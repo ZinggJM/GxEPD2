@@ -1,0 +1,317 @@
+// Display Library for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
+// Requires HW SPI and Adafruit_GFX. Caution: these e-papers require 3.3V supply AND data lines!
+//
+// based on Demo Example from Good Display: http://www.good-display.com/download_list/downloadcategoryid=34&isMode=false.html
+//
+// Author: Jean-Marc Zingg
+//
+// Version: see library.properties
+//
+// Library: https://github.com/ZinggJM/GxEPD2
+
+#include "GxEPD2_750c.h"
+#include "WaveTables.h"
+
+GxEPD2_750c::GxEPD2_750c(int8_t cs, int8_t dc, int8_t rst, int8_t busy) : GxEPD2_EPD(cs, dc, rst, busy, LOW, 20000000)
+{
+  _initial = true;
+  _power_is_on = false;
+}
+
+void GxEPD2_750c::init(uint32_t serial_diag_bitrate)
+{
+  GxEPD2_EPD::init(serial_diag_bitrate);
+  _initial = true;
+  _power_is_on = false;
+}
+
+void GxEPD2_750c::clearScreen(uint8_t value)
+{
+  clearScreen(value, 0xFF);
+}
+
+void GxEPD2_750c::clearScreen(uint8_t black_value, uint8_t color_value)
+{
+  _Init_Part();
+  _writeCommand(0x91); // partial in
+  _setPartialRamArea(0, 0, WIDTH, HEIGHT);
+  _writeCommand(0x10);
+  for (int16_t i = 0; i < WIDTH * HEIGHT / 8; i++)
+  {
+    _send8pixel(~black_value, ~color_value);
+  }
+  _Update_Part();
+  _writeCommand(0x92); // partial out
+}
+
+void GxEPD2_750c::writeScreenBuffer(uint8_t value)
+{
+  writeScreenBuffer(value, 0xFF);
+}
+
+void GxEPD2_750c::writeScreenBuffer(uint8_t black_value, uint8_t color_value)
+{
+  _Init_Part();
+  _writeCommand(0x91); // partial in
+  _setPartialRamArea(0, 0, WIDTH, HEIGHT);
+  _writeCommand(0x10);
+  for (int16_t i = 0; i < WIDTH * HEIGHT / 8; i++)
+  {
+    _send8pixel(~black_value, ~color_value);
+  }
+  _writeCommand(0x92); // partial out
+}
+
+void GxEPD2_750c::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+{
+  writeImage(bitmap, NULL, x, y, w, h, invert, mirror_y, pgm);
+}
+
+void GxEPD2_750c::writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+{
+  x -= x % 8; // byte boundary
+  w -= x % 8; // byte boundary
+  int16_t x1 = x < 0 ? 0 : x; // limit
+  int16_t y1 = y < 0 ? 0 : y; // limit
+  int16_t w1 = x + w < WIDTH ? w : WIDTH - x; // limit
+  int16_t h1 = y + h < HEIGHT ? h : HEIGHT - y; // limit
+  int16_t dx = x1 - x;
+  int16_t dy = y1 - y;
+  w1 -= dx;
+  h1 -= dy;
+  if ((w1 <= 0) || (h1 <= 0)) return;
+  _Init_Part();
+  _writeCommand(0x91); // partial in
+  _setPartialRamArea(x1, y1, w1, h1);
+  _writeCommand(0x10);
+  for (int16_t i = 0; i < h1; i++)
+  {
+    for (int16_t j = 0; j < w1 / 8; j++)
+    {
+      uint8_t black_data = 0xFF;
+      uint8_t color_data = 0xFF;
+      if (black)
+      {
+        // use w, h of bitmap for index!
+        int16_t idx = mirror_y ? j + dx / 8 + ((h - 1 - (i + dy))) * (w / 8) : j + dx / 8 + (i + dy) * (w / 8);
+        if (pgm)
+        {
+#if defined(__AVR) || defined(ESP8266) || defined(ESP32)
+          black_data = pgm_read_byte(&black[idx]);
+#else
+          black_data = black[idx];
+#endif
+        }
+        else
+        {
+          black_data = black[idx];
+        }
+        if (invert) black_data = ~black_data;
+      }
+      if (color)
+      {
+        // use w, h of bitmap for index!
+        int16_t idx = mirror_y ? j + dx / 8 + ((h - 1 - (i + dy))) * (w / 8) : j + dx / 8 + (i + dy) * (w / 8);
+        if (pgm)
+        {
+#if defined(__AVR) || defined(ESP8266) || defined(ESP32)
+          color_data = pgm_read_byte(&color[idx]);
+#else
+          color_data = color[idx];
+#endif
+        }
+        else
+        {
+          color_data = color[idx];
+        }
+        if (invert) color_data = ~color_data;
+      }
+      _send8pixel(~black_data, ~color_data);
+    }
+  }
+  _writeCommand(0x92); // partial out
+}
+
+void GxEPD2_750c::writeNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+{
+  if (data1)
+  {
+    writeImage(data1, x, y, w, h, invert, mirror_y, pgm);
+  }
+}
+
+void GxEPD2_750c::drawImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+{
+  writeImage(bitmap, x, y, w, h, invert, mirror_y, pgm);
+  refresh(x, y, w, h);
+}
+
+void GxEPD2_750c::drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+{
+  writeImage(black, color, x, y, w, h, invert, mirror_y, pgm);
+  refresh(x, y, w, h);
+}
+
+void GxEPD2_750c::drawNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+{
+  writeNative(data1, data2, x, y, w, h, invert, mirror_y, pgm);
+  refresh(x, y, w, h);
+}
+
+void GxEPD2_750c::refresh(bool partial_update_mode)
+{
+  if (partial_update_mode) refresh(0, 0, WIDTH, HEIGHT);
+  else _Update_Full();
+}
+
+void GxEPD2_750c::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
+{
+  x -= x % 8; // byte boundary
+  w -= x % 8; // byte boundary
+  int16_t x1 = x < 0 ? 0 : x; // limit
+  int16_t y1 = y < 0 ? 0 : y; // limit
+  int16_t w1 = x + w < WIDTH ? w : WIDTH - x; // limit
+  int16_t h1 = y + h < HEIGHT ? h : HEIGHT - y; // limit
+  w1 -= x1 - x;
+  h1 -= y1 - y;
+  _Init_Part();
+  _setPartialRamArea(x1, y1, w1, h1);
+  _Update_Part();
+}
+
+void GxEPD2_750c::powerOff()
+{
+  _PowerOff();
+}
+
+void GxEPD2_750c::_send8pixel(uint8_t black_data, uint8_t color_data)
+{
+  for (uint8_t j = 0; j < 8; j++)
+  {
+    uint8_t t = 0x00; // black
+    if (black_data & 0x80); // keep black
+    else if (color_data & 0x80) t = 0x04; //color
+    else t = 0x03; // white
+    t <<= 4;
+    black_data <<= 1;
+    color_data <<= 1;
+    j++;
+    if (black_data & 0x80); // keep black
+    else if (color_data & 0x80) t |= 0x04; //color
+    else t |= 0x03; // white
+    black_data <<= 1;
+    color_data <<= 1;
+    _writeData(t);
+  }
+}
+
+void GxEPD2_750c::_setPartialRamArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
+{
+  uint16_t xe = (x + w - 1) | 0x0007; // byte boundary inclusive (last byte)
+  uint16_t ye = y + h - 1;
+  x &= 0xFFF8; // byte boundary
+  xe |= 0x0007; // byte boundary
+  _writeCommand(0x90); // partial window
+  _writeData(x / 256);
+  _writeData(x % 256);
+  _writeData(xe / 256);
+  _writeData(xe % 256);
+  _writeData(y / 256);
+  _writeData(y % 256);
+  _writeData(ye / 256);
+  _writeData(ye % 256);
+  //_writeData(0x01); // distortion on full right half
+  _writeData(0x00); // distortion on right half
+}
+
+void GxEPD2_750c::_PowerOn()
+{
+  if (!_power_is_on)
+  {
+    _writeCommand(0x04);
+    _waitWhileBusy("_PowerOn");
+  }
+  _power_is_on = true;
+}
+
+void GxEPD2_750c::_PowerOff()
+{
+  _writeCommand(0x02); // power off
+  _waitWhileBusy("_PowerOff");
+  _power_is_on = false;
+}
+
+void GxEPD2_750c::_InitDisplay()
+{
+  // reset required for wakeup
+  if (!_power_is_on && (_rst >= 0))
+  {
+    digitalWrite(_rst, 0);
+    delay(10);
+    digitalWrite(_rst, 1);
+    delay(10);
+  }
+  /**********************************release flash sleep**********************************/
+  _writeCommand(0X65);     //FLASH CONTROL
+  _writeData(0x01);
+  _writeCommand(0xAB);
+  _writeCommand(0X65);     //FLASH CONTROL
+  _writeData(0x00);
+  /**********************************release flash sleep**********************************/
+  _writeCommand(0x01);
+  _writeData (0x37);       //POWER SETTING
+  _writeData (0x00);
+  _writeCommand(0x04);     //POWER ON
+  _waitWhileBusy("POWER");
+  _writeCommand(0X00);     //PANNEL SETTING
+  _writeData(0xCF);
+  _writeData(0x08);
+  _writeCommand(0x06);     //boost
+  _writeData (0xc7);
+  _writeData (0xcc);
+  _writeData (0x28);
+  _writeCommand(0x30);     //PLL setting
+  _writeData (0x3c);
+  _writeCommand(0X41);     //TEMPERATURE SETTING
+  _writeData(0x00);
+  _writeCommand(0X50);     //VCOM AND DATA INTERVAL SETTING
+  _writeData(0x77);
+  _writeCommand(0X60);     //TCON SETTING
+  _writeData(0x22);
+  _writeCommand(0x61);     //tres 640*384
+  _writeData (0x02);       //source 640
+  _writeData (0x80);
+  _writeData (0x01);       //gate 384
+  _writeData (0x80);
+  _writeCommand(0X82);     //VDCS SETTING
+  _writeData(0x1E);        //decide by LUT file
+  _writeCommand(0xe5);     //FLASH MODE
+  _writeData(0x03);
+}
+
+void GxEPD2_750c::_Init_Full()
+{
+  _InitDisplay();
+  _PowerOn();
+}
+
+void GxEPD2_750c::_Init_Part()
+{
+  _InitDisplay();
+  _PowerOn();
+}
+
+void GxEPD2_750c::_Update_Full()
+{
+  _writeCommand(0x12); //display refresh
+  _waitWhileBusy("_Update_Full");
+}
+
+void GxEPD2_750c::_Update_Part()
+{
+  _writeCommand(0x12); //display refresh
+  _waitWhileBusy("_Update_Part");
+}
+
+
+
