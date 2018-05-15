@@ -24,13 +24,17 @@ class GxEPD2_750 : public GxEPD2_EPD
     static const bool hasColor = false;
     static const bool hasPartialUpdate = true;
     static const bool hasFastPartialUpdate = false;
+    static const uint16_t power_on_time = 80; // ms, e.g. 69914us
+    static const uint16_t power_off_time = 50; // ms, e.g. 40578us
+    static const uint16_t full_refresh_time = 4500; // ms, e.g. 4273474us
+    static const uint16_t partial_refresh_time = 4500; // ms, e.g. 4273474us
     // constructor
     GxEPD2_750(int8_t cs, int8_t dc, int8_t rst, int8_t busy);
     // methods (virtual)
     void init(uint32_t serial_diag_bitrate = 0); // = 0 : disabled
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
-    void clearScreen(uint8_t value = 0xFF); // init controller memory and screen (default white)
-    void writeScreenBuffer(uint8_t value = 0xFF); // init controller memory (default white)
+    void clearScreen(uint8_t value = 0x33); // init controller memory and screen (default white)
+    void writeScreenBuffer(uint8_t value = 0x33); // init controller memory (default white)
     // write to controller memory, without screen refresh; x and w should be multiple of 8
     void writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false);
     void writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false);

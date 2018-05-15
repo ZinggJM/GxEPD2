@@ -9,34 +9,32 @@
 //
 // Library: https://github.com/ZinggJM/GxEPD2
 
-#ifndef _GxEPD2_420c_H_
-#define _GxEPD2_420c_H_
+#ifndef _GxEPD2_583_H_
+#define _GxEPD2_583_H_
 
 #include "../GxEPD2_EPD.h"
 
-class GxEPD2_420c : public GxEPD2_EPD
+class GxEPD2_583 : public GxEPD2_EPD
 {
   public:
     // attributes
-    static const uint16_t WIDTH = 400;
-    static const uint16_t HEIGHT = 300;
-    static const GxEPD2::Panel panel = GxEPD2::GDEW042Z15;
-    static const bool hasColor = true;
+    static const uint16_t WIDTH = 600;
+    static const uint16_t HEIGHT = 448;
+    static const GxEPD2::Panel panel = GxEPD2::GDEW0583T7;
+    static const bool hasColor = false;
     static const bool hasPartialUpdate = true;
     static const bool hasFastPartialUpdate = false;
-    static const uint16_t power_on_time = 40; // ms, e.g. 38006us
-    static const uint16_t power_off_time = 30; // ms, e.g. 20292us
-    static const uint16_t full_refresh_time = 16000; // ms, e.g. 15771891us
-    static const uint16_t partial_refresh_time = 16000; // ms, e.g. 15771891us
+    static const uint16_t power_on_time = 60; // ms, e.g. 56728us
+    static const uint16_t power_off_time = 30; // ms, e.g. 20291us
+    static const uint16_t full_refresh_time = 15000; // ms, e.g. 14598868us
+    static const uint16_t partial_refresh_time = 15000; // ms, e.g. 14598868us
     // constructor
-    GxEPD2_420c(int8_t cs, int8_t dc, int8_t rst, int8_t busy);
+    GxEPD2_583(int8_t cs, int8_t dc, int8_t rst, int8_t busy);
     // methods (virtual)
     void init(uint32_t serial_diag_bitrate = 0); // = 0 : disabled
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
-    void clearScreen(uint8_t value = 0xFF); // init controller memory and screen (default white)
-    void clearScreen(uint8_t black_value, uint8_t color_value); // init controller memory and screen
-    void writeScreenBuffer(uint8_t value = 0xFF); // init controller memory (default white)
-    void writeScreenBuffer(uint8_t black_value, uint8_t color_value); // init controller memory
+    void clearScreen(uint8_t value = 0x33); // init controller memory and screen (default white)
+    void writeScreenBuffer(uint8_t value = 0x33); // init controller memory (default white)
     // write to controller memory, without screen refresh; x and w should be multiple of 8
     void writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false);
     void writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false);
@@ -52,6 +50,7 @@ class GxEPD2_420c : public GxEPD2_EPD
     void powerOff();
   private:
     void _writeScreenBuffer(uint8_t value);
+    void _send8pixel(uint8_t data);
     void _setPartialRamArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
     void _PowerOn();
     void _PowerOff();
@@ -61,7 +60,7 @@ class GxEPD2_420c : public GxEPD2_EPD
     void _Update_Full();
     void _Update_Part();
   protected:
-    bool _initial, _power_is_on;
+    bool _initial, _power_is_on, _using_partial_mode;
 };
 
 #endif

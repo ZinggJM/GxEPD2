@@ -24,6 +24,10 @@ class GxEPD2_154c : public GxEPD2_EPD
     static const bool hasColor = true;
     static const bool hasPartialUpdate = false;
     static const bool hasFastPartialUpdate = false;
+    static const uint16_t power_on_time = 20; // ms, e.g. 10157us
+    static const uint16_t power_off_time = 20; // ms, e.g. 10157us
+    static const uint16_t full_refresh_time = 7500; // ms, e.g. 7135635us
+    static const uint16_t partial_refresh_time = 7500; // ms, e.g. 7135635us
     // constructor
     GxEPD2_154c(int8_t cs, int8_t dc, int8_t rst, int8_t busy);
     // methods (virtual)

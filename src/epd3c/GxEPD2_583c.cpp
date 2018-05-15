@@ -9,23 +9,23 @@
 //
 // Library: https://github.com/ZinggJM/GxEPD2
 
-#include "GxEPD2_750c.h"
+#include "GxEPD2_583c.h"
 #include "WaveTables.h"
 
-GxEPD2_750c::GxEPD2_750c(int8_t cs, int8_t dc, int8_t rst, int8_t busy) : GxEPD2_EPD(cs, dc, rst, busy, LOW, 40000000)
+GxEPD2_583c::GxEPD2_583c(int8_t cs, int8_t dc, int8_t rst, int8_t busy) : GxEPD2_EPD(cs, dc, rst, busy, LOW, 40000000)
 {
   _initial = true;
   _power_is_on = false;
 }
 
-void GxEPD2_750c::init(uint32_t serial_diag_bitrate)
+void GxEPD2_583c::init(uint32_t serial_diag_bitrate)
 {
   GxEPD2_EPD::init(serial_diag_bitrate);
   _initial = true;
   _power_is_on = false;
 }
 
-void GxEPD2_750c::clearScreen(uint8_t value)
+void GxEPD2_583c::clearScreen(uint8_t value)
 {
   if (value == 0xFF) value = 0x33; // white value for this controller
   _Init_Part();
@@ -40,7 +40,7 @@ void GxEPD2_750c::clearScreen(uint8_t value)
   _writeCommand(0x92); // partial out
 }
 
-void GxEPD2_750c::clearScreen(uint8_t black_value, uint8_t color_value)
+void GxEPD2_583c::clearScreen(uint8_t black_value, uint8_t color_value)
 {
   _Init_Part();
   _writeCommand(0x91); // partial in
@@ -54,7 +54,7 @@ void GxEPD2_750c::clearScreen(uint8_t black_value, uint8_t color_value)
   _writeCommand(0x92); // partial out
 }
 
-void GxEPD2_750c::writeScreenBuffer(uint8_t value)
+void GxEPD2_583c::writeScreenBuffer(uint8_t value)
 {
   if (value == 0xFF) value = 0x33; // white value for this controller
   _Init_Part();
@@ -68,7 +68,7 @@ void GxEPD2_750c::writeScreenBuffer(uint8_t value)
   _writeCommand(0x92); // partial out
 }
 
-void GxEPD2_750c::writeScreenBuffer(uint8_t black_value, uint8_t color_value)
+void GxEPD2_583c::writeScreenBuffer(uint8_t black_value, uint8_t color_value)
 {
   _Init_Part();
   _writeCommand(0x91); // partial in
@@ -81,12 +81,12 @@ void GxEPD2_750c::writeScreenBuffer(uint8_t black_value, uint8_t color_value)
   _writeCommand(0x92); // partial out
 }
 
-void GxEPD2_750c::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_583c::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   writeImage(bitmap, NULL, x, y, w, h, invert, mirror_y, pgm);
 }
 
-void GxEPD2_750c::writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_583c::writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
   int16_t wb = (w + 7) / 8; // width bytes, bitmaps are padded
@@ -149,12 +149,15 @@ void GxEPD2_750c::writeImage(const uint8_t* black, const uint8_t* color, int16_t
       }
       _send8pixel(~black_data, ~color_data);
     }
+#if defined(ESP8266)
+    yield();
+#endif
   }
   _writeCommand(0x92); // partial out
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
 
-void GxEPD2_750c::writeNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_583c::writeNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   if (data1)
   {
@@ -203,31 +206,31 @@ void GxEPD2_750c::writeNative(const uint8_t* data1, const uint8_t* data2, int16_
   }
 }
 
-void GxEPD2_750c::drawImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_583c::drawImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   writeImage(bitmap, x, y, w, h, invert, mirror_y, pgm);
   refresh(x, y, w, h);
 }
 
-void GxEPD2_750c::drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_583c::drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   writeImage(black, color, x, y, w, h, invert, mirror_y, pgm);
   refresh(x, y, w, h);
 }
 
-void GxEPD2_750c::drawNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_583c::drawNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   writeNative(data1, data2, x, y, w, h, invert, mirror_y, pgm);
   refresh(x, y, w, h);
 }
 
-void GxEPD2_750c::refresh(bool partial_update_mode)
+void GxEPD2_583c::refresh(bool partial_update_mode)
 {
   if (partial_update_mode) refresh(0, 0, WIDTH, HEIGHT);
   else _Update_Full();
 }
 
-void GxEPD2_750c::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
+void GxEPD2_583c::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
 {
   x -= x % 8; // byte boundary
   w -= x % 8; // byte boundary
@@ -242,12 +245,12 @@ void GxEPD2_750c::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
   _Update_Part();
 }
 
-void GxEPD2_750c::powerOff()
+void GxEPD2_583c::powerOff()
 {
   _PowerOff();
 }
 
-void GxEPD2_750c::_send8pixel(uint8_t black_data, uint8_t color_data)
+void GxEPD2_583c::_send8pixel(uint8_t black_data, uint8_t color_data)
 {
   for (uint8_t j = 0; j < 8; j++)
   {
@@ -268,7 +271,7 @@ void GxEPD2_750c::_send8pixel(uint8_t black_data, uint8_t color_data)
   }
 }
 
-void GxEPD2_750c::_setPartialRamArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
+void GxEPD2_583c::_setPartialRamArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
 {
   uint16_t xe = (x + w - 1) | 0x0007; // byte boundary inclusive (last byte)
   uint16_t ye = y + h - 1;
@@ -287,7 +290,7 @@ void GxEPD2_750c::_setPartialRamArea(uint16_t x, uint16_t y, uint16_t w, uint16_
   _writeData(0x00); // distortion on right half
 }
 
-void GxEPD2_750c::_PowerOn()
+void GxEPD2_583c::_PowerOn()
 {
   if (!_power_is_on)
   {
@@ -297,14 +300,14 @@ void GxEPD2_750c::_PowerOn()
   _power_is_on = true;
 }
 
-void GxEPD2_750c::_PowerOff()
+void GxEPD2_583c::_PowerOff()
 {
   _writeCommand(0x02); // power off
   _waitWhileBusy("_PowerOff", power_off_time);
   _power_is_on = false;
 }
 
-void GxEPD2_750c::_InitDisplay()
+void GxEPD2_583c::_InitDisplay()
 {
   // reset required for wakeup
   if (!_power_is_on && (_rst >= 0))
@@ -314,63 +317,55 @@ void GxEPD2_750c::_InitDisplay()
     digitalWrite(_rst, 1);
     delay(10);
   }
-  /**********************************release flash sleep**********************************/
-  _writeCommand(0X65);     //FLASH CONTROL
-  _writeData(0x01);
-  _writeCommand(0xAB);
-  _writeCommand(0X65);     //FLASH CONTROL
-  _writeData(0x00);
-  /**********************************release flash sleep**********************************/
   _writeCommand(0x01);
-  _writeData (0x37);       //POWER SETTING
+  _writeData (0x37); //POWER SETTING
   _writeData (0x00);
-  //_writeCommand(0x04);     //POWER ON
-  //_waitWhileBusy("PowerOn", power_on_time);
-  _writeCommand(0X00);     //PANNEL SETTING
+  _writeCommand(0X00); //PANNEL SETTING
   _writeData(0xCF);
   _writeData(0x08);
-  _writeCommand(0x06);     //boost
+  _writeCommand(0x06); //boost
   _writeData (0xc7);
   _writeData (0xcc);
   _writeData (0x28);
-  _writeCommand(0x30);     //PLL setting
-  _writeData (0x3c);
-  _writeCommand(0X41);     //TEMPERATURE SETTING
+  _writeCommand(0x30); //PLL setting
+  //_writeData (0x3a);   //PLL:    0-15��:0x3C, 15+:0x3A
+  _writeData (0x3c); //PLL:    0-15��:0x3C, 15+:0x3A
+  _writeCommand(0X41); //TEMPERATURE SETTING
   _writeData(0x00);
-  _writeCommand(0X50);     //VCOM AND DATA INTERVAL SETTING
+  _writeCommand(0X50); //VCOM AND DATA INTERVAL SETTING
   _writeData(0x77);
-  _writeCommand(0X60);     //TCON SETTING
+  _writeCommand(0X60); //TCON SETTING
   _writeData(0x22);
-  _writeCommand(0x61);     //tres 640*384
-  _writeData (0x02);       //source 640
-  _writeData (0x80);
-  _writeData (0x01);       //gate 384
-  _writeData (0x80);
-  _writeCommand(0X82);     //VDCS SETTING
-  _writeData(0x1E);        //decide by LUT file
-  _writeCommand(0xe5);     //FLASH MODE
+  _writeCommand(0x61); //600*448
+  _writeData (0x02);   //source 600
+  _writeData (0x58);
+  _writeData (0x01);   //gate 448
+  _writeData (0xc0);
+  _writeCommand(0X82); //VCOM VOLTAGE SETTING
+  _writeData(0x28);    //all temperature  range
+  _writeCommand(0xe5); //FLASH MODE
   _writeData(0x03);
 }
 
-void GxEPD2_750c::_Init_Full()
+void GxEPD2_583c::_Init_Full()
 {
   _InitDisplay();
   _PowerOn();
 }
 
-void GxEPD2_750c::_Init_Part()
+void GxEPD2_583c::_Init_Part()
 {
   _InitDisplay();
   _PowerOn();
 }
 
-void GxEPD2_750c::_Update_Full()
+void GxEPD2_583c::_Update_Full()
 {
   _writeCommand(0x12); //display refresh
   _waitWhileBusy("_Update_Full", full_refresh_time);
 }
 
-void GxEPD2_750c::_Update_Part()
+void GxEPD2_583c::_Update_Part()
 {
   _writeCommand(0x12); //display refresh
   _waitWhileBusy("_Update_Part", partial_refresh_time);

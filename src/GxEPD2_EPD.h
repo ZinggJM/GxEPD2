@@ -29,18 +29,20 @@ class GxEPD2
   public:
     enum Panel
     {
-      GDEP015OC1, WS_1_54_bw = GDEP015OC1,
-      GDE0213B1,  WS_2_13_bw = GDE0213B1,
-      GDEH029A1,  WS_2_9_bw = GDEH029A1,
-      GDEW027W3,  WS_2_7_bw = GDEW027W3,
-      GDEW042T2,  WS_4_2_bw = GDEW042T2,
-      GDEW075T8,  WS_7_5_bw = GDEW075T8,
+      GDEP015OC1, Waveshare_1_54_bw = GDEP015OC1,
+      GDE0213B1,  Waveshare_2_13_bw = GDE0213B1,
+      GDEH029A1,  Waveshare_2_9_bw = GDEH029A1,
+      GDEW027W3,  Waveshare_2_7_bw = GDEW027W3,
+      GDEW042T2,  Waveshare_4_2_bw = GDEW042T2,
+      GDEW0583T7, Waveshare_5_83_bw = GDEW0583T7,
+      GDEW075T8,  Waveshare_7_5_bw = GDEW075T8,
       // 3-color
       GDEW0154Z04, Waveshare_1_54_bwr = GDEW0154Z04,
       GDEW0213Z16, Waveshare_2_13_bwr = GDEW0213Z16,
       GDEW029Z10,  Waveshare_2_9_bwr = GDEW029Z10,
       GDEW027C44,  Waveshare_2_7_bwr = GDEW027C44,
       GDEW042Z15,  Waveshare_4_2_bwr = GDEW042Z15,
+      GDEW0583Z21, Waveshare_5_83_bwr = GDEW0583Z21,
       GDEW075Z09,  Waveshare_7_5_bwr = GDEW075Z09
     };
 };
@@ -51,8 +53,8 @@ class GxEPD2_EPD
     GxEPD2_EPD(int8_t cs, int8_t dc, int8_t rst, int8_t busy, int8_t busy_level, uint32_t busy_timeout);
     virtual void init(uint32_t serial_diag_bitrate = 0) = 0; // serial_diag_bitrate = 0 : disabled
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
-    virtual void clearScreen(uint8_t value = 0xFF) = 0; // init controller memory and screen (default white)
-    virtual void writeScreenBuffer(uint8_t value = 0xFF) = 0; // init controller memory (default white)
+    virtual void clearScreen(uint8_t value) = 0; // init controller memory and screen (default white)
+    virtual void writeScreenBuffer(uint8_t value) = 0; // init controller memory (default white)
     // write to controller memory, without screen refresh; x and w should be multiple of 8
     virtual void writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
     virtual void writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
@@ -70,7 +72,7 @@ class GxEPD2_EPD
       return (a > b ? a : b);
     };
   protected:
-    void _waitWhileBusy(const char* comment = 0);
+    void _waitWhileBusy(const char* comment = 0, uint16_t busy_time = 5000);
     void _writeCommand(uint8_t c);
     void _writeData(uint8_t d);
     void _writeData(const uint8_t* data, uint16_t n);

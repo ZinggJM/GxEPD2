@@ -42,13 +42,13 @@ void GxEPD2_154c::clearScreen(uint8_t black_value, uint8_t color_value)
 {
   _Init_Full();
   _writeCommand(0x10);
-  for (int16_t i = 0; i < WIDTH * HEIGHT / 8; i++)
+  for (uint32_t i = 0; i < WIDTH * HEIGHT / 8; i++)
   {
     _writeData(bw2grey[(black_value & 0xF0) >> 4]);
     _writeData(bw2grey[black_value & 0x0F]);
   }
   _writeCommand(0x13);
-  for (int16_t i = 0; i < WIDTH * HEIGHT / 8; i++)
+  for (uint32_t i = 0; i < WIDTH * HEIGHT / 8; i++)
   {
     _writeData(color_value);
   }
@@ -65,13 +65,13 @@ void GxEPD2_154c::writeScreenBuffer(uint8_t black_value, uint8_t color_value)
 {
   _Init_Full();
   _writeCommand(0x10);
-  for (int16_t i = 0; i < WIDTH * HEIGHT / 8; i++)
+  for (uint32_t i = 0; i < WIDTH * HEIGHT / 8; i++)
   {
     _writeData(bw2grey[(black_value & 0xF0) >> 4]);
     _writeData(bw2grey[black_value & 0x0F]);
   }
   _writeCommand(0x13);
-  for (int16_t i = 0; i < WIDTH * HEIGHT / 8; i++)
+  for (uint32_t i = 0; i < WIDTH * HEIGHT / 8; i++)
   {
     _writeData(color_value);
   }
@@ -84,17 +84,11 @@ void GxEPD2_154c::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16
 
 void GxEPD2_154c::writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
+  delay(1); // yield() to avoid WDT on ESP8266 and ESP32
+  int16_t wb = (w + 7) / 8; // width bytes, bitmaps are padded
   x -= x % 8; // byte boundary
-  w -= x % 8; // byte boundary
-  int16_t x1 = x < 0 ? 0 : x; // limit
-  int16_t y1 = y < 0 ? 0 : y; // limit
-  int16_t w1 = x + w < WIDTH ? w : WIDTH - x; // limit
-  int16_t h1 = y + h < HEIGHT ? h : HEIGHT - y; // limit
-  int16_t dx = x1 - x;
-  int16_t dy = y1 - y;
-  w1 -= dx;
-  h1 -= dy;
-  if ((w1 <= 0) || (h1 <= 0)) return;
+  w = wb * 8; // byte boundary
+  if ((w <= 0) || (h <= 0)) return;
   _Init_Full();
   _writeCommand(0x10);
   for (int16_t i = 0; i < HEIGHT; i++)
@@ -104,11 +98,9 @@ void GxEPD2_154c::writeImage(const uint8_t* black, const uint8_t* color, int16_t
       uint8_t data = 0xFF;
       if (black)
       {
-        // use w, h of bitmap for index!
-        //if ((i + dy < h) && (j + dx < w))
-        if (((x + j) >= 0) && ((x + j) < w) && ((y + i) >= 0) && ((y + i) < h))
+        if ((j >= x) && (j <= x + w) && (i >= y) && (i < y + h))
         {
-          int16_t idx = mirror_y ? (x + j) / 8 + ((h - 1 - (y + i))) * (w / 8) : (x + j) / 8 + (y + i) * (w / 8);
+          int16_t idx = mirror_y ? (j - x) / 8 + ((h - 1 - (i - y))) * wb : (j - x) / 8 + (i - y) * wb;
           if (pgm)
           {
 #if defined(__AVR) || defined(ESP8266) || defined(ESP32)
@@ -137,11 +129,9 @@ void GxEPD2_154c::writeImage(const uint8_t* black, const uint8_t* color, int16_t
       uint8_t data = 0xFF;
       if (color)
       {
-        // use w, h of bitmap for index!
-        //if ((i + dy < h) && (j + dx < w))
-        if (((x + j) >= 0) && ((x + j) < w) && ((y + i) >= 0) && ((y + i) < h))
+        if ((j >= x) && (j <= x + w) && (i >= y) && (i < y + h))
         {
-          int16_t idx = mirror_y ? (x + j) / 8 + ((h - 1 - (y + i))) * (w / 8) : (x + j) / 8 + (y + i) * (w / 8);
+          int16_t idx = mirror_y ? (j - x) / 8 + ((h - 1 - (i - y))) * wb : (j - x) / 8 + (i - y) * wb;
           if (pgm)
           {
 #if defined(__AVR) || defined(ESP8266) || defined(ESP32)
@@ -160,6 +150,7 @@ void GxEPD2_154c::writeImage(const uint8_t* black, const uint8_t* color, int16_t
       _writeData(data);
     }
   }
+  delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
 
 void GxEPD2_154c::writeNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
@@ -212,15 +203,25 @@ void GxEPD2_154c::_PowerOn()
   if (!_power_is_on)
   {
     _writeCommand(0x04);
-    _waitWhileBusy("_PowerOn");
+    _waitWhileBusy("_PowerOn", power_on_time);
   }
   _power_is_on = true;
 }
 
 void GxEPD2_154c::_PowerOff()
 {
+  _writeCommand(0x50);
+  _writeData(0x17);    //BD floating
+  _writeCommand(0x82);     //to solve Vcom drop
+  _writeData(0x00);
+  _writeCommand(0x01);     //power setting
+  _writeData(0x02);    //gate switch to external
+  _writeData(0x00);
+  _writeData(0x00);
+  _writeData(0x00);
+  delay(1500);     //delay 1.5S
   _writeCommand(0x02); // power off
-  _waitWhileBusy("_PowerOff");
+  //_waitWhileBusy("_PowerOff", power_off_time);
   _power_is_on = false;
 }
 
@@ -243,12 +244,10 @@ void GxEPD2_154c::_InitDisplay()
   _writeData(0x07);
   _writeData(0x07);
   _writeData(0x07);
-  _writeCommand(0x04);
-  // power on needed here!
-  _waitWhileBusy("Power On");
-  _writeCommand(0X00);
+  _PowerOn(); //power on needed here!
+  _writeCommand(0x00);
   _writeData(0xcf);
-  _writeCommand(0X50);
+  _writeCommand(0x50);
   _writeData(0x37);
   _writeCommand(0x30);
   _writeData(0x39);
@@ -291,13 +290,13 @@ void GxEPD2_154c::_Init_Part()
 void GxEPD2_154c::_Update_Full()
 {
   _writeCommand(0x12); //display refresh
-  _waitWhileBusy("_Update_Full");
+  _waitWhileBusy("_Update_Full", full_refresh_time);
 }
 
 void GxEPD2_154c::_Update_Part()
 {
   _writeCommand(0x12); //display refresh
-  _waitWhileBusy("_Update_Part");
+  _waitWhileBusy("_Update_Part", partial_refresh_time);
 }
 
 

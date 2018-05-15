@@ -61,32 +61,36 @@ void GxEPD2_EPD::init(uint32_t serial_diag_bitrate)
 #endif
 }
 
-void GxEPD2_EPD::_waitWhileBusy(const char* comment)
+void GxEPD2_EPD::_waitWhileBusy(const char* comment, uint16_t busy_time)
 {
-  unsigned long start = micros();
-  while (1)
+  if (_busy >= 0)
   {
-    if (digitalRead(_busy) != _busy_level) break;
-    delay(1);
-    if (micros() - start > _busy_timeout)
+    unsigned long start = micros();
+    while (1)
     {
-      Serial.println("Busy Timeout!");
-      break;
+      if (digitalRead(_busy) != _busy_level) break;
+      delay(1);
+      if (micros() - start > _busy_timeout)
+      {
+        Serial.println("Busy Timeout!");
+        break;
+      }
     }
-  }
-  if (comment)
-  {
+    if (comment)
+    {
 #if !defined(DISABLE_DIAGNOSTIC_OUTPUT)
-    if (_diag_enabled)
-    {
-      unsigned long elapsed = micros() - start;
-      Serial.print(comment);
-      Serial.print(" : ");
-      Serial.println(elapsed);
-    }
+      if (_diag_enabled)
+      {
+        unsigned long elapsed = micros() - start;
+        Serial.print(comment);
+        Serial.print(" : ");
+        Serial.println(elapsed);
+      }
 #endif
+    }
+    (void) start;
   }
-  (void) start;
+  else delay(busy_time);
 }
 
 void GxEPD2_EPD::_writeCommand(uint8_t c)

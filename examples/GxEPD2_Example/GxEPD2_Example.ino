@@ -26,6 +26,9 @@
 // new mapping suggestion for STM32F1, e.g. STM32F103C8T6 "BluePill"
 // BUSY -> A1, RST -> A2, DC -> A3, CS-> A4, CLK -> A5, DIN -> A7
 
+// mapping suggestion for AVR, UNO, NANO etc.
+// BUSY -> 7, RST -> 9, DC -> 8, CS-> 10, CLK -> 13, DIN -> 11
+
 #include <GxEPD2_BW.h>
 #include <GxEPD2_3C.h>
 #include <Fonts/FreeMonoBold9pt7b.h>
@@ -38,6 +41,7 @@
 //GxEPD2_BW<GxEPD2_270, GxEPD2_270::HEIGHT> display(GxEPD2_270(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 //GxEPD2_BW<GxEPD2_420, GxEPD2_420::HEIGHT> display(GxEPD2_420(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 // can use only half buffer size
+//GxEPD2_BW < GxEPD2_583, GxEPD2_583::HEIGHT / 2 > display(GxEPD2_583(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 //GxEPD2_BW < GxEPD2_750, GxEPD2_750::HEIGHT / 2 > display(GxEPD2_750(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 // 3-color e-papers
 //GxEPD2_3C<GxEPD2_154c, GxEPD2_154c::HEIGHT> display(GxEPD2_154c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
@@ -47,6 +51,7 @@
 // can use only half buffer size
 //GxEPD2_3C<GxEPD2_420c, GxEPD2_420c::HEIGHT / 2> display(GxEPD2_420c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 // can use only quarter buffer size
+//GxEPD2_3C<GxEPD2_583c, GxEPD2_583c::HEIGHT / 4> display(GxEPD2_583c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 //GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT / 4> display(GxEPD2_750c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 #endif
 
@@ -84,6 +89,25 @@
 //GxEPD2_3C<GxEPD2_270c, MAX_HEIGHT(GxEPD2_270c)> display(GxEPD2_270c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
 //GxEPD2_3C<GxEPD2_420c, MAX_HEIGHT(GxEPD2_420c)> display(GxEPD2_420c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
 //GxEPD2_3C<GxEPD2_750c, MAX_HEIGHT(GxEPD2_750c)> display(GxEPD2_750c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
+#endif
+
+#if defined(__AVR)
+#define MAX_DISPAY_BUFFER_SIZE 1000 // half of available RAM as a compromise
+#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPAY_BUFFER_SIZE / 8 / EPD::WIDTH ? EPD::HEIGHT : MAX_DISPAY_BUFFER_SIZE / 8 / EPD::WIDTH)
+// select one and adapt to your mapping
+//GxEPD2_BW<GxEPD2_154, MAX_HEIGHT(GxEPD2_154)> display(GxEPD2_154(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
+//GxEPD2_BW<GxEPD2_213, MAX_HEIGHT(GxEPD2_213)> display(GxEPD2_213(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
+//GxEPD2_BW<GxEPD2_290, MAX_HEIGHT(GxEPD2_290)> display(GxEPD2_290(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
+//GxEPD2_BW<GxEPD2_270, MAX_HEIGHT(GxEPD2_270)> display(GxEPD2_270(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
+//GxEPD2_BW<GxEPD2_420, MAX_HEIGHT(GxEPD2_420)> display(GxEPD2_420(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
+//GxEPD2_BW<GxEPD2_750, MAX_HEIGHT(GxEPD2_750)> display(GxEPD2_750(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
+// 3-color e-papers
+//GxEPD2_3C<GxEPD2_154c, MAX_HEIGHT(GxEPD2_154c)> display(GxEPD2_154c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
+//GxEPD2_3C<GxEPD2_213c, MAX_HEIGHT(GxEPD2_213c)> display(GxEPD2_213c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
+//GxEPD2_3C<GxEPD2_290c, MAX_HEIGHT(GxEPD2_290c)> display(GxEPD2_290c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
+//GxEPD2_3C<GxEPD2_270c, MAX_HEIGHT(GxEPD2_270c)> display(GxEPD2_270c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
+//GxEPD2_3C<GxEPD2_420c, MAX_HEIGHT(GxEPD2_420c)> display(GxEPD2_420c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
+//GxEPD2_3C<GxEPD2_750c, MAX_HEIGHT(GxEPD2_750c)> display(GxEPD2_750c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
 #endif
 
 void setup()
@@ -319,56 +343,6 @@ void showPartialUpdate()
     while (display.nextPage());
     delay(1000);
   }
-  // check box on right side corner
-  box_x = display.height() - box_x - box_w - 1; // not valid for all corners
-  // should show on right side of long side
-  // show where the update box is
-  for (uint16_t r = 0; r < 4; r++)
-  {
-    display.setRotation(r);
-    display.setPartialWindow(box_x, box_y, box_w, box_h);
-    display.firstPage();
-    do
-    {
-      display.fillRect(box_x, box_y, box_w, box_h, GxEPD_BLACK);
-    }
-    while (display.nextPage());
-    delay(1000);
-    display.firstPage();
-    do
-    {
-      display.fillRect(box_x, box_y, box_w, box_h, GxEPD_WHITE);
-    }
-    while (display.nextPage());
-    delay(1000);
-  }
-  // show updates in the update box
-  for (uint16_t r = 0; r < 4; r++)
-  {
-    display.setRotation(r);
-    display.setPartialWindow(box_x, box_y, box_w, box_h);
-    if (box_x >= display.width()) continue; // avoid delay
-    for (uint16_t i = 1; i <= 10; i += incr)
-    {
-      display.firstPage();
-      do
-      {
-        display.fillRect(box_x, box_y, box_w, box_h, GxEPD_WHITE);
-        display.setCursor(box_x, cursor_y);
-        display.print(value * i, 2);
-      }
-      while (display.nextPage());
-      delay(500);
-    }
-    delay(1000);
-    display.firstPage();
-    do
-    {
-      display.fillRect(box_x, box_y, box_w, box_h, GxEPD_WHITE);
-    }
-    while (display.nextPage());
-    delay(1000);
-  }
 }
 
 // comment out unused bitmaps to reduce code space used
@@ -388,9 +362,7 @@ void showPartialUpdate()
 
 void drawBitmaps()
 {
-#ifdef _GxBitmaps200x200_H_
-  drawBitmaps200x200();
-#endif
+  display.setFullWindow();
 #ifdef _GxBitmaps128x250_H_
   drawBitmaps128x250();
 #endif
@@ -407,9 +379,6 @@ void drawBitmaps()
   drawBitmaps640x384();
 #endif
   // 3-color
-#ifdef _GxBitmaps3c200x200_H_
-  drawBitmaps3c200x200();
-#endif
 #ifdef _GxBitmaps3c104x212_H_
   drawBitmaps3c104x212();
 #endif
@@ -421,6 +390,14 @@ void drawBitmaps()
 #endif
 #ifdef _GxBitmaps3c400x300_H_
   drawBitmaps3c400x300();
+#endif
+// show these after the specific bitmaps
+#ifdef _GxBitmaps200x200_H_
+  drawBitmaps200x200();
+#endif
+  // 3-color
+#ifdef _GxBitmaps3c200x200_H_
+  drawBitmaps3c200x200();
 #endif
 }
 
@@ -450,7 +427,7 @@ void drawBitmaps200x200()
   //else
   {
     bool mirror_y = (display.epd2.panel != GxEPD2::GDE0213B1);
-    display.clearScreen(0xFF);
+    display.clearScreen(); // use default for white
     uint16_t x = (display.epd2.WIDTH - 200) / 2;
     uint16_t y = (display.epd2.HEIGHT - 200) / 2;
     for (uint16_t i = 0; i < sizeof(bitmaps) / sizeof(char*); i++)
@@ -466,7 +443,7 @@ void drawBitmaps200x200()
     int16_t y = -60;
     for (uint16_t j = 0; j < 10; j++)
     {
-      display.writeScreenBuffer(0xFF);
+      display.writeScreenBuffer(); // use default for white
       display.writeImage(bitmaps[i], x, y, 200, 200, false, mirror_y, true);
       display.refresh(true);
       delay(2000);
@@ -477,7 +454,7 @@ void drawBitmaps200x200()
     if (!display.epd2.hasFastPartialUpdate) break; // comment out for full show
     break; // comment out for full show
   }
-  display.writeScreenBuffer(0xFF);
+  display.writeScreenBuffer(); // use default for white
   display.writeImage(bitmaps[0], 0, 0, 200, 200, false, mirror_y, true);
   display.writeImage(bitmaps[0], display.epd2.WIDTH - 200, display.epd2.HEIGHT - 200, 200, 200, false, mirror_y, true);
   display.refresh(true);
@@ -671,7 +648,7 @@ void drawBitmaps3c200x200()
   }
   if (display.epd2.hasColor)
   {
-    display.clearScreen(0xFF);
+    display.clearScreen(); // use default for white
     uint16_t x = (display.epd2.WIDTH - 200) / 2;
     uint16_t y = (display.epd2.HEIGHT - 200) / 2;
     for (uint16_t i = 0; i < sizeof(bitmap_pairs) / sizeof(bitmap_pair); i++)
@@ -685,7 +662,7 @@ void drawBitmaps3c200x200()
       int16_t y = -60;
       for (uint16_t j = 0; j < 10; j++)
       {
-        display.writeScreenBuffer(0xFF);
+        display.writeScreenBuffer(); // use default for white
         display.writeImage(bitmap_pairs[i].black, bitmap_pairs[i].red, x, y, 200, 200, false, false, true);
         display.refresh();
         delay(2000);
@@ -694,7 +671,7 @@ void drawBitmaps3c200x200()
         if ((x >= display.epd2.WIDTH) || (y >= display.epd2.HEIGHT)) break;
       }
     }
-    display.writeScreenBuffer(0xFF);
+    display.writeScreenBuffer(); // use default for white
     display.writeImage(bitmap_pairs[0].black, bitmap_pairs[0].red, 0, 0, 200, 200, false, false, true);
     display.writeImage(bitmap_pairs[0].black, bitmap_pairs[0].red, display.epd2.WIDTH - 200, display.epd2.HEIGHT - 200, 200, 200, false, false, true);
     display.refresh();

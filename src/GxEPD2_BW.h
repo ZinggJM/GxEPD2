@@ -19,6 +19,7 @@
 #include "epd/GxEPD2_290.h"
 #include "epd/GxEPD2_270.h"
 #include "epd/GxEPD2_420.h"
+#include "epd/GxEPD2_583.h"
 #include "epd/GxEPD2_750.h"
 
 template<typename GxEPD2_Type, const uint16_t page_height>

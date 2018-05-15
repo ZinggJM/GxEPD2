@@ -31,12 +31,12 @@ void GxEPD2_270::clearScreen(uint8_t value)
 {
   _Init_Part();
   _setPartialRamArea(0, 0, WIDTH, HEIGHT);
-  for (int16_t i = 0; i < WIDTH * HEIGHT / 8; i++)
+  for (uint32_t i = 0; i < WIDTH * HEIGHT / 8; i++)
   {
     _writeData(value);
   }
   _refreshWindow(0, 0, WIDTH, HEIGHT);
-  _waitWhileBusy("clearScreen");
+  _waitWhileBusy("clearScreen", full_refresh_time);
   _initial = false;
 }
 
@@ -52,7 +52,7 @@ void GxEPD2_270::_writeScreenBuffer(uint8_t value)
   _Init_Part();
   _writeCommand(0x91); // partial in
   _setPartialRamArea(0, 0, WIDTH, HEIGHT);
-  for (int16_t i = 0; i < WIDTH * HEIGHT / 8; i++)
+  for (uint32_t i = 0; i < WIDTH * HEIGHT / 8; i++)
   {
     _writeData(value);
   }
@@ -61,8 +61,10 @@ void GxEPD2_270::_writeScreenBuffer(uint8_t value)
 
 void GxEPD2_270::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
+  delay(1); // yield() to avoid WDT on ESP8266 and ESP32
+  int16_t wb = (w + 7) / 8; // width bytes, bitmaps are padded
   x -= x % 8; // byte boundary
-  w -= x % 8; // byte boundary
+  w = wb * 8; // byte boundary
   int16_t x1 = x < 0 ? 0 : x; // limit
   int16_t y1 = y < 0 ? 0 : y; // limit
   int16_t w1 = x + w < WIDTH ? w : WIDTH - x; // limit
@@ -79,8 +81,8 @@ void GxEPD2_270::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_
     for (int16_t j = 0; j < w1 / 8; j++)
     {
       uint8_t data;
-      // use w, h of bitmap for index!
-      int16_t idx = mirror_y ? j + dx / 8 + ((h - 1 - (i + dy))) * (w / 8) : j + dx / 8 + (i + dy) * (w / 8);
+      // use wb, h of bitmap for index!
+      int16_t idx = mirror_y ? j + dx / 8 + ((h - 1 - (i + dy))) * wb : j + dx / 8 + (i + dy) * wb;
       if (pgm)
       {
 #if defined(__AVR) || defined(ESP8266) || defined(ESP32)
@@ -97,6 +99,7 @@ void GxEPD2_270::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_
       else _writeData(data);
     }
   }
+  delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
 
 void GxEPD2_270::writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
@@ -154,7 +157,7 @@ void GxEPD2_270::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
   w1 -= x1 - x;
   h1 -= y1 - y;
   _refreshWindow(x1, y1, w1, h1);
-  _waitWhileBusy("refresh");
+  _waitWhileBusy("refresh", full_refresh_time);
 }
 
 void GxEPD2_270::powerOff(void)
@@ -196,7 +199,7 @@ void GxEPD2_270::_PowerOn()
   if (!_power_is_on)
   {
     _writeCommand(0x04);
-    _waitWhileBusy("_PowerOn");
+    _waitWhileBusy("_PowerOn", power_on_time);
   }
   _power_is_on = true;
 }
@@ -204,7 +207,7 @@ void GxEPD2_270::_PowerOn()
 void GxEPD2_270::_PowerOff()
 {
   _writeCommand(0x02); // power off
-  _waitWhileBusy("_PowerOff");
+  _waitWhileBusy("_PowerOff", power_off_time);
   _power_is_on = false;
   _using_partial_mode = false;
 }
@@ -296,14 +299,14 @@ void GxEPD2_270::_Init_Part()
 
 void GxEPD2_270::_Update_Full()
 {
-  _writeCommand(0x12);      //display refresh
-  _waitWhileBusy("_Update_Full");
+  _writeCommand(0x12); //display refresh
+  _waitWhileBusy("_Update_Full", full_refresh_time);
 }
 
 void GxEPD2_270::_Update_Part()
 {
-  _writeCommand(0x12);      //display refresh
-  _waitWhileBusy("_Update_Part");
+  _writeCommand(0x12); //display refresh
+  _waitWhileBusy("_Update_Part", full_refresh_time);
 }
 
 
