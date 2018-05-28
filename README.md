@@ -24,9 +24,9 @@ New Simplified Version of GxEPD for Arduino
 #### - and then calling method display()
 
 ### Low Level Bitmap Drawing Support
-#### - bitmap drawing support to the controller memory and screen is available 
-#### - either through the template class instance as calls forwarded to the base display class
-#### - or directy using an instance of a base display class
+#### - bitmap drawing support to the controller memory and screen is available:
+#### - either through the template class instance methods that forward calls to the base display class
+#### - or directy using an instance of a base display class and calling its methods directly
 
 ### Supporting Arduino Forum Topics:
 
