@@ -317,8 +317,9 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
         {
           delay(1); // yield() to avoid WDT
           uint32_t got = client.read(buffer, rowSize);
-          while (got < rowSize)
+          while ((got < rowSize) && client.connected())
           {
+            delay(1); // yield() to avoid WDT
             got += client.read(buffer + got, rowSize - got);
           }
           bytes_read += got;
@@ -463,8 +464,9 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
         {
           delay(1); // yield() to avoid WDT
           uint32_t got = client.read(buffer, rowSize);
-          while (got < rowSize)
+          while ((got < rowSize) && client.connected())
           {
+            delay(1); // yield() to avoid WDT
             got += client.read(buffer + got, rowSize - got);
           }
           bytes_read += got;
