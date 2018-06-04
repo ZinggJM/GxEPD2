@@ -231,10 +231,13 @@ void showBitmapsFromWiFi()
   delay(2000);
 }
 
+static const uint16_t max_row_width = 640; // for up to 7.5" display
+
+uint8_t row_buffer[3 * max_row_width]; // buffer for at least one row (of up to 24bit BMP)
+
 void showBitmapFrom_HTTP(const char* host, const char* path, const char* filename, uint8_t x, uint8_t y)
 {
   WiFiClient client;
-  uint8_t buffer[512]; // buffer for at least one row
   bool valid = false; // valid format to be handled
   bool flip = true; // bitmap is stored bottom-to-top
   uint32_t startTime = millis();
@@ -307,20 +310,23 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
       if ((x + w - 1) >= display.width())  w = display.width()  - x;
       if ((y + h - 1) >= display.height()) h = display.height() - y;
       uint32_t skip = (flip ? (imageOffset + (height - h) * rowSize) : imageOffset) - bytes_read;
-      if (skip > 0) bytes_read += client.read(buffer, skip);
       //Serial.print("skip "); Serial.println(skip);
-      if (((depth == 1) || (depth == 24)) && (rowSize < sizeof(buffer))) // handle with direct drawing
+      while ((skip > 0) && client.connected())
+      {
+        client.read(); bytes_read++; skip--;
+      }
+      if (((depth == 1) || (depth == 24)) && (rowSize < sizeof(row_buffer))) // handle with direct drawing
       {
         valid = true;
         display.writeScreenBuffer();
         for (uint16_t row = 0; row < h; row++) // for each line
         {
           delay(1); // yield() to avoid WDT
-          uint32_t got = client.read(buffer, rowSize);
+          uint32_t got = client.read(row_buffer, rowSize);
           while ((got < rowSize) && client.connected())
           {
             delay(1); // yield() to avoid WDT
-            got += client.read(buffer + got, rowSize - got);
+            got += client.read(row_buffer + got, rowSize - got);
           }
           bytes_read += got;
           if (depth == 24)
@@ -330,22 +336,22 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
             uint32_t in_idx = 0;
             for (uint16_t col = 0; col < w; col++)
             {
-              uint16_t b = buffer[in_idx++];
-              uint16_t g = buffer[in_idx++];
-              uint16_t r = buffer[in_idx++];
+              uint16_t b = row_buffer[in_idx++];
+              uint16_t g = row_buffer[in_idx++];
+              uint16_t r = row_buffer[in_idx++];
               if ((r + g + b) / 3 > 0xFF  / 2)
               {
                 out_byte |= 0x80 >> col % 8;
               }
               if (7 == col % 8)
               {
-                buffer[out_idx++] = out_byte;
+                row_buffer[out_idx++] = out_byte;
                 out_byte = 0;
               }
             }
           }
           uint16_t y = flip ? h - row - 1 : row;
-          display.writeImage(buffer, 0, y, w, 1);
+          display.writeImage(row_buffer, 0, y, w, 1);
         }
         display.refresh();
       }
@@ -369,7 +375,6 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
 {
   // Use WiFiClientSecure class to create TLS connection
   WiFiClientSecure client;
-  uint8_t buffer[512]; // buffer for at least one row
   bool valid = false; // valid format to be handled
   bool flip = true; // bitmap is stored bottom-to-top
   uint32_t startTime = millis();
@@ -454,20 +459,23 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
       if ((x + w - 1) >= display.width())  w = display.width()  - x;
       if ((y + h - 1) >= display.height()) h = display.height() - y;
       uint32_t skip = (flip ? (imageOffset + (height - h) * rowSize) : imageOffset) - bytes_read;
-      if (skip > 0) bytes_read += client.read(buffer, skip);
       //Serial.print("skip "); Serial.println(skip);
-      if (((depth == 1) || (depth == 24)) && (rowSize < sizeof(buffer))) // handle with direct drawing
+      while ((skip > 0) && client.connected())
+      {
+        client.read(); bytes_read++; skip--;
+      }
+      if (((depth == 1) || (depth == 24)) && (rowSize < sizeof(row_buffer))) // handle with direct drawing
       {
         valid = true;
         display.writeScreenBuffer();
         for (uint16_t row = 0; row < h; row++) // for each line
         {
           delay(1); // yield() to avoid WDT
-          uint32_t got = client.read(buffer, rowSize);
+          uint32_t got = client.read(row_buffer, rowSize);
           while ((got < rowSize) && client.connected())
           {
             delay(1); // yield() to avoid WDT
-            got += client.read(buffer + got, rowSize - got);
+            got += client.read(row_buffer + got, rowSize - got);
           }
           bytes_read += got;
           if (depth == 24)
@@ -477,22 +485,22 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
             uint32_t in_idx = 0;
             for (uint16_t col = 0; col < w; col++)
             {
-              uint16_t b = buffer[in_idx++];
-              uint16_t g = buffer[in_idx++];
-              uint16_t r = buffer[in_idx++];
+              uint16_t b = row_buffer[in_idx++];
+              uint16_t g = row_buffer[in_idx++];
+              uint16_t r = row_buffer[in_idx++];
               if ((r + g + b) / 3 > 0xFF  / 2)
               {
                 out_byte |= 0x80 >> col % 8;
               }
               if (7 == col % 8)
               {
-                buffer[out_idx++] = out_byte;
+                row_buffer[out_idx++] = out_byte;
                 out_byte = 0;
               }
             }
           }
           uint16_t y = flip ? h - row - 1 : row;
-          display.writeImage(buffer, 0, y, w, 1);
+          display.writeImage(row_buffer, 0, y, w, 1);
         }
         display.refresh();
       }
