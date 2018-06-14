@@ -3,6 +3,8 @@
 //
 // Display Library based on Demo Example from Good Display: http://www.good-display.com/download_list/downloadcategoryid=34&isMode=false.html
 //
+// BMP handling code extracts taken from: https://github.com/prenticedavid/MCUFRIEND_kbv/tree/master/examples/showBMP_kbv_Uno
+//
 // Author: Jean-Marc Zingg
 //
 // Version: see library.properties
@@ -45,16 +47,7 @@
 // include SdFat for FAT32 support with long filenames; available through Library Manager
 #include <SdFat.h>
 
-#if defined(SdFat_h)
 SdFat SD;
-#define FileClass SdFile
-#define position curPosition
-#define seek seekSet
-#else
-#include <SD.h>
-#define FileClass File
-#undef SdFat_h
-#endif
 
 #if defined (ESP8266)
 #define SD_CS SS  // e.g. for RobotDyn Wemos D1 mini SD board
@@ -156,6 +149,8 @@ GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display(GxEPD2_154(/*CS=D8*/ EPD_CS, /
 //GxEPD2_3C<GxEPD2_750c, MAX_HEIGHT(GxEPD2_750c)> display(GxEPD2_750c(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
 #endif
 
+// function declaration with default parameter
+void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_color = true);
 
 void setup()
 {
@@ -173,68 +168,97 @@ void setup()
   }
   Serial.println("SD OK!");
 
-  drawBitmapFromSD("parrot.bmp", 0, 0);
-  delay(2000);
-  drawBitmapFromSD("betty_1.bmp", 0, 0);
-  delay(2000);
-#if defined(SdFat_h)
-  drawBitmapFromSD("logo200x200.bmp", 0, 0);
-  delay(2000);
-  drawBitmapFromSD("first200x200.bmp", 0, 0);
-  delay(2000);
-  drawBitmapFromSD("second200x200.bmp", 0, 0);
-  delay(2000);
-  drawBitmapFromSD("third200x200.bmp", 0, 0);
-  delay(2000);
-  drawBitmapFromSD("fourth200x200.bmp", 0, 0);
-  delay(2000);
-  drawBitmapFromSD("fifth200x200.bmp", 0, 0);
-  delay(2000);
-  drawBitmapFromSD("sixth200x200.bmp", 0, 0);
-  delay(2000);
-  drawBitmapFromSD("senventh200x200.bmp", 0, 0);
-  delay(2000);
-  drawBitmapFromSD("eighth200x200.bmp", 0, 0);
-  delay(2000);
-#else
-  drawBitmapFromSD("logo.bmp", 0, 0);
-  delay(2000);
-#endif
+  drawBitmaps_200x200();
+  drawBitmaps_other();
 }
 
 void loop(void)
 {
 }
 
-#define SD_BUFFER_PIXELS 20
-
-void drawBitmapFromSD(const char *filename, uint8_t x, uint8_t y)
+void drawBitmaps_200x200()
 {
-  FileClass file;
-  uint8_t buffer[3 * SD_BUFFER_PIXELS]; // pixel buffer, size for r,g,b
+  int16_t x = (display.width() - 200) / 2;
+  int16_t y = (display.height() - 200) / 2;
+  drawBitmapFromSD("logo200x200.bmp", x, y);
+  delay(2000);
+  drawBitmapFromSD("first200x200.bmp", x, y);
+  delay(2000);
+  drawBitmapFromSD("second200x200.bmp", x, y);
+  delay(2000);
+  drawBitmapFromSD("third200x200.bmp", x, y);
+  delay(2000);
+  drawBitmapFromSD("fourth200x200.bmp", x, y);
+  delay(2000);
+  drawBitmapFromSD("fifth200x200.bmp", x, y);
+  delay(2000);
+  drawBitmapFromSD("sixth200x200.bmp", x, y);
+  delay(2000);
+  drawBitmapFromSD("senventh200x200.bmp", x, y);
+  delay(2000);
+  drawBitmapFromSD("eighth200x200.bmp", x, y);
+  delay(2000);
+}
+
+void drawBitmaps_other()
+{
+  int16_t w2 = display.width() / 2;
+  int16_t h2 = display.height() / 2;
+  drawBitmapFromSD("parrot.bmp", w2 - 64, h2 - 80);
+  delay(2000);
+  drawBitmapFromSD("betty_1.bmp", w2 - 100, h2 - 160);
+  delay(2000);
+  drawBitmapFromSD("betty_4.bmp", w2 - 102, h2 - 126);
+  delay(2000);
+  drawBitmapFromSD("marilyn_240x240x8.bmp", w2 - 120, h2 - 120);
+  delay(2000);
+  drawBitmapFromSD("miniwoof.bmp", w2 - 60, h2 - 80);
+  delay(2000);
+  drawBitmapFromSD("t200x200.bmp", w2 - 100, h2 - 100);
+  delay(2000);
+  drawBitmapFromSD("test.bmp", w2 - 120, h2 - 160);
+  delay(2000);
+  drawBitmapFromSD("tiger.bmp", w2 - 160, h2 - 120);
+  delay(2000);
+  drawBitmapFromSD("tiger_178x160x4.bmp", w2 - 89, h2 - 80);
+  delay(2000);
+  drawBitmapFromSD("tiger_240x317x4.bmp", w2 - 120, h2 - 160);
+  delay(2000);
+  drawBitmapFromSD("tiger_320x200x24.bmp", w2 - 160, h2 - 100);
+  delay(2000);
+  drawBitmapFromSD("tiger16T.bmp", w2 - 160, h2 - 120);
+  delay(2000);
+  drawBitmapFromSD("woof.bmp", w2 - 120, h2 - 160);
+  delay(2000);
+}
+
+static const uint16_t input_buffer_pixels = 20; // may affect performance
+
+static const uint16_t max_row_width = 640; // for up to 7.5" display
+static const uint16_t max_palette_pixels = 256; // for depth <= 8
+
+uint8_t input_buffer[3 * input_buffer_pixels]; // up to depth 24
+uint8_t output_row_mono_buffer[max_row_width / 8]; // buffer for at least one row of b/w bits
+uint8_t output_row_color_buffer[max_row_width / 8]; // buffer for at least one row of color bits
+uint8_t mono_palette_buffer[max_palette_pixels / 8]; // palette buffer for depth <= 8 b/w
+uint8_t color_palette_buffer[max_palette_pixels / 8]; // palette buffer for depth <= 8 c/w
+
+void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_color)
+{
+  SdFile file;
   bool valid = false; // valid format to be handled
   bool flip = true; // bitmap is stored bottom-to-top
-  uint32_t pos = 0;
   uint32_t startTime = millis();
   if ((x >= display.width()) || (y >= display.height())) return;
   Serial.println();
   Serial.print("Loading image '");
   Serial.print(filename);
   Serial.println('\'');
-#if defined(SdFat_h)
   if (!file.open(filename, FILE_READ))
   {
     Serial.print("File not found");
     return;
   }
-#else
-  file = SD.open(filename);
-  if (!file)
-  {
-    Serial.print("File not found");
-    return;
-  }
-#endif
   // Parse BMP header
   if (read16(file) == 0x4D42) // BMP signature
   {
@@ -247,7 +271,7 @@ void drawBitmapFromSD(const char *filename, uint8_t x, uint8_t y)
     uint16_t planes = read16(file);
     uint16_t depth = read16(file); // bits per pixel
     uint32_t format = read32(file);
-    if ((planes == 1) && (format == 0)) // uncompressed is handled
+    if ((planes == 1) && ((format == 0) || (format == 3))) // uncompressed is handled, 565 also
     {
       Serial.print("File size: "); Serial.println(fileSize);
       Serial.print("Image Offset: "); Serial.println(imageOffset);
@@ -257,14 +281,6 @@ void drawBitmapFromSD(const char *filename, uint8_t x, uint8_t y)
       Serial.print(width);
       Serial.print('x');
       Serial.println(height);
-      //      Serial.print("first position "); Serial.println(file.position());
-      //      for (uint32_t i = file.position(); i < imageOffset; i++)
-      //      {
-      //        uint8_t data = file.read();// remaining header bytes
-      //        Serial.print("0x"); Serial.print(data, HEX); Serial.print(", ");
-      //      }
-      //      Serial.println();
-      //      Serial.print("start position "); Serial.println(file.position());
       // BMP rows are padded (if needed) to 4-byte boundary
       uint32_t rowSize = (width * depth / 8 + 3) & ~3;
       if (height < 0)
@@ -276,93 +292,138 @@ void drawBitmapFromSD(const char *filename, uint8_t x, uint8_t y)
       uint16_t h = height;
       if ((x + w - 1) >= display.width())  w = display.width()  - x;
       if ((y + h - 1) >= display.height()) h = display.height() - y;
-      if ((depth == 1) && (rowSize < sizeof(buffer))) // handle with direct drawing
+      if (w < max_row_width) // handle with direct drawing
       {
         valid = true;
-        display.writeScreenBuffer();
-        if (flip) file.seek(imageOffset + (height - h) * rowSize);
-        else file.seek(imageOffset);
-        for (uint16_t row = 0; row < h; row++) // for each line
+        uint8_t bitmask = 0xFF;
+        uint8_t bitshift = 8 - depth;
+        uint16_t red, green, blue;
+        bool whitish, colored;
+        if (depth == 1) with_color = false;
+        if (depth <= 8)
         {
-          file.read(buffer, rowSize);
-          uint16_t y = flip ? h - row - 1 : row;
-          display.writeImage(buffer, 0, y, w, 1);
-        }
-        display.refresh();
-      }
-      else
-      {
-        display.firstPage();
-        do
-        {
-          size_t buffidx = sizeof(buffer); // force buffer load
-          for (uint16_t row = 0; row < h; row++) // for each line
+          if (depth < 8) bitmask >>= depth;
+          file.seekSet(54); //palette is always @ 54
+          for (uint16_t pn = 0; pn < (1 << depth); pn++)
           {
-            if (flip) // Bitmap is stored bottom-to-top order (normal BMP)
-              pos = imageOffset + (height - 1 - row) * rowSize;
-            else     // Bitmap is stored top-to-bottom
-              pos = imageOffset + row * rowSize;
-            if (file.position() != pos)
-            { // Need seek?
-              file.seek(pos);
-              buffidx = sizeof(buffer); // force buffer reload
-            }
-            uint8_t bits;
-            for (uint16_t col = 0; col < w; col++) // for each pixel
+            blue  = file.read();
+            green = file.read();
+            red   = file.read();
+            file.read();
+            whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
+            colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
+            if (0 == pn % 8) mono_palette_buffer[pn / 8] = 0;
+            mono_palette_buffer[pn / 8] |= whitish << pn % 8;
+            if (0 == pn % 8) color_palette_buffer[pn / 8] = 0;
+            color_palette_buffer[pn / 8] |= colored << pn % 8;
+          }
+        }
+        display.clearScreen();
+        uint32_t rowPosition = flip ? imageOffset + (height - h) * rowSize : imageOffset;
+        for (uint16_t row = 0; row < h; row++, rowPosition += rowSize) // for each line
+        {
+          uint32_t in_remain = rowSize;
+          uint32_t in_idx = 0;
+          uint32_t in_bytes = 0;
+          uint8_t in_byte = 0; // for depth <= 8
+          uint8_t in_bits = 0; // for depth <= 8
+          uint8_t out_byte = 0;
+          uint8_t out_color_byte = 0;
+          uint32_t out_idx = 0;
+          file.seekSet(rowPosition);
+          for (uint16_t col = 0; col < w; col++) // for each pixel
+          {
+            // Time to read more pixel data?
+            if (in_idx >= in_bytes) // ok, exact match for 24bit also (size IS multiple of 3)
             {
-              // Time to read more pixel data?
-              if (buffidx >= sizeof(buffer))
-              {
-                file.read(buffer, sizeof(buffer));
-                buffidx = 0; // Set index to beginning
-              }
-              switch (depth)
-              {
-                case 1: // one bit per pixel b/w format
+              in_bytes = file.read(input_buffer, in_remain > sizeof(input_buffer) ? sizeof(input_buffer) : in_remain);
+              in_remain -= in_bytes;
+              in_idx = 0;
+            }
+            switch (depth)
+            {
+              case 24:
+                blue = input_buffer[in_idx++];
+                green = input_buffer[in_idx++];
+                red = input_buffer[in_idx++];
+                whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
+                colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
+                break;
+              case 16:
+                {
+                  uint8_t lsb = input_buffer[in_idx++];
+                  uint8_t msb = input_buffer[in_idx++];
+                  if (format == 0) // 555
                   {
-                    valid = true;
-                    if (0 == col % 8)
-                    {
-                      bits = buffer[buffidx++];
-                    }
-                    uint16_t bw_color = bits & 0x80 ? GxEPD_WHITE : GxEPD_BLACK;
-                    display.drawPixel(col, row, bw_color);
-                    bits <<= 1;
+                    blue  = (lsb & 0x1F) << 3;
+                    green = ((msb & 0x03) << 6) | ((lsb & 0xE0) >> 2);
+                    red   = (msb & 0x7C) << 1;
                   }
-                  break;
-                case 24: // standard BMP format
+                  else // 565
                   {
-                    valid = true;
-                    uint16_t b = buffer[buffidx++];
-                    uint16_t g = buffer[buffidx++];
-                    uint16_t r = buffer[buffidx++];
-                    uint16_t bw_color = ((r + g + b) / 3 > 0xFF  / 2) ? GxEPD_WHITE : GxEPD_BLACK;
-                    display.drawPixel(col, row, bw_color);
+                    blue  = (lsb & 0x1F) << 3;
+                    green = ((msb & 0x07) << 5) | ((lsb & 0xE0) >> 3);
+                    red   = (msb & 0xF8);
                   }
-                  break;
-              }
-            } // end pixel
-          } // end line
-        } // end do
-        while (display.nextPage());
+                  whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
+                  colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
+                }
+                break;
+              case 1:
+              case 4:
+              case 8:
+                {
+                  if (0 == in_bits)
+                  {
+                    in_byte = input_buffer[in_idx++];
+                    in_bits = 8;
+                  }
+                  uint16_t pn = (in_byte >> bitshift) & bitmask;
+                  whitish = mono_palette_buffer[pn / 8] & (0x1 << pn % 8);
+                  colored = color_palette_buffer[pn / 8] & (0x1 << pn % 8);
+                  in_byte <<= depth;
+                  in_bits -= depth;
+                }
+                break;
+            }
+            if (whitish)
+            {
+              out_byte |= 0x80 >> col % 8; // not black
+              out_color_byte |= 0x80 >> col % 8; // not colored
+            }
+            else if (colored && with_color)
+            {
+              out_byte |= 0x80 >> col % 8; // not black
+            }
+            else
+            {
+              out_color_byte |= 0x80 >> col % 8; // not colored
+            }
+            if (7 == col % 8)
+            {
+              output_row_color_buffer[out_idx] = out_color_byte;
+              output_row_mono_buffer[out_idx++] = out_byte;
+              out_byte = 0;
+              out_color_byte = 0;
+            }
+          } // end pixel
+          uint16_t yrow = y + (flip ? h - row - 1 : row);
+          display.writeImage(output_row_mono_buffer, output_row_color_buffer, x, yrow, w, 1);
+        } // end line
+        Serial.print("loaded in "); Serial.print(millis() - startTime); Serial.println(" ms");
+        display.refresh();
       }
     }
   }
-  //Serial.print("end position  "); Serial.println(file.position());
+  //Serial.print("end curPosition  "); Serial.println(file.curPosition());
   file.close();
-  if (valid)
-  {
-    Serial.print("loaded in ");
-    Serial.print(millis() - startTime);
-    Serial.println(" ms");
-  }
-  else
+  if (!valid)
   {
     Serial.println("bitmap format not handled.");
   }
 }
 
-uint16_t read16(FileClass& f)
+uint16_t read16(SdFile& f)
 {
   // BMP data is stored little-endian, same as Arduino.
   uint16_t result;
@@ -371,7 +432,7 @@ uint16_t read16(FileClass& f)
   return result;
 }
 
-uint32_t read32(FileClass& f)
+uint32_t read32(SdFile& f)
 {
   // BMP data is stored little-endian, same as Arduino.
   uint32_t result;

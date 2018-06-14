@@ -27,6 +27,7 @@ const char* fp_github_com     = "ca 06 f5 6b 25 8b 7a 0d 4f 2b 05 47 09 39 47 86
 const char* fp_rawcontent     = "cc aa 48 48 66 46 0e 91 53 2c 9c 7c 23 2a b1 74 4d 29 9d 33";
 const char* host_rawcontent   = "raw.githubusercontent.com";
 const char* path_rawcontent   = "/ZinggJM/GxEPD2/master/extras/bitmaps/";
+const char* path_prenticedavid   = "/prenticedavid/MCUFRIEND_kbv/master/extras/bitmaps/";
 
 void setup()
 {
@@ -76,7 +77,9 @@ void setup()
   SPIFFS.begin();
   Serial.println("SPIFFS started");
   listFiles();
-  downloadBitmaps();
+  //deleteFiles();
+  downloadBitmaps_200x200();
+  downloadBitmaps_other();
   listFiles();
 }
 
@@ -84,9 +87,8 @@ void loop()
 {
 }
 
-void downloadBitmaps()
+void downloadBitmaps_200x200()
 {
-  downloadFile_HTTP("www.squix.org", "/blog/wunderground/", "chanceflurries.bmp", "chanceflurries.bmp");
   downloadFile_HTTPS(host_rawcontent, path_rawcontent, "logo200x200.bmp", fp_rawcontent, "logo200x200.bmp");
   downloadFile_HTTPS(host_rawcontent, path_rawcontent, "first200x200.bmp", fp_rawcontent, "first200x200.bmp");
   downloadFile_HTTPS(host_rawcontent, path_rawcontent, "second200x200.bmp", fp_rawcontent, "second200x200.bmp");
@@ -96,6 +98,47 @@ void downloadBitmaps()
   downloadFile_HTTPS(host_rawcontent, path_rawcontent, "sixth200x200.bmp", fp_rawcontent, "sixth200x200.bmp");
   downloadFile_HTTPS(host_rawcontent, path_rawcontent, "seventh200x200.bmp", fp_rawcontent, "seventh200x200.bmp");
   downloadFile_HTTPS(host_rawcontent, path_rawcontent, "eighth200x200.bmp", fp_rawcontent, "eighth200x200.bmp");
+}
+
+void downloadBitmaps_other()
+{
+  downloadFile_HTTP("www.squix.org", "/blog/wunderground/", "chanceflurries.bmp", "chanceflurries.bmp");
+  downloadFile_HTTPS(host_rawcontent, path_prenticedavid, "betty_1.bmp", fp_rawcontent, "betty_1.bmp");
+  downloadFile_HTTPS(host_rawcontent, path_prenticedavid, "betty_4.bmp", fp_rawcontent, "betty_4.bmp");
+  downloadFile_HTTPS(host_rawcontent, path_prenticedavid, "marilyn_240x240x8.bmp", fp_rawcontent, "marilyn_240x240x8.bmp");
+  downloadFile_HTTPS(host_rawcontent, path_prenticedavid, "miniwoof.bmp", fp_rawcontent, "miniwoof.bmp");
+  //downloadFile_HTTPS(host_rawcontent, path_prenticedavid, "test.bmp", fp_rawcontent, "test.bmp");
+  downloadFile_HTTPS(host_rawcontent, path_prenticedavid, "tiger.bmp", fp_rawcontent, "tiger.bmp");
+  downloadFile_HTTPS(host_rawcontent, path_prenticedavid, "tiger_178x160x4.bmp", fp_rawcontent, "tiger_178x160x4.bmp");
+  downloadFile_HTTPS(host_rawcontent, path_prenticedavid, "tiger_240x317x4.bmp", fp_rawcontent, "tiger_240x317x4.bmp");
+  downloadFile_HTTPS(host_rawcontent, path_prenticedavid, "tiger_320x200x24.bmp", fp_rawcontent, "tiger_320x200x24.bmp");
+  //downloadFile_HTTPS(host_rawcontent, path_prenticedavid, "tiger16T.bmp", fp_rawcontent, "tiger16T.bmp");
+  downloadFile_HTTPS(host_rawcontent, path_prenticedavid, "woof.bmp", fp_rawcontent, "woof.bmp");
+}
+
+void deleteFiles()
+{
+  SPIFFS.remove("logo200x200.bmp");
+  SPIFFS.remove("first200x200.bmp");
+  SPIFFS.remove("second200x200.bmp");
+  SPIFFS.remove("third200x200.bmp");
+  SPIFFS.remove("fourth200x200.bmp");
+  SPIFFS.remove("fifth200x200.bmp");
+  SPIFFS.remove("sixth200x200.bmp");
+  SPIFFS.remove("seventh200x200.bmp");
+  SPIFFS.remove("eighth200x200.bmp");
+  SPIFFS.remove("chanceflurries.bmp");
+  SPIFFS.remove("betty_1.bmp");
+  SPIFFS.remove("betty_4.bmp");
+  SPIFFS.remove("marilyn_240x240x8.bmp");
+  SPIFFS.remove("miniwoof.bmp");
+  SPIFFS.remove("test.bmp");
+  SPIFFS.remove("tiger.bmp");
+  SPIFFS.remove("tiger_178x160x4.bmp");
+  SPIFFS.remove("tiger_240x317x4.bmp");
+  SPIFFS.remove("tiger_320x200x24.bmp");
+  SPIFFS.remove("tiger16T.bmp");
+  SPIFFS.remove("woof.bmp");
 }
 
 void downloadFile_HTTP(const char* host, const char* path, const char* filename, const char* target)
@@ -164,8 +207,8 @@ void downloadFile_HTTPS(const char* host, const char* path, const char* filename
 {
   // Use WiFiClientSecure class to create TLS connection
   WiFiClientSecure client;
-  Serial.print("connecting to ");
-  Serial.println(host);
+  Serial.println(); Serial.print("downloading file \""); Serial.print(filename);  Serial.println("\"");
+  Serial.print("connecting to "); Serial.println(host);
   if (!client.connect(host, httpsPort))
   {
     Serial.println("connection failed");
@@ -221,7 +264,26 @@ void downloadFile_HTTPS(const char* host, const char* path, const char* filename
   }
   while (client.connected())
   {
+    // this doesn't work as expected, but it helps for long downloads
+    int32_t start = millis();
+    for (int16_t t = 0, dly = 50; t < 20; t++, dly += 50)
+    {
+      if (!client.connected()) break;
+      if (client.available()) break; // read would not recover after having returned 0
+      delay(dly);
+    }
+    if (!client.connected()) break;
+    int32_t elapsed = millis() - start;
+    if (elapsed > 250)
+    {
+      Serial.print("waited for available "); Serial.print(millis() - start); Serial.print(" ms @ "); Serial.println(total);
+    }
     size_t available = client.available();
+    if (0 == available)
+    {
+      Serial.print("download error: timeout on available() after "); Serial.print(total); Serial.println(" bytes");
+      break; // don't hang forever
+    }
     size_t fetch = available <= sizeof(buffer) ? available : sizeof(buffer);
     if (fetch > 0)
     {
@@ -230,6 +292,7 @@ void downloadFile_HTTPS(const char* host, const char* path, const char* filename
       total += got;
     }
     delay(1); // yield();
+    if (total > 30000) delay(250); // helps for long downloads
   }
   file.close();
   Serial.print("done, "); Serial.print(total); Serial.println(" bytes transferred");
