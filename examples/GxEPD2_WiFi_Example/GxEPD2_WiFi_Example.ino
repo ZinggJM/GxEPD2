@@ -42,7 +42,7 @@
 
 #if defined (ESP8266)
 // select one and adapt to your mapping, can use full buffer size (full HEIGHT)
-GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display(GxEPD2_154(/*CS=D8*/ EPD_CS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
+//GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display(GxEPD2_154(/*CS=D8*/ EPD_CS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 //GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display(GxEPD2_213(/*CS=D8*/ EPD_CS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 //GxEPD2_BW<GxEPD2_290, GxEPD2_290::HEIGHT> display(GxEPD2_290(/*CS=D8*/ EPD_CS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 //GxEPD2_BW<GxEPD2_270, GxEPD2_270::HEIGHT> display(GxEPD2_270(/*CS=D8*/ EPD_CS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
@@ -138,8 +138,9 @@ GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display(GxEPD2_154(/*CS=D8*/ EPD_CS, /
 //GxEPD2_3C<GxEPD2_750c, MAX_HEIGHT(GxEPD2_750c)> display(GxEPD2_750c(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
 #endif
 
-
+#if defined (ESP8266)
 #include <ESP8266WiFi.h>
+#endif
 #include <WiFiClient.h>
 #include <WiFiClientSecure.h>
 
@@ -527,6 +528,7 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
     Serial.println("connection failed");
     return;
   }
+#if defined (ESP8266)
   if (fingerprint)
   {
     if (client.verify(fingerprint, host))
@@ -539,6 +541,7 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
       return;
     }
   }
+#endif
   Serial.print("requesting URL: ");
   Serial.println(String("https://") + host + path + filename);
   client.print(String("GET ") + path + filename + " HTTP/1.1\r\n" +
@@ -689,15 +692,15 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
                   uint8_t msb = input_buffer[in_idx++];
                   if (format == 0) // 555
                   {
-                    blue  = (lsb & 0x1F);
-                    green = ((msb & 0x03) << 3) | ((lsb & 0xE0) >> 5);
-                    red   = (msb & 0x7C) >> 2;
+                    blue  = (lsb & 0x1F) << 3;
+                    green = ((msb & 0x03) << 6) | ((lsb & 0xE0) >> 2);
+                    red   = (msb & 0x7C) << 1;
                   }
                   else // 565
                   {
-                    blue  = (lsb & 0x1F);
-                    green = ((msb & 0x07) << 3) | ((lsb & 0xE0) >> 5);
-                    red   = (msb & 0xF8) >> 3;
+                    blue  = (lsb & 0x1F) << 3;
+                    green = ((msb & 0x07) << 5) | ((lsb & 0xE0) >> 3);
+                    red   = (msb & 0xF8);
                   }
                   whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
                   colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?

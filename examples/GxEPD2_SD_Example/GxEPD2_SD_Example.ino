@@ -44,16 +44,28 @@
 #include <GxEPD2_3C.h>
 #include <Fonts/FreeMonoBold9pt7b.h>
 
+#if defined(ESP32)
+
+// has support for FAT32 support with long filenames
+#include "FS.h"
+#include "SD.h"
+#include "SPI.h"
+#define SdFile File
+#define seekSet seek
+
+#else
+
 // include SdFat for FAT32 support with long filenames; available through Library Manager
 #include <SdFat.h>
-
 SdFat SD;
+
+#endif
 
 #if defined (ESP8266)
 #define SD_CS SS  // e.g. for RobotDyn Wemos D1 mini SD board
 #define EPD_CS D1 // alternative I use with RobotDyn Wemos D1 mini SD board
 // select one and adapt to your mapping, can use full buffer size (full HEIGHT)
-GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display(GxEPD2_154(/*CS=D8*/ EPD_CS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
+//GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display(GxEPD2_154(/*CS=D8*/ EPD_CS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 //GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display(GxEPD2_213(/*CS=D8*/ EPD_CS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 //GxEPD2_BW<GxEPD2_290, GxEPD2_290::HEIGHT> display(GxEPD2_290(/*CS=D8*/ EPD_CS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 //GxEPD2_BW<GxEPD2_270, GxEPD2_270::HEIGHT> display(GxEPD2_270(/*CS=D8*/ EPD_CS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
@@ -95,6 +107,8 @@ GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display(GxEPD2_154(/*CS=D8*/ EPD_CS, /
 #endif
 
 #if defined(ESP32)
+#define SD_CS 2  // adapt to your wiring
+#define EPD_CS SS // adapt to your wiring
 // select one and adapt to your mapping, can use full buffer size (full HEIGHT)
 //GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display(GxEPD2_154(/*CS=5*/ EPD_CS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
 //GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display(GxEPD2_213(/*CS=5*/ EPD_CS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
@@ -194,7 +208,7 @@ void drawBitmaps_200x200()
   delay(2000);
   drawBitmapFromSD("sixth200x200.bmp", x, y);
   delay(2000);
-  drawBitmapFromSD("senventh200x200.bmp", x, y);
+  drawBitmapFromSD("seventh200x200.bmp", x, y);
   delay(2000);
   drawBitmapFromSD("eighth200x200.bmp", x, y);
   delay(2000);
@@ -254,11 +268,20 @@ void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_colo
   Serial.print("Loading image '");
   Serial.print(filename);
   Serial.println('\'');
+#if defined(ESP32)
+  file = SD.open(String("/") + filename, FILE_READ);
+  if (!file)
+  {
+    Serial.print("File not found");
+    return;
+  }
+#else
   if (!file.open(filename, FILE_READ))
   {
     Serial.print("File not found");
     return;
   }
+#endif
   // Parse BMP header
   if (read16(file) == 0x4D42) // BMP signature
   {
