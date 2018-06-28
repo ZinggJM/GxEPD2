@@ -81,6 +81,7 @@ class GxEPD2_EPD
     int8_t _cs, _dc, _rst, _busy, _busy_level;
     uint32_t _busy_timeout;
     bool _diag_enabled;
+    SPISettings _spi_settings;
 };
 
 #endif

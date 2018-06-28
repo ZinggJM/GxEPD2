@@ -31,7 +31,6 @@ class GxEPD2_3C : public Adafruit_GFX
     {
       _page_height = page_height;
       _pages = (HEIGHT / _page_height) + ((HEIGHT % _page_height) > 0);
-      _reverse = (epd2_instance.panel == GxEPD2::GDE0213B1);
       _using_partial_mode = false;
       _current_page = 0;
       setFullWindow();
@@ -63,16 +62,13 @@ class GxEPD2_3C : public Adafruit_GFX
           y = HEIGHT - y - 1;
           break;
       }
+      // transpose partial window to 0,0
+      x -= _pw_x;
+      y -= _pw_y;
       // adjust for current page
       y -= _current_page * _page_height;
-      // adjust for partial window
-      x -= _pw_x;
-      y -= _pw_y % _page_height;
-      if (_reverse) y = _pw_h - y - 1;
       // check if in current page
-      if (y >= _page_height) return;
-      // check if in (partial) window
-      if ((x < 0) || (x >= _pw_w) || (y < 0) || (y >= _pw_h)) return;
+      if ((y < 0) || (y >= _page_height)) return;
       uint16_t i = x / 8 + y * (_pw_w / 8);
       _black_buffer[i] = (_black_buffer[i] | (1 << (7 - x % 8))); // white
       _color_buffer[i] = _color_buffer[i] = (_color_buffer[i] | (1 << (7 - x % 8)));
@@ -149,8 +145,8 @@ class GxEPD2_3C : public Adafruit_GFX
         //Serial.print("  nextPage("); Serial.print(_pw_x); Serial.print(", "); Serial.print(_pw_y); Serial.print(", ");
         //Serial.print(_pw_w); Serial.print(", "); Serial.print(_pw_h); Serial.print(") P"); Serial.println(_current_page);
         uint16_t page_ye = _current_page < (_pages - 1) ? page_ys + _page_height : HEIGHT;
-        uint16_t dest_ys = gx_uint16_max(_pw_y, page_ys);
-        uint16_t dest_ye = gx_uint16_min(_pw_y + _pw_h, page_ye);
+        uint16_t dest_ys = _pw_y + page_ys; // transposed
+        uint16_t dest_ye = gx_uint16_min(_pw_y + _pw_h, _pw_y + page_ye);
         if (dest_ye > dest_ys)
         {
           //Serial.print("writeImage("); Serial.print(_pw_x); Serial.print(", "); Serial.print(dest_ys); Serial.print(", ");
@@ -216,8 +212,8 @@ class GxEPD2_3C : public Adafruit_GFX
         {
           uint16_t page_ys = _current_page * _page_height;
           uint16_t page_ye = _current_page < (_pages - 1) ? page_ys + _page_height : HEIGHT;
-          uint16_t dest_ys = gx_uint16_max(_pw_y, page_ys);
-          uint16_t dest_ye = gx_uint16_min(_pw_y + _pw_h, page_ye);
+          uint16_t dest_ys = _pw_y + page_ys; // transposed
+          uint16_t dest_ye = gx_uint16_min(_pw_y + _pw_h, _pw_y + page_ye);
           if (dest_ye > dest_ys)
           {
             fillScreen(GxEPD_WHITE);
@@ -355,7 +351,7 @@ class GxEPD2_3C : public Adafruit_GFX
   private:
     uint8_t _black_buffer[(GxEPD2_Type::WIDTH / 8) * page_height];
     uint8_t _color_buffer[(GxEPD2_Type::WIDTH / 8) * page_height];
-    bool _using_partial_mode, _second_phase, _mirror, _reverse;
+    bool _using_partial_mode, _second_phase, _mirror;
     uint16_t _width_bytes, _pixel_bytes;
     int16_t _current_page;
     uint16_t _pages, _page_height;

@@ -63,16 +63,14 @@ class GxEPD2_BW : public Adafruit_GFX
           y = HEIGHT - y - 1;
           break;
       }
+      // transpose partial window to 0,0
+      x -= _pw_x;
+      y -= _pw_y;
       // adjust for current page
       y -= _current_page * _page_height;
-      // adjust for partial window
-      x -= _pw_x;
-      y -= _pw_y % _page_height;
-      if (_reverse) y = _pw_h - y - 1;
+      if (_reverse) y = _page_height - y - 1;
       // check if in current page
-      if (y >= _page_height) return;
-      // check if in (partial) window
-      if ((x < 0) || (x >= _pw_w) || (y < 0) || (y >= _pw_h)) return;
+      if ((y < 0) || (y >= _page_height)) return;
       uint16_t i = x / 8 + y * (_pw_w / 8);
       if (color)
         _buffer[i] = (_buffer[i] | (1 << (7 - x % 8)));
@@ -142,13 +140,14 @@ class GxEPD2_BW : public Adafruit_GFX
         //Serial.print("  nextPage("); Serial.print(_pw_x); Serial.print(", "); Serial.print(_pw_y); Serial.print(", ");
         //Serial.print(_pw_w); Serial.print(", "); Serial.print(_pw_h); Serial.print(") P"); Serial.println(_current_page);
         uint16_t page_ye = _current_page < (_pages - 1) ? page_ys + _page_height : HEIGHT;
-        uint16_t dest_ys = gx_uint16_max(_pw_y, page_ys);
-        uint16_t dest_ye = gx_uint16_min(_pw_y + _pw_h, page_ye);
+        uint16_t dest_ys = _pw_y + page_ys; // transposed
+        uint16_t dest_ye = gx_uint16_min(_pw_y + _pw_h, _pw_y + page_ye);
         if (dest_ye > dest_ys)
         {
           //Serial.print("writeImage("); Serial.print(_pw_x); Serial.print(", "); Serial.print(dest_ys); Serial.print(", ");
           //Serial.print(_pw_w); Serial.print(", "); Serial.print(dest_ye - dest_ys); Serial.println(")");
-          epd2.writeImage(_buffer, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
+          uint32_t offset = _reverse ? (_page_height - (dest_ye - dest_ys)) * _pw_w / 8 : 0;
+          epd2.writeImage(_buffer + offset, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
         }
         else
         {
@@ -205,20 +204,26 @@ class GxEPD2_BW : public Adafruit_GFX
     {
       if (_using_partial_mode)
       {
-        for (_current_page = 0; _current_page < _pages; _current_page++)
+        for (uint16_t phase = 1; phase <= 2; phase++)
         {
-          uint16_t page_ys = _current_page * _page_height;
-          uint16_t page_ye = _current_page < (_pages - 1) ? page_ys + _page_height : HEIGHT;
-          uint16_t dest_ys = gx_uint16_max(_pw_y, page_ys);
-          uint16_t dest_ye = gx_uint16_min(_pw_y + _pw_h, page_ye);
-          if (dest_ye > dest_ys)
+          for (_current_page = 0; _current_page < _pages; _current_page++)
           {
-            fillScreen(GxEPD_WHITE);
-            drawCallback(pv);
-            epd2.writeImage(_buffer, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
+            uint16_t page_ys = _current_page * _page_height;
+            uint16_t page_ye = _current_page < (_pages - 1) ? page_ys + _page_height : HEIGHT;
+            uint16_t dest_ys = _pw_y + page_ys; // transposed
+            uint16_t dest_ye = gx_uint16_min(_pw_y + _pw_h, _pw_y + page_ye);
+            if (dest_ye > dest_ys)
+            {
+              fillScreen(GxEPD_WHITE);
+              drawCallback(pv);
+              uint32_t offset = _reverse ? (_page_height - (dest_ye - dest_ys)) * _pw_w / 8 : 0;
+              epd2.writeImage(_buffer + offset, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
+            }
           }
+          epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
+          if (!epd2.hasFastPartialUpdate) break;
+          // else make both controller buffers have equal content
         }
-        epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
       }
       else
       {
@@ -229,7 +234,19 @@ class GxEPD2_BW : public Adafruit_GFX
           drawCallback(pv);
           epd2.writeImage(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
         }
-        epd2.refresh();
+        epd2.refresh(false);
+        if (epd2.hasFastPartialUpdate)
+        {
+          // make both controller buffers have equal content
+          for (_current_page = 0; _current_page < _pages; _current_page++)
+          {
+            uint16_t page_ys = _current_page * _page_height;
+            fillScreen(GxEPD_WHITE);
+            drawCallback(pv);
+            epd2.writeImage(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
+          }
+          epd2.refresh(true);
+        }
       }
       _current_page = 0;
     }

@@ -208,12 +208,14 @@ void GxEPD2_270c::powerOff()
 
 void GxEPD2_270c::_writeData_nCS(const uint8_t* data, uint16_t n)
 {
+  SPI.beginTransaction(_spi_settings);
   for (uint8_t i = 0; i < n; i++)
   {
     if (_cs >= 0) digitalWrite(_cs, LOW);
     SPI.transfer(*data++);
     if (_cs >= 0) digitalWrite(_cs, HIGH);
   }
+  SPI.endTransaction();
 }
 
 void GxEPD2_270c::_setPartialRamArea_270c(uint8_t cmd, uint16_t x, uint16_t y, uint16_t w, uint16_t h)
