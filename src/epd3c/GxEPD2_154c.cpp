@@ -42,13 +42,13 @@ void GxEPD2_154c::clearScreen(uint8_t black_value, uint8_t color_value)
 {
   _Init_Full();
   _writeCommand(0x10);
-  for (uint32_t i = 0; i < WIDTH * HEIGHT / 8; i++)
+  for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
     _writeData(bw2grey[(black_value & 0xF0) >> 4]);
     _writeData(bw2grey[black_value & 0x0F]);
   }
   _writeCommand(0x13);
-  for (uint32_t i = 0; i < WIDTH * HEIGHT / 8; i++)
+  for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
     _writeData(color_value);
   }
@@ -65,13 +65,13 @@ void GxEPD2_154c::writeScreenBuffer(uint8_t black_value, uint8_t color_value)
 {
   _Init_Full();
   _writeCommand(0x10);
-  for (uint32_t i = 0; i < WIDTH * HEIGHT / 8; i++)
+  for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
     _writeData(bw2grey[(black_value & 0xF0) >> 4]);
     _writeData(bw2grey[black_value & 0x0F]);
   }
   _writeCommand(0x13);
-  for (uint32_t i = 0; i < WIDTH * HEIGHT / 8; i++)
+  for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
     _writeData(color_value);
   }

@@ -33,7 +33,7 @@ void GxEPD2_420::clearScreen(uint8_t value)
   {
     _Init_Full();
     _writeCommand(0x13);
-    for (uint32_t i = 0; i < WIDTH * HEIGHT / 8; i++)
+    for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
     {
       _writeData(value);
     }
@@ -44,14 +44,14 @@ void GxEPD2_420::clearScreen(uint8_t value)
   _writeCommand(0x91); // partial in
   _setPartialRamArea(0, 0, WIDTH, HEIGHT);
   _writeCommand(0x13);
-  for (uint32_t i = 0; i < WIDTH * HEIGHT / 8; i++)
+  for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
     _writeData(value);
   }
   _Update_Part();
   _setPartialRamArea(0, 0, WIDTH, HEIGHT);
   _writeCommand(0x13);
-  for (uint32_t i = 0; i < WIDTH * HEIGHT / 8; i++)
+  for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
     _writeData(value);
   }
@@ -72,7 +72,7 @@ void GxEPD2_420::_writeScreenBuffer(uint8_t value)
   _writeCommand(0x91); // partial in
   _setPartialRamArea(0, 0, WIDTH, HEIGHT);
   _writeCommand(0x13);
-  for (uint32_t i = 0; i < WIDTH * HEIGHT / 8; i++)
+  for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
     _writeData(value);
   }
@@ -87,8 +87,8 @@ void GxEPD2_420::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_
   w = wb * 8; // byte boundary
   int16_t x1 = x < 0 ? 0 : x; // limit
   int16_t y1 = y < 0 ? 0 : y; // limit
-  int16_t w1 = x + w < WIDTH ? w : WIDTH - x; // limit
-  int16_t h1 = y + h < HEIGHT ? h : HEIGHT - y; // limit
+  int16_t w1 = x + w < int16_t(WIDTH) ? w : int16_t(WIDTH) - x; // limit
+  int16_t h1 = y + h < int16_t(HEIGHT) ? h : int16_t(HEIGHT) - y; // limit
   int16_t dx = x1 - x;
   int16_t dy = y1 - y;
   w1 -= dx;
@@ -175,8 +175,8 @@ void GxEPD2_420::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
   w -= x % 8; // byte boundary
   int16_t x1 = x < 0 ? 0 : x; // limit
   int16_t y1 = y < 0 ? 0 : y; // limit
-  int16_t w1 = x + w < WIDTH ? w : WIDTH - x; // limit
-  int16_t h1 = y + h < HEIGHT ? h : HEIGHT - y; // limit
+  int16_t w1 = x + w < int16_t(WIDTH) ? w : int16_t(WIDTH) - x; // limit
+  int16_t h1 = y + h < int16_t(HEIGHT) ? h : int16_t(HEIGHT) - y; // limit
   w1 -= x1 - x;
   h1 -= y1 - y;
   if (!_using_partial_mode) _Init_Part();

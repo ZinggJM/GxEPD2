@@ -155,7 +155,7 @@
 #else
 
 // select only one to fit in code space
-//#include "bitmaps/Bitmaps200x200.h" // 1.54" b/w
+#include "bitmaps/Bitmaps200x200.h" // 1.54" b/w
 //#include "bitmaps/Bitmaps128x250.h" // 2.13" b/w
 //#include "bitmaps/Bitmaps128x296.h" // 2.9"  b/w
 //#include "bitmaps/Bitmaps176x264.h" // 2.7"  b/w
@@ -525,8 +525,8 @@ void drawBitmaps200x200()
   {
     bool mirror_y = (display.epd2.panel != GxEPD2::GDE0213B1);
     display.clearScreen(); // use default for white
-    uint16_t x = (display.epd2.WIDTH - 200) / 2;
-    uint16_t y = (display.epd2.HEIGHT - 200) / 2;
+    int16_t x = (int16_t(display.epd2.WIDTH) - 200) / 2;
+    int16_t y = (int16_t(display.epd2.HEIGHT) - 200) / 2;
     for (uint16_t i = 0; i < sizeof(bitmaps) / sizeof(char*); i++)
     {
       display.drawImage(bitmaps[i], x, y, 200, 200, false, mirror_y, true);
@@ -546,14 +546,14 @@ void drawBitmaps200x200()
       delay(2000);
       x += 40;
       y += 40;
-      if ((x >= display.epd2.WIDTH) || (y >= display.epd2.HEIGHT)) break;
+      if ((x >= int16_t(display.epd2.WIDTH)) || (y >= int16_t(display.epd2.HEIGHT))) break;
     }
     if (!display.epd2.hasFastPartialUpdate) break; // comment out for full show
     break; // comment out for full show
   }
   display.writeScreenBuffer(); // use default for white
   display.writeImage(bitmaps[0], 0, 0, 200, 200, false, mirror_y, true);
-  display.writeImage(bitmaps[0], display.epd2.WIDTH - 200, display.epd2.HEIGHT - 200, 200, 200, false, mirror_y, true);
+  display.writeImage(bitmaps[0], int16_t(display.epd2.WIDTH) - 200, int16_t(display.epd2.HEIGHT) - 200, 200, 200, false, mirror_y, true);
   display.refresh(true);
   delay(2000);
 }
@@ -768,8 +768,8 @@ void drawBitmaps3c200x200()
   if (display.epd2.hasColor)
   {
     display.clearScreen(); // use default for white
-    uint16_t x = (display.epd2.WIDTH - 200) / 2;
-    uint16_t y = (display.epd2.HEIGHT - 200) / 2;
+    int16_t x = (int16_t(display.epd2.WIDTH) - 200) / 2;
+    int16_t y = (int16_t(display.epd2.HEIGHT) - 200) / 2;
     for (uint16_t i = 0; i < sizeof(bitmap_pairs) / sizeof(bitmap_pair); i++)
     {
       display.drawImage(bitmap_pairs[i].black, bitmap_pairs[i].red, x, y, 200, 200, false, false, true);
@@ -787,12 +787,12 @@ void drawBitmaps3c200x200()
         delay(2000);
         x += 40;
         y += 40;
-        if ((x >= display.epd2.WIDTH) || (y >= display.epd2.HEIGHT)) break;
+        if ((x >= int16_t(display.epd2.WIDTH)) || (y >= int16_t(display.epd2.HEIGHT))) break;
       }
     }
     display.writeScreenBuffer(); // use default for white
     display.writeImage(bitmap_pairs[0].black, bitmap_pairs[0].red, 0, 0, 200, 200, false, false, true);
-    display.writeImage(bitmap_pairs[0].black, bitmap_pairs[0].red, display.epd2.WIDTH - 200, display.epd2.HEIGHT - 200, 200, 200, false, false, true);
+    display.writeImage(bitmap_pairs[0].black, bitmap_pairs[0].red, int16_t(display.epd2.WIDTH) - 200, int16_t(display.epd2.HEIGHT) - 200, 200, 200, false, false, true);
     display.refresh();
     delay(2000);
   }
