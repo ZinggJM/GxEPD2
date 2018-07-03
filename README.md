@@ -37,5 +37,6 @@ New Simplified Version of GxEPD for Arduino
 - pre-release test version
 - GxEPD2_SD_AVR_Example added, has no graphics buffer to reduce RAM usage (base display class use)
 - issues disabled so far, use Arduino Forum Topics instead
+- in this version 1.54" 3-color GxEPD2_154c can only be used with full size buffer (or with no buffer base display class)
 #### Version 1.0.0
 - preliminary version, under construction
