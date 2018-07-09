@@ -11,6 +11,12 @@
 
 #include "GxEPD2_EPD.h"
 
+#if defined(ESP8266) || defined(ESP32)
+#include <pgmspace.h>
+#else
+#include <avr/pgmspace.h>
+#endif
+
 GxEPD2_EPD::GxEPD2_EPD(int8_t cs, int8_t dc, int8_t rst, int8_t busy, int8_t busy_level, uint32_t busy_timeout) :
   _cs(cs), _dc(dc), _rst(rst), _busy(busy), _busy_level(busy_level), _busy_timeout(busy_timeout), _diag_enabled(false),
   _spi_settings(4000000, MSBFIRST, SPI_MODE0)
@@ -126,6 +132,18 @@ void GxEPD2_EPD::_writeData(const uint8_t* data, uint16_t n)
   SPI.endTransaction();
 }
 
+void GxEPD2_EPD::_writeDataPGM(const uint8_t* data, uint16_t n)
+{
+  SPI.beginTransaction(_spi_settings);
+  if (_cs >= 0) digitalWrite(_cs, LOW);
+  for (uint8_t i = 0; i < n; i++)
+  {
+    SPI.transfer(pgm_read_byte(&*data++));
+  }
+  if (_cs >= 0) digitalWrite(_cs, HIGH);
+  SPI.endTransaction();
+}
+
 void GxEPD2_EPD::_writeCommandData(const uint8_t* pCommandData, uint8_t datalen)
 {
   SPI.beginTransaction(_spi_settings);
@@ -136,6 +154,21 @@ void GxEPD2_EPD::_writeCommandData(const uint8_t* pCommandData, uint8_t datalen)
   for (uint8_t i = 0; i < datalen - 1; i++)  // sub the command
   {
     SPI.transfer(*pCommandData++);
+  }
+  if (_cs >= 0) digitalWrite(_cs, HIGH);
+  SPI.endTransaction();
+}
+
+void GxEPD2_EPD::_writeCommandDataPGM(const uint8_t* pCommandData, uint8_t datalen)
+{
+  SPI.beginTransaction(_spi_settings);
+  if (_dc >= 0) digitalWrite(_dc, LOW);
+  if (_cs >= 0) digitalWrite(_cs, LOW);
+  SPI.transfer(pgm_read_byte(&*pCommandData++));
+  if (_dc >= 0) digitalWrite(_dc, HIGH);
+  for (uint8_t i = 0; i < datalen - 1; i++)  // sub the command
+  {
+    SPI.transfer(pgm_read_byte(&*pCommandData++));
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);
   SPI.endTransaction();

@@ -250,7 +250,7 @@ void GxEPD2_154::_InitDisplay()
 void GxEPD2_154::_Init_Full()
 {
   _InitDisplay();
-  _writeCommandData(GDEP015OC1_LUTDefault_full, sizeof(GDEP015OC1_LUTDefault_full));
+  _writeCommandDataPGM(GDEP015OC1_LUTDefault_full, sizeof(GDEP015OC1_LUTDefault_full));
   _PowerOn();
   _using_partial_mode = false;
 }
@@ -258,7 +258,7 @@ void GxEPD2_154::_Init_Full()
 void GxEPD2_154::_Init_Part()
 {
   _InitDisplay();
-  _writeCommandData(GDEP015OC1_LUTDefault_part, sizeof(GDEP015OC1_LUTDefault_part));
+  _writeCommandDataPGM(GDEP015OC1_LUTDefault_part, sizeof(GDEP015OC1_LUTDefault_part));
   _PowerOn();
   _using_partial_mode = true;
 }

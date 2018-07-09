@@ -24,6 +24,8 @@ GxEPD2_154c::GxEPD2_154c(int8_t cs, int8_t dc, int8_t rst, int8_t busy) : GxEPD2
 {
   _initial = true;
   _power_is_on = false;
+  _paged = false;
+  _second_phase = false;
 }
 
 void GxEPD2_154c::init(uint32_t serial_diag_bitrate)
@@ -31,6 +33,8 @@ void GxEPD2_154c::init(uint32_t serial_diag_bitrate)
   GxEPD2_EPD::init(serial_diag_bitrate);
   _initial = true;
   _power_is_on = false;
+  _paged = false;
+  _second_phase = false;
 }
 
 void GxEPD2_154c::clearScreen(uint8_t value)
@@ -84,70 +88,107 @@ void GxEPD2_154c::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16
 
 void GxEPD2_154c::writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
+  //Serial.print("writeImage("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", ");
+  //Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
-  int16_t wb = (w + 7) / 8; // width bytes, bitmaps are padded
-  x -= x % 8; // byte boundary
-  w = wb * 8; // byte boundary
-  if ((w <= 0) || (h <= 0)) return;
-  _Init_Full();
-  _writeCommand(0x10);
-  for (int16_t i = 0; i < HEIGHT; i++)
+  if (_paged && (x == 0) && (w == WIDTH) && (h < HEIGHT))
   {
-    for (int16_t j = 0; j < WIDTH; j += 8)
+    //Serial.println("paged");
+    if (!_second_phase)
     {
-      uint8_t data = 0xFF;
-      if (black)
+      for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(h) / 8; i++)
       {
-        if ((j >= x) && (j <= x + w) && (i >= y) && (i < y + h))
-        {
-          int16_t idx = mirror_y ? (j - x) / 8 + ((h - 1 - (i - y))) * wb : (j - x) / 8 + (i - y) * wb;
-          if (pgm)
-          {
-#if defined(__AVR) || defined(ESP8266) || defined(ESP32)
-            data = pgm_read_byte(&black[idx]);
-#else
-            data = black[idx];
-#endif
-          }
-          else
-          {
-            data = black[idx];
-          }
-          if (invert) data = ~data;
-        }
+        _writeData(bw2grey[(black[i] & 0xF0) >> 4]);
+        _writeData(bw2grey[black[i] & 0x0F]);
       }
-      //_writeData(data);
-      _writeData(bw2grey[(data & 0xF0) >> 4]);
-      _writeData(bw2grey[data & 0x0F]);
+      if (y + h == HEIGHT) // last page
+      {
+        //Serial.println("phase 1 ended");
+        _second_phase = true;
+        _writeCommand(0x13);
+      }
+    }
+    else
+    {
+      for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(h) / 8; i++)
+      {
+        _writeData(color[i]);
+      }
+      if (y + h == HEIGHT) // last page
+      {
+        //Serial.println("phase 2 ended");
+        _second_phase = false;
+        _paged = false;
+      }
     }
   }
-  _writeCommand(0x13);
-  for (int16_t i = 0; i < HEIGHT; i++)
+  else
   {
-    for (int16_t j = 0; j < WIDTH; j += 8)
+    _paged = false;
+    int16_t wb = (w + 7) / 8; // width bytes, bitmaps are padded
+    x -= x % 8; // byte boundary
+    w = wb * 8; // byte boundary
+    if ((w <= 0) || (h <= 0)) return;
+    _Init_Full();
+    _writeCommand(0x10);
+    for (int16_t i = 0; i < HEIGHT; i++)
     {
-      uint8_t data = 0xFF;
-      if (color)
+      for (int16_t j = 0; j < WIDTH; j += 8)
       {
-        if ((j >= x) && (j <= x + w) && (i >= y) && (i < y + h))
+        uint8_t data = 0xFF;
+        if (black)
         {
-          int16_t idx = mirror_y ? (j - x) / 8 + ((h - 1 - (i - y))) * wb : (j - x) / 8 + (i - y) * wb;
-          if (pgm)
+          if ((j >= x) && (j <= x + w) && (i >= y) && (i < y + h))
           {
+            int16_t idx = mirror_y ? (j - x) / 8 + ((h - 1 - (i - y))) * wb : (j - x) / 8 + (i - y) * wb;
+            if (pgm)
+            {
 #if defined(__AVR) || defined(ESP8266) || defined(ESP32)
-            data = pgm_read_byte(&color[idx]);
+              data = pgm_read_byte(&black[idx]);
 #else
-            data = color[idx];
+              data = black[idx];
 #endif
+            }
+            else
+            {
+              data = black[idx];
+            }
+            if (invert) data = ~data;
           }
-          else
-          {
-            data = color[idx];
-          }
-          if (invert) data = ~data;
         }
+        //_writeData(data);
+        _writeData(bw2grey[(data & 0xF0) >> 4]);
+        _writeData(bw2grey[data & 0x0F]);
       }
-      _writeData(data);
+    }
+    _writeCommand(0x13);
+    for (int16_t i = 0; i < HEIGHT; i++)
+    {
+      for (int16_t j = 0; j < WIDTH; j += 8)
+      {
+        uint8_t data = 0xFF;
+        if (color)
+        {
+          if ((j >= x) && (j <= x + w) && (i >= y) && (i < y + h))
+          {
+            int16_t idx = mirror_y ? (j - x) / 8 + ((h - 1 - (i - y))) * wb : (j - x) / 8 + (i - y) * wb;
+            if (pgm)
+            {
+#if defined(__AVR) || defined(ESP8266) || defined(ESP32)
+              data = pgm_read_byte(&color[idx]);
+#else
+              data = color[idx];
+#endif
+            }
+            else
+            {
+              data = color[idx];
+            }
+            if (invert) data = ~data;
+          }
+        }
+        _writeData(data);
+      }
     }
   }
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
@@ -181,6 +222,7 @@ void GxEPD2_154c::drawNative(const uint8_t* data1, const uint8_t* data2, int16_t
 
 void GxEPD2_154c::refresh(bool partial_update_mode)
 {
+  if (_paged) return;
   _Update_Full();
 }
 
@@ -225,6 +267,14 @@ void GxEPD2_154c::_PowerOff()
   _power_is_on = false;
 }
 
+void GxEPD2_154c::setPaged()
+{
+  _paged = true;
+  _second_phase = false;
+  _Init_Full();
+  _writeCommand(0x10);
+}
+
 void GxEPD2_154c::_InitDisplay()
 {
   // reset required for wakeup
@@ -263,21 +313,21 @@ void GxEPD2_154c::_Init_Full()
 {
   _InitDisplay();
   _writeCommand(0x20);
-  _writeData(GxGDEW0154Z04_lut_20_vcom0, sizeof(GxGDEW0154Z04_lut_20_vcom0));
+  _writeDataPGM(GxGDEW0154Z04_lut_20_vcom0, sizeof(GxGDEW0154Z04_lut_20_vcom0));
   _writeCommand(0x21);
-  _writeData(GxGDEW0154Z04_lut_21_w, sizeof(GxGDEW0154Z04_lut_21_w));
+  _writeDataPGM(GxGDEW0154Z04_lut_21_w, sizeof(GxGDEW0154Z04_lut_21_w));
   _writeCommand(0x22);
-  _writeData(GxGDEW0154Z04_lut_22_b, sizeof(GxGDEW0154Z04_lut_22_b));
+  _writeDataPGM(GxGDEW0154Z04_lut_22_b, sizeof(GxGDEW0154Z04_lut_22_b));
   _writeCommand(0x23);
-  _writeData(GxGDEW0154Z04_lut_23_g1, sizeof(GxGDEW0154Z04_lut_23_g1));
+  _writeDataPGM(GxGDEW0154Z04_lut_23_g1, sizeof(GxGDEW0154Z04_lut_23_g1));
   _writeCommand(0x24);
-  _writeData(GxGDEW0154Z04_lut_24_g2, sizeof(GxGDEW0154Z04_lut_24_g2));
+  _writeDataPGM(GxGDEW0154Z04_lut_24_g2, sizeof(GxGDEW0154Z04_lut_24_g2));
   _writeCommand(0x25);
-  _writeData(GxGDEW0154Z04_lut_25_vcom1, sizeof(GxGDEW0154Z04_lut_25_vcom1));
+  _writeDataPGM(GxGDEW0154Z04_lut_25_vcom1, sizeof(GxGDEW0154Z04_lut_25_vcom1));
   _writeCommand(0x26);
-  _writeData(GxGDEW0154Z04_lut_26_red0, sizeof(GxGDEW0154Z04_lut_26_red0));
+  _writeDataPGM(GxGDEW0154Z04_lut_26_red0, sizeof(GxGDEW0154Z04_lut_26_red0));
   _writeCommand(0x27);
-  _writeData(GxGDEW0154Z04_lut_27_red1, sizeof(GxGDEW0154Z04_lut_27_red1));
+  _writeDataPGM(GxGDEW0154Z04_lut_27_red1, sizeof(GxGDEW0154Z04_lut_27_red1));
   _PowerOn();
 }
 

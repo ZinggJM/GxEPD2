@@ -50,6 +50,7 @@ class GxEPD2_154c : public GxEPD2_EPD
     void refresh(bool partial_update_mode = false); // screen refresh from controller memory to full screen
     void refresh(int16_t x, int16_t y, int16_t w, int16_t h); // screen refresh from controller memory, partial screen
     void powerOff();
+    void setPaged(); // for GxEPD2_154c paged workaround
   private:
     void _writeScreenBuffer(uint8_t value);
     void _setPartialRamArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
@@ -62,6 +63,7 @@ class GxEPD2_154c : public GxEPD2_EPD
     void _Update_Part();
   protected:
     bool _initial, _power_is_on;
+    bool _paged, _second_phase;
     static const uint8_t bw2grey[];
 };
 

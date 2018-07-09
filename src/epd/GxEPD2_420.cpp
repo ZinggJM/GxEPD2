@@ -242,15 +242,15 @@ void GxEPD2_420::_Init_Full()
 {
   _InitDisplay();
   _writeCommand(0x20);
-  _writeData(GxGDEW042T2_lut_20_vcom0_full, sizeof(GxGDEW042T2_lut_20_vcom0_full));
+  _writeDataPGM(GxGDEW042T2_lut_20_vcom0_full, sizeof(GxGDEW042T2_lut_20_vcom0_full));
   _writeCommand(0x21);
-  _writeData(GxGDEW042T2_lut_21_ww_full, sizeof(GxGDEW042T2_lut_21_ww_full));
+  _writeDataPGM(GxGDEW042T2_lut_21_ww_full, sizeof(GxGDEW042T2_lut_21_ww_full));
   _writeCommand(0x22);
-  _writeData(GxGDEW042T2_lut_22_bw_full, sizeof(GxGDEW042T2_lut_22_bw_full));
+  _writeDataPGM(GxGDEW042T2_lut_22_bw_full, sizeof(GxGDEW042T2_lut_22_bw_full));
   _writeCommand(0x23);
-  _writeData(GxGDEW042T2_lut_23_wb_full, sizeof(GxGDEW042T2_lut_23_wb_full));
+  _writeDataPGM(GxGDEW042T2_lut_23_wb_full, sizeof(GxGDEW042T2_lut_23_wb_full));
   _writeCommand(0x24);
-  _writeData(GxGDEW042T2_lut_24_bb_full, sizeof(GxGDEW042T2_lut_24_bb_full));
+  _writeDataPGM(GxGDEW042T2_lut_24_bb_full, sizeof(GxGDEW042T2_lut_24_bb_full));
   _PowerOn();
   _using_partial_mode = false;
 }
@@ -259,15 +259,15 @@ void GxEPD2_420::_Init_Part()
 {
   _InitDisplay();
   _writeCommand(0x20);
-  _writeData(GxGDEW042T2_lut_20_vcom0_partial, sizeof(GxGDEW042T2_lut_20_vcom0_partial));
+  _writeDataPGM(GxGDEW042T2_lut_20_vcom0_partial, sizeof(GxGDEW042T2_lut_20_vcom0_partial));
   _writeCommand(0x21);
-  _writeData(GxGDEW042T2_lut_21_ww_partial, sizeof(GxGDEW042T2_lut_21_ww_partial));
+  _writeDataPGM(GxGDEW042T2_lut_21_ww_partial, sizeof(GxGDEW042T2_lut_21_ww_partial));
   _writeCommand(0x22);
-  _writeData(GxGDEW042T2_lut_22_bw_partial, sizeof(GxGDEW042T2_lut_22_bw_partial));
+  _writeDataPGM(GxGDEW042T2_lut_22_bw_partial, sizeof(GxGDEW042T2_lut_22_bw_partial));
   _writeCommand(0x23);
-  _writeData(GxGDEW042T2_lut_23_wb_partial, sizeof(GxGDEW042T2_lut_23_wb_partial));
+  _writeDataPGM(GxGDEW042T2_lut_23_wb_partial, sizeof(GxGDEW042T2_lut_23_wb_partial));
   _writeCommand(0x24);
-  _writeData(GxGDEW042T2_lut_24_bb_partial, sizeof(GxGDEW042T2_lut_24_bb_partial));
+  _writeDataPGM(GxGDEW042T2_lut_24_bb_partial, sizeof(GxGDEW042T2_lut_24_bb_partial));
   _PowerOn();
   _using_partial_mode = true;
 }

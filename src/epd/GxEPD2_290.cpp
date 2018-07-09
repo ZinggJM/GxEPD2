@@ -250,7 +250,7 @@ void GxEPD2_290::_InitDisplay()
 void GxEPD2_290::_Init_Full()
 {
   _InitDisplay();
-  _writeCommandData(GxGDEH029A1_LUTDefault_full, sizeof(GxGDEH029A1_LUTDefault_full));
+  _writeCommandDataPGM(GxGDEH029A1_LUTDefault_full, sizeof(GxGDEH029A1_LUTDefault_full));
   _PowerOn();
   _using_partial_mode = false;
 }
@@ -258,7 +258,7 @@ void GxEPD2_290::_Init_Full()
 void GxEPD2_290::_Init_Part()
 {
   _InitDisplay();
-  _writeCommandData(GxGDEH029A1_LUTDefault_part, sizeof(GxGDEH029A1_LUTDefault_part));
+  _writeCommandDataPGM(GxGDEH029A1_LUTDefault_part, sizeof(GxGDEH029A1_LUTDefault_part));
   _PowerOn();
   _using_partial_mode = true;
 }

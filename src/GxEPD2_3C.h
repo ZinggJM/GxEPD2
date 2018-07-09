@@ -135,6 +135,7 @@ class GxEPD2_3C : public Adafruit_GFX
       fillScreen(GxEPD_WHITE);
       _current_page = 0;
       _second_phase = false;
+      epd2.setPaged(); // for GxEPD2_154c paged workaround
     }
 
     bool nextPage()
@@ -184,7 +185,7 @@ class GxEPD2_3C : public Adafruit_GFX
         if (_current_page == _pages)
         {
           _current_page = 0;
-          if (epd2.hasFastPartialUpdate)
+          if (epd2.panel == GxEPD2::GDEW0154Z04)
           {
             if (!_second_phase)
             {
@@ -225,12 +226,23 @@ class GxEPD2_3C : public Adafruit_GFX
       }
       else
       {
+        epd2.setPaged(); // for GxEPD2_154c paged workaround
         for (_current_page = 0; _current_page < _pages; _current_page++)
         {
           uint16_t page_ys = _current_page * _page_height;
           fillScreen(GxEPD_WHITE);
           drawCallback(pv);
           epd2.writeImage(_black_buffer, _color_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
+        }
+        if (epd2.panel == GxEPD2::GDEW0154Z04)
+        { // GxEPD2_154c paged workaround: write color part
+          for (_current_page = 0; _current_page < _pages; _current_page++)
+          {
+            uint16_t page_ys = _current_page * _page_height;
+            fillScreen(GxEPD_WHITE);
+            drawCallback(pv);
+            epd2.writeImage(_black_buffer, _color_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
+          }
         }
         epd2.refresh();
       }

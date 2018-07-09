@@ -103,7 +103,7 @@ void GxEPD2_213::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_
     {
       uint8_t data;
       // use wb, h of bitmap for index!
-      int16_t idx = mirror_y ? j + dx / 8 + ((h - 1 - (i + dy))) * wb : j + dx / 8 + (i + dy) * wb;
+      int16_t idx = mirror_y ? j + dx / 8 + (h - 1 - i) * wb : j + dx / 8 + i * wb;
       if (pgm)
       {
 #if defined(__AVR) || defined(ESP8266) || defined(ESP32)
@@ -250,7 +250,7 @@ void GxEPD2_213::_InitDisplay()
 void GxEPD2_213::_Init_Full()
 {
   _InitDisplay();
-  _writeCommandData(GxGDE0213B1_LUTDefault_full, sizeof(GxGDE0213B1_LUTDefault_full));
+  _writeCommandDataPGM(GxGDE0213B1_LUTDefault_full, sizeof(GxGDE0213B1_LUTDefault_full));
   _PowerOn();
   _using_partial_mode = false;
 }
@@ -258,7 +258,7 @@ void GxEPD2_213::_Init_Full()
 void GxEPD2_213::_Init_Part()
 {
   _InitDisplay();
-  _writeCommandData(GxGDE0213B1_LUTDefault_part, sizeof(GxGDE0213B1_LUTDefault_part));
+  _writeCommandDataPGM(GxGDE0213B1_LUTDefault_part, sizeof(GxGDE0213B1_LUTDefault_part));
   _PowerOn();
   _using_partial_mode = true;
 }

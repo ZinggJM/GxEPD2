@@ -266,15 +266,15 @@ void GxEPD2_270::_Init_Full()
 {
   _InitDisplay();
   _writeCommand(0x20);
-  _writeData(GxGDEW027W3_lut_20_vcomDC, sizeof(GxGDEW027W3_lut_20_vcomDC));
+  _writeDataPGM(GxGDEW027W3_lut_20_vcomDC, sizeof(GxGDEW027W3_lut_20_vcomDC));
   _writeCommand(0x21);
-  _writeData(GxGDEW027W3_lut_21_ww, sizeof(GxGDEW027W3_lut_21_ww));
+  _writeDataPGM(GxGDEW027W3_lut_21_ww, sizeof(GxGDEW027W3_lut_21_ww));
   _writeCommand(0x22);
-  _writeData(GxGDEW027W3_lut_22_bw, sizeof(GxGDEW027W3_lut_22_bw));
+  _writeDataPGM(GxGDEW027W3_lut_22_bw, sizeof(GxGDEW027W3_lut_22_bw));
   _writeCommand(0x23);
-  _writeData(GxGDEW027W3_lut_23_wb, sizeof(GxGDEW027W3_lut_23_wb));
+  _writeDataPGM(GxGDEW027W3_lut_23_wb, sizeof(GxGDEW027W3_lut_23_wb));
   _writeCommand(0x24);
-  _writeData(GxGDEW027W3_lut_24_bb, sizeof(GxGDEW027W3_lut_24_bb));
+  _writeDataPGM(GxGDEW027W3_lut_24_bb, sizeof(GxGDEW027W3_lut_24_bb));
   _PowerOn();
   _using_partial_mode = false;
 }
@@ -284,15 +284,15 @@ void GxEPD2_270::_Init_Part()
   _InitDisplay();
   // no partial update LUT
   _writeCommand(0x20);
-  _writeData(GxGDEW027W3_lut_20_vcomDC, sizeof(GxGDEW027W3_lut_20_vcomDC));
+  _writeDataPGM(GxGDEW027W3_lut_20_vcomDC, sizeof(GxGDEW027W3_lut_20_vcomDC));
   _writeCommand(0x21);
-  _writeData(GxGDEW027W3_lut_21_ww, sizeof(GxGDEW027W3_lut_21_ww));
+  _writeDataPGM(GxGDEW027W3_lut_21_ww, sizeof(GxGDEW027W3_lut_21_ww));
   _writeCommand(0x22);
-  _writeData(GxGDEW027W3_lut_22_bw, sizeof(GxGDEW027W3_lut_22_bw));
+  _writeDataPGM(GxGDEW027W3_lut_22_bw, sizeof(GxGDEW027W3_lut_22_bw));
   _writeCommand(0x23);
-  _writeData(GxGDEW027W3_lut_23_wb, sizeof(GxGDEW027W3_lut_23_wb));
+  _writeDataPGM(GxGDEW027W3_lut_23_wb, sizeof(GxGDEW027W3_lut_23_wb));
   _writeCommand(0x24);
-  _writeData(GxGDEW027W3_lut_24_bb, sizeof(GxGDEW027W3_lut_24_bb));
+  _writeDataPGM(GxGDEW027W3_lut_24_bb, sizeof(GxGDEW027W3_lut_24_bb));
   _PowerOn();
   _using_partial_mode = true;
 }

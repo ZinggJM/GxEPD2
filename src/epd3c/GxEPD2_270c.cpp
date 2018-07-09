@@ -212,7 +212,7 @@ void GxEPD2_270c::_writeData_nCS(const uint8_t* data, uint16_t n)
   for (uint8_t i = 0; i < n; i++)
   {
     if (_cs >= 0) digitalWrite(_cs, LOW);
-    SPI.transfer(*data++);
+    SPI.transfer(pgm_read_byte(&*data++));
     if (_cs >= 0) digitalWrite(_cs, HIGH);
   }
   SPI.endTransaction();
