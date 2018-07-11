@@ -33,7 +33,10 @@ New Simplified Version of GxEPD for Arduino
 - Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
 - Good Dispay ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
 
-### Version 1.0.2
+### Version 1.0.3
+- fix GxEPD2_SD_Example & GxEPD2_SD_AVR_Example
+- add GxEPD2_MultiDisplayExample (preliminary version)
+#### Version 1.0.2
 - initial release version 1.0.2
 - tested with ESP8266, ESP32, STM32F103C8T6, AVR Arduino (Pro Mini 3.3V)
 - 1.54" 3-color GxEPD2_154c can be used with paging for AVR

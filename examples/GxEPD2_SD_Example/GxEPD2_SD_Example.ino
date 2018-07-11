@@ -176,6 +176,8 @@ void setup()
 
   drawBitmaps_200x200();
   drawBitmaps_other();
+
+  //drawBitmaps_test();
 }
 
 void loop(void)
@@ -235,6 +237,16 @@ void drawBitmaps_other()
   drawBitmapFromSD("tiger16T.bmp", w2 - 160, h2 - 120);
   delay(2000);
   drawBitmapFromSD("woof.bmp", w2 - 120, h2 - 160);
+  delay(2000);
+  drawBitmapFromSD("bitmap640x384_1.bmp", 0, 0);
+  delay(2000);
+}
+
+void drawBitmaps_test()
+{
+  int16_t w2 = display.width() / 2;
+  int16_t h2 = display.height() / 2;
+  drawBitmapFromSD("betty_4.bmp", w2 - 102, h2 - 126);
   delay(2000);
 }
 
@@ -307,7 +319,7 @@ void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_colo
       uint16_t h = height;
       if ((x + w - 1) >= display.width())  w = display.width()  - x;
       if ((y + h - 1) >= display.height()) h = display.height() - y;
-      if (w < max_row_width) // handle with direct drawing
+      if (w <= max_row_width) // handle with direct drawing
       {
         valid = true;
         uint8_t bitmask = 0xFF;
@@ -342,8 +354,8 @@ void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_colo
           uint32_t in_bytes = 0;
           uint8_t in_byte = 0; // for depth <= 8
           uint8_t in_bits = 0; // for depth <= 8
-          uint8_t out_byte = 0;
-          uint8_t out_color_byte = 0;
+          uint8_t out_byte = 0xFF; // white (for w%8!=0 boarder)
+          uint8_t out_color_byte = 0xFF; // white (for w%8!=0 boarder)
           uint32_t out_idx = 0;
           file.seekSet(rowPosition);
           for (uint16_t col = 0; col < w; col++) // for each pixel
@@ -403,23 +415,26 @@ void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_colo
             }
             if (whitish)
             {
-              out_byte |= 0x80 >> col % 8; // not black
-              out_color_byte |= 0x80 >> col % 8; // not colored
+              //out_byte |= 0x80 >> col % 8; // not black
+              //out_color_byte |= 0x80 >> col % 8; // not colored
+              // keep white
             }
             else if (colored && with_color)
             {
-              out_byte |= 0x80 >> col % 8; // not black
+              //out_byte |= 0x80 >> col % 8; // not black
+              out_color_byte &= ~(0x80 >> col % 8); // colored
             }
             else
             {
-              out_color_byte |= 0x80 >> col % 8; // not colored
+              //out_color_byte |= 0x80 >> col % 8; // not colored
+              out_byte &= ~(0x80 >> col % 8); // black
             }
-            if (7 == col % 8)
+            if ((7 == col % 8) || (col == w - 1)) // write that last byte! (for w%8!=0 boarder)
             {
               output_row_color_buffer[out_idx] = out_color_byte;
               output_row_mono_buffer[out_idx++] = out_byte;
-              out_byte = 0;
-              out_color_byte = 0;
+              out_byte = 0xFF; // white (for w%8!=0 boarder)
+              out_color_byte = 0xFF; // white (for w%8!=0 boarder)
             }
           } // end pixel
           uint16_t yrow = y + (flip ? h - row - 1 : row);
