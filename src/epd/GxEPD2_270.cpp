@@ -12,7 +12,8 @@
 #include "GxEPD2_270.h"
 #include "WaveTables.h"
 
-GxEPD2_270::GxEPD2_270(int8_t cs, int8_t dc, int8_t rst, int8_t busy) : GxEPD2_EPD(cs, dc, rst, busy, LOW, 10000000)
+GxEPD2_270::GxEPD2_270(int8_t cs, int8_t dc, int8_t rst, int8_t busy) :
+  GxEPD2_EPD(cs, dc, rst, busy, LOW, 10000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate)
 {
   _initial = true;
   _power_is_on = false;
@@ -74,7 +75,7 @@ void GxEPD2_270::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_
   w1 -= dx;
   h1 -= dy;
   if ((w1 <= 0) || (h1 <= 0)) return;
-    if (!_using_partial_mode) _Init_Part();
+  if (!_using_partial_mode) _Init_Part();
   _setPartialRamArea(x1, y1, w1, h1);
   for (int16_t i = 0; i < h1; i++)
   {
@@ -139,7 +140,7 @@ void GxEPD2_270::drawNative(const uint8_t* data1, const uint8_t* data2, int16_t 
 void GxEPD2_270::refresh(bool partial_update_mode)
 {
   if (partial_update_mode) refresh(0, 0, WIDTH, HEIGHT);
-  else 
+  else
   {
     if (_using_partial_mode) _Init_Full();
     _Update_Full();

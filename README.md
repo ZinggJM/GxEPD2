@@ -33,7 +33,12 @@ New Simplified Version of GxEPD for Arduino
 - Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
 - Good Dispay ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
 
-### Version 1.0.3
+### Version 1.0.4
+- add GxEPD2_GFX base class support (optional, selectable, uses slightly more code)
+- base class GxEPD2_GFX can be used to pass references or pointers to the display instance as parameter
+- add GxEPD2_GFX_MultiDisplayExample, uses  GxEPD2_GFX reference parameter
+- modify GxEPD2_MultiDisplayExample for ESP8266 (template issue: class expected instead of typename)
+#### Version 1.0.3
 - fix GxEPD2_SD_Example & GxEPD2_SD_AVR_Example
 - add GxEPD2_MultiDisplayExample (preliminary version)
 #### Version 1.0.2

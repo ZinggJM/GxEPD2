@@ -17,7 +17,9 @@
 #include <avr/pgmspace.h>
 #endif
 
-GxEPD2_EPD::GxEPD2_EPD(int8_t cs, int8_t dc, int8_t rst, int8_t busy, int8_t busy_level, uint32_t busy_timeout) :
+GxEPD2_EPD::GxEPD2_EPD(int8_t cs, int8_t dc, int8_t rst, int8_t busy, int8_t busy_level, uint32_t busy_timeout,
+                       uint16_t w, uint16_t h, GxEPD2::Panel p, bool c, bool pu, bool fpu) :
+  WIDTH(w), HEIGHT(h), panel(p), hasColor(c), hasPartialUpdate(pu), hasFastPartialUpdate(fpu),
   _cs(cs), _dc(dc), _rst(rst), _busy(busy), _busy_level(busy_level), _busy_timeout(busy_timeout), _diag_enabled(false),
   _spi_settings(4000000, MSBFIRST, SPI_MODE0)
 {
@@ -55,17 +57,17 @@ void GxEPD2_EPD::init(uint32_t serial_diag_bitrate)
     pinMode(_busy, INPUT);
   }
   SPI.begin();
-//  SPI.setDataMode(SPI_MODE0);
-//  SPI.setBitOrder(MSBFIRST);
-//#if defined(SPI_HAS_TRANSACTION)
-//  // true also for STM32F1xx Boards
-//  SPISettings settings(4000000, MSBFIRST, SPI_MODE0);
-//  SPI.beginTransaction(settings);
-//  SPI.endTransaction();
-//  //Serial.println("SPI has Transaction");
-//#elif defined(ESP8266) || defined(ESP32)
-//  SPI.setFrequency(4000000);
-//#endif
+  //  SPI.setDataMode(SPI_MODE0);
+  //  SPI.setBitOrder(MSBFIRST);
+  //#if defined(SPI_HAS_TRANSACTION)
+  //  // true also for STM32F1xx Boards
+  //  SPISettings settings(4000000, MSBFIRST, SPI_MODE0);
+  //  SPI.beginTransaction(settings);
+  //  SPI.endTransaction();
+  //  //Serial.println("SPI has Transaction");
+  //#elif defined(ESP8266) || defined(ESP32)
+  //  SPI.setFrequency(4000000);
+  //#endif
 }
 
 void GxEPD2_EPD::_waitWhileBusy(const char* comment, uint16_t busy_time)

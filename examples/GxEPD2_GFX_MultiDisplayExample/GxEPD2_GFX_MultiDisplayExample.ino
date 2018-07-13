@@ -1,4 +1,4 @@
-// Display Library example for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
+// GxEPD2_GFX_MultiDisplayExample : Display Library example for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 // Requires HW SPI and Adafruit_GFX. Caution: these e-papers require 3.3V supply AND data lines!
 //
 // Display Library based on Demo Example from Good Display: http://www.good-display.com/download_list/downloadcategoryid=34&isMode=false.html
@@ -32,119 +32,74 @@
 // mapping suggestion for AVR, UNO, NANO etc.
 // BUSY -> 7, RST -> 9, DC -> 8, CS-> 10, CLK -> 13, DIN -> 11
 
-// base class GxEPD2_GFX can be used to pass references or pointers to the display instance as parameter, uses ~1.2k more code
-// enable or disable GxEPD2_GFX base class
-#define ENABLE_GxEPD2_GFX 0
+// base class GxEPD2_GFX can be used to pass references or pointers to the display instance as parameter
+// enable GxEPD2_GFX base class
+#define ENABLE_GxEPD2_GFX 1 
 
 #include <GxEPD2_BW.h>
 #include <GxEPD2_3C.h>
 #include <Fonts/FreeMonoBold9pt7b.h>
 
-#if defined (ESP8266)
-// select one and adapt to your mapping, can use full buffer size (full HEIGHT)
-//GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display(GxEPD2_154(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
-//GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display(GxEPD2_213(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
-//GxEPD2_BW<GxEPD2_290, GxEPD2_290::HEIGHT> display(GxEPD2_290(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
-//GxEPD2_BW<GxEPD2_270, GxEPD2_270::HEIGHT> display(GxEPD2_270(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
-//GxEPD2_BW<GxEPD2_420, GxEPD2_420::HEIGHT> display(GxEPD2_420(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
-// can use only half buffer size
-//GxEPD2_BW < GxEPD2_583, GxEPD2_583::HEIGHT / 2 > display(GxEPD2_583(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
-//GxEPD2_BW < GxEPD2_750, GxEPD2_750::HEIGHT / 2 > display(GxEPD2_750(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
-// 3-color e-papers
-//GxEPD2_3C<GxEPD2_154c, GxEPD2_154c::HEIGHT> display(GxEPD2_154c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
-//GxEPD2_3C<GxEPD2_213c, GxEPD2_213c::HEIGHT> display(GxEPD2_213c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
-//GxEPD2_3C<GxEPD2_290c, GxEPD2_290c::HEIGHT> display(GxEPD2_290c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
-//GxEPD2_3C<GxEPD2_270c, GxEPD2_270c::HEIGHT> display(GxEPD2_270c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
-// can use only half buffer size
-//GxEPD2_3C<GxEPD2_420c, GxEPD2_420c::HEIGHT / 2> display(GxEPD2_420c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
-// can use only quarter buffer size
-//GxEPD2_3C<GxEPD2_583c, GxEPD2_583c::HEIGHT / 4> display(GxEPD2_583c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
-//GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT / 4> display(GxEPD2_750c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
+// create display class instances for each display, each instance with different CS line, each instance with RST disabled,
+// (or use separate RST pins for each display),
+// each instance with different BUSY line, or BUSY lines or-ed to one pin
+// disable reset line to disable cross resets by multiple instances
 
-// ***** for mapping of Waveshare e-Paper ESP8266 Driver Board *****
-// select one , can use full buffer size (full HEIGHT)
-//GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display(GxEPD2_154(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
-//GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display(GxEPD2_213(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
-//GxEPD2_BW<GxEPD2_290, GxEPD2_290::HEIGHT> display(GxEPD2_290(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
-//GxEPD2_BW<GxEPD2_270, GxEPD2_270::HEIGHT> display(GxEPD2_270(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
-//GxEPD2_BW<GxEPD2_420, GxEPD2_420::HEIGHT> display(GxEPD2_420(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
+#if defined (ESP8266)
+#define RST_PIN 0 // D3(0)
+#define CS_1 SS // CS = D8(15)
+#define CS_2 16 // CS = D0(16)
+#define CS_3  5 // CS = D1(5)
+// BUSY lines can be or-ed with diodes and pulldown register for displays with BUSY active HIGH
+#define BUSY_H_x 4 // BUSY = D2(4)
+// BUSY lines can be or-ed with diodes and pullup resistor for displays with BUSY active LOW
+//#define BUSY_L_x 4 // BUSY = D2(4)
+// select one and adapt to your mapping, can use full buffer size (full HEIGHT)
+GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display1(GxEPD2_154(/*CS=*/ CS_1, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x));
+GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display2(GxEPD2_213(/*CS=*/ CS_2, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x));
+GxEPD2_BW<GxEPD2_290, GxEPD2_290::HEIGHT> display3(GxEPD2_290(/*CS=*/ CS_3, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x));
+//GxEPD2_BW<GxEPD2_270, GxEPD2_270::HEIGHT> display(GxEPD2_270(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
+//GxEPD2_BW<GxEPD2_420, GxEPD2_420::HEIGHT> display(GxEPD2_420(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
 // can use only half buffer size
-//GxEPD2_BW < GxEPD2_583, GxEPD2_583::HEIGHT / 2 > display(GxEPD2_583(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
-//GxEPD2_BW < GxEPD2_750, GxEPD2_750::HEIGHT / 2 > display(GxEPD2_750(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
+//GxEPD2_BW < GxEPD2_583, GxEPD2_583::HEIGHT / 2 > display(GxEPD2_583(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
+//GxEPD2_BW < GxEPD2_750, GxEPD2_750::HEIGHT / 2 > display(GxEPD2_750(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
 // 3-color e-papers
-//GxEPD2_3C<GxEPD2_154c, GxEPD2_154c::HEIGHT> display(GxEPD2_154c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
-//GxEPD2_3C<GxEPD2_213c, GxEPD2_213c::HEIGHT> display(GxEPD2_213c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
-//GxEPD2_3C<GxEPD2_290c, GxEPD2_290c::HEIGHT> display(GxEPD2_290c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
-//GxEPD2_3C<GxEPD2_270c, GxEPD2_270c::HEIGHT> display(GxEPD2_270c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
+//GxEPD2_3C<GxEPD2_154c, GxEPD2_154c::HEIGHT> display(GxEPD2_154c(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
+//GxEPD2_3C<GxEPD2_213c, GxEPD2_213c::HEIGHT> display(GxEPD2_213c(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
+//GxEPD2_3C<GxEPD2_290c, GxEPD2_290c::HEIGHT> display(GxEPD2_290c(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
+//GxEPD2_3C<GxEPD2_270c, GxEPD2_270c::HEIGHT> display(GxEPD2_270c(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
 // can use only half buffer size
-//GxEPD2_3C<GxEPD2_420c, GxEPD2_420c::HEIGHT / 2> display(GxEPD2_420c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
+//GxEPD2_3C<GxEPD2_420c, GxEPD2_420c::HEIGHT / 2> display(GxEPD2_420c(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
 // can use only quarter buffer size
-//GxEPD2_3C<GxEPD2_583c, GxEPD2_583c::HEIGHT / 4> display(GxEPD2_583c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
-//GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT / 4> display(GxEPD2_750c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
+//GxEPD2_3C<GxEPD2_583c, GxEPD2_583c::HEIGHT / 4> display(GxEPD2_583c(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
+//GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT / 4> display3(GxEPD2_750c(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
 #endif
 
 #if defined(ESP32)
+#define RST_PIN 16
+#define CS_1 SS // CS = 5(SS)
+#define CS_2  0 // CS = 0
+#define CS_3  2 // CS = 2
+#define CS_4 13 // CS = 13
+// BUSY lines can be or-ed with diodes and pulldown register for displays with BUSY active HIGH
+#define BUSY_H_x 4 // BUSY = 4
+// BUSY lines can be or-ed with diodes and pullup resistor for displays with BUSY active LOW
+#define BUSY_L_x 15 // BUSY = 15
 // select one and adapt to your mapping, can use full buffer size (full HEIGHT)
-//GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display(GxEPD2_154(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
-//GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display(GxEPD2_213(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
-//GxEPD2_BW<GxEPD2_290, GxEPD2_290::HEIGHT> display(GxEPD2_290(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
-//GxEPD2_BW<GxEPD2_270, GxEPD2_270::HEIGHT> display(GxEPD2_270(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
-//GxEPD2_BW<GxEPD2_420, GxEPD2_420::HEIGHT> display(GxEPD2_420(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
-//GxEPD2_BW<GxEPD2_750, GxEPD2_750::HEIGHT> display(GxEPD2_750(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
+GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display1(GxEPD2_154(/*CS=*/ CS_1, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x));
+GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display2(GxEPD2_213(/*CS=*/ CS_2, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x));
+GxEPD2_BW<GxEPD2_290, GxEPD2_290::HEIGHT> display3(GxEPD2_290(/*CS=*/ CS_3, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x));
+//GxEPD2_BW<GxEPD2_270, GxEPD2_270::HEIGHT> display(GxEPD2_270(/*CS=*/ CS_x, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
+//GxEPD2_BW<GxEPD2_420, GxEPD2_420::HEIGHT> display4(GxEPD2_420(/*CS=*/ CS_4, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
+//GxEPD2_BW<GxEPD2_750, GxEPD2_750::HEIGHT> display(GxEPD2_750(/*CS=*/ CS_x, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
 // 3-color e-papers
-//GxEPD2_3C<GxEPD2_154c, GxEPD2_154c::HEIGHT> display(GxEPD2_154c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
-//GxEPD2_3C<GxEPD2_213c, GxEPD2_213c::HEIGHT> display(GxEPD2_213c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
-//GxEPD2_3C<GxEPD2_290c, GxEPD2_290c::HEIGHT> display(GxEPD2_290c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
-//GxEPD2_3C<GxEPD2_270c, GxEPD2_270c::HEIGHT> display(GxEPD2_270c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
-//GxEPD2_3C<GxEPD2_420c, GxEPD2_420c::HEIGHT> display(GxEPD2_420c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
-//GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT> display(GxEPD2_750c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
+//GxEPD2_3C<GxEPD2_154c, GxEPD2_154c::HEIGHT> display(GxEPD2_154c(/*CS=*/ CS_x, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
+//GxEPD2_3C<GxEPD2_213c, GxEPD2_213c::HEIGHT> display(GxEPD2_213c(/*CS=*/ CS_x, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
+//GxEPD2_3C<GxEPD2_290c, GxEPD2_290c::HEIGHT> display(GxEPD2_290c(/*CS=*/ CS_x, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
+//GxEPD2_3C<GxEPD2_270c, GxEPD2_270c::HEIGHT> display(GxEPD2_270c(/*CS=*/ CS_x, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
+//GxEPD2_3C<GxEPD2_420c, GxEPD2_420c::HEIGHT> display(GxEPD2_420c(/*CS=*/ CS_x, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
+GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT> display4(GxEPD2_750c(/*CS=*/ CS_4, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
 #endif
-
-#if defined(_BOARD_GENERIC_STM32F103C_H_)
-#define MAX_DISPAY_BUFFER_SIZE 15000ul // ~15k is a good compromise
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPAY_BUFFER_SIZE / (EPD::WIDTH / 8))
-// select one and adapt to your mapping
-//GxEPD2_BW<GxEPD2_154, MAX_HEIGHT(GxEPD2_154)> display(GxEPD2_154(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-//GxEPD2_BW<GxEPD2_213, MAX_HEIGHT(GxEPD2_213)> display(GxEPD2_213(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-//GxEPD2_BW<GxEPD2_290, MAX_HEIGHT(GxEPD2_290)> display(GxEPD2_290(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-//GxEPD2_BW<GxEPD2_270, MAX_HEIGHT(GxEPD2_270)> display(GxEPD2_270(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-//GxEPD2_BW<GxEPD2_420, MAX_HEIGHT(GxEPD2_420)> display(GxEPD2_420(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-//GxEPD2_BW<GxEPD2_583, MAX_HEIGHT(GxEPD2_583)> display(GxEPD2_583(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-//GxEPD2_BW<GxEPD2_750, MAX_HEIGHT(GxEPD2_750)> display(GxEPD2_750(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-// 3-color e-papers
-#define MAX_HEIGHT_3C(EPD) (EPD::HEIGHT <= (MAX_DISPAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8) ? EPD::HEIGHT : (MAX_DISPAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8))
-//GxEPD2_3C<GxEPD2_154c, MAX_HEIGHT_3C(GxEPD2_154c)> display(GxEPD2_154c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-//GxEPD2_3C<GxEPD2_213c, MAX_HEIGHT_3C(GxEPD2_213c)> display(GxEPD2_213c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-//GxEPD2_3C<GxEPD2_290c, MAX_HEIGHT_3C(GxEPD2_290c)> display(GxEPD2_290c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-//GxEPD2_3C<GxEPD2_270c, MAX_HEIGHT_3C(GxEPD2_270c)> display(GxEPD2_270c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-//GxEPD2_3C<GxEPD2_420c, MAX_HEIGHT_3C(GxEPD2_420c)> display(GxEPD2_420c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-//GxEPD2_3C<GxEPD2_583c, MAX_HEIGHT_3C(GxEPD2_583c)> display(GxEPD2_583c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-//GxEPD2_3C<GxEPD2_750c, MAX_HEIGHT_3C(GxEPD2_750c)> display(GxEPD2_750c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-#endif
-
-#if defined(__AVR)
-#define MAX_DISPAY_BUFFER_SIZE 800 // 
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPAY_BUFFER_SIZE / (EPD::WIDTH / 8))
-// select one and adapt to your mapping
-//GxEPD2_BW<GxEPD2_154, MAX_HEIGHT(GxEPD2_154)> display(GxEPD2_154(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_BW<GxEPD2_213, MAX_HEIGHT(GxEPD2_213)> display(GxEPD2_213(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_BW<GxEPD2_290, MAX_HEIGHT(GxEPD2_290)> display(GxEPD2_290(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_BW<GxEPD2_270, MAX_HEIGHT(GxEPD2_270)> display(GxEPD2_270(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_BW<GxEPD2_420, MAX_HEIGHT(GxEPD2_420)> display(GxEPD2_420(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_BW<GxEPD2_583, MAX_HEIGHT(GxEPD2_583)> display(GxEPD2_583(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_BW<GxEPD2_750, MAX_HEIGHT(GxEPD2_750)> display(GxEPD2_750(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-// 3-color e-papers
-#define MAX_HEIGHT_3C(EPD) (EPD::HEIGHT <= (MAX_DISPAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8) ? EPD::HEIGHT : (MAX_DISPAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8))
-//GxEPD2_3C<GxEPD2_154c, MAX_HEIGHT_3C(GxEPD2_154c)> display(GxEPD2_154c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_3C<GxEPD2_213c, MAX_HEIGHT_3C(GxEPD2_213c)> display(GxEPD2_213c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_3C<GxEPD2_290c, MAX_HEIGHT_3C(GxEPD2_290c)> display(GxEPD2_290c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_3C<GxEPD2_270c, MAX_HEIGHT_3C(GxEPD2_270c)> display(GxEPD2_270c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_3C<GxEPD2_420c, MAX_HEIGHT_3C(GxEPD2_420c)> display(GxEPD2_420c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_3C<GxEPD2_583c, MAX_HEIGHT_3C(GxEPD2_583c)> display(GxEPD2_583c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_3C<GxEPD2_750c, MAX_HEIGHT_3C(GxEPD2_750c)> display(GxEPD2_750c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-#endif
-
-#if !defined(__AVR) && !defined(_BOARD_GENERIC_STM32F103C_H_)
 
 // comment out unused bitmaps to reduce code space used
 #include "bitmaps/Bitmaps200x200.h" // 1.54" b/w
@@ -160,53 +115,82 @@
 #include "bitmaps/Bitmaps3c176x264.h" // 2.7"  b/w/r
 #include "bitmaps/Bitmaps3c400x300.h" // 4.2"  b/w/r
 
-#else
-
-// select only one to fit in code space
-#include "bitmaps/Bitmaps200x200.h" // 1.54" b/w
-//#include "bitmaps/Bitmaps128x250.h" // 2.13" b/w
-//#include "bitmaps/Bitmaps128x296.h" // 2.9"  b/w
-//#include "bitmaps/Bitmaps176x264.h" // 2.7"  b/w
-////#include "bitmaps/Bitmaps400x300.h" // 4.2"  b/w // not enough code space
-////#include "bitmaps/Bitmaps640x384.h" // 7.5"  b/w // not enough code space
-// 3-color
-//#include "bitmaps/Bitmaps3c200x200.h" // 1.54" b/w/r
-//#include "bitmaps/Bitmaps3c104x212.h" // 2.13" b/w/r
-//#include "bitmaps/Bitmaps3c128x296.h" // 2.9"  b/w/r
-//#include "bitmaps/Bitmaps3c176x264.h" // 2.7"  b/w/r
-////#include "bitmaps/Bitmaps3c400x300.h" // 4.2"  b/w/r // not enough code space
-
-#endif
-
 void setup()
 {
   Serial.begin(115200);
   Serial.println();
   Serial.println("setup");
-  display.init(115200);
+
+  // one common reset for all displays
+  digitalWrite(RST_PIN, HIGH);
+  pinMode(RST_PIN, OUTPUT);
+  delay(20);
+  digitalWrite(RST_PIN, LOW);
+  delay(20);
+  digitalWrite(RST_PIN, HIGH);
+  delay(200);
+
+  display1.init(115200); // enable diagnostic output on Serial
+  display2.init(115200); // enable diagnostic output on Serial
+  display3.init(115200); // enable diagnostic output on Serial
+#if defined(ESP32)
+  display4.init(115200); // enable diagnostic output on Serial
+#endif
   // first update should be full refresh
-  helloWorld();
+  helloWorld(display1);
+  helloWorld(display2);
+  helloWorld(display3);
+#if defined(ESP32)
+  helloWorld(display4);
+#endif
   delay(1000);
   // partial refresh mode can be used to full screen,
   // effective if display panel hasFastPartialUpdate
-  helloFullScreenPartialMode();
+  helloFullScreenPartialMode(display1);
+  helloFullScreenPartialMode(display2);
+  helloFullScreenPartialMode(display3);
+#if defined(ESP32)
+  helloFullScreenPartialMode(display4);
+#endif
   delay(1000);
-  helloArduino();
+  helloArduino(display1);
+  helloArduino(display2);
+  helloArduino(display3);
+#if defined(ESP32)
+  helloArduino(display4);
+#endif
   delay(1000);
-  helloEpaper();
+  helloEpaper(display1);
+  helloEpaper(display2);
+  helloEpaper(display3);
+#if defined(ESP32)
+  helloEpaper(display4);
+#endif
   delay(1000);
-  showFont("FreeMonoBold9pt7b", &FreeMonoBold9pt7b);
+  showFont(display1, "FreeMonoBold9pt7b", &FreeMonoBold9pt7b);
+  showFont(display2, "FreeMonoBold9pt7b", &FreeMonoBold9pt7b);
+  showFont(display3, "FreeMonoBold9pt7b", &FreeMonoBold9pt7b);
+#if defined(ESP32)
+  showFont(display4, "FreeMonoBold9pt7b", &FreeMonoBold9pt7b);
+#endif
   delay(1000);
-  drawBitmaps();
-  if (display.epd2.hasPartialUpdate)
-  {
-    showPartialUpdate();
-    delay(1000);
-  } // else // on GDEW0154Z04 only full update available, doesn't look nice
-  //drawCornerTest();
-  //showBox(16, 16, 48, 32, false);
-  //showBox(16, 56, 48, 32, true);
-  display.powerOff();
+  drawBitmaps(display1);
+  drawBitmaps(display2);
+  drawBitmaps(display3);
+#if defined(ESP32)
+  drawBitmaps(display4);
+#endif
+//  if (display1.epd2.hasPartialUpdate)
+//  {
+//    showPartialUpdate(display1);
+//    delay(1000);
+//  } // else // on GDEW0154Z04 only full update available, doesn't look nice
+  //drawCornerTest(display1);
+  //showBox(display1, 16, 16, 48, 32, false);
+  //showBox(display1, 16, 56, 48, 32, true);
+  display1.powerOff();
+  display2.powerOff();
+  display3.powerOff();
   Serial.println("setup done");
 }
 
@@ -214,7 +198,8 @@ void loop()
 {
 }
 
-void helloWorld()
+
+void helloWorld(GxEPD2_GFX& display)
 {
   //Serial.println("helloWorld");
   display.setRotation(1);
@@ -234,7 +219,8 @@ void helloWorld()
   //Serial.println("helloWorld done");
 }
 
-void helloFullScreenPartialMode()
+
+void helloFullScreenPartialMode(GxEPD2_GFX& display)
 {
   //Serial.println("helloFullScreenPartialMode");
   display.setPartialWindow(0, 0, display.width(), display.height());
@@ -272,7 +258,8 @@ void helloFullScreenPartialMode()
   //Serial.println("helloFullScreenPartialMode done");
 }
 
-void helloArduino()
+
+void helloArduino(GxEPD2_GFX& display)
 {
   //Serial.println("helloArduino");
   display.setRotation(1);
@@ -293,7 +280,8 @@ void helloArduino()
   //Serial.println("helloArduino done");
 }
 
-void helloEpaper()
+
+void helloEpaper(GxEPD2_GFX& display)
 {
   //Serial.println("helloEpaper");
   display.setRotation(1);
@@ -313,7 +301,8 @@ void helloEpaper()
   //Serial.println("helloEpaper done");
 }
 
-void showBox(uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool partial)
+
+void showBox(GxEPD2_GFX& display, uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool partial)
 {
   //Serial.println("showBox");
   display.setRotation(1);
@@ -335,7 +324,8 @@ void showBox(uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool partial)
   //Serial.println("showBox done");
 }
 
-void drawCornerTest()
+
+void drawCornerTest(GxEPD2_GFX& display)
 {
   display.setFullWindow();
   display.setFont(&FreeMonoBold9pt7b);
@@ -359,7 +349,8 @@ void drawCornerTest()
   }
 }
 
-void showFont(const char name[], const GFXfont* f)
+
+void showFont(GxEPD2_GFX& display, const char name[], const GFXfont* f)
 {
   display.setFullWindow();
   display.setRotation(0);
@@ -367,12 +358,16 @@ void showFont(const char name[], const GFXfont* f)
   display.firstPage();
   do
   {
-    drawFont(name, f);
+    drawFont(display, name, f);
   }
   while (display.nextPage());
 }
 
-void drawFont(const char name[], const GFXfont* f)
+
+//void drawFont(GxEPD2_GFX& display, const char name[], const GFXfont* f);
+
+
+void drawFont(GxEPD2_GFX& display, const char name[], const GFXfont* f)
 {
   //display.setRotation(0);
   display.fillScreen(GxEPD_WHITE);
@@ -393,10 +388,11 @@ void drawFont(const char name[], const GFXfont* f)
   display.println("pqrstuvwxyz{|}~ ");
 }
 
-void showPartialUpdate()
+
+void showPartialUpdate(GxEPD2_GFX& display)
 {
   // some useful background
-  helloWorld();
+  helloWorld(display);
   // use asymmetric values for test
   uint16_t box_x = 10;
   uint16_t box_y = 15;
@@ -458,49 +454,11 @@ void showPartialUpdate()
 }
 
 
-void drawBitmaps()
-{
-  display.setFullWindow();
-#ifdef _GxBitmaps128x250_H_
-  drawBitmaps128x250();
-#endif
-#ifdef _GxBitmaps128x296_H_
-  drawBitmaps128x296();
-#endif
-#ifdef _GxBitmaps176x264_H_
-  drawBitmaps176x264();
-#endif
-#ifdef _GxBitmaps400x300_H_
-  drawBitmaps400x300();
-#endif
-#ifdef _GxBitmaps640x384_H_
-  drawBitmaps640x384();
-#endif
-  // 3-color
-#ifdef _GxBitmaps3c104x212_H_
-  drawBitmaps3c104x212();
-#endif
-#ifdef _GxBitmaps3c128x296_H_
-  drawBitmaps3c128x296();
-#endif
-#ifdef _GxBitmaps3c176x264_H_
-  drawBitmaps3c176x264();
-#endif
-#ifdef _GxBitmaps3c400x300_H_
-  drawBitmaps3c400x300();
-#endif
-  // show these after the specific bitmaps
 #ifdef _GxBitmaps200x200_H_
-  drawBitmaps200x200();
-#endif
-  // 3-color
-#ifdef _GxBitmaps3c200x200_H_
-  drawBitmaps3c200x200();
-#endif
-}
 
-#ifdef _GxBitmaps200x200_H_
-void drawBitmaps200x200()
+void drawBitmaps200x200(GxEPD2_GFX& display);
+
+void drawBitmaps200x200(GxEPD2_GFX& display)
 {
 #if defined(__AVR)
   const unsigned char* bitmaps[] =
@@ -573,7 +531,10 @@ void drawBitmaps200x200()
 #endif
 
 #ifdef _GxBitmaps128x250_H_
-void drawBitmaps128x250()
+
+void drawBitmaps128x250(GxEPD2_GFX& display);
+
+void drawBitmaps128x250(GxEPD2_GFX& display)
 {
 #if !defined(__AVR)
   const unsigned char* bitmaps[] =
@@ -606,7 +567,10 @@ void drawBitmaps128x250()
 #endif
 
 #ifdef _GxBitmaps128x296_H_
-void drawBitmaps128x296()
+
+void drawBitmaps128x296(GxEPD2_GFX& display);
+
+void drawBitmaps128x296(GxEPD2_GFX& display)
 {
 #if !defined(__AVR)
   const unsigned char* bitmaps[] =
@@ -639,7 +603,10 @@ void drawBitmaps128x296()
 #endif
 
 #ifdef _GxBitmaps176x264_H_
-void drawBitmaps176x264()
+
+void drawBitmaps176x264(GxEPD2_GFX& display);
+
+void drawBitmaps176x264(GxEPD2_GFX& display)
 {
   const unsigned char* bitmaps[] =
   {
@@ -663,7 +630,10 @@ void drawBitmaps176x264()
 #endif
 
 #ifdef _GxBitmaps400x300_H_
-void drawBitmaps400x300()
+
+void drawBitmaps400x300(GxEPD2_GFX& display);
+
+void drawBitmaps400x300(GxEPD2_GFX& display)
 {
 #if !defined(__AVR)
   const unsigned char* bitmaps[] =
@@ -691,7 +661,10 @@ void drawBitmaps400x300()
 #endif
 
 #ifdef _GxBitmaps640x384_H_
-void drawBitmaps640x384()
+
+void drawBitmaps640x384(GxEPD2_GFX& display);
+
+void drawBitmaps640x384(GxEPD2_GFX& display)
 {
 #if !defined(__AVR)
   const unsigned char* bitmaps[] =
@@ -725,7 +698,10 @@ struct bitmap_pair
 };
 
 #ifdef _GxBitmaps3c200x200_H_
-void drawBitmaps3c200x200()
+
+void drawBitmaps3c200x200(GxEPD2_GFX& display);
+
+void drawBitmaps3c200x200(GxEPD2_GFX& display)
 {
   bitmap_pair bitmap_pairs[] =
   {
@@ -813,7 +789,10 @@ void drawBitmaps3c200x200()
 #endif
 
 #ifdef _GxBitmaps3c104x212_H_
-void drawBitmaps3c104x212()
+
+void drawBitmaps3c104x212(GxEPD2_GFX& display);
+
+void drawBitmaps3c104x212(GxEPD2_GFX& display)
 {
 #if !defined(__AVR)
   bitmap_pair bitmap_pairs[] =
@@ -853,7 +832,10 @@ void drawBitmaps3c104x212()
 #endif
 
 #ifdef _GxBitmaps3c128x296_H_
-void drawBitmaps3c128x296()
+
+void drawBitmaps3c128x296(GxEPD2_GFX& display);
+
+void drawBitmaps3c128x296(GxEPD2_GFX& display)
 {
 #if !defined(__AVR)
   bitmap_pair bitmap_pairs[] =
@@ -893,7 +875,10 @@ void drawBitmaps3c128x296()
 #endif
 
 #ifdef _GxBitmaps3c176x264_H_
-void drawBitmaps3c176x264()
+
+void drawBitmaps3c176x264(GxEPD2_GFX& display);
+
+void drawBitmaps3c176x264(GxEPD2_GFX& display)
 {
   bitmap_pair bitmap_pairs[] =
   {
@@ -918,7 +903,10 @@ void drawBitmaps3c176x264()
 #endif
 
 #ifdef _GxBitmaps3c400x300_H_
-void drawBitmaps3c400x300()
+
+void drawBitmaps3c400x300(GxEPD2_GFX& display);
+
+void drawBitmaps3c400x300(GxEPD2_GFX& display)
 {
 #if !defined(__AVR)
   bitmap_pair bitmap_pairs[] =
@@ -947,4 +935,48 @@ void drawBitmaps3c400x300()
   }
 }
 #endif
+
+
+void drawBitmaps(GxEPD2_GFX& display)
+{
+  display.setFullWindow();
+  display.setRotation(0);
+#ifdef _GxBitmaps128x250_H_
+  drawBitmaps128x250(display);
+#endif
+#ifdef _GxBitmaps128x296_H_
+  drawBitmaps128x296(display);
+#endif
+#ifdef _GxBitmaps176x264_H_
+  drawBitmaps176x264(display);
+#endif
+#ifdef _GxBitmaps400x300_H_
+  drawBitmaps400x300(display);
+#endif
+#ifdef _GxBitmaps640x384_H_
+  drawBitmaps640x384(display);
+#endif
+  // 3-color
+#ifdef _GxBitmaps3c104x212_H_
+  drawBitmaps3c104x212(display);
+#endif
+#ifdef _GxBitmaps3c128x296_H_
+  drawBitmaps3c128x296(display);
+#endif
+#ifdef _GxBitmaps3c176x264_H_
+  drawBitmaps3c176x264(display);
+#endif
+#ifdef _GxBitmaps3c400x300_H_
+  drawBitmaps3c400x300(display);
+#endif
+  // show these after the specific bitmaps
+#ifdef _GxBitmaps200x200_H_
+  drawBitmaps200x200(display);
+#endif
+  // 3-color
+#ifdef _GxBitmaps3c200x200_H_
+  drawBitmaps3c200x200(display);
+#endif
+}
+
 

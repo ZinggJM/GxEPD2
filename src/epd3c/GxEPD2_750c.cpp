@@ -12,7 +12,8 @@
 #include "GxEPD2_750c.h"
 #include "WaveTables.h"
 
-GxEPD2_750c::GxEPD2_750c(int8_t cs, int8_t dc, int8_t rst, int8_t busy) : GxEPD2_EPD(cs, dc, rst, busy, LOW, 40000000)
+GxEPD2_750c::GxEPD2_750c(int8_t cs, int8_t dc, int8_t rst, int8_t busy) :
+  GxEPD2_EPD(cs, dc, rst, busy, LOW, 40000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate)
 {
   _initial = true;
   _power_is_on = false;

@@ -22,12 +22,29 @@
 #include "epd3c/GxEPD2_583c.h"
 #include "epd3c/GxEPD2_750c.h"
 
+#ifndef ENABLE_GxEPD2_GFX
+// default is off
+#define ENABLE_GxEPD2_GFX 0 
+#endif
+
+#if ENABLE_GxEPD2_GFX
+#include "GxEPD2_GFX.h"
+#endif
+
 template<typename GxEPD2_Type, const uint16_t page_height>
+#if ENABLE_GxEPD2_GFX
+class GxEPD2_3C : public GxEPD2_GFX
+#else
 class GxEPD2_3C : public Adafruit_GFX
+#endif
 {
   public:
     GxEPD2_Type epd2;
+#if ENABLE_GxEPD2_GFX
+    GxEPD2_3C(GxEPD2_Type epd2_instance) : epd2(epd2_instance), GxEPD2_GFX(epd2, GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT)
+#else
     GxEPD2_3C(GxEPD2_Type epd2_instance) : Adafruit_GFX(GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
+#endif
     {
       _page_height = page_height;
       _pages = (HEIGHT / _page_height) + ((HEIGHT % _page_height) > 0);

@@ -12,7 +12,8 @@
 #include "GxEPD2_270c.h"
 #include "WaveTables.h"
 
-GxEPD2_270c::GxEPD2_270c(int8_t cs, int8_t dc, int8_t rst, int8_t busy) : GxEPD2_EPD(cs, dc, rst, busy, LOW, 20000000)
+GxEPD2_270c::GxEPD2_270c(int8_t cs, int8_t dc, int8_t rst, int8_t busy) :
+  GxEPD2_EPD(cs, dc, rst, busy, LOW, 20000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate)
 {
   _initial = true;
   _power_is_on = false;

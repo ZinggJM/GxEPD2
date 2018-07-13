@@ -50,7 +50,16 @@ class GxEPD2
 class GxEPD2_EPD
 {
   public:
-    GxEPD2_EPD(int8_t cs, int8_t dc, int8_t rst, int8_t busy, int8_t busy_level, uint32_t busy_timeout);
+    // attributes
+    const uint16_t WIDTH;
+    const uint16_t HEIGHT;
+    const GxEPD2::Panel panel;
+    const bool hasColor;
+    const bool hasPartialUpdate;
+    const bool hasFastPartialUpdate;
+    // constructor
+    GxEPD2_EPD(int8_t cs, int8_t dc, int8_t rst, int8_t busy, int8_t busy_level, uint32_t busy_timeout,
+               uint16_t w, uint16_t h, GxEPD2::Panel p, bool c, bool pu, bool fpu);
     virtual void init(uint32_t serial_diag_bitrate = 0) = 0; // serial_diag_bitrate = 0 : disabled
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     virtual void clearScreen(uint8_t value) = 0; // init controller memory and screen (default white)
