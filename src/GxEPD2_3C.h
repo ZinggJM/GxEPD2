@@ -202,7 +202,7 @@ class GxEPD2_3C : public Adafruit_GFX
         if (_current_page == _pages)
         {
           _current_page = 0;
-          if (epd2.panel == GxEPD2::GDEW0154Z04)
+          if ((epd2.panel == GxEPD2::GDEW0154Z04) && (_pages > 1))
           {
             if (!_second_phase)
             {
