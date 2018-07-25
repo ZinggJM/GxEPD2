@@ -18,6 +18,8 @@ class GxEPD2_GFX : public Adafruit_GFX
 {
   public:
     GxEPD2_GFX(GxEPD2_EPD& _epd2, int16_t w, int16_t h) : Adafruit_GFX(w, h), epd2(_epd2) {};
+    virtual uint16_t pages() = 0;
+    virtual uint16_t pageHeight() = 0;
     virtual bool mirror(bool m) = 0;
     virtual void init(uint32_t serial_diag_bitrate = 0) = 0; // serial_diag_bitrate = 0 : disabled
     virtual void fillScreen(uint16_t color) = 0; // 0x0 black, >0x0 white, to buffer

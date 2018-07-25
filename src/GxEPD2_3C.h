@@ -53,6 +53,16 @@ class GxEPD2_3C : public Adafruit_GFX
       setFullWindow();
     }
 
+    uint16_t pages()
+    {
+      return _pages;
+    }
+
+    uint16_t pageHeight()
+    {
+      return _page_height;
+    }
+
     bool mirror(bool m)
     {
       swap (_mirror, m);

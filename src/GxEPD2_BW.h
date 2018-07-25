@@ -24,7 +24,7 @@
 
 #ifndef ENABLE_GxEPD2_GFX
 // default is off
-#define ENABLE_GxEPD2_GFX 0 
+#define ENABLE_GxEPD2_GFX 0
 #endif
 
 #if ENABLE_GxEPD2_GFX
@@ -41,7 +41,7 @@ class GxEPD2_BW : public Adafruit_GFX
   public:
     GxEPD2_Type epd2;
 #if ENABLE_GxEPD2_GFX
-    GxEPD2_BW(GxEPD2_Type epd2_instance) : epd2(epd2_instance), GxEPD2_GFX(epd2, GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT) 
+    GxEPD2_BW(GxEPD2_Type epd2_instance) : epd2(epd2_instance), GxEPD2_GFX(epd2, GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT)
 #else
     GxEPD2_BW(GxEPD2_Type epd2_instance) : Adafruit_GFX(GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
 #endif
@@ -52,6 +52,16 @@ class GxEPD2_BW : public Adafruit_GFX
       _using_partial_mode = false;
       _current_page = 0;
       setFullWindow();
+    }
+
+    uint16_t pages()
+    {
+      return _pages;
+    }
+
+    uint16_t pageHeight()
+    {
+      return _page_height;
     }
 
     bool mirror(bool m)
@@ -151,6 +161,31 @@ class GxEPD2_BW : public Adafruit_GFX
 
     bool nextPage()
     {
+      if (1 == _pages)
+      {
+        if (_using_partial_mode)
+        {
+          uint32_t offset = _reverse ? (HEIGHT - _pw_h) * _pw_w / 8 : 0;
+          epd2.writeImage(_buffer + offset, _pw_x, _pw_y, _pw_w, _pw_h);
+          epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
+          if (epd2.hasFastPartialUpdate)
+          {
+            epd2.writeImage(_buffer + offset, _pw_x, _pw_y, _pw_w, _pw_h);
+            epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
+          }
+        }
+        else
+        {
+          epd2.writeImage(_buffer, 0, 0, WIDTH, HEIGHT);
+          epd2.refresh(false);
+          if (epd2.hasFastPartialUpdate)
+          {
+            epd2.writeImage(_buffer, 0, 0, WIDTH, HEIGHT);
+            epd2.refresh(true);
+          }
+        }
+        return false;
+      }
       uint16_t page_ys = _current_page * _page_height;
       if (_using_partial_mode)
       {
@@ -182,6 +217,7 @@ class GxEPD2_BW : public Adafruit_GFX
             if (epd2.hasFastPartialUpdate)
             {
               _second_phase = true;
+              fillScreen(GxEPD_WHITE);
               return true;
             }
           }

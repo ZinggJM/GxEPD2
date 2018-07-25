@@ -33,7 +33,10 @@ New Simplified Version of GxEPD for Arduino
 - Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
 - Good Dispay ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
 
-### Version 1.0.5
+### Version 1.0.6
+- add buffered drawing option to GxEPD2_WiFi_Example
+- allows use with 1.54" 3-color 200x200 display, may also be useful for small bitmaps
+#### Version 1.0.5
 - add buffered drawing option to GxEPD2_SD_Example and GxEPD2_Spiffs_Example
 - allows use with 1.54" 3-color 200x200 display, may also be useful for small bitmaps
 #### Version 1.0.4
