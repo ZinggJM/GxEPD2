@@ -144,6 +144,8 @@
 //GxEPD2_3C<GxEPD2_750c, MAX_HEIGHT_3C(GxEPD2_750c)> display(GxEPD2_750c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
 #endif
 
+#include "GxEPD2_boards_added.h"
+
 #if !defined(__AVR) && !defined(_BOARD_GENERIC_STM32F103C_H_)
 
 // comment out unused bitmaps to reduce code space used
