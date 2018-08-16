@@ -33,7 +33,10 @@ New Simplified Version of GxEPD for Arduino
 - Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
 - Good Dispay ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
 
-### Version 1.0.7
+### Version 1.0.8
+- add GxEPD2_SD_AVR_boards_added.h to GxEPD2_SD_AVR_Example
+- with example definitions for non-AVR boards (low level display class use example)
+#### Version 1.0.7
 - add GxEPD2_boards_added.h to GxEPD2_Example 
 - with example definitions for Arduino DUE and MKR1000
 #### Version 1.0.6

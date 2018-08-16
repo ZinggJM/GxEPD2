@@ -44,9 +44,22 @@
 #include <GxEPD2_3C.h>
 #include <Fonts/FreeMonoBold9pt7b.h>
 
+#if defined(ESP32)
+
+// has support for FAT32 support with long filenames
+#include "FS.h"
+#include "SD.h"
+#include "SPI.h"
+#define SdFile File
+#define seekSet seek
+
+#else
+
 // include SdFat for FAT32 support with long filenames; available through Library Manager
 #include <SdFat.h>
 SdFat SD;
+
+#endif
 
 #if defined(__AVR)
 #define SD_CS 6  // adapt to your wiring
@@ -66,6 +79,11 @@ SdFat SD;
 //GxEPD2_420c display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
 //GxEPD2_750c display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
 #endif
+
+// non-AVR board can also be used with GxEPD2 base display classes, e.g. for SD bitmap drawing
+// uncomment your display for your board in the following included header file and adapt to your mapping
+
+#include "GxEPD2_SD_AVR_boards_added.h"
 
 // function declaration with default parameter
 void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_color = true);
