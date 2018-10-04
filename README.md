@@ -9,31 +9,34 @@ New Simplified Version of GxEPD for Arduino
 ### - never connect data lines directly to 5V data pins.
 
 ### Paged Drawing, Picture Loop
-#### - This library uses paged drawing to limit RAM use and cope with missing single pixel update support
-#### - buffer size can be selected in the application by template parameter page_height, see GxEPD2_Example
-#### - Paged drawing is implemented as picture loop, like in U8G2 (Oliver Kraus)
-#### - see https://github.com/olikraus/u8glib/wiki/tpictureloop
-#### - Paged drawing is also available using drawPaged() and drawCallback(), like in GxEPD
-#### - // GxEPD style paged drawing; drawCallback() is called as many times as needed
-#### - void drawPaged(void (*drawCallback)(const void*), const void* pv)
-#### - paged drawing is done using Adafruit_GFX methods inside picture loop or drawCallback
+ - This library uses paged drawing to limit RAM use and cope with missing single pixel update support
+ - buffer size can be selected in the application by template parameter page_height, see GxEPD2_Example
+ - Paged drawing is implemented as picture loop, like in U8G2 (Oliver Kraus)
+ - see https://github.com/olikraus/u8glib/wiki/tpictureloop
+ - Paged drawing is also available using drawPaged() and drawCallback(), like in GxEPD
+- ` // GxEPD style paged drawing; drawCallback() is called as many times as needed `
+- ` void drawPaged(void (*drawCallback)(const void*), const void* pv) `
+- paged drawing is done using Adafruit_GFX methods inside picture loop or drawCallback
 
 ### Full Screen Buffer Support
-#### - full screen buffer is selected by setting template parameter page_height to display height
-#### - drawing to full screen buffer is done using Adafruit_GFX methods without picture loop or drawCallback
-#### - and then calling method display()
+ - full screen buffer is selected by setting template parameter page_height to display height
+ - drawing to full screen buffer is done using Adafruit_GFX methods without picture loop or drawCallback
+ - and then calling method display()
 
 ### Low Level Bitmap Drawing Support
-#### - bitmap drawing support to the controller memory and screen is available:
-#### - either through the template class instance methods that forward calls to the base display class
-#### - or directy using an instance of a base display class and calling its methods directly
+ - bitmap drawing support to the controller memory and screen is available:
+ - either through the template class instance methods that forward calls to the base display class
+ - or directy using an instance of a base display class and calling its methods directly
 
 ### Supporting Arduino Forum Topics:
 
 - Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
 - Good Dispay ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
 
-### Version 1.0.8
+### Version 1.0.9
+- add GxEPD2_U8G2_Fonts_Example, e.g. for use of Umlauts ÄÖÜäéöü
+- NOTE: you need to SAVE the modified example to a saveable location for UTF-8 characters to work
+#### Version 1.0.8
 - add GxEPD2_SD_AVR_boards_added.h to GxEPD2_SD_AVR_Example
 - with example definitions for non-AVR boards (low level display class use example)
 #### Version 1.0.7
