@@ -1,12 +1,14 @@
 # GxEPD2
-New Simplified Version of GxEPD for Arduino
+## Arduino Display Library for SPI E-Paper Displays
 
-## for SPI e-paper displays from Dalian Good Display 
-## and SPI e-paper boards from Waveshare
+- With full Graphics and Text support using Adafruit_GFX
+
+- For SPI e-paper displays from Dalian Good Display 
+- and SPI e-paper boards from Waveshare
 
 ### important note :
-### - these displays are for 3.3V supply and 3.3V data lines.
-### - never connect data lines directly to 5V data pins.
+ - these displays are for 3.3V supply and 3.3V data lines.
+ - never connect data lines directly to 5V data pins.
 
 ### Paged Drawing, Picture Loop
  - This library uses paged drawing to limit RAM use and cope with missing single pixel update support
@@ -33,7 +35,10 @@ New Simplified Version of GxEPD for Arduino
 - Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
 - Good Dispay ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
 
-### Version 1.0.9
+### Version 1.1.0
+- added  support for GDEW0213I5F for 2.13" b/w 104x212 flexible display
+- updated GxEPD2_WiFi_Example and GxEPD2_Spiffs_Loader to use BearSSL on ESP8266, for large bitmap downloads
+#### Version 1.0.9
 - add GxEPD2_U8G2_Fonts_Example, e.g. for use of Umlauts ÄÖÜäéöü
 - NOTE: you need to SAVE the modified example to a saveable location for UTF-8 characters to work
 #### Version 1.0.8

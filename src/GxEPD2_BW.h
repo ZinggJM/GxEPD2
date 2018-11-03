@@ -16,6 +16,7 @@
 #include "GxEPD2_EPD.h"
 #include "epd/GxEPD2_154.h"
 #include "epd/GxEPD2_213.h"
+#include "epd/GxEPD2_213_flex.h"
 #include "epd/GxEPD2_290.h"
 #include "epd/GxEPD2_270.h"
 #include "epd/GxEPD2_420.h"

@@ -23,7 +23,9 @@ const bool formatOnFail = false;
 
 #if defined (ESP8266)
 #include <ESP8266WiFi.h>
+#define USE_BearSSL true
 #endif
+
 #include <WiFiClient.h>
 #include <WiFiClientSecure.h>
 
@@ -33,7 +35,11 @@ const int httpPort  = 80;
 const int httpsPort = 443;
 const char* fp_api_github_com = "35 85 74 EF 67 35 A7 CE 40 69 50 F3 C0 F6 80 CF 80 3B 2E 19";
 const char* fp_github_com     = "ca 06 f5 6b 25 8b 7a 0d 4f 2b 05 47 09 39 47 86 51 15 19 84";
+#if USE_BearSSL
+const char fp_rawcontent[20]  = {0xcc, 0xaa, 0x48, 0x48, 0x66, 0x46, 0x0e, 0x91, 0x53, 0x2c, 0x9c, 0x7c, 0x23, 0x2a, 0xb1, 0x74, 0x4d, 0x29, 0x9d, 0x33};
+#else
 const char* fp_rawcontent     = "cc aa 48 48 66 46 0e 91 53 2c 9c 7c 23 2a b1 74 4d 29 9d 33";
+#endif
 const char* host_rawcontent   = "raw.githubusercontent.com";
 const char* path_rawcontent   = "/ZinggJM/GxEPD2/master/extras/bitmaps/";
 const char* path_prenticedavid   = "/prenticedavid/MCUFRIEND_kbv/master/extras/bitmaps/";
@@ -225,15 +231,22 @@ void downloadFile_HTTP(const char* host, const char* path, const char* filename,
 void downloadFile_HTTPS(const char* host, const char* path, const char* filename, const char* fingerprint, const char* target)
 {
   // Use WiFiClientSecure class to create TLS connection
+#if USE_BearSSL
+  BearSSL::WiFiClientSecure client;
+#else
   WiFiClientSecure client;
+#endif
   Serial.println(); Serial.print("downloading file \""); Serial.print(filename);  Serial.println("\"");
   Serial.print("connecting to "); Serial.println(host);
+#if USE_BearSSL
+  if (fingerprint) client.setFingerprint((uint8_t*)fingerprint);
+#endif
   if (!client.connect(host, httpsPort))
   {
     Serial.println("connection failed");
     return;
   }
-#if defined (ESP8266)
+#if defined (ESP8266) && !USE_BearSSL
   if (fingerprint)
   {
     if (client.verify(fingerprint, host))
@@ -324,6 +337,3 @@ void downloadFile_HTTPS(const char* host, const char* path, const char* filename
   file.close();
   Serial.print("done, "); Serial.print(total); Serial.println(" bytes transferred");
 }
-
-
-
