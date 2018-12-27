@@ -7,8 +7,10 @@
 - and SPI e-paper boards from Waveshare
 
 ### important note :
- - these displays are for 3.3V supply and 3.3V data lines.
- - never connect data lines directly to 5V data pins.
+- these displays are for 3.3V supply and 3.3V data lines
+- never connect data lines directly to 5V Arduino data pins, use e.g. 4k7/10k resistor divider
+- series resistor only is not enough for reliable operation (back-feed effect through protection diodes)
+- do not forget to connect GND
 
 ### Paged Drawing, Picture Loop
  - This library uses paged drawing to limit RAM use and cope with missing single pixel update support
@@ -35,7 +37,12 @@
 - Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
 - Good Dispay ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
 
-### Version 1.1.0
+### Version 1.1.1
+- 2.7" b/w GDEW027W3 with fast partial update support, based on new demo code wavetable
+- mapping suggestion added for Arduino MEGA
+- NOTE: use voltage divider resistors for 5V Arduinos, series resistor is not reliable enough
+- ConnectingHardware.md updated
+#### Version 1.1.0
 - added  support for GDEW0213I5F for 2.13" b/w 104x212 flexible display
 - updated GxEPD2_WiFi_Example and GxEPD2_Spiffs_Loader to use BearSSL on ESP8266, for large bitmap downloads
 #### Version 1.0.9

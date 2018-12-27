@@ -1,7 +1,7 @@
 // Display Library for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 // Requires HW SPI and Adafruit_GFX. Caution: these e-papers require 3.3V supply AND data lines!
 //
-// based on Demo Example from Good Display: http://www.good-display.com/download_list/downloadcategoryid=34&isMode=false.html
+// based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
 //
 // Author: Jean-Marc Zingg
 //
@@ -30,15 +30,35 @@ void GxEPD2_270::init(uint32_t serial_diag_bitrate)
 
 void GxEPD2_270::clearScreen(uint8_t value)
 {
-  _Init_Part();
-  _setPartialRamArea(0, 0, WIDTH, HEIGHT);
+  if (_initial)
+  {
+    _Init_Full();
+    _writeCommand(0x10); // preset previous
+    for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
+    {
+      _writeData(0xFF); // 0xFF is white
+    }
+    _writeCommand(0x13); // set current
+    for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
+    {
+      _writeData(value);
+    }
+    _Update_Full();
+    _initial = false;
+  }
+  if (!_using_partial_mode) _Init_Part();
+  _setPartialRamArea(0x15, 0, 0, WIDTH, HEIGHT);
   for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
     _writeData(value);
   }
   _refreshWindow(0, 0, WIDTH, HEIGHT);
-  _waitWhileBusy("clearScreen", full_refresh_time);
-  _initial = false;
+  _waitWhileBusy("clearScreen", partial_refresh_time);
+  _setPartialRamArea(0x14, 0, 0, WIDTH, HEIGHT);
+  for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
+  {
+    _writeData(value);
+  }
 }
 
 void GxEPD2_270::writeScreenBuffer(uint8_t value)
@@ -51,16 +71,24 @@ void GxEPD2_270::writeScreenBuffer(uint8_t value)
 void GxEPD2_270::_writeScreenBuffer(uint8_t value)
 {
   _Init_Part();
-  _writeCommand(0x91); // partial in
-  _setPartialRamArea(0, 0, WIDTH, HEIGHT);
+  _setPartialRamArea(0x15, 0, 0, WIDTH, HEIGHT);
   for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
     _writeData(value);
   }
-  _writeCommand(0x92); // partial out
 }
 
 void GxEPD2_270::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+{
+  _writeImage(0x15, bitmap, x, y, w, h, invert, mirror_y, pgm);
+}
+
+void GxEPD2_270::writeImageAgain(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+{
+  _writeImage(0x14, bitmap, x, y, w, h, invert, mirror_y, pgm);
+}
+
+void GxEPD2_270::_writeImage(uint8_t command, const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
   int16_t wb = (w + 7) / 8; // width bytes, bitmaps are padded
@@ -76,7 +104,7 @@ void GxEPD2_270::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_
   h1 -= dy;
   if ((w1 <= 0) || (h1 <= 0)) return;
   if (!_using_partial_mode) _Init_Part();
-  _setPartialRamArea(x1, y1, w1, h1);
+  _setPartialRamArea(command, x1, y1, w1, h1);
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -123,18 +151,23 @@ void GxEPD2_270::drawImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t
 {
   writeImage(bitmap, x, y, w, h, invert, mirror_y, pgm);
   refresh(x, y, w, h);
+  writeImageAgain(bitmap, x, y, w, h, invert, mirror_y, pgm);
 }
 
 void GxEPD2_270::drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  writeImage(black, color, x, y, w, h, invert, mirror_y, pgm);
-  refresh(x, y, w, h);
+  if (black)
+  {
+    drawImage(black, x, y, w, h, invert, mirror_y, pgm);
+  }
 }
 
 void GxEPD2_270::drawNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  writeNative(data1, data2, x, y, w, h, invert, mirror_y, pgm);
-  refresh(x, y, w, h);
+  if (data1)
+  {
+    drawImage(data1, x, y, w, h, invert, mirror_y, pgm);
+  }
 }
 
 void GxEPD2_270::refresh(bool partial_update_mode)
@@ -158,7 +191,7 @@ void GxEPD2_270::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
   w1 -= x1 - x;
   h1 -= y1 - y;
   _refreshWindow(x1, y1, w1, h1);
-  _waitWhileBusy("refresh", full_refresh_time);
+  _waitWhileBusy("refresh", partial_refresh_time);
 }
 
 void GxEPD2_270::powerOff(void)
@@ -166,10 +199,10 @@ void GxEPD2_270::powerOff(void)
   _PowerOff();
 }
 
-void GxEPD2_270::_setPartialRamArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
+void GxEPD2_270::_setPartialRamArea(uint8_t command, uint16_t x, uint16_t y, uint16_t w, uint16_t h)
 {
   w = (w + 7 + (x % 8)) & 0xfff8; // byte boundary exclusive (round up)
-  _writeCommand(0x15);
+  _writeCommand(command);
   _writeData(x >> 8);
   _writeData(x & 0xf8);
   _writeData(y >> 8);
@@ -215,57 +248,37 @@ void GxEPD2_270::_PowerOff()
 
 void GxEPD2_270::_InitDisplay()
 {
-  _writeCommand(0x01);
+  _writeCommand(0x01); //POWER SETTING
   _writeData (0x03);
   _writeData (0x00);
   _writeData (0x2b);
   _writeData (0x2b);
-  _writeData (0x09);
-  _writeCommand(0x06);
-  _writeData (0x07);
-  _writeData (0x07);
-  _writeData (0x17);
-  _writeCommand(0xF8);
-  _writeData (0x60);
-  _writeData (0xA5);
-  _writeCommand(0xF8);
-  _writeData (0x89);
-  _writeData (0xA5);
-  _writeCommand(0xF8);
-  _writeData (0x90);
-  _writeData (0x00);
-  _writeCommand(0xF8);
-  _writeData (0x93);
-  _writeData (0x2A);
-  _writeCommand(0xF8);
-  _writeData (0xa0);
-  _writeData (0xa5);
-  _writeCommand(0xF8);
-  _writeData (0xa1);
-  _writeData (0x00);
-  _writeCommand(0xF8);
-  _writeData (0x73);
-  _writeData (0x41);
+  _writeCommand(0x06); //boost
+  _writeData (0x07);   //A
+  _writeData (0x07);   //B
+  _writeData (0x17);   //C
   _writeCommand(0x16);
   _writeData(0x00);
   //_writeCommand(0x04);
   //_waitWhileBusy("_wakeUp Power On");
-  _writeCommand(0x00);
-  _writeData(0x9f); // b/w, by OTP LUT
-  _writeCommand(0x30);
-  _writeData (0x3a); //3A 100HZ
-  _writeCommand(0x61);
+  _writeCommand(0x00); //panel setting
+  _writeData(0xbf);    //KW-BF   KWR-AF  BWROTP 0f
+  _writeCommand(0x30); //PLL setting
+  _writeData (0x3a);   //90 50HZ  3A 100HZ   29 150Hz 39 200HZ 31 171HZ
+  _writeCommand(0x61); //resolution setting
   _writeData (0x00);
   _writeData (0xb0); //176
   _writeData (0x01);
   _writeData (0x08); //264
-  _writeCommand(0x82);
-  _writeData (0x12);
+  _writeCommand(0x82); //vcom_DC setting
+  _writeData (0x08);   //0x28:-2.0V,0x12:-0.9V
 }
 
 void GxEPD2_270::_Init_Full()
 {
   _InitDisplay();
+  _writeCommand(0x50); //VCOM AND DATA INTERVAL SETTING
+  _writeData(0x97);    //WBmode:VBDF 17|D7 VBDW 97 VBDB 57   WBRmode:VBDF F7 VBDW 77 VBDB 37  VBDR B7
   _writeCommand(0x20);
   _writeDataPGM(GxGDEW027W3_lut_20_vcomDC, sizeof(GxGDEW027W3_lut_20_vcomDC));
   _writeCommand(0x21);
@@ -283,17 +296,18 @@ void GxEPD2_270::_Init_Full()
 void GxEPD2_270::_Init_Part()
 {
   _InitDisplay();
-  // no partial update LUT
+  _writeCommand(0x50); //VCOM AND DATA INTERVAL SETTING
+  _writeData(0x17);    //WBmode:VBDF 17|D7 VBDW 97 VBDB 57   WBRmode:VBDF F7 VBDW 77 VBDB 37  VBDR B7
   _writeCommand(0x20);
-  _writeDataPGM(GxGDEW027W3_lut_20_vcomDC, sizeof(GxGDEW027W3_lut_20_vcomDC));
+  _writeDataPGM(GxGDEW027W3_lut_20_vcomDC_partial, sizeof(GxGDEW027W3_lut_20_vcomDC_partial));
   _writeCommand(0x21);
-  _writeDataPGM(GxGDEW027W3_lut_21_ww, sizeof(GxGDEW027W3_lut_21_ww));
+  _writeDataPGM(GxGDEW027W3_lut_21_ww_partial, sizeof(GxGDEW027W3_lut_21_ww_partial));
   _writeCommand(0x22);
-  _writeDataPGM(GxGDEW027W3_lut_22_bw, sizeof(GxGDEW027W3_lut_22_bw));
+  _writeDataPGM(GxGDEW027W3_lut_22_bw_partial, sizeof(GxGDEW027W3_lut_22_bw_partial));
   _writeCommand(0x23);
-  _writeDataPGM(GxGDEW027W3_lut_23_wb, sizeof(GxGDEW027W3_lut_23_wb));
+  _writeDataPGM(GxGDEW027W3_lut_23_wb_partial, sizeof(GxGDEW027W3_lut_23_wb_partial));
   _writeCommand(0x24);
-  _writeDataPGM(GxGDEW027W3_lut_24_bb, sizeof(GxGDEW027W3_lut_24_bb));
+  _writeDataPGM(GxGDEW027W3_lut_24_bb_partial, sizeof(GxGDEW027W3_lut_24_bb_partial));
   _PowerOn();
   _using_partial_mode = true;
 }
@@ -307,7 +321,17 @@ void GxEPD2_270::_Update_Full()
 void GxEPD2_270::_Update_Part()
 {
   _writeCommand(0x12); //display refresh
-  _waitWhileBusy("_Update_Part", full_refresh_time);
+  _waitWhileBusy("_Update_Part", partial_refresh_time);
 }
 
-
+void GxEPD2_270::_writeDataPGM(const uint8_t* data, uint16_t n)
+{
+  SPI.beginTransaction(_spi_settings);
+  for (uint8_t i = 0; i < n; i++)
+  {
+    if (_cs >= 0) digitalWrite(_cs, LOW);
+    SPI.transfer(pgm_read_byte(&*data++));
+    if (_cs >= 0) digitalWrite(_cs, HIGH);
+  }
+  SPI.endTransaction();
+}

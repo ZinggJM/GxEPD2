@@ -1,7 +1,7 @@
 // Display Library example for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 // Requires HW SPI and Adafruit_GFX. Caution: these e-papers require 3.3V supply AND data lines!
 //
-// Display Library based on Demo Example from Good Display: http://www.good-display.com/download_list/downloadcategoryid=34&isMode=false.html
+// Display Library based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
 //
 // Author: Jean-Marc Zingg
 //
@@ -31,6 +31,9 @@
 
 // mapping suggestion for AVR, UNO, NANO etc.
 // BUSY -> 7, RST -> 9, DC -> 8, CS-> 10, CLK -> 13, DIN -> 11
+
+// mapping suggestion for Arduino MEGA
+// BUSY -> 7, RST -> 9, DC -> 8, CS-> 53, CLK -> 52, DIN -> 51
 
 // base class GxEPD2_GFX can be used to pass references or pointers to the display instance as parameter, uses ~1.2k more code
 // enable or disable GxEPD2_GFX base class
@@ -150,6 +153,7 @@
 #endif
 
 #include "GxEPD2_boards_added.h"
+//#include "GxEPD2_more_boards_added.h" // private
 
 #if !defined(__AVR) && !defined(_BOARD_GENERIC_STM32F103C_H_)
 
@@ -563,6 +567,12 @@ void drawBitmaps200x200()
       display.writeScreenBuffer(); // use default for white
       display.writeImage(bitmaps[i], x, y, 200, 200, false, mirror_y, true);
       display.refresh(true);
+      if ((display.epd2.hasFastPartialUpdate) && (display.epd2.panel == GxEPD2::GDEW027W3))
+      {
+        // for differential update: set previous buffer equal to current (IL91874 doesn't switch on refresh)
+        // display.writeScreenBuffer(); // above is enough for the other controllers
+        display.epd2.writeImageAgain(bitmaps[i], x, y, 200, 200, false, mirror_y, true);
+      }
       delay(2000);
       x += 40;
       y += 40;
@@ -648,10 +658,17 @@ void drawBitmaps128x296()
 #ifdef _GxBitmaps176x264_H_
 void drawBitmaps176x264()
 {
+#if !defined(__AVR)
   const unsigned char* bitmaps[] =
   {
-    Bitmap176x264_1, Bitmap176x264_2
+    Bitmap176x264_1, Bitmap176x264_2, Bitmap176x264_3, Bitmap176x264_4, Bitmap176x264_5
   };
+#else
+  const unsigned char* bitmaps[] =
+  {
+    Bitmap176x264_1, Bitmap176x264_2 //, Bitmap176x264_3, Bitmap176x264_4, Bitmap176x264_5
+  };
+#endif
   if (display.epd2.panel == GxEPD2::GDEW027W3)
   {
     for (uint16_t i = 0; i < sizeof(bitmaps) / sizeof(char*); i++)
@@ -954,4 +971,3 @@ void drawBitmaps3c400x300()
   }
 }
 #endif
-

@@ -1,7 +1,7 @@
 // Display Library for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 // Requires HW SPI and Adafruit_GFX. Caution: these e-papers require 3.3V supply AND data lines!
 //
-// based on Demo Example from Good Display: http://www.good-display.com/download_list/downloadcategoryid=34&isMode=false.html
+// based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
 //
 // Author: Jean-Marc Zingg
 //
@@ -171,7 +171,7 @@ class GxEPD2_BW : public Adafruit_GFX
           epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
           if (epd2.hasFastPartialUpdate)
           {
-            epd2.writeImage(_buffer + offset, _pw_x, _pw_y, _pw_w, _pw_h);
+            epd2.writeImageAgain(_buffer + offset, _pw_x, _pw_y, _pw_w, _pw_h);
             epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
           }
         }
@@ -181,7 +181,7 @@ class GxEPD2_BW : public Adafruit_GFX
           epd2.refresh(false);
           if (epd2.hasFastPartialUpdate)
           {
-            epd2.writeImage(_buffer, 0, 0, WIDTH, HEIGHT);
+            epd2.writeImageAgain(_buffer, 0, 0, WIDTH, HEIGHT);
             epd2.refresh(true);
           }
         }
@@ -200,7 +200,8 @@ class GxEPD2_BW : public Adafruit_GFX
           //Serial.print("writeImage("); Serial.print(_pw_x); Serial.print(", "); Serial.print(dest_ys); Serial.print(", ");
           //Serial.print(_pw_w); Serial.print(", "); Serial.print(dest_ye - dest_ys); Serial.println(")");
           uint32_t offset = _reverse ? (_page_height - (dest_ye - dest_ys)) * _pw_w / 8 : 0;
-          epd2.writeImage(_buffer + offset, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
+          if (!_second_phase) epd2.writeImage(_buffer + offset, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
+          else epd2.writeImageAgain(_buffer + offset, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
         }
         else
         {
@@ -229,7 +230,8 @@ class GxEPD2_BW : public Adafruit_GFX
       }
       else
       {
-        epd2.writeImage(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
+        if (!_second_phase) epd2.writeImage(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
+        else epd2.writeImageAgain(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
         _current_page++;
         if (_current_page == _pages)
         {
@@ -271,7 +273,8 @@ class GxEPD2_BW : public Adafruit_GFX
               fillScreen(GxEPD_WHITE);
               drawCallback(pv);
               uint32_t offset = _reverse ? (_page_height - (dest_ye - dest_ys)) * _pw_w / 8 : 0;
-              epd2.writeImage(_buffer + offset, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
+              if (phase == 1) epd2.writeImage(_buffer + offset, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
+              else epd2.writeImageAgain(_buffer + offset, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
             }
           }
           epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
@@ -297,7 +300,7 @@ class GxEPD2_BW : public Adafruit_GFX
             uint16_t page_ys = _current_page * _page_height;
             fillScreen(GxEPD_WHITE);
             drawCallback(pv);
-            epd2.writeImage(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
+            epd2.writeImageAgain(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
           }
           epd2.refresh(true);
         }
@@ -426,4 +429,3 @@ class GxEPD2_BW : public Adafruit_GFX
 };
 
 #endif
-
