@@ -10,6 +10,7 @@
 - these displays are for 3.3V supply and 3.3V data lines
 - never connect data lines directly to 5V Arduino data pins, use e.g. 4k7/10k resistor divider
 - series resistor only is not enough for reliable operation (back-feed effect through protection diodes)
+- 4k7/10k resistor divider may not work with flat cable extensions or Waveshare 4.2 board, use level converter then
 - do not forget to connect GND
 
 ### Paged Drawing, Picture Loop
@@ -37,7 +38,12 @@
 - Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
 - Good Dispay ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
 
-### Version 1.1.1
+### Version 1.1.2
+- added support for GDEW029T5
+- fixed (added) clipping for partial window
+- fixed (added) powerOff() after full update (partial update keeps power on)
+- added hibernate() for minimum power use by displays that support it
+#### Version 1.1.1
 - 2.7" b/w GDEW027W3 with fast partial update support, based on new demo code wavetable
 - mapping suggestion added for Arduino MEGA
 - NOTE: use voltage divider resistors for 5V Arduinos, series resistor is not reliable enough

@@ -24,7 +24,7 @@
 
 #ifndef ENABLE_GxEPD2_GFX
 // default is off
-#define ENABLE_GxEPD2_GFX 0 
+#define ENABLE_GxEPD2_GFX 0
 #endif
 
 #if ENABLE_GxEPD2_GFX
@@ -65,7 +65,7 @@ class GxEPD2_3C : public Adafruit_GFX
 
     bool mirror(bool m)
     {
-      swap (_mirror, m);
+      _swap_ (_mirror, m);
       return m;
     }
 
@@ -77,7 +77,7 @@ class GxEPD2_3C : public Adafruit_GFX
       switch (getRotation())
       {
         case 1:
-          swap(x, y);
+          _swap_(x, y);
           x = WIDTH - x - 1;
           break;
         case 2:
@@ -85,20 +85,22 @@ class GxEPD2_3C : public Adafruit_GFX
           y = HEIGHT - y - 1;
           break;
         case 3:
-          swap(x, y);
+          _swap_(x, y);
           y = HEIGHT - y - 1;
           break;
       }
       // transpose partial window to 0,0
       x -= _pw_x;
       y -= _pw_y;
+      // clip to (partial) window
+      if ((x < 0) || (x >= _pw_w) || (y < 0) || (y >= _pw_h)) return;
       // adjust for current page
       y -= _current_page * _page_height;
       // check if in current page
       if ((y < 0) || (y >= _page_height)) return;
       uint16_t i = x / 8 + y * (_pw_w / 8);
       _black_buffer[i] = (_black_buffer[i] | (1 << (7 - x % 8))); // white
-      _color_buffer[i] = _color_buffer[i] = (_color_buffer[i] | (1 << (7 - x % 8)));
+      _color_buffer[i] = (_color_buffer[i] | (1 << (7 - x % 8)));
       if (color == GxEPD_WHITE) return;
       else if (color == GxEPD_BLACK) _black_buffer[i] = (_black_buffer[i] & (0xFF ^ (1 << (7 - x % 8))));
       else if (color == GxEPD_RED) _color_buffer[i] = (_color_buffer[i] & (0xFF ^ (1 << (7 - x % 8))));
@@ -142,6 +144,11 @@ class GxEPD2_3C : public Adafruit_GFX
       _pw_h = HEIGHT;
     }
 
+    // setPartialWindow, use parameters according to actual rotation.
+    // x and w should be multiple of 8, for rotation 0 or 2,
+    // y and h should be multiple of 8, for rotation 1 or 3,
+    // else window is increased as needed,
+    // this is an addressing limitation of the e-paper controllers
     void setPartialWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
     {
       if (!epd2.hasPartialUpdate) return;
@@ -205,7 +212,7 @@ class GxEPD2_3C : public Adafruit_GFX
         fillScreen(GxEPD_WHITE);
         return true;
       }
-      else
+      else // full update
       {
         epd2.writeImage(_black_buffer, _color_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
         _current_page++;
@@ -216,13 +223,13 @@ class GxEPD2_3C : public Adafruit_GFX
           {
             if (!_second_phase)
             {
-              epd2.refresh(false);
+              epd2.refresh(false); // full update after first phase
               _second_phase = true;
               fillScreen(GxEPD_WHITE);
               return true;
             }
-            else epd2.refresh(true);
-          } else epd2.refresh(false);
+            else epd2.refresh(true); // partial update after second phase
+          } else epd2.refresh(false); // full update after only phase
           epd2.powerOff();
           return false;
         }
@@ -251,7 +258,7 @@ class GxEPD2_3C : public Adafruit_GFX
         }
         epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
       }
-      else
+      else // full update
       {
         epd2.setPaged(); // for GxEPD2_154c paged workaround
         for (_current_page = 0; _current_page < _pages; _current_page++)
@@ -271,7 +278,8 @@ class GxEPD2_3C : public Adafruit_GFX
             epd2.writeImage(_black_buffer, _color_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
           }
         }
-        epd2.refresh();
+        epd2.refresh(false); // full update
+        epd2.powerOff();
       }
       _current_page = 0;
     }
@@ -347,13 +355,19 @@ class GxEPD2_3C : public Adafruit_GFX
     {
       epd2.refresh(x, y, w, h);
     }
+    // turns off generation of panel driving voltages, avoids screen fading over time
     void powerOff()
     {
       epd2.powerOff();
     }
+    // turns powerOff() and sets controller to deep sleep for minimum power use, ONLY if wakeable by RST (rst >= 0)
+    void hibernate()
+    {
+      epd2.hibernate();
+    }
   private:
     template <typename T> static inline void
-    swap(T & a, T & b)
+    _swap_(T & a, T & b)
     {
       T t = a;
       a = b;
@@ -372,8 +386,8 @@ class GxEPD2_3C : public Adafruit_GFX
       switch (getRotation())
       {
         case 1:
-          swap(x, y);
-          swap(w, h);
+          _swap_(x, y);
+          _swap_(w, h);
           x = WIDTH - x - w;
           break;
         case 2:
@@ -381,8 +395,8 @@ class GxEPD2_3C : public Adafruit_GFX
           y = HEIGHT - y - h;
           break;
         case 3:
-          swap(x, y);
-          swap(w, h);
+          _swap_(x, y);
+          _swap_(w, h);
           y = HEIGHT - y - h;
           break;
       }

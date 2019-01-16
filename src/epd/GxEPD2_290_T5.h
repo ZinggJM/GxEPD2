@@ -2,7 +2,7 @@
 // Requires HW SPI and Adafruit_GFX. Caution: these e-papers require 3.3V supply AND data lines!
 //
 // based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
-// Controller : IL3829 : http://www.e-paper-display.com/download_detail/downloadsId=534.html
+// Controller: IL0373 : http://www.e-paper-display.com/download_detail/downloadsId=535.html
 //
 // Author: Jean-Marc Zingg
 //
@@ -10,27 +10,27 @@
 //
 // Library: https://github.com/ZinggJM/GxEPD2
 
-#ifndef _GxEPD2_154_H_
-#define _GxEPD2_154_H_
+#ifndef _GxEPD2_290_T5_H_
+#define _GxEPD2_290_T5_H_
 
 #include "../GxEPD2_EPD.h"
 
-class GxEPD2_154 : public GxEPD2_EPD
+class GxEPD2_290_T5 : public GxEPD2_EPD
 {
   public:
     // attributes
-    static const uint16_t WIDTH = 200;
-    static const uint16_t HEIGHT = 200;
-    static const GxEPD2::Panel panel = GxEPD2::GDEP015OC1;
+    static const uint16_t WIDTH = 128;
+    static const uint16_t HEIGHT = 296;
+    static const GxEPD2::Panel panel = GxEPD2::GDEW029T5;
     static const bool hasColor = false;
     static const bool hasPartialUpdate = true;
-    static const bool hasFastPartialUpdate = true;
-    static const uint16_t power_on_time = 80; // ms, e.g. 73508us
-    static const uint16_t power_off_time = 80; // ms, e.g. 68982us
-    static const uint16_t full_refresh_time = 1200; // ms, e.g. 1113273us
-    static const uint16_t partial_refresh_time = 300; // ms, e.g. 290867us
+    static const bool hasFastPartialUpdate = true; // set this false for test with OTP LUT (GDEW029I6F)
+    static const uint16_t power_on_time = 400; // ms, e.g. 36553us
+    static const uint16_t power_off_time = 250; // ms, e.g. 20759us
+    static const uint16_t full_refresh_time = 2100; // ms, e.g. 2056899us
+    static const uint16_t partial_refresh_time = 400; // ms, e.g. 353649us
     // constructor
-    GxEPD2_154(int8_t cs, int8_t dc, int8_t rst, int8_t busy);
+    GxEPD2_290_T5(int8_t cs, int8_t dc, int8_t rst, int8_t busy);
     // methods (virtual)
     void init(uint32_t serial_diag_bitrate = 0); // = 0 : disabled
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen

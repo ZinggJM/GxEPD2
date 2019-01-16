@@ -2,6 +2,7 @@
 // Requires HW SPI and Adafruit_GFX. Caution: these e-papers require 3.3V supply AND data lines!
 //
 // based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
+// Controller: IL91874 : http://www.e-paper-display.com/download_detail/downloadsId=539.html
 //
 // Author: Jean-Marc Zingg
 //
@@ -18,6 +19,7 @@ GxEPD2_270::GxEPD2_270(int8_t cs, int8_t dc, int8_t rst, int8_t busy) :
   _initial = true;
   _power_is_on = false;
   _using_partial_mode = false;
+  _hibernating = false;
 }
 
 void GxEPD2_270::init(uint32_t serial_diag_bitrate)
@@ -26,6 +28,7 @@ void GxEPD2_270::init(uint32_t serial_diag_bitrate)
   _initial = true;
   _power_is_on = false;
   _using_partial_mode = false;
+  _hibernating = false;
 }
 
 void GxEPD2_270::clearScreen(uint8_t value)
@@ -199,6 +202,17 @@ void GxEPD2_270::powerOff(void)
   _PowerOff();
 }
 
+void GxEPD2_270::hibernate()
+{
+  _PowerOff();
+  if (_rst >= 0)
+  {
+    _writeCommand(0x07); // deep sleep
+    _writeData(0xA5);    // check code
+    _hibernating = true;
+  }
+}
+
 void GxEPD2_270::_setPartialRamArea(uint8_t command, uint16_t x, uint16_t y, uint16_t w, uint16_t h)
 {
   w = (w + 7 + (x % 8)) & 0xfff8; // byte boundary exclusive (round up)
@@ -248,6 +262,14 @@ void GxEPD2_270::_PowerOff()
 
 void GxEPD2_270::_InitDisplay()
 {
+  if (_hibernating && (_rst >= 0))
+  {
+    digitalWrite(_rst, LOW);
+    delay(20);
+    digitalWrite(_rst, HIGH);
+    delay(200);
+    _hibernating = false;
+  }
   _writeCommand(0x01); //POWER SETTING
   _writeData (0x03);
   _writeData (0x00);

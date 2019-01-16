@@ -2,6 +2,7 @@
 // Requires HW SPI and Adafruit_GFX. Caution: these e-papers require 3.3V supply AND data lines!
 //
 // based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
+// Controller: IL91874 : http://www.e-paper-display.com/download_detail/downloadsId=539.html
 //
 // Author: Jean-Marc Zingg
 //
@@ -49,7 +50,8 @@ class GxEPD2_270 : public GxEPD2_EPD
     void drawNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false);
     void refresh(bool partial_update_mode = false); // screen refresh from controller memory to full screen
     void refresh(int16_t x, int16_t y, int16_t w, int16_t h); // screen refresh from controller memory, partial screen
-    void powerOff();
+    void powerOff(); // turns off generation of panel driving voltages, avoids screen fading over time
+    void hibernate(); // turns powerOff() and sets controller to deep sleep for minimum power use, ONLY if wakeable by RST (rst >= 0)
   private:
     void _writeImage(uint8_t command, const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false);
     void _writeScreenBuffer(uint8_t value);
@@ -64,7 +66,7 @@ class GxEPD2_270 : public GxEPD2_EPD
     void _Update_Part();
     void _writeDataPGM(const uint8_t* data, uint16_t n);
   protected:
-    bool _initial, _power_is_on, _using_partial_mode;
+    bool _initial, _power_is_on, _using_partial_mode, _hibernating;
 };
 
 #endif

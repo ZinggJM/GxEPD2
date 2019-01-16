@@ -1,7 +1,8 @@
 // Display Library for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 // Requires HW SPI and Adafruit_GFX. Caution: these e-papers require 3.3V supply AND data lines!
 //
-// based on Demo Example from Good Display: http://www.good-display.com/download_list/downloadcategoryid=34&isMode=false.html
+// based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
+// Controller : IL3829 : http://www.e-paper-display.com/download_detail/downloadsId=534.html
 //
 // Author: Jean-Marc Zingg
 //
@@ -18,6 +19,7 @@ GxEPD2_154::GxEPD2_154(int8_t cs, int8_t dc, int8_t rst, int8_t busy) :
   _initial = true;
   _power_is_on = false;
   _using_partial_mode = false;
+  _hibernating = false;
 }
 
 void GxEPD2_154::init(uint32_t serial_diag_bitrate)
@@ -26,6 +28,7 @@ void GxEPD2_154::init(uint32_t serial_diag_bitrate)
   _initial = true;
   _power_is_on = false;
   _using_partial_mode = false;
+  _hibernating = false;
 }
 
 void GxEPD2_154::clearScreen(uint8_t value)
@@ -183,9 +186,20 @@ void GxEPD2_154::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
   _Update_Part();
 }
 
-void GxEPD2_154::powerOff(void)
+void GxEPD2_154::powerOff()
 {
   _PowerOff();
+}
+
+void GxEPD2_154::hibernate()
+{
+  _PowerOff();
+  if (_rst >= 0)
+  {
+    _writeCommand(0x10); // deep sleep mode
+    _writeData(0x1);     // enter deep sleep
+    _hibernating = true;
+  }
 }
 
 void GxEPD2_154::_setPartialRamArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
@@ -231,6 +245,14 @@ void GxEPD2_154::_PowerOff()
 
 void GxEPD2_154::_InitDisplay()
 {
+  if (_hibernating && (_rst >= 0))
+  {
+    digitalWrite(_rst, LOW);
+    delay(20);
+    digitalWrite(_rst, HIGH);
+    delay(200);
+    _hibernating = false;
+  }
   _writeCommand(0x01); // Panel configuration, Gate selection
   _writeData((HEIGHT - 1) % 256);
   _writeData((HEIGHT - 1) / 256);
@@ -281,6 +303,3 @@ void GxEPD2_154::_Update_Part()
   _waitWhileBusy("_Update_Part", partial_refresh_time);
   _writeCommand(0xff);
 }
-
-
-

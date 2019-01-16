@@ -1,7 +1,8 @@
 // Display Library for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 // Requires HW SPI and Adafruit_GFX. Caution: these e-papers require 3.3V supply AND data lines!
 //
-// based on Demo Example from Good Display: http://www.good-display.com/download_list/downloadcategoryid=34&isMode=false.html
+// based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
+// Controller: IL0371 : http://www.e-paper-display.com/download_detail/downloadsId=536.html
 //
 // Author: Jean-Marc Zingg
 //
@@ -10,13 +11,14 @@
 // Library: https://github.com/ZinggJM/GxEPD2
 
 #include "GxEPD2_583c.h"
-#include "WaveTables.h"
+//#include "WaveTables3c.h"
 
 GxEPD2_583c::GxEPD2_583c(int8_t cs, int8_t dc, int8_t rst, int8_t busy) :
   GxEPD2_EPD(cs, dc, rst, busy, LOW, 40000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate)
 {
   _initial = true;
   _power_is_on = false;
+  _hibernating = false;
 }
 
 void GxEPD2_583c::init(uint32_t serial_diag_bitrate)
@@ -24,6 +26,7 @@ void GxEPD2_583c::init(uint32_t serial_diag_bitrate)
   GxEPD2_EPD::init(serial_diag_bitrate);
   _initial = true;
   _power_is_on = false;
+  _hibernating = false;
 }
 
 void GxEPD2_583c::clearScreen(uint8_t value)
@@ -251,6 +254,18 @@ void GxEPD2_583c::powerOff()
   _PowerOff();
 }
 
+void GxEPD2_583c::hibernate()
+{
+  _PowerOff();
+  if (_rst >= 0)
+  {
+    // check if it supports this command!
+    _writeCommand(0x07); // deep sleep
+    _writeData(0xA5);    // check code
+    _hibernating = true;
+  }
+}
+
 void GxEPD2_583c::_send8pixel(uint8_t black_data, uint8_t color_data)
 {
   for (uint8_t j = 0; j < 8; j++)
@@ -310,13 +325,13 @@ void GxEPD2_583c::_PowerOff()
 
 void GxEPD2_583c::_InitDisplay()
 {
-  // reset required for wakeup
-  if (!_power_is_on && (_rst >= 0))
+  if (_hibernating && (_rst >= 0))
   {
-    digitalWrite(_rst, 0);
-    delay(10);
-    digitalWrite(_rst, 1);
-    delay(10);
+    digitalWrite(_rst, LOW);
+    delay(20);
+    digitalWrite(_rst, HIGH);
+    delay(200);
+    _hibernating = false;
   }
   _writeCommand(0x01);
   _writeData (0x37); //POWER SETTING
@@ -371,6 +386,3 @@ void GxEPD2_583c::_Update_Part()
   _writeCommand(0x12); //display refresh
   _waitWhileBusy("_Update_Part", partial_refresh_time);
 }
-
-
-

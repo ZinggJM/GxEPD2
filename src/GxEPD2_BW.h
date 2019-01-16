@@ -18,6 +18,7 @@
 #include "epd/GxEPD2_213.h"
 #include "epd/GxEPD2_213_flex.h"
 #include "epd/GxEPD2_290.h"
+#include "epd/GxEPD2_290_T5.h"
 #include "epd/GxEPD2_270.h"
 #include "epd/GxEPD2_420.h"
 #include "epd/GxEPD2_583.h"
@@ -67,7 +68,7 @@ class GxEPD2_BW : public Adafruit_GFX
 
     bool mirror(bool m)
     {
-      swap (_mirror, m);
+      _swap_ (_mirror, m);
       return m;
     }
 
@@ -79,7 +80,7 @@ class GxEPD2_BW : public Adafruit_GFX
       switch (getRotation())
       {
         case 1:
-          swap(x, y);
+          _swap_(x, y);
           x = WIDTH - x - 1;
           break;
         case 2:
@@ -87,13 +88,15 @@ class GxEPD2_BW : public Adafruit_GFX
           y = HEIGHT - y - 1;
           break;
         case 3:
-          swap(x, y);
+          _swap_(x, y);
           y = HEIGHT - y - 1;
           break;
       }
       // transpose partial window to 0,0
       x -= _pw_x;
       y -= _pw_y;
+      // clip to (partial) window
+      if ((x < 0) || (x >= _pw_w) || (y < 0) || (y >= _pw_h)) return;
       // adjust for current page
       y -= _current_page * _page_height;
       if (_reverse) y = _page_height - y - 1;
@@ -139,6 +142,11 @@ class GxEPD2_BW : public Adafruit_GFX
       _pw_h = HEIGHT;
     }
 
+    // setPartialWindow, use parameters according to actual rotation.
+    // x and w should be multiple of 8, for rotation 0 or 2,
+    // y and h should be multiple of 8, for rotation 1 or 3,
+    // else window is increased as needed,
+    // this is an addressing limitation of the e-paper controllers
     void setPartialWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
     {
       _rotate(x, y, w, h);
@@ -175,7 +183,7 @@ class GxEPD2_BW : public Adafruit_GFX
             epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
           }
         }
-        else
+        else // full update
         {
           epd2.writeImage(_buffer, 0, 0, WIDTH, HEIGHT);
           epd2.refresh(false);
@@ -183,6 +191,7 @@ class GxEPD2_BW : public Adafruit_GFX
           {
             epd2.writeImageAgain(_buffer, 0, 0, WIDTH, HEIGHT);
             epd2.refresh(true);
+            epd2.powerOff();
           }
         }
         return false;
@@ -228,7 +237,7 @@ class GxEPD2_BW : public Adafruit_GFX
         fillScreen(GxEPD_WHITE);
         return true;
       }
-      else
+      else // full update
       {
         if (!_second_phase) epd2.writeImage(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
         else epd2.writeImageAgain(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
@@ -240,13 +249,13 @@ class GxEPD2_BW : public Adafruit_GFX
           {
             if (!_second_phase)
             {
-              epd2.refresh(false);
+              epd2.refresh(false); // full update after first phase
               _second_phase = true;
               fillScreen(GxEPD_WHITE);
               return true;
             }
-            else epd2.refresh(true);
-          } else epd2.refresh(false);
+            else epd2.refresh(true); // partial update after second phase
+          } else epd2.refresh(false); // full update after only phase
           epd2.powerOff();
           return false;
         }
@@ -282,7 +291,7 @@ class GxEPD2_BW : public Adafruit_GFX
           // else make both controller buffers have equal content
         }
       }
-      else
+      else // full update
       {
         for (_current_page = 0; _current_page < _pages; _current_page++)
         {
@@ -291,7 +300,7 @@ class GxEPD2_BW : public Adafruit_GFX
           drawCallback(pv);
           epd2.writeImage(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
         }
-        epd2.refresh(false);
+        epd2.refresh(false); // full update after first phase
         if (epd2.hasFastPartialUpdate)
         {
           // make both controller buffers have equal content
@@ -302,8 +311,9 @@ class GxEPD2_BW : public Adafruit_GFX
             drawCallback(pv);
             epd2.writeImageAgain(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
           }
-          epd2.refresh(true);
+          epd2.refresh(true); // partial update after second phase
         }
+        epd2.powerOff();
       }
       _current_page = 0;
     }
@@ -379,13 +389,19 @@ class GxEPD2_BW : public Adafruit_GFX
     {
       epd2.refresh(x, y, w, h);
     }
+    // turns off generation of panel driving voltages, avoids screen fading over time
     void powerOff()
     {
       epd2.powerOff();
     }
+    // turns powerOff() and sets controller to deep sleep for minimum power use, ONLY if wakeable by RST (rst >= 0)
+    void hibernate()
+    {
+      epd2.hibernate();
+    }
   private:
     template <typename T> static inline void
-    swap(T & a, T & b)
+    _swap_(T & a, T & b)
     {
       T t = a;
       a = b;
@@ -404,8 +420,8 @@ class GxEPD2_BW : public Adafruit_GFX
       switch (getRotation())
       {
         case 1:
-          swap(x, y);
-          swap(w, h);
+          _swap_(x, y);
+          _swap_(w, h);
           x = WIDTH - x - w;
           break;
         case 2:
@@ -413,8 +429,8 @@ class GxEPD2_BW : public Adafruit_GFX
           y = HEIGHT - y - h;
           break;
         case 3:
-          swap(x, y);
-          swap(w, h);
+          _swap_(x, y);
+          _swap_(w, h);
           y = HEIGHT - y - h;
           break;
       }
