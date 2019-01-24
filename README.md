@@ -38,7 +38,10 @@
 - Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
 - Good Dispay ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
 
-### Version 1.1.2
+### Version 1.1.3
+- fixed wavetables for GDEW029T5 and GDEW0213I5F
+- fixed drawImage(...) overloaded methods signature matching ambiguity
+#### Version 1.1.2
 - added support for GDEW029T5
 - fixed (added) clipping for partial window
 - fixed (added) powerOff() after full update (partial update keeps power on)

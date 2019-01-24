@@ -324,7 +324,7 @@ class GxEPD2_3C : public Adafruit_GFX
     {
       epd2.writeImage(bitmap, x, y, w, h, invert, mirror_y, pgm);
     }
-    void writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false)
+    void writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
     {
       epd2.writeImage(black, color, x, y, w, h, invert, mirror_y, pgm);
     }
@@ -338,7 +338,7 @@ class GxEPD2_3C : public Adafruit_GFX
     {
       epd2.drawImage(bitmap, x, y, w, h, invert, mirror_y, pgm);
     }
-    void drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false)
+    void drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
     {
       epd2.drawImage(black, color, x, y, w, h, invert, mirror_y, pgm);
     }
