@@ -32,7 +32,6 @@ class GxEPD2_213c : public GxEPD2_EPD
     // constructor
     GxEPD2_213c(int8_t cs, int8_t dc, int8_t rst, int8_t busy);
     // methods (virtual)
-    void init(uint32_t serial_diag_bitrate = 0); // = 0 : disabled
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     void clearScreen(uint8_t value = 0xFF); // init controller memory and screen (default white)
     void clearScreen(uint8_t black_value, uint8_t color_value); // init controller memory and screen
@@ -62,8 +61,6 @@ class GxEPD2_213c : public GxEPD2_EPD
     void _Init_Part();
     void _Update_Full();
     void _Update_Part();
-  protected:
-    bool _initial, _power_is_on, _hibernating;
 };
 
 #endif

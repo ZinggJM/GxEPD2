@@ -32,7 +32,6 @@ class GxEPD2_420 : public GxEPD2_EPD
     // constructor
     GxEPD2_420(int8_t cs, int8_t dc, int8_t rst, int8_t busy);
     // methods (virtual)
-    void init(uint32_t serial_diag_bitrate = 0); // = 0 : disabled
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     void clearScreen(uint8_t value = 0xFF); // init controller memory and screen (default white)
     void writeScreenBuffer(uint8_t value = 0xFF); // init controller memory (default white)
@@ -60,8 +59,17 @@ class GxEPD2_420 : public GxEPD2_EPD
     void _Init_Part();
     void _Update_Full();
     void _Update_Part();
-  protected:
-    bool _initial, _power_is_on, _using_partial_mode, _hibernating;
+  private:
+    static const unsigned char lut_20_vcom0_full[];
+    static const unsigned char lut_21_ww_full[];
+    static const unsigned char lut_22_bw_full[];
+    static const unsigned char lut_23_wb_full[];
+    static const unsigned char lut_24_bb_full[];
+    static const unsigned char lut_20_vcom0_partial[];
+    static const unsigned char lut_21_ww_partial[];
+    static const unsigned char lut_22_bw_partial[];
+    static const unsigned char lut_23_wb_partial[];
+    static const unsigned char lut_24_bb_partial[];
 };
 
 #endif

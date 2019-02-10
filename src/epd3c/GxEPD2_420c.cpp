@@ -11,22 +11,10 @@
 // Library: https://github.com/ZinggJM/GxEPD2
 
 #include "GxEPD2_420c.h"
-//#include "WaveTables3c.h"
 
 GxEPD2_420c::GxEPD2_420c(int8_t cs, int8_t dc, int8_t rst, int8_t busy) :
   GxEPD2_EPD(cs, dc, rst, busy, LOW, 20000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate)
 {
-  _initial = true;
-  _power_is_on = false;
-  _hibernating = false;
-}
-
-void GxEPD2_420c::init(uint32_t serial_diag_bitrate)
-{
-  GxEPD2_EPD::init(serial_diag_bitrate);
-  _initial = true;
-  _power_is_on = false;
-  _hibernating = false;
 }
 
 void GxEPD2_420c::clearScreen(uint8_t value)
@@ -259,14 +247,7 @@ void GxEPD2_420c::_PowerOff()
 
 void GxEPD2_420c::_InitDisplay()
 {
-  if (_hibernating && (_rst >= 0))
-  {
-    digitalWrite(_rst, LOW);
-    delay(20);
-    digitalWrite(_rst, HIGH);
-    delay(200);
-    _hibernating = false;
-  }
+  if (_hibernating) _reset();
   _writeCommand(0x06); //boost
   _writeData(0x17);
   _writeData(0x17);

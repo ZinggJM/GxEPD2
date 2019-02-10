@@ -38,7 +38,31 @@
 - Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
 - Good Dispay ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
 
-### Version 1.1.3
+### Supported SPI e-paper panels from Good Display:
+- GDEP015OC1      1.54" b/w
+- GDEW0154Z04   1.54" b/w/r 200x200
+- GDE0213B1         2.13" b/w
+- GDEW0213I5F    2.13" b/w flexible
+- GDEW0213Z16   2.13" b/w/r
+- GDEH029A1        2.9" b/w
+- GDEW029T5       2.9" b/w
+- GDEW029Z10     2.9" b/w/r
+- GDEW027C44     2.7" b/w/r
+- GDEW027W3      2.7" b/w
+- GDEW042T2        4.2" b/w
+- GDEW042Z15      4.2" b/w/r
+- GDEW0583T7      5.83" b/w
+- GDEW075T8        7.5" b/w
+- GDEW075Z09      7.5" b/w/r
+#### Supported SPI e-paper panels & boards from Waveshare: compare with Good Display, same panel
+
+### Version 1.1.4
+- eliminated double refresh for "fast partial update"
+- moved wavetables to the driver classes
+- added one explicit drawImage(...) and writeImage(...) method (for removed default paramter values for 1.1.3)
+- added init method with added parameter  initial, for re-init after processor deep sleep wakeup
+- added init parameter pulldown_rst_mode, for special RST handling (not needed for waveshare shield)
+#### Version 1.1.3
 - fixed wavetables for GDEW029T5 and GDEW0213I5F
 - fixed drawImage(...) overloaded methods signature matching ambiguity
 #### Version 1.1.2

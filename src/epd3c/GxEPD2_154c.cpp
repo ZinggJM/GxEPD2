@@ -11,7 +11,6 @@
 // Library: https://github.com/ZinggJM/GxEPD2
 
 #include "GxEPD2_154c.h"
-#include "WaveTables3c.h"
 
 const uint8_t GxEPD2_154c::bw2grey[] =
 {
@@ -24,21 +23,22 @@ const uint8_t GxEPD2_154c::bw2grey[] =
 GxEPD2_154c::GxEPD2_154c(int8_t cs, int8_t dc, int8_t rst, int8_t busy) :
   GxEPD2_EPD(cs, dc, rst, busy, LOW, 20000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate)
 {
-  _initial = true;
-  _power_is_on = false;
   _paged = false;
   _second_phase = false;
-  _hibernating = false;
 }
 
 void GxEPD2_154c::init(uint32_t serial_diag_bitrate)
 {
   GxEPD2_EPD::init(serial_diag_bitrate);
-  _initial = true;
-  _power_is_on = false;
   _paged = false;
   _second_phase = false;
-  _hibernating = false;
+}
+
+void GxEPD2_154c::init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode)
+{
+  GxEPD2_EPD::init(serial_diag_bitrate, initial, pulldown_rst_mode);
+  _paged = false;
+  _second_phase = false;
 }
 
 void GxEPD2_154c::clearScreen(uint8_t value)
@@ -293,14 +293,7 @@ void GxEPD2_154c::setPaged()
 
 void GxEPD2_154c::_InitDisplay()
 {
-  if (_hibernating && (_rst >= 0))
-  {
-    digitalWrite(_rst, LOW);
-    delay(20);
-    digitalWrite(_rst, HIGH);
-    delay(200);
-    _hibernating = false;
-  }
+  if (_hibernating) _reset();
   _writeCommand(0x01);
   _writeData(0x07);
   _writeData(0x00);
@@ -325,25 +318,34 @@ void GxEPD2_154c::_InitDisplay()
   _writeData(0x0E);
 }
 
+const uint8_t GxEPD2_154c::lut_20_vcom0[] PROGMEM = {  0x0E  , 0x14 , 0x01 , 0x0A , 0x06 , 0x04 , 0x0A , 0x0A , 0x0F , 0x03 , 0x03 , 0x0C , 0x06 , 0x0A , 0x00 };
+const uint8_t GxEPD2_154c::lut_21_w[] PROGMEM = {  0x0E  , 0x14 , 0x01 , 0x0A , 0x46 , 0x04 , 0x8A , 0x4A , 0x0F , 0x83 , 0x43 , 0x0C , 0x86 , 0x0A , 0x04 };
+const uint8_t GxEPD2_154c::lut_22_b[] PROGMEM = {  0x0E  , 0x14 , 0x01 , 0x8A , 0x06 , 0x04 , 0x8A , 0x4A , 0x0F , 0x83 , 0x43 , 0x0C , 0x06 , 0x4A , 0x04 };
+const uint8_t GxEPD2_154c::lut_23_g1[] PROGMEM = { 0x8E  , 0x94 , 0x01 , 0x8A , 0x06 , 0x04 , 0x8A , 0x4A , 0x0F , 0x83 , 0x43 , 0x0C , 0x06 , 0x0A , 0x04 };
+const uint8_t GxEPD2_154c::lut_24_g2[] PROGMEM = { 0x8E  , 0x94 , 0x01 , 0x8A , 0x06 , 0x04 , 0x8A , 0x4A , 0x0F , 0x83 , 0x43 , 0x0C , 0x06 , 0x0A , 0x04 };
+const uint8_t GxEPD2_154c::lut_25_vcom1[] PROGMEM = {  0x03  , 0x1D , 0x01 , 0x01 , 0x08 , 0x23 , 0x37 , 0x37 , 0x01 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 };
+const uint8_t GxEPD2_154c::lut_26_red0[] PROGMEM = { 0x83  , 0x5D , 0x01 , 0x81 , 0x48 , 0x23 , 0x77 , 0x77 , 0x01 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 };
+const uint8_t GxEPD2_154c::lut_27_red1[] PROGMEM = { 0x03  , 0x1D , 0x01 , 0x01 , 0x08 , 0x23 , 0x37 , 0x37 , 0x01 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 };
+
 void GxEPD2_154c::_Init_Full()
 {
   _InitDisplay();
   _writeCommand(0x20);
-  _writeDataPGM(GxGDEW0154Z04_lut_20_vcom0, sizeof(GxGDEW0154Z04_lut_20_vcom0));
+  _writeDataPGM(lut_20_vcom0, sizeof(lut_20_vcom0));
   _writeCommand(0x21);
-  _writeDataPGM(GxGDEW0154Z04_lut_21_w, sizeof(GxGDEW0154Z04_lut_21_w));
+  _writeDataPGM(lut_21_w, sizeof(lut_21_w));
   _writeCommand(0x22);
-  _writeDataPGM(GxGDEW0154Z04_lut_22_b, sizeof(GxGDEW0154Z04_lut_22_b));
+  _writeDataPGM(lut_22_b, sizeof(lut_22_b));
   _writeCommand(0x23);
-  _writeDataPGM(GxGDEW0154Z04_lut_23_g1, sizeof(GxGDEW0154Z04_lut_23_g1));
+  _writeDataPGM(lut_23_g1, sizeof(lut_23_g1));
   _writeCommand(0x24);
-  _writeDataPGM(GxGDEW0154Z04_lut_24_g2, sizeof(GxGDEW0154Z04_lut_24_g2));
+  _writeDataPGM(lut_24_g2, sizeof(lut_24_g2));
   _writeCommand(0x25);
-  _writeDataPGM(GxGDEW0154Z04_lut_25_vcom1, sizeof(GxGDEW0154Z04_lut_25_vcom1));
+  _writeDataPGM(lut_25_vcom1, sizeof(lut_25_vcom1));
   _writeCommand(0x26);
-  _writeDataPGM(GxGDEW0154Z04_lut_26_red0, sizeof(GxGDEW0154Z04_lut_26_red0));
+  _writeDataPGM(lut_26_red0, sizeof(lut_26_red0));
   _writeCommand(0x27);
-  _writeDataPGM(GxGDEW0154Z04_lut_27_red1, sizeof(GxGDEW0154Z04_lut_27_red1));
+  _writeDataPGM(lut_27_red1, sizeof(lut_27_red1));
   _PowerOn();
 }
 

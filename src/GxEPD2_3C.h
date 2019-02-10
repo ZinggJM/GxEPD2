@@ -114,6 +114,18 @@ class GxEPD2_3C : public Adafruit_GFX
       setFullWindow();
     }
 
+    // init method with additional parameters:
+    // initial true for re-init after processor deep sleep wake up, if display power supply was kept
+    // only relevant for b/w displays with fast partial update
+    // pulldown_rst_mode true for alternate RST handling to avoid feeding 5V through RST pin
+    void init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode = false)
+    {
+      epd2.init(serial_diag_bitrate, initial, pulldown_rst_mode);
+      _using_partial_mode = false;
+      _current_page = 0;
+      setFullWindow();
+    }
+
     void fillScreen(uint16_t color) // 0x0 black, >0x0 white, to buffer
     {
       uint8_t black = 0xFF;
@@ -328,6 +340,10 @@ class GxEPD2_3C : public Adafruit_GFX
     {
       epd2.writeImage(black, color, x, y, w, h, invert, mirror_y, pgm);
     }
+    void writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h)
+    {
+      epd2.writeImage(black, color, x, y, w, h, false, false, false);
+    }
     // write sprite of native data to controller memory, without screen refresh; x and w should be multiple of 8
     void writeNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
     {
@@ -341,6 +357,10 @@ class GxEPD2_3C : public Adafruit_GFX
     void drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
     {
       epd2.drawImage(black, color, x, y, w, h, invert, mirror_y, pgm);
+    }
+    void drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h)
+    {
+      epd2.drawImage(black, color, x, y, w, h, false, false, false);
     }
     // write sprite of native data to controller memory, with screen refresh; x and w should be multiple of 8
     void drawNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)

@@ -11,24 +11,10 @@
 // Library: https://github.com/ZinggJM/GxEPD2
 
 #include "GxEPD2_213.h"
-#include "WaveTables.h"
 
 GxEPD2_213::GxEPD2_213(int8_t cs, int8_t dc, int8_t rst, int8_t busy) :
   GxEPD2_EPD(cs, dc, rst, busy, HIGH, 10000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate)
 {
-  _initial = true;
-  _power_is_on = false;
-  _using_partial_mode = false;
-  _hibernating = false;
-}
-
-void GxEPD2_213::init(uint32_t serial_diag_bitrate)
-{
-  GxEPD2_EPD::init(serial_diag_bitrate);
-  _initial = true;
-  _power_is_on = false;
-  _using_partial_mode = false;
-  _hibernating = false;
 }
 
 void GxEPD2_213::clearScreen(uint8_t value)
@@ -245,14 +231,7 @@ void GxEPD2_213::_PowerOff()
 
 void GxEPD2_213::_InitDisplay()
 {
-  if (_hibernating && (_rst >= 0))
-  {
-    digitalWrite(_rst, LOW);
-    delay(20);
-    digitalWrite(_rst, HIGH);
-    delay(200);
-    _hibernating = false;
-  }
+  if (_hibernating) _reset();
   _writeCommand(0x01); // Panel configuration, Gate selection
   _writeData((HEIGHT - 1) % 256);
   _writeData((HEIGHT - 1) / 256);
@@ -270,10 +249,24 @@ void GxEPD2_213::_InitDisplay()
   _setPartialRamArea(0, 0, WIDTH, HEIGHT);
 }
 
+const uint8_t GxEPD2_213::LUTDefault_full[] PROGMEM =
+{
+  0x32,  // command
+  0x22, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x1E, 0x1E, 0x1E, 0x1E, 0x1E, 0x1E, 0x1E, 0x1E, 0x01, 0x00, 0x00, 0x00, 0x00
+};
+
+const uint8_t GxEPD2_213::LUTDefault_part[] PROGMEM =
+{
+  0x32,  // command
+  0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x0F, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+};
+
 void GxEPD2_213::_Init_Full()
 {
   _InitDisplay();
-  _writeCommandDataPGM(GxGDE0213B1_LUTDefault_full, sizeof(GxGDE0213B1_LUTDefault_full));
+  _writeCommandDataPGM(LUTDefault_full, sizeof(LUTDefault_full));
   _PowerOn();
   _using_partial_mode = false;
 }
@@ -281,7 +274,7 @@ void GxEPD2_213::_Init_Full()
 void GxEPD2_213::_Init_Part()
 {
   _InitDisplay();
-  _writeCommandDataPGM(GxGDE0213B1_LUTDefault_part, sizeof(GxGDE0213B1_LUTDefault_part));
+  _writeCommandDataPGM(LUTDefault_part, sizeof(LUTDefault_part));
   _PowerOn();
   _using_partial_mode = true;
 }

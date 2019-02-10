@@ -32,7 +32,6 @@ class GxEPD2_213_flex : public GxEPD2_EPD
     // constructor
     GxEPD2_213_flex(int8_t cs, int8_t dc, int8_t rst, int8_t busy);
     // methods (virtual)
-    void init(uint32_t serial_diag_bitrate = 0); // = 0 : disabled
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     void clearScreen(uint8_t value = 0xFF); // init controller memory and screen (default white)
     void writeScreenBuffer(uint8_t value = 0xFF); // init controller memory (default white)
@@ -60,8 +59,17 @@ class GxEPD2_213_flex : public GxEPD2_EPD
     void _Init_Part();
     void _Update_Full();
     void _Update_Part();
-  protected:
-    bool _initial, _power_is_on, _using_partial_mode, _hibernating;
+  private:
+    static const unsigned char lut_20_vcomDC[];
+    static const unsigned char lut_21_ww[];
+    static const unsigned char lut_22_bw[];
+    static const unsigned char lut_23_wb[];
+    static const unsigned char lut_24_bb[];
+    static const unsigned char lut_20_vcomDC_partial[];
+    static const unsigned char lut_21_ww_partial[];
+    static const unsigned char lut_22_bw_partial[];
+    static const unsigned char lut_23_wb_partial[];
+    static const unsigned char lut_24_bb_partial[];
 };
 
 #endif

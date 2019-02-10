@@ -23,10 +23,23 @@ GxEPD2_EPD::GxEPD2_EPD(int8_t cs, int8_t dc, int8_t rst, int8_t busy, int8_t bus
   _cs(cs), _dc(dc), _rst(rst), _busy(busy), _busy_level(busy_level), _busy_timeout(busy_timeout), _diag_enabled(false),
   _spi_settings(4000000, MSBFIRST, SPI_MODE0)
 {
+  _power_is_on = false;
+  _using_partial_mode = false;
+  _hibernating = false;
 }
 
 void GxEPD2_EPD::init(uint32_t serial_diag_bitrate)
 {
+  init(serial_diag_bitrate, true, false);
+}
+
+void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode)
+{
+  _initial = initial;
+  _pulldown_rst_mode = pulldown_rst_mode;
+  _power_is_on = false;
+  _using_partial_mode = false;
+  _hibernating = false;
   if (serial_diag_bitrate > 0)
   {
     Serial.begin(serial_diag_bitrate);
@@ -42,32 +55,38 @@ void GxEPD2_EPD::init(uint32_t serial_diag_bitrate)
     digitalWrite(_dc, HIGH);
     pinMode(_dc, OUTPUT);
   }
-  if (_rst >= 0)
-  {
-    digitalWrite(_rst, HIGH);
-    pinMode(_rst, OUTPUT);
-    delay(20);
-    digitalWrite(_rst, LOW);
-    delay(20);
-    digitalWrite(_rst, HIGH);
-    delay(200);
-  }
+  _reset();
   if (_busy >= 0)
   {
     pinMode(_busy, INPUT);
   }
   SPI.begin();
-  //  SPI.setDataMode(SPI_MODE0);
-  //  SPI.setBitOrder(MSBFIRST);
-  //#if defined(SPI_HAS_TRANSACTION)
-  //  // true also for STM32F1xx Boards
-  //  SPISettings settings(4000000, MSBFIRST, SPI_MODE0);
-  //  SPI.beginTransaction(settings);
-  //  SPI.endTransaction();
-  //  //Serial.println("SPI has Transaction");
-  //#elif defined(ESP8266) || defined(ESP32)
-  //  SPI.setFrequency(4000000);
-  //#endif
+}
+
+void GxEPD2_EPD::_reset()
+{
+  if (_rst >= 0)
+  {
+    if (_pulldown_rst_mode)
+    {
+      digitalWrite(_rst, LOW);
+      pinMode(_rst, OUTPUT);
+      delay(20);
+      pinMode(_rst, INPUT_PULLUP);
+      delay(200);
+    }
+    else
+    {
+      digitalWrite(_rst, HIGH);
+      pinMode(_rst, OUTPUT);
+      delay(20);
+      digitalWrite(_rst, LOW);
+      delay(20);
+      digitalWrite(_rst, HIGH);
+      delay(200);
+    }
+    _hibernating = false;
+  }
 }
 
 void GxEPD2_EPD::_waitWhileBusy(const char* comment, uint16_t busy_time)

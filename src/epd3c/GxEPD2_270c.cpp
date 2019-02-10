@@ -11,22 +11,10 @@
 // Library: https://github.com/ZinggJM/GxEPD2
 
 #include "GxEPD2_270c.h"
-#include "WaveTables3c.h"
 
 GxEPD2_270c::GxEPD2_270c(int8_t cs, int8_t dc, int8_t rst, int8_t busy) :
   GxEPD2_EPD(cs, dc, rst, busy, LOW, 20000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate)
 {
-  _initial = true;
-  _power_is_on = false;
-  _hibernating = false;
-}
-
-void GxEPD2_270c::init(uint32_t serial_diag_bitrate)
-{
-  GxEPD2_EPD::init(serial_diag_bitrate);
-  _initial = true;
-  _power_is_on = false;
-  _hibernating = false;
 }
 
 void GxEPD2_270c::clearScreen(uint8_t value)
@@ -266,14 +254,7 @@ void GxEPD2_270c::_PowerOff()
 
 void GxEPD2_270c::_InitDisplay()
 {
-  if (_hibernating && (_rst >= 0))
-  {
-    digitalWrite(_rst, LOW);
-    delay(20);
-    digitalWrite(_rst, HIGH);
-    delay(200);
-    _hibernating = false;
-  }
+  if (_hibernating) _reset();
   _writeCommand(0x01);
   _writeData (0x03);
   _writeData (0x00);
@@ -318,19 +299,71 @@ void GxEPD2_270c::_InitDisplay()
   _writeData(0x87);
 }
 
+const uint8_t GxEPD2_270c::lut_20_vcomDC[] PROGMEM =
+{
+  0x00  , 0x00,
+  0x00  , 0x1A  , 0x1A  , 0x00  , 0x00  , 0x01,
+  0x00  , 0x0A  , 0x0A  , 0x00  , 0x00  , 0x08,
+  0x00  , 0x0E  , 0x01  , 0x0E  , 0x01  , 0x10,
+  0x00  , 0x0A  , 0x0A  , 0x00  , 0x00  , 0x08,
+  0x00  , 0x04  , 0x10  , 0x00  , 0x00  , 0x05,
+  0x00  , 0x03  , 0x0E  , 0x00  , 0x00  , 0x0A,
+  0x00  , 0x23  , 0x00  , 0x00  , 0x00  , 0x01
+};
+//R21H
+const uint8_t GxEPD2_270c::lut_21[] PROGMEM = {
+  0x90  , 0x1A  , 0x1A  , 0x00  , 0x00  , 0x01,
+  0x40  , 0x0A  , 0x0A  , 0x00  , 0x00  , 0x08,
+  0x84  , 0x0E  , 0x01  , 0x0E  , 0x01  , 0x10,
+  0x80  , 0x0A  , 0x0A  , 0x00  , 0x00  , 0x08,
+  0x00  , 0x04  , 0x10  , 0x00  , 0x00  , 0x05,
+  0x00  , 0x03  , 0x0E  , 0x00  , 0x00  , 0x0A,
+  0x00  , 0x23  , 0x00  , 0x00  , 0x00  , 0x01
+};
+//R22H  r
+const uint8_t GxEPD2_270c::lut_22_red[] PROGMEM = {
+  0xA0  , 0x1A  , 0x1A  , 0x00  , 0x00  , 0x01,
+  0x00  , 0x0A  , 0x0A  , 0x00  , 0x00  , 0x08,
+  0x84  , 0x0E  , 0x01  , 0x0E  , 0x01  , 0x10,
+  0x90  , 0x0A  , 0x0A  , 0x00  , 0x00  , 0x08,
+  0xB0  , 0x04  , 0x10  , 0x00  , 0x00  , 0x05,
+  0xB0  , 0x03  , 0x0E  , 0x00  , 0x00  , 0x0A,
+  0xC0  , 0x23  , 0x00  , 0x00  , 0x00  , 0x01
+};
+//R23H  w
+const uint8_t GxEPD2_270c::lut_23_white[] PROGMEM = {
+  0x90  , 0x1A  , 0x1A  , 0x00  , 0x00  , 0x01,
+  0x40  , 0x0A  , 0x0A  , 0x00  , 0x00  , 0x08,
+  0x84  , 0x0E  , 0x01  , 0x0E  , 0x01  , 0x10,
+  0x80  , 0x0A  , 0x0A  , 0x00  , 0x00  , 0x08,
+  0x00  , 0x04  , 0x10  , 0x00  , 0x00  , 0x05,
+  0x00  , 0x03  , 0x0E  , 0x00  , 0x00  , 0x0A,
+  0x00  , 0x23  , 0x00  , 0x00  , 0x00  , 0x01
+};
+//R24H  b
+const uint8_t GxEPD2_270c::lut_24_black[] PROGMEM = {
+  0x90  , 0x1A  , 0x1A  , 0x00  , 0x00  , 0x01,
+  0x20  , 0x0A  , 0x0A  , 0x00  , 0x00  , 0x08,
+  0x84  , 0x0E  , 0x01  , 0x0E  , 0x01  , 0x10,
+  0x10  , 0x0A  , 0x0A  , 0x00  , 0x00  , 0x08,
+  0x00  , 0x04  , 0x10  , 0x00  , 0x00  , 0x05,
+  0x00  , 0x03  , 0x0E  , 0x00  , 0x00  , 0x0A,
+  0x00  , 0x23  , 0x00  , 0x00  , 0x00  , 0x01
+};
+
 void GxEPD2_270c::_Init_Full()
 {
   _InitDisplay();
   _writeCommand(0x20); //vcom
-  _writeData_nCS(GxGDEW027C44_lut_20_vcomDC, sizeof(GxGDEW027C44_lut_20_vcomDC));
+  _writeData_nCS(lut_20_vcomDC, sizeof(lut_20_vcomDC));
   _writeCommand(0x21); //ww --
-  _writeData_nCS(GxGDEW027C44_lut_21, sizeof(GxGDEW027C44_lut_21));
+  _writeData_nCS(lut_21, sizeof(lut_21));
   _writeCommand(0x22); //bw r
-  _writeData_nCS(GxGDEW027C44_lut_22_red, sizeof(GxGDEW027C44_lut_22_red));
+  _writeData_nCS(lut_22_red, sizeof(lut_22_red));
   _writeCommand(0x23); //wb w
-  _writeData_nCS(GxGDEW027C44_lut_23_white, sizeof(GxGDEW027C44_lut_23_white));
+  _writeData_nCS(lut_23_white, sizeof(lut_23_white));
   _writeCommand(0x24); //bb b
-  _writeData_nCS(GxGDEW027C44_lut_24_black, sizeof(GxGDEW027C44_lut_24_black));
+  _writeData_nCS(lut_24_black, sizeof(lut_24_black));
   _PowerOn();
 }
 
@@ -338,15 +371,15 @@ void GxEPD2_270c::_Init_Part()
 {
   _InitDisplay();
   _writeCommand(0x20); //vcom
-  _writeData_nCS(GxGDEW027C44_lut_20_vcomDC, sizeof(GxGDEW027C44_lut_20_vcomDC));
+  _writeData_nCS(lut_20_vcomDC, sizeof(lut_20_vcomDC));
   _writeCommand(0x21); //ww --
-  _writeData_nCS(GxGDEW027C44_lut_21, sizeof(GxGDEW027C44_lut_21));
+  _writeData_nCS(lut_21, sizeof(lut_21));
   _writeCommand(0x22); //bw r
-  _writeData_nCS(GxGDEW027C44_lut_22_red, sizeof(GxGDEW027C44_lut_22_red));
+  _writeData_nCS(lut_22_red, sizeof(lut_22_red));
   _writeCommand(0x23); //wb w
-  _writeData_nCS(GxGDEW027C44_lut_23_white, sizeof(GxGDEW027C44_lut_23_white));
+  _writeData_nCS(lut_23_white, sizeof(lut_23_white));
   _writeCommand(0x24); //bb b
-  _writeData_nCS(GxGDEW027C44_lut_24_black, sizeof(GxGDEW027C44_lut_24_black));
+  _writeData_nCS(lut_24_black, sizeof(lut_24_black));
   _PowerOn();
 }
 

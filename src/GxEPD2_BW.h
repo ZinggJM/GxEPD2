@@ -117,6 +117,19 @@ class GxEPD2_BW : public Adafruit_GFX
       setFullWindow();
     }
 
+    // init method with additional parameters:
+    // initial true for re-init after processor deep sleep wake up, if display power supply was kept
+    // this can be used to avoid the repeated initial full refresh on displays with fast partial update
+    // NOTE: garbage will result on fast partial update displays, if initial full update is omitted after power loss
+    // pulldown_rst_mode true for alternate RST handling to avoid feeding 5V through RST pin
+    void init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode = false)
+    {
+      epd2.init(serial_diag_bitrate, initial, pulldown_rst_mode);
+      _using_partial_mode = false;
+      _current_page = 0;
+      setFullWindow();
+    }
+
     void fillScreen(uint16_t color) // 0x0 black, >0x0 white, to buffer
     {
       uint8_t data = (color == GxEPD_BLACK) ? 0x00 : 0xFF;
@@ -180,7 +193,7 @@ class GxEPD2_BW : public Adafruit_GFX
           if (epd2.hasFastPartialUpdate)
           {
             epd2.writeImageAgain(_buffer + offset, _pw_x, _pw_y, _pw_w, _pw_h);
-            epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
+            //epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h); // not needed
           }
         }
         else // full update
@@ -190,7 +203,7 @@ class GxEPD2_BW : public Adafruit_GFX
           if (epd2.hasFastPartialUpdate)
           {
             epd2.writeImageAgain(_buffer, 0, 0, WIDTH, HEIGHT);
-            epd2.refresh(true);
+            //epd2.refresh(true); // not needed
             epd2.powerOff();
           }
         }
@@ -254,7 +267,7 @@ class GxEPD2_BW : public Adafruit_GFX
               fillScreen(GxEPD_WHITE);
               return true;
             }
-            else epd2.refresh(true); // partial update after second phase
+            //else epd2.refresh(true); // partial update after second phase
           } else epd2.refresh(false); // full update after only phase
           epd2.powerOff();
           return false;
@@ -267,6 +280,34 @@ class GxEPD2_BW : public Adafruit_GFX
     // GxEPD style paged drawing; drawCallback() is called as many times as needed
     void drawPaged(void (*drawCallback)(const void*), const void* pv)
     {
+      if (1 == _pages)
+      {
+        fillScreen(GxEPD_WHITE);
+        drawCallback(pv);
+        if (_using_partial_mode)
+        {
+          uint32_t offset = _reverse ? (HEIGHT - _pw_h) * _pw_w / 8 : 0;
+          epd2.writeImage(_buffer + offset, _pw_x, _pw_y, _pw_w, _pw_h);
+          epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
+          if (epd2.hasFastPartialUpdate)
+          {
+            epd2.writeImageAgain(_buffer + offset, _pw_x, _pw_y, _pw_w, _pw_h);
+            //epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h); // not needed
+          }
+        }
+        else // full update
+        {
+          epd2.writeImage(_buffer, 0, 0, WIDTH, HEIGHT);
+          epd2.refresh(false);
+          if (epd2.hasFastPartialUpdate)
+          {
+            epd2.writeImageAgain(_buffer, 0, 0, WIDTH, HEIGHT);
+            //epd2.refresh(true); // not needed
+            epd2.powerOff();
+          }
+        }
+        return;
+      }
       if (_using_partial_mode)
       {
         for (uint16_t phase = 1; phase <= 2; phase++)
@@ -311,7 +352,7 @@ class GxEPD2_BW : public Adafruit_GFX
             drawCallback(pv);
             epd2.writeImageAgain(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
           }
-          epd2.refresh(true); // partial update after second phase
+          //epd2.refresh(true); // partial update after second phase // not needed
         }
         epd2.powerOff();
       }
@@ -362,6 +403,10 @@ class GxEPD2_BW : public Adafruit_GFX
     {
       epd2.writeImage(black, color, x, y, w, h, invert, mirror_y, pgm);
     }
+    void writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h)
+    {
+      epd2.writeImage(black, color, x, y, w, h, false, false, false);
+    }
     // write sprite of native data to controller memory, without screen refresh; x and w should be multiple of 8
     void writeNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
     {
@@ -375,6 +420,10 @@ class GxEPD2_BW : public Adafruit_GFX
     void drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
     {
       epd2.drawImage(black, color, x, y, w, h, invert, mirror_y, pgm);
+    }
+    void drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h)
+    {
+      epd2.drawImage(black, color, x, y, w, h, false, false, false);
     }
     // write sprite of native data to controller memory, with screen refresh; x and w should be multiple of 8
     void drawNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
