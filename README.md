@@ -31,7 +31,7 @@
 ### Low Level Bitmap Drawing Support
  - bitmap drawing support to the controller memory and screen is available:
  - either through the template class instance methods that forward calls to the base display class
- - or directy using an instance of a base display class and calling its methods directly
+ - or directly using an instance of a base display class and calling its methods directly
 
 ### Supporting Arduino Forum Topics:
 
@@ -56,7 +56,9 @@
 - GDEW075Z09      7.5" b/w/r
 #### Supported SPI e-paper panels & boards from Waveshare: compare with Good Display, same panel
 
-### Version 1.1.4
+### Version 1.1.4+
+- added GxEPD2_WS_ESP32_Driver example for Waveshare ESP32 Driver Board
+#### Version 1.1.4
 - eliminated double refresh for "fast partial update"
 - moved wavetables to the driver classes
 - added one explicit drawImage(...) and writeImage(...) method (for removed default paramter values for 1.1.3)
