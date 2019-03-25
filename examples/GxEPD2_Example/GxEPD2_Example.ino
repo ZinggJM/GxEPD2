@@ -70,6 +70,10 @@
 // can use only quarter buffer size
 //GxEPD2_3C < GxEPD2_583c, GxEPD2_583c::HEIGHT / 4 > display(GxEPD2_583c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 //GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT / 4> display(GxEPD2_750c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
+// grey levels parallel IF e-papers on Waveshare e-Paper IT8951 Driver HAT
+// HRDY -> 4, RST -> 2, CS -> SS(15), SCK -> SCK(14), MOSI -> MOSI(D7(13)), MISO -> MISO(D6(12)), GND -> GND, 5V -> 5V
+// note: 5V supply needs to be exact and strong; 5V pin of USB powered Wemos D1 mini doesn't work!
+//GxEPD2_BW<GxEPD2_it60, GxEPD2_it60::HEIGHT / 8> display(GxEPD2_it60(/*CS=5*/ SS, /*DC=*/ 0, /*RST=*/ 2, /*BUSY=*/ 4));
 
 // ***** for mapping of Waveshare e-Paper ESP8266 Driver Board *****
 // select one , can use full buffer size (full HEIGHT)
@@ -112,6 +116,10 @@
 //GxEPD2_3C<GxEPD2_270c, GxEPD2_270c::HEIGHT> display(GxEPD2_270c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
 //GxEPD2_3C<GxEPD2_420c, GxEPD2_420c::HEIGHT> display(GxEPD2_420c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
 //GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT> display(GxEPD2_750c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
+// grey levels parallel IF e-papers on Waveshare e-Paper IT8951 Driver HAT
+// HRDY -> 4, RST -> 16, CS -> SS(5), SCK -> SCK(18), MOSI -> MOSI(23), MISO -> MISO(19), GND -> GND, 5V -> 5V
+// note: 5V supply needs to be exact and strong; 5V over diode from USB (e.g. Wemos D1 mini) doesn't work!
+//GxEPD2_BW<GxEPD2_it60, GxEPD2_it60::HEIGHT> display(GxEPD2_it60(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
 #endif
 
 #if defined(_BOARD_GENERIC_STM32F103C_H_)
@@ -203,6 +211,9 @@
 #include "bitmaps/Bitmaps3c128x296.h" // 2.9"  b/w/r
 #include "bitmaps/Bitmaps3c176x264.h" // 2.7"  b/w/r
 #include "bitmaps/Bitmaps3c400x300.h" // 4.2"  b/w/r
+#if defined(ESP8266) || defined(ESP32)
+#include "bitmaps/WS_Bitmaps800x600.h" // 6.0"  grey
+#endif
 
 #else
 
@@ -227,6 +238,7 @@ void setup()
   Serial.begin(115200);
   Serial.println();
   Serial.println("setup");
+  delay(100);
   display.init(115200);
   // first update should be full refresh
   helloWorld();
@@ -654,6 +666,9 @@ void drawBitmaps()
 #ifdef _GxBitmaps640x384_H_
   drawBitmaps640x384();
 #endif
+#ifdef _WS_Bitmaps800x600_H_
+  drawBitmaps800x600();
+#endif
   // 3-color
 #ifdef _GxBitmaps3c104x212_H_
   drawBitmaps3c104x212();
@@ -909,6 +924,26 @@ void drawBitmaps640x384()
 }
 #endif
 
+#ifdef _WS_Bitmaps800x600_H_
+void drawBitmaps800x600()
+{
+#if defined(ESP8266) || defined(ESP32)
+  if (display.epd2.panel == GxEPD2::ED060SCT)
+  {
+//    Serial.print("sizeof(WS_zoo_800x600) is "); Serial.println(sizeof(WS_zoo_800x600));
+    display.drawNative(WS_zoo_800x600, 0, 0, 0, 800, 600, false, false, true);
+    delay(2000);
+//    Serial.print("sizeof(WS_pic_1200x825) is "); Serial.println(sizeof(WS_pic_1200x825));
+//    display.drawNative((const uint8_t*)WS_pic_1200x825, 0, 0, 0, 1200, 825, false, false, true);
+//    delay(2000);
+//    Serial.print("sizeof(WS_acaa_1024x731) is "); Serial.println(sizeof(WS_acaa_1024x731));
+//    display.drawNative(WS_acaa_1024x731, 0, 0, 0, 1024, 731, false, false, true);
+//    delay(2000);
+  }
+#endif
+}
+#endif
+
 struct bitmap_pair
 {
   const unsigned char* black;
@@ -988,7 +1023,7 @@ void drawBitmaps3c200x200()
         display.writeScreenBuffer(); // use default for white
         display.writeImage(bitmap_pairs[i].black, bitmap_pairs[i].red, x, y, 200, 200, false, false, true);
         display.refresh();
-        delay(2000);
+        delay(1000);
         x += 40;
         y += 40;
         if ((x >= int16_t(display.epd2.WIDTH)) || (y >= int16_t(display.epd2.HEIGHT))) break;

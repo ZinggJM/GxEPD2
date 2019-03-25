@@ -146,7 +146,7 @@ void GxEPD2_EPD::_writeData(const uint8_t* data, uint16_t n)
 {
   SPI.beginTransaction(_spi_settings);
   if (_cs >= 0) digitalWrite(_cs, LOW);
-  for (uint8_t i = 0; i < n; i++)
+  for (uint16_t i = 0; i < n; i++)
   {
     SPI.transfer(*data++);
   }
@@ -158,7 +158,7 @@ void GxEPD2_EPD::_writeDataPGM(const uint8_t* data, uint16_t n)
 {
   SPI.beginTransaction(_spi_settings);
   if (_cs >= 0) digitalWrite(_cs, LOW);
-  for (uint8_t i = 0; i < n; i++)
+  for (uint16_t i = 0; i < n; i++)
   {
     SPI.transfer(pgm_read_byte(&*data++));
   }

@@ -55,8 +55,16 @@
 - GDEW075T8        7.5" b/w
 - GDEW075Z09      7.5" b/w/r
 #### Supported SPI e-paper panels & boards from Waveshare: compare with Good Display, same panel
+#### other supported panels
+- ED060SCT        6" grey levels, on Waveshare e-Paper IT8951 Driver HAT
 
-### Version 1.1.4+
+#### Version 1.1.5
+- added support for 6" ED060SCT on Waveshare e-Paper IT8951 Driver HAT
+- uses 3.3V data lines, but 5V supply (~80mA active, ~20mA stand-by, sleep doesn't work)
+- note: 5V supply needs to be exact and strong; 5V over diode from USB (e.g. Wemos D1 mini) doesn't work!
+- note that the IT8951 Driver HAT is panel specific, with flash parameterized by supplier
+- this is an initial version
+#### Version 1.1.4+
 - added GxEPD2_WS_ESP32_Driver example for Waveshare ESP32 Driver Board
 #### Version 1.1.4
 - eliminated double refresh for "fast partial update"
