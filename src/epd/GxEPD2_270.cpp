@@ -441,12 +441,12 @@ void GxEPD2_270::_Update_Part()
 
 void GxEPD2_270::_writeDataPGM(const uint8_t* data, uint16_t n)
 {
-  SPI.beginTransaction(_spi_settings);
+  _controller->spiBeginTransaction();
   for (uint8_t i = 0; i < n; i++)
   {
     if (_cs >= 0) digitalWrite(_cs, LOW);
     SPI.transfer(pgm_read_byte(&*data++));
     if (_cs >= 0) digitalWrite(_cs, HIGH);
   }
-  SPI.endTransaction();
+  _controller->spiEndTransaction();
 }

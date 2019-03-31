@@ -211,14 +211,14 @@ void GxEPD2_270c::hibernate()
 
 void GxEPD2_270c::_writeData_nCS(const uint8_t* data, uint16_t n)
 {
-  SPI.beginTransaction(_spi_settings);
+  _controller->spiBeginTransaction();
   for (uint8_t i = 0; i < n; i++)
   {
     if (_cs >= 0) digitalWrite(_cs, LOW);
     SPI.transfer(pgm_read_byte(&*data++));
     if (_cs >= 0) digitalWrite(_cs, HIGH);
   }
-  SPI.endTransaction();
+  _controller->spiEndTransaction();
 }
 
 void GxEPD2_270c::_setPartialRamArea_270c(uint8_t cmd, uint16_t x, uint16_t y, uint16_t w, uint16_t h)

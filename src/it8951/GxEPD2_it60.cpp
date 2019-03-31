@@ -56,8 +56,7 @@
 #define LISAR (MCSR_BASE_ADDR + 0x0008)
 
 GxEPD2_it60::GxEPD2_it60(int8_t cs, int8_t dc, int8_t rst, int8_t busy) :
-  GxEPD2_EPD(cs, dc, rst, busy, LOW, 10000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate),
-  _spi_settings(1000000, MSBFIRST, SPI_MODE0)
+  GxEPD2_EPD(cs, dc, rst, busy, LOW, 10000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate)
 {
 }
 
@@ -110,7 +109,7 @@ void GxEPD2_it60::clearScreen(uint8_t value)
   else _Init_Part();
   _initial = false;
   _setPartialRamArea(0, 0, WIDTH, HEIGHT);
-  SPI.beginTransaction(_spi_settings);
+  _controller->spiBeginTransaction();
   if (_cs >= 0) digitalWrite(_cs, LOW);
   _transfer16(0x0000); // preamble for write data
   _waitWhileBusy2("clearScreen preamble", default_wait_time);
@@ -122,7 +121,7 @@ void GxEPD2_it60::clearScreen(uint8_t value)
 #endif
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);
-  SPI.endTransaction();
+  _controller->spiEndTransaction();
   _writeCommand16(IT8951_TCON_LD_IMG_END);
   _waitWhileBusy2("clearScreen load end", default_wait_time);
   _refresh(0, 0, WIDTH, HEIGHT, false);
@@ -138,7 +137,7 @@ void GxEPD2_it60::_writeScreenBuffer(uint8_t value)
 {
   if (!_using_partial_mode) _Init_Part();
   _setPartialRamArea(0, 0, WIDTH, HEIGHT);
-  SPI.beginTransaction(_spi_settings);
+  _controller->spiBeginTransaction();
   if (_cs >= 0) digitalWrite(_cs, LOW);
   _transfer16(0x0000); // preamble for write data
   _waitWhileBusy2("clearScreen preamble", default_wait_time);
@@ -150,7 +149,7 @@ void GxEPD2_it60::_writeScreenBuffer(uint8_t value)
 #endif
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);
-  SPI.endTransaction();
+  _controller->spiEndTransaction();
   _writeCommand16(IT8951_TCON_LD_IMG_END);
   _waitWhileBusy2("_writeScreenBuffer load end", default_wait_time);
 }
@@ -172,7 +171,7 @@ void GxEPD2_it60::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16
   if ((w1 <= 0) || (h1 <= 0)) return;
   if (!_using_partial_mode) _Init_Part();
   _setPartialRamArea(x1, y1, w1, h1);
-  SPI.beginTransaction(_spi_settings);
+  _controller->spiBeginTransaction();
   if (_cs >= 0) digitalWrite(_cs, LOW);
   _transfer16(0x0000); // preamble for write data
   _waitWhileBusy2("writeImage preamble", default_wait_time);
@@ -203,7 +202,7 @@ void GxEPD2_it60::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16
 #endif
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);
-  SPI.endTransaction();
+  _controller->spiEndTransaction();
   _writeCommand16(IT8951_TCON_LD_IMG_END);
   _waitWhileBusy2("writeImage load end", default_wait_time);
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
@@ -233,7 +232,7 @@ void GxEPD2_it60::writeNative(const uint8_t* data1, const uint8_t* data2, int16_
     if ((w1 <= 0) || (h1 <= 0)) return;
     if (!_using_partial_mode) _Init_Part();
     _setPartialRamArea(x1, y1, w1, h1);
-    SPI.beginTransaction(_spi_settings);
+    _controller->spiBeginTransaction();
     if (_cs >= 0) digitalWrite(_cs, LOW);
     _transfer16(0x0000); // preamble for write data
     _waitWhileBusy2("writeNative preamble", default_wait_time);
@@ -264,7 +263,7 @@ void GxEPD2_it60::writeNative(const uint8_t* data1, const uint8_t* data2, int16_
 #endif
     }
     if (_cs >= 0) digitalWrite(_cs, HIGH);
-    SPI.endTransaction();
+    _controller->spiEndTransaction();
     _writeCommand16(IT8951_TCON_LD_IMG_END);
     _waitWhileBusy2("writeNative load end", default_wait_time);
     delay(1); // yield() to avoid WDT on ESP8266 and ESP32
@@ -455,32 +454,32 @@ void GxEPD2_it60::_writeCommand16(uint16_t c)
 {
   String s = String("_writeCommand16(0x") + String(c, HEX) + String(")");
   _waitWhileBusy2(s.c_str(), default_wait_time);
-  SPI.beginTransaction(_spi_settings);
+  _controller->spiBeginTransaction();
   if (_cs >= 0) digitalWrite(_cs, LOW);
   _transfer16(0x6000); // preamble for write command
   _waitWhileBusy2("_writeCommand16 preamble", default_wait_time);
   _transfer16(c);
   if (_cs >= 0) digitalWrite(_cs, HIGH);
-  SPI.endTransaction();
+  _controller->spiEndTransaction();
   //_waitWhileBusy(s.c_str(), default_wait_time);
 }
 
 void GxEPD2_it60::_writeData16(uint16_t d)
 {
   _waitWhileBusy2("_writeData16", default_wait_time);
-  SPI.beginTransaction(_spi_settings);
+  _controller->spiBeginTransaction();
   if (_cs >= 0) digitalWrite(_cs, LOW);
   _transfer16(0x0000); // preamble for write data
   _waitWhileBusy2("_writeData16 preamble", default_wait_time);
   _transfer16(d);
   if (_cs >= 0) digitalWrite(_cs, HIGH);
-  SPI.endTransaction();
+  _controller->spiEndTransaction();
 }
 
 void GxEPD2_it60::_writeData16(const uint16_t* d, uint32_t n)
 {
   _waitWhileBusy2("_writeData16", default_wait_time);
-  SPI.beginTransaction(_spi_settings);
+  _controller->spiBeginTransaction();
   if (_cs >= 0) digitalWrite(_cs, LOW);
   _transfer16(0x0000); // preamble for write data
   _waitWhileBusy2("_writeData16 preamble", default_wait_time);
@@ -489,13 +488,13 @@ void GxEPD2_it60::_writeData16(const uint16_t* d, uint32_t n)
     _transfer16(*d++);
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);
-  SPI.endTransaction();
+  _controller->spiEndTransaction();
 }
 
 uint16_t GxEPD2_it60::_readData16()
 {
   _waitWhileBusy2("_readData16", default_wait_time);
-  SPI.beginTransaction(_spi_settings);
+  _controller->spiBeginTransaction();
   if (_cs >= 0) digitalWrite(_cs, LOW);
   _transfer16(0x1000); // preamble for read data
   _waitWhileBusy2("_readData16 preamble", default_wait_time);
@@ -503,14 +502,14 @@ uint16_t GxEPD2_it60::_readData16()
   _waitWhileBusy2("_readData16 dummy", default_wait_time);
   uint16_t rv = _transfer16(0);
   if (_cs >= 0) digitalWrite(_cs, HIGH);
-  SPI.endTransaction();
+  _controller->spiEndTransaction();
   return rv;
 }
 
 void GxEPD2_it60::_readData16(uint16_t* d, uint32_t n)
 {
   _waitWhileBusy2("_readData16", default_wait_time);
-  SPI.beginTransaction(_spi_settings);
+  _controller->spiBeginTransaction();
   if (_cs >= 0) digitalWrite(_cs, LOW);
   _transfer16(0x1000); // preamble for read data
   _waitWhileBusy2("_readData16 preamble", default_wait_time);
@@ -521,7 +520,7 @@ void GxEPD2_it60::_readData16(uint16_t* d, uint32_t n)
     *d++ = _transfer16(0);
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);
-  SPI.endTransaction();
+  _controller->spiEndTransaction();
 }
 
 void GxEPD2_it60::_writeCommandData16(uint16_t c, const uint16_t* d, uint16_t n)

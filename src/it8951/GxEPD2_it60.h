@@ -72,7 +72,6 @@ class GxEPD2_it60 : public GxEPD2_EPD
       uint16_t usLUTVersion[8];   //16 Bytes String
     };
     IT8951DevInfoStruct IT8951DevInfo;
-    SPISettings _spi_settings;
   private:
     void _writeScreenBuffer(uint8_t value);
     void _refresh(int16_t x, int16_t y, int16_t w, int16_t h, bool partial_update_mode);

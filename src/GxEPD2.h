@@ -12,9 +12,6 @@
 #ifndef _GxEPD2_H_
 #define _GxEPD2_H_
 
-#include <Arduino.h>
-#include <SPI.h>
-
 #define GxEPD_BLACK     0x0000
 #define GxEPD_DARKGREY  0x7BEF      /* 128, 128, 128 */
 #define GxEPD_LIGHTGREY 0xC618      /* 192, 192, 192 */
@@ -23,6 +20,9 @@
 
 #define GxEPD_YELLOW    GxEPD_RED
 #define GxEPD_COLORED   GxEPD_RED
+
+#include "Arduino.h"
+#include "SPI.h"
 
 class GxEPD2
 {

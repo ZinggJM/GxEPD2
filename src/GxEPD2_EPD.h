@@ -12,9 +12,7 @@
 #ifndef _GxEPD2_EPD_H_
 #define _GxEPD2_EPD_H_
 
-#include <Arduino.h>
-#include <SPI.h>
-
+#include <Controller.h>
 #include <GxEPD2.h>
 
 class GxEPD2_EPD
@@ -73,7 +71,7 @@ class GxEPD2_EPD
     int8_t _cs, _dc, _rst, _busy, _busy_level;
     uint32_t _busy_timeout;
     bool _diag_enabled, _pulldown_rst_mode;
-    SPISettings _spi_settings;
+    Controller* _controller;
     bool _initial, _power_is_on, _using_partial_mode, _hibernating;
 };
 
