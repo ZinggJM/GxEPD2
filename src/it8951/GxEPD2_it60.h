@@ -29,7 +29,7 @@ class GxEPD2_it60 : public GxEPD2_EPD
     static const bool hasColor = false;
     static const bool hasPartialUpdate = true;
     static const bool hasFastPartialUpdate = true;
-    static const uint16_t reset_to_redy_time = 1800; // ms, e.g. 1721883us
+    static const uint16_t reset_to_ready_time = 1800; // ms, e.g. 1721883us
     static const uint16_t power_on_time = 10; // ms, e.g. 3879us
     static const uint16_t power_off_time = 200; // ms, e.g. 109875us
     static const uint16_t full_refresh_time = 600; // ms, e.g. 573921us
@@ -73,6 +73,7 @@ class GxEPD2_it60 : public GxEPD2_EPD
     };
     IT8951DevInfoStruct IT8951DevInfo;
     SPISettings _spi_settings;
+    SPISettings _spi_settings_for_read;
   private:
     void _writeScreenBuffer(uint8_t value);
     void _refresh(int16_t x, int16_t y, int16_t w, int16_t h, bool partial_update_mode);

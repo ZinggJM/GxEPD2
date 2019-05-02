@@ -52,15 +52,24 @@ void GxEPD2_270::clearScreen(uint8_t value)
 
 void GxEPD2_270::writeScreenBuffer(uint8_t value)
 {
-  //if (_initial) clearScreen(value);
-  //else _writeScreenBuffer(value);
-  clearScreen(value);
+  if (_initial) clearScreen(value);
+  else _writeScreenBuffer(value);
 }
 
 void GxEPD2_270::_writeScreenBuffer(uint8_t value)
 {
   _Init_Part();
   _setPartialRamArea(0x15, 0, 0, WIDTH, HEIGHT);
+  for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
+  {
+    _writeData(value);
+  }
+}
+
+void GxEPD2_270::writeScreenBufferAgain(uint8_t value)
+{
+  _Init_Part();
+  _setPartialRamArea(0x14, 0, 0, WIDTH, HEIGHT);
   for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
     _writeData(value);

@@ -51,7 +51,8 @@
 #if defined (ESP8266)
 // select one and adapt to your mapping, can use full buffer size (full HEIGHT)
 //GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display(GxEPD2_154(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
-//GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display(GxEPD2_213(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
+//GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display(GxEPD2_213(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDE0213B1, phased out
+//GxEPD2_BW<GxEPD2_213_B72, GxEPD2_213_B72::HEIGHT> display(GxEPD2_213_B72(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEH0213B72
 //GxEPD2_BW<GxEPD2_213_flex, GxEPD2_213_flex::HEIGHT> display(GxEPD2_213_flex(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEW0213I5F
 //GxEPD2_BW<GxEPD2_290, GxEPD2_290::HEIGHT> display(GxEPD2_290(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 //GxEPD2_BW<GxEPD2_290_T5, GxEPD2_290_T5::HEIGHT> display(GxEPD2_290_T5(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEW029T5
@@ -78,7 +79,8 @@
 // ***** for mapping of Waveshare e-Paper ESP8266 Driver Board *****
 // select one , can use full buffer size (full HEIGHT)
 //GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display(GxEPD2_154(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
-//GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display(GxEPD2_213(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
+//GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display(GxEPD2_213(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16)); // GDE0213B1, phased out
+//GxEPD2_BW<GxEPD2_213_B72, GxEPD2_213_B72::HEIGHT> display(GxEPD2_213_B72(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16)); // GDEH0213B72
 //GxEPD2_BW<GxEPD2_213_flex, GxEPD2_213_flex::HEIGHT> display(GxEPD2_213_flex(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16)); // GDEW0213I5F
 //GxEPD2_BW<GxEPD2_290, GxEPD2_290::HEIGHT> display(GxEPD2_290(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
 //GxEPD2_BW<GxEPD2_290_T5, GxEPD2_290_T5::HEIGHT> display(GxEPD2_290_T5(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16)); // GDEW029T5
@@ -102,7 +104,8 @@
 #if defined(ESP32)
 // select one and adapt to your mapping, can use full buffer size (full HEIGHT)
 //GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display(GxEPD2_154(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
-//GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display(GxEPD2_213(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
+//GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display(GxEPD2_213(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDE0213B1, phased out
+//GxEPD2_BW<GxEPD2_213_B72, GxEPD2_213_B72::HEIGHT> display(GxEPD2_213_B72(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEH0213B72
 //GxEPD2_BW<GxEPD2_213_flex, GxEPD2_213_flex::HEIGHT> display(GxEPD2_213_flex(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEW0213I5F
 //GxEPD2_BW<GxEPD2_290, GxEPD2_290::HEIGHT> display(GxEPD2_290(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
 //GxEPD2_BW<GxEPD2_290_T5, GxEPD2_290_T5::HEIGHT> display(GxEPD2_290_T5(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEW029T5
@@ -127,7 +130,8 @@
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPAY_BUFFER_SIZE / (EPD::WIDTH / 8))
 // select one and adapt to your mapping
 //GxEPD2_BW<GxEPD2_154, MAX_HEIGHT(GxEPD2_154)> display(GxEPD2_154(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-//GxEPD2_BW<GxEPD2_213, MAX_HEIGHT(GxEPD2_213)> display(GxEPD2_213(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
+//GxEPD2_BW<GxEPD2_213, MAX_HEIGHT(GxEPD2_213)> display(GxEPD2_213(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1)); // GDE0213B1, phased out
+//GxEPD2_BW<GxEPD2_213_B72, MAX_HEIGHT(GxEPD2_213_B72)> display(GxEPD2_213_B72(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1)); // GDEH0213B72
 //GxEPD2_BW<GxEPD2_213_flex, MAX_HEIGHT(GxEPD2_213_flex)> display(GxEPD2_213_flex(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1)); // GDEW0213I5F
 //GxEPD2_BW<GxEPD2_290, MAX_HEIGHT(GxEPD2_290)> display(GxEPD2_290(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
 //GxEPD2_BW<GxEPD2_290_T5, MAX_HEIGHT(GxEPD2_290_T5)> display(GxEPD2_290_T5(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1)); // GDEW029T5
@@ -151,7 +155,8 @@
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPAY_BUFFER_SIZE / (EPD::WIDTH / 8))
 // select one and adapt to your mapping
 //GxEPD2_BW<GxEPD2_154, MAX_HEIGHT(GxEPD2_154)> display(GxEPD2_154(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_BW<GxEPD2_213, MAX_HEIGHT(GxEPD2_213)> display(GxEPD2_213(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
+//GxEPD2_BW<GxEPD2_213, MAX_HEIGHT(GxEPD2_213)> display(GxEPD2_213(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // GDE0213B1, phased out
+//GxEPD2_BW<GxEPD2_213_B72, MAX_HEIGHT(GxEPD2_213_B72)> display(GxEPD2_213_B72(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // GDEH0213B72
 //GxEPD2_BW<GxEPD2_213_flex, MAX_HEIGHT(GxEPD2_213_flex)> display(GxEPD2_213_flex(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // GDEW0213I5F
 //GxEPD2_BW<GxEPD2_290, MAX_HEIGHT(GxEPD2_290)> display(GxEPD2_290(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
 //GxEPD2_BW<GxEPD2_290_T5, MAX_HEIGHT(GxEPD2_290_T5)> display(GxEPD2_290_T5(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // GDEW029T5
@@ -174,7 +179,8 @@
 // NOTE: the 11-pinholes for pin connectors are not through level converter, and the VCC pin is 5V, only FCP connector pins are through level converter
 // select one and adapt to your mapping
 //GxEPD2_BW<GxEPD2_154, MAX_HEIGHT(GxEPD2_154)> display(GxEPD2_154(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7));
-//GxEPD2_BW<GxEPD2_213, MAX_HEIGHT(GxEPD2_213)> display(GxEPD2_213(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7));
+//GxEPD2_BW<GxEPD2_213, MAX_HEIGHT(GxEPD2_213)> display(GxEPD2_213(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDE0213B1, phased out
+//GxEPD2_BW<GxEPD2_213_B72, MAX_HEIGHT(GxEPD2_213_B72)> display(GxEPD2_213_B72(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEH0213B72
 //GxEPD2_BW<GxEPD2_213_flex, MAX_HEIGHT(GxEPD2_213_flex)> display(GxEPD2_213_flex(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEW0213I5F
 //GxEPD2_BW<GxEPD2_290, MAX_HEIGHT(GxEPD2_290)> display(GxEPD2_290(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7));
 //GxEPD2_BW<GxEPD2_290_T5, MAX_HEIGHT(GxEPD2_290_T5)> display(GxEPD2_290_T5(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEW029T5
@@ -200,6 +206,7 @@
 
 // comment out unused bitmaps to reduce code space used
 #include "bitmaps/Bitmaps200x200.h" // 1.54" b/w
+#include "bitmaps/Bitmaps104x212.h" // 2.13" b/w flexible GDEW0213I5F
 #include "bitmaps/Bitmaps128x250.h" // 2.13" b/w
 #include "bitmaps/Bitmaps128x296.h" // 2.9"  b/w
 #include "bitmaps/Bitmaps176x264.h" // 2.7"  b/w
@@ -219,6 +226,7 @@
 
 // select only one to fit in code space
 #include "bitmaps/Bitmaps200x200.h" // 1.54" b/w
+//#include "bitmaps/Bitmaps104x212.h" // 2.13" b/w flexible GDEW0213I5F
 //#include "bitmaps/Bitmaps128x250.h" // 2.13" b/w
 //#include "bitmaps/Bitmaps128x296.h" // 2.9"  b/w
 //#include "bitmaps/Bitmaps176x264.h" // 2.7"  b/w
@@ -271,6 +279,11 @@ void loop()
 {
 }
 
+// note for partial update window and setPartialWindow() method:
+// partial update window size and position is on byte boundary in physical x direction
+// the size is increased in setPartialWindow() if x or w are not multiple of 8 for even rotation, y or h for odd rotation
+// see also comment in GxEPD2_BW.h, GxEPD2_3C.h or GxEPD2_GFX.h for method setPartialWindow()
+
 const char HelloWorld[] = "Hello World!";
 const char HelloArduino[] = "Hello Arduino!";
 const char HelloEpaper[] = "Hello E-Paper!";
@@ -283,8 +296,9 @@ void helloWorld()
   display.setTextColor(GxEPD_BLACK);
   int16_t tbx, tby; uint16_t tbw, tbh;
   display.getTextBounds(HelloWorld, 0, 0, &tbx, &tby, &tbw, &tbh);
-  uint16_t x = (display.width() - tbw) / 2;
-  uint16_t y = (display.height() + tbh) / 2; // y is base line!
+  // center bounding box by transposition of origin:
+  uint16_t x = ((display.width() - tbw) / 2) - tbx;
+  uint16_t y = ((display.height() - tbh) / 2) - tby;
   display.setFullWindow();
   display.firstPage();
   do
@@ -311,10 +325,10 @@ void helloWorldForDummies()
   display.setTextColor(GxEPD_BLACK);
   // Adafruit_GFX has a handy method getTextBounds() to determine the boundary box for a text for the actual font
   int16_t tbx, tby; uint16_t tbw, tbh; // boundary box window
-  display.getTextBounds(text, 0, 0, &tbx, &tby, &tbw, &tbh); // it works for 0, 0, fortunately (negative tby!)
-  // center the boundary box of the text
-  uint16_t x = (display.width() - tbw) / 2;
-  uint16_t y = (display.height() + tbh) / 2; // y is base line!
+  display.getTextBounds(text, 0, 0, &tbx, &tby, &tbw, &tbh); // it works for origin 0, 0, fortunately (negative tby!)
+  // center bounding box by transposition of origin:
+  uint16_t x = ((display.width() - tbw) / 2) - tbx;
+  uint16_t y = ((display.height() - tbh) / 2) - tby;
   // full window mode is the initial mode, set it anyway
   display.setFullWindow();
   // here we use paged drawing, even if the processor has enough RAM for full buffer
@@ -371,26 +385,25 @@ void helloFullScreenPartialMode()
   int16_t tbx, tby; uint16_t tbw, tbh;
   // center update text
   display.getTextBounds(fullscreen, 0, 0, &tbx, &tby, &tbw, &tbh);
-  uint16_t utx = (display.width() - tbw) / 2;
+  uint16_t utx = ((display.width() - tbw) / 2) - tbx;
+  uint16_t uty = ((display.height() / 4) - tbh / 2) - tby;
   // center update mode
   display.getTextBounds(updatemode, 0, 0, &tbx, &tby, &tbw, &tbh);
-  uint16_t umx = (display.width() - tbw) / 2;
+  uint16_t umx = ((display.width() - tbw) / 2) - tbx;
+  uint16_t umy = ((display.height() * 3 / 4) - tbh / 2) - tby;
   // center HelloWorld
   display.getTextBounds(HelloWorld, 0, 0, &tbx, &tby, &tbw, &tbh);
-  uint16_t hwx = (display.width() - tbw) / 2;
-  uint16_t y;
+  uint16_t hwx = ((display.width() - tbw) / 2) - tbx;
+  uint16_t hwy = ((display.height() - tbh) / 2) - tby;
   display.firstPage();
   do
   {
     display.fillScreen(GxEPD_WHITE);
-    y = (display.height() + tbh) / 2; // y is base line!
-    display.setCursor(hwx, y);
+    display.setCursor(hwx, hwy);
     display.print(HelloWorld);
-    y = display.height() / 4 + tbh / 2; // y is base line!
-    display.setCursor(utx, y);
+    display.setCursor(utx, uty);
     display.print(fullscreen);
-    y = display.height() * 3 / 4 + tbh / 2; // y is base line!
-    display.setCursor(umx, y);
+    display.setCursor(umx, umy);
     display.print(updatemode);
   }
   while (display.nextPage());
@@ -406,13 +419,14 @@ void helloArduino()
   int16_t tbx, tby; uint16_t tbw, tbh;
   // align with centered HelloWorld
   display.getTextBounds(HelloWorld, 0, 0, &tbx, &tby, &tbw, &tbh);
-  uint16_t x = (display.width() - tbw) / 2;
+  uint16_t x = ((display.width() - tbw) / 2) - tbx;
   // height might be different
   display.getTextBounds(HelloArduino, 0, 0, &tbx, &tby, &tbw, &tbh);
-  uint16_t y = display.height() / 4 + tbh / 2; // y is base line!
+  uint16_t y = ((display.height() / 4) - tbh / 2) - tby; // y is base line!
   // make the window big enough to cover (overwrite) descenders of previous text
   uint16_t wh = FreeMonoBold9pt7b.yAdvance;
-  display.setPartialWindow(0, y - tbh, display.width(), wh);
+  uint16_t wy = (display.height() / 4) - wh / 2;
+  display.setPartialWindow(0, wy, display.width(), wh);
   display.firstPage();
   do
   {
@@ -435,13 +449,14 @@ void helloEpaper()
   int16_t tbx, tby; uint16_t tbw, tbh;
   // align with centered HelloWorld
   display.getTextBounds(HelloWorld, 0, 0, &tbx, &tby, &tbw, &tbh);
-  uint16_t x = (display.width() - tbw) / 2;
+  uint16_t x = ((display.width() - tbw) / 2) - tbx;
   // height might be different
   display.getTextBounds(HelloEpaper, 0, 0, &tbx, &tby, &tbw, &tbh);
-  uint16_t y = display.height() * 3 / 4 + tbh / 2; // y is base line!
+  uint16_t y = (display.height() * 3 / 4) + tbh / 2; // y is base line!
   // make the window big enough to cover (overwrite) descenders of previous text
   uint16_t wh = FreeMonoBold9pt7b.yAdvance;
-  display.setPartialWindow(0, y - tbh, display.width(), wh);
+  uint16_t wy = (display.height() * 3 / 4) - wh / 2;
+  display.setPartialWindow(0, wy, display.width(), wh);
   display.firstPage();
   do
   {
@@ -457,16 +472,17 @@ void deepSleepTest()
 {
   //Serial.println("deepSleepTest");
   const char hibernating[] = "hibernating ...";
-  const char wokeup[] = "woke up from deep sleep";
-  const char again[] = "hibernating again ...";
+  const char wokeup[] = "woke up";
+  const char from[] = "from deep sleep";
+  const char again[] = "again";
   display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
   display.setTextColor(GxEPD_BLACK);
   int16_t tbx, tby; uint16_t tbw, tbh;
   // center text
   display.getTextBounds(hibernating, 0, 0, &tbx, &tby, &tbw, &tbh);
-  uint16_t x = (display.width() - tbw) / 2;
-  uint16_t y = (display.height() + tbh) / 2; // y is base line!
+  uint16_t x = ((display.width() - tbw) / 2) - tbx;
+  uint16_t y = ((display.height() - tbh) / 2) - tby;
   display.setFullWindow();
   display.firstPage();
   do
@@ -479,23 +495,35 @@ void deepSleepTest()
   display.hibernate();
   delay(5000);
   display.getTextBounds(wokeup, 0, 0, &tbx, &tby, &tbw, &tbh);
-  x = (display.width() - tbw) / 2;
+  uint16_t wx = (display.width() - tbw) / 2;
+  uint16_t wy = (display.height() / 3) + tbh / 2; // y is base line!
+  display.getTextBounds(from, 0, 0, &tbx, &tby, &tbw, &tbh);
+  uint16_t fx = (display.width() - tbw) / 2;
+  uint16_t fy = (display.height() * 2 / 3) + tbh / 2; // y is base line!
   display.firstPage();
   do
   {
     display.fillScreen(GxEPD_WHITE);
-    display.setCursor(x, y);
+    display.setCursor(wx, wy);
     display.print(wokeup);
+    display.setCursor(fx, fy);
+    display.print(from);
   }
   while (display.nextPage());
   delay(5000);
+  display.getTextBounds(hibernating, 0, 0, &tbx, &tby, &tbw, &tbh);
+  uint16_t hx = (display.width() - tbw) / 2;
+  uint16_t hy = (display.height() / 3) + tbh / 2; // y is base line!
   display.getTextBounds(again, 0, 0, &tbx, &tby, &tbw, &tbh);
-  x = (display.width() - tbw) / 2;
+  uint16_t ax = (display.width() - tbw) / 2;
+  uint16_t ay = (display.height() * 2 / 3) + tbh / 2; // y is base line!
   display.firstPage();
   do
   {
     display.fillScreen(GxEPD_WHITE);
-    display.setCursor(x, y);
+    display.setCursor(hx, hy);
+    display.print(hibernating);
+    display.setCursor(ax, ay);
     display.print(again);
   }
   while (display.nextPage());
@@ -583,6 +611,12 @@ void drawFont(const char name[], const GFXfont* f)
   display.println("pqrstuvwxyz{|}~ ");
 }
 
+// note for partial update window and setPartialWindow() method:
+// partial update window size and position is on byte boundary in physical x direction
+// the size is increased in setPartialWindow() if x or w are not multiple of 8 for even rotation, y or h for odd rotation
+// see also comment in GxEPD2_BW.h, GxEPD2_3C.h or GxEPD2_GFX.h for method setPartialWindow()
+// showPartialUpdate() purposely uses values that are not multiples of 8 to test this
+
 void showPartialUpdate()
 {
   // some useful background
@@ -651,6 +685,9 @@ void showPartialUpdate()
 void drawBitmaps()
 {
   display.setFullWindow();
+#ifdef _GxBitmaps104x212_H_
+  drawBitmaps104x212();
+#endif
 #ifdef _GxBitmaps128x250_H_
   drawBitmaps128x250();
 #endif
@@ -749,10 +786,10 @@ void drawBitmaps200x200()
       display.writeScreenBuffer(); // use default for white
       display.writeImage(bitmaps[i], x, y, 200, 200, false, mirror_y, true);
       display.refresh(true);
-      if ((display.epd2.hasFastPartialUpdate) && (display.epd2.panel == GxEPD2::GDEW027W3))
+      if (display.epd2.hasFastPartialUpdate)
       {
-        // for differential update: set previous buffer equal to current (IL91874 doesn't switch on refresh)
-        // display.writeScreenBuffer(); // above is enough for the other controllers
+        // for differential update: set previous buffer equal to current buffer in controller
+        display.epd2.writeScreenBufferAgain(); // use default for white
         display.epd2.writeImageAgain(bitmaps[i], x, y, 200, 200, false, mirror_y, true);
       }
       delay(2000);
@@ -771,6 +808,37 @@ void drawBitmaps200x200()
 }
 #endif
 
+#ifdef _GxBitmaps104x212_H_
+void drawBitmaps104x212()
+{
+#if !defined(__AVR)
+  const unsigned char* bitmaps[] =
+  {
+    WS_Bitmap104x212, Bitmap104x212_1, Bitmap104x212_2, Bitmap104x212_3
+  };
+#else
+  const unsigned char* bitmaps[] =
+  {
+    WS_Bitmap104x212, Bitmap104x212_1, Bitmap104x212_2, Bitmap104x212_3
+  };
+#endif
+  if (display.epd2.panel == GxEPD2::GDEW0213I5F)
+  {
+    for (uint16_t i = 0; i < sizeof(bitmaps) / sizeof(char*); i++)
+    {
+      display.firstPage();
+      do
+      {
+        display.fillScreen(GxEPD_WHITE);
+        display.drawBitmap(0, 0, bitmaps[i], display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
+      }
+      while (display.nextPage());
+      delay(2000);
+    }
+  }
+}
+#endif
+
 #ifdef _GxBitmaps128x250_H_
 void drawBitmaps128x250()
 {
@@ -785,7 +853,7 @@ void drawBitmaps128x250()
     Bitmap128x250_1, logo128x250, first128x250, second128x250, third128x250
   };
 #endif
-  if (display.epd2.panel == GxEPD2::GDE0213B1)
+  if ((display.epd2.panel == GxEPD2::GDE0213B1) || (display.epd2.panel == GxEPD2::GDEH0213B72))
   {
     bool m = display.mirror(true);
     for (uint16_t i = 0; i < sizeof(bitmaps) / sizeof(char*); i++)
@@ -930,15 +998,15 @@ void drawBitmaps800x600()
 #if defined(ESP8266) || defined(ESP32)
   if (display.epd2.panel == GxEPD2::ED060SCT)
   {
-//    Serial.print("sizeof(WS_zoo_800x600) is "); Serial.println(sizeof(WS_zoo_800x600));
+    //    Serial.print("sizeof(WS_zoo_800x600) is "); Serial.println(sizeof(WS_zoo_800x600));
     display.drawNative(WS_zoo_800x600, 0, 0, 0, 800, 600, false, false, true);
     delay(2000);
-//    Serial.print("sizeof(WS_pic_1200x825) is "); Serial.println(sizeof(WS_pic_1200x825));
-//    display.drawNative((const uint8_t*)WS_pic_1200x825, 0, 0, 0, 1200, 825, false, false, true);
-//    delay(2000);
-//    Serial.print("sizeof(WS_acaa_1024x731) is "); Serial.println(sizeof(WS_acaa_1024x731));
-//    display.drawNative(WS_acaa_1024x731, 0, 0, 0, 1024, 731, false, false, true);
-//    delay(2000);
+    //    Serial.print("sizeof(WS_pic_1200x825) is "); Serial.println(sizeof(WS_pic_1200x825));
+    //    display.drawNative((const uint8_t*)WS_pic_1200x825, 0, 0, 0, 1200, 825, false, false, true);
+    //    delay(2000);
+    //    Serial.print("sizeof(WS_acaa_1024x731) is "); Serial.println(sizeof(WS_acaa_1024x731));
+    //    display.drawNative(WS_acaa_1024x731, 0, 0, 0, 1024, 731, false, false, true);
+    //    delay(2000);
   }
 #endif
 }

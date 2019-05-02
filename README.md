@@ -38,10 +38,18 @@
 - Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
 - Good Dispay ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
 
+### Note on documentation
+- GxEPD2 uses Adafruit_GFX for Graphics and Text support, which is well documented there
+- GxEPD2 uses meaningful method names, and has some comments in the header files
+- consult the header files GxEPD2_BW.h, GxEPD2_3C.h and GxEPD2_GFX.h
+- for the concept of paged drawing and picture loop see: 
+- https://github.com/olikraus/u8glib/wiki/tpictureloop
+
 ### Supported SPI e-paper panels from Good Display:
 - GDEP015OC1      1.54" b/w
 - GDEW0154Z04   1.54" b/w/r 200x200
 - GDE0213B1         2.13" b/w
+- GDEH0213B72       2.13" b/w, replacement for GDE0213B1
 - GDEW0213I5F    2.13" b/w flexible
 - GDEW0213Z16   2.13" b/w/r
 - GDEH029A1        2.9" b/w
@@ -58,6 +66,10 @@
 #### other supported panels
 - ED060SCT        6" grey levels, on Waveshare e-Paper IT8951 Driver HAT
 
+### Version 1.1.6
+- added support for GDEH0213B72 2.13" b/w, replacement for GDE0213B1
+- changed SPI speed for IT8951 Driver HAT to 24MHz for write, 10MHz for read
+- minor fixes, e.g. centering of text bounding box in GxEPD2_Example
 #### Version 1.1.5
 - added support for 6" ED060SCT on Waveshare e-Paper IT8951 Driver HAT
 - uses 3.3V data lines, but 5V supply (~80mA active, ~20mA stand-by, sleep doesn't work)

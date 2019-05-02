@@ -57,7 +57,8 @@
 
 GxEPD2_it60::GxEPD2_it60(int8_t cs, int8_t dc, int8_t rst, int8_t busy) :
   GxEPD2_EPD(cs, dc, rst, busy, LOW, 10000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate),
-  _spi_settings(1000000, MSBFIRST, SPI_MODE0)
+  _spi_settings(24000000, MSBFIRST, SPI_MODE0),
+  _spi_settings_for_read(1000000, MSBFIRST, SPI_MODE0)
 {
 }
 
@@ -77,7 +78,7 @@ void GxEPD2_it60::init(uint32_t serial_diag_bitrate, bool initial, bool pulldown
     delay(200);
     digitalWrite(_rst, HIGH);
     delay(200);
-    _waitWhileBusy("init reset_to_ready", reset_to_redy_time);
+    _waitWhileBusy("init reset_to_ready", reset_to_ready_time);
   }
 
   _writeCommand16(USDEF_I80_CMD_GET_DEV_INFO);
@@ -118,7 +119,7 @@ void GxEPD2_it60::clearScreen(uint8_t value)
   {
     SPI.transfer(value);
 #if defined(ESP8266) || defined(ESP32)
-    if(0 == i % 10000) yield();
+    if (0 == i % 10000) yield();
 #endif
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);
@@ -146,7 +147,7 @@ void GxEPD2_it60::_writeScreenBuffer(uint8_t value)
   {
     SPI.transfer(value);
 #if defined(ESP8266) || defined(ESP32)
-    if(0 == i % 10000) yield();
+    if (0 == i % 10000) yield();
 #endif
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);
@@ -519,6 +520,7 @@ void GxEPD2_it60::_readData16(uint16_t* d, uint32_t n)
   for (uint32_t i = 0; i < n; i++)
   {
     *d++ = _transfer16(0);
+    //_waitWhileBusy("_readData16 data", default_wait_time);
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);
   SPI.endTransaction();

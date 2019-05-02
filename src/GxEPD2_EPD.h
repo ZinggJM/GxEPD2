@@ -39,6 +39,11 @@ class GxEPD2_EPD
     virtual void writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
     virtual void writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
     // for differential update: set current and previous buffers equal (for fast partial update to work correctly)
+    virtual void writeScreenBufferAgain(uint8_t value) // init controller memory (default white)
+    {
+      // most controllers with differential update do switch buffers on refresh, can use:
+      writeScreenBuffer(value);
+    }
     virtual void writeImageAgain(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false)
     {
       // most controllers with differential update do switch buffers on refresh, can use:
