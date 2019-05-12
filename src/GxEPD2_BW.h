@@ -148,6 +148,12 @@ class GxEPD2_BW : public Adafruit_GFX
       epd2.refresh(partial_update_mode);
     }
 
+    void display(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
+    {
+      epd2.writeImage(_buffer, 0, 0, WIDTH, HEIGHT);
+      epd2.refresh(x, y, w, h);
+    }
+
     void setFullWindow()
     {
       _using_partial_mode = false;
