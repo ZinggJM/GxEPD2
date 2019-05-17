@@ -59,22 +59,22 @@
 //GxEPD2_BW<GxEPD2_270, GxEPD2_270::HEIGHT> display(GxEPD2_270(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 //GxEPD2_BW<GxEPD2_420, GxEPD2_420::HEIGHT> display(GxEPD2_420(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 // can use only half buffer size
-//GxEPD2_BW < GxEPD2_583, GxEPD2_583::HEIGHT / 2 > display(GxEPD2_583(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
-//GxEPD2_BW < GxEPD2_750, GxEPD2_750::HEIGHT / 2 > display(GxEPD2_750(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
+////GxEPD2_BW < GxEPD2_583, GxEPD2_583::HEIGHT / 2 > display(GxEPD2_583(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
+////GxEPD2_BW < GxEPD2_750, GxEPD2_750::HEIGHT / 2 > display(GxEPD2_750(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 // 3-color e-papers
 //GxEPD2_3C<GxEPD2_154c, GxEPD2_154c::HEIGHT> display(GxEPD2_154c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 //GxEPD2_3C<GxEPD2_213c, GxEPD2_213c::HEIGHT> display(GxEPD2_213c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 //GxEPD2_3C<GxEPD2_290c, GxEPD2_290c::HEIGHT> display(GxEPD2_290c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 //GxEPD2_3C<GxEPD2_270c, GxEPD2_270c::HEIGHT> display(GxEPD2_270c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 // can use only half buffer size
-//GxEPD2_3C<GxEPD2_420c, GxEPD2_420c::HEIGHT / 2> display(GxEPD2_420c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
+////GxEPD2_3C<GxEPD2_420c, GxEPD2_420c::HEIGHT / 2> display(GxEPD2_420c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 // can use only quarter buffer size
-//GxEPD2_3C < GxEPD2_583c, GxEPD2_583c::HEIGHT / 4 > display(GxEPD2_583c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
-//GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT / 4> display(GxEPD2_750c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
+////GxEPD2_3C < GxEPD2_583c, GxEPD2_583c::HEIGHT / 4 > display(GxEPD2_583c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
+////GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT / 4> display(GxEPD2_750c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 // grey levels parallel IF e-papers on Waveshare e-Paper IT8951 Driver HAT
 // HRDY -> 4, RST -> 2, CS -> SS(15), SCK -> SCK(14), MOSI -> MOSI(D7(13)), MISO -> MISO(D6(12)), GND -> GND, 5V -> 5V
 // note: 5V supply needs to be exact and strong; 5V pin of USB powered Wemos D1 mini doesn't work!
-//GxEPD2_BW<GxEPD2_it60, GxEPD2_it60::HEIGHT / 8> display(GxEPD2_it60(/*CS=5*/ SS, /*DC=*/ 0, /*RST=*/ 2, /*BUSY=*/ 4));
+////GxEPD2_BW<GxEPD2_it60, GxEPD2_it60::HEIGHT / 8> display(GxEPD2_it60(/*CS=5*/ SS, /*DC=*/ 0, /*RST=*/ 2, /*BUSY=*/ 4));
 
 // ***** for mapping of Waveshare e-Paper ESP8266 Driver Board *****
 // select one , can use full buffer size (full HEIGHT)
@@ -87,18 +87,18 @@
 //GxEPD2_BW<GxEPD2_270, GxEPD2_270::HEIGHT> display(GxEPD2_270(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
 //GxEPD2_BW<GxEPD2_420, GxEPD2_420::HEIGHT> display(GxEPD2_420(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
 // can use only half buffer size
-//GxEPD2_BW < GxEPD2_583, GxEPD2_583::HEIGHT / 2 > display(GxEPD2_583(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
-//GxEPD2_BW < GxEPD2_750, GxEPD2_750::HEIGHT / 2 > display(GxEPD2_750(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
+////GxEPD2_BW < GxEPD2_583, GxEPD2_583::HEIGHT / 2 > display(GxEPD2_583(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
+////GxEPD2_BW < GxEPD2_750, GxEPD2_750::HEIGHT / 2 > display(GxEPD2_750(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
 // 3-color e-papers
 //GxEPD2_3C<GxEPD2_154c, GxEPD2_154c::HEIGHT> display(GxEPD2_154c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
 //GxEPD2_3C<GxEPD2_213c, GxEPD2_213c::HEIGHT> display(GxEPD2_213c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
 //GxEPD2_3C<GxEPD2_290c, GxEPD2_290c::HEIGHT> display(GxEPD2_290c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
 //GxEPD2_3C<GxEPD2_270c, GxEPD2_270c::HEIGHT> display(GxEPD2_270c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
 // can use only half buffer size
-//GxEPD2_3C<GxEPD2_420c, GxEPD2_420c::HEIGHT / 2> display(GxEPD2_420c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
+////GxEPD2_3C<GxEPD2_420c, GxEPD2_420c::HEIGHT / 2> display(GxEPD2_420c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
 // can use only quarter buffer size
-//GxEPD2_3C<GxEPD2_583c, GxEPD2_583c::HEIGHT / 4> display(GxEPD2_583c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
-//GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT / 4> display(GxEPD2_750c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
+////GxEPD2_3C<GxEPD2_583c, GxEPD2_583c::HEIGHT / 4> display(GxEPD2_583c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
+////GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT / 4> display(GxEPD2_750c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
 #endif
 
 #if defined(ESP32)
@@ -139,66 +139,17 @@
 //GxEPD2_BW<GxEPD2_290_T5, MAX_HEIGHT(GxEPD2_290_T5)> display(GxEPD2_290_T5(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1)); // GDEW029T5
 //GxEPD2_BW<GxEPD2_270, MAX_HEIGHT(GxEPD2_270)> display(GxEPD2_270(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
 //GxEPD2_BW<GxEPD2_420, MAX_HEIGHT(GxEPD2_420)> display(GxEPD2_420(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-//GxEPD2_BW<GxEPD2_583, MAX_HEIGHT(GxEPD2_583)> display(GxEPD2_583(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-//GxEPD2_BW<GxEPD2_750, MAX_HEIGHT(GxEPD2_750)> display(GxEPD2_750(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
+////GxEPD2_BW<GxEPD2_583, MAX_HEIGHT(GxEPD2_583)> display(GxEPD2_583(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
+////GxEPD2_BW<GxEPD2_750, MAX_HEIGHT(GxEPD2_750)> display(GxEPD2_750(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
 // 3-color e-papers
 #define MAX_HEIGHT_3C(EPD) (EPD::HEIGHT <= (MAX_DISPAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8) ? EPD::HEIGHT : (MAX_DISPAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8))
 //GxEPD2_3C<GxEPD2_154c, MAX_HEIGHT_3C(GxEPD2_154c)> display(GxEPD2_154c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
 //GxEPD2_3C<GxEPD2_213c, MAX_HEIGHT_3C(GxEPD2_213c)> display(GxEPD2_213c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
 //GxEPD2_3C<GxEPD2_290c, MAX_HEIGHT_3C(GxEPD2_290c)> display(GxEPD2_290c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
 //GxEPD2_3C<GxEPD2_270c, MAX_HEIGHT_3C(GxEPD2_270c)> display(GxEPD2_270c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-//GxEPD2_3C<GxEPD2_420c, MAX_HEIGHT_3C(GxEPD2_420c)> display(GxEPD2_420c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-//GxEPD2_3C<GxEPD2_583c, MAX_HEIGHT_3C(GxEPD2_583c)> display(GxEPD2_583c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-//GxEPD2_3C<GxEPD2_750c, MAX_HEIGHT_3C(GxEPD2_750c)> display(GxEPD2_750c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
-#endif
-
-#if defined(__AVR)
-#define MAX_DISPAY_BUFFER_SIZE 800 // 
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPAY_BUFFER_SIZE / (EPD::WIDTH / 8))
-// select one and adapt to your mapping
-//GxEPD2_BW<GxEPD2_154, MAX_HEIGHT(GxEPD2_154)> display(GxEPD2_154(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_BW<GxEPD2_213, MAX_HEIGHT(GxEPD2_213)> display(GxEPD2_213(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // GDE0213B1, phased out
-//GxEPD2_BW<GxEPD2_213_B72, MAX_HEIGHT(GxEPD2_213_B72)> display(GxEPD2_213_B72(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // GDEH0213B72
-//GxEPD2_BW<GxEPD2_213_flex, MAX_HEIGHT(GxEPD2_213_flex)> display(GxEPD2_213_flex(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // GDEW0213I5F
-//GxEPD2_BW<GxEPD2_290, MAX_HEIGHT(GxEPD2_290)> display(GxEPD2_290(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_BW<GxEPD2_290_T5, MAX_HEIGHT(GxEPD2_290_T5)> display(GxEPD2_290_T5(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // GDEW029T5
-//GxEPD2_BW<GxEPD2_270, MAX_HEIGHT(GxEPD2_270)> display(GxEPD2_270(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_BW<GxEPD2_420, MAX_HEIGHT(GxEPD2_420)> display(GxEPD2_420(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_BW<GxEPD2_583, MAX_HEIGHT(GxEPD2_583)> display(GxEPD2_583(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_BW<GxEPD2_750, MAX_HEIGHT(GxEPD2_750)> display(GxEPD2_750(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-// 3-color e-papers
-#define MAX_HEIGHT_3C(EPD) (EPD::HEIGHT <= (MAX_DISPAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8) ? EPD::HEIGHT : (MAX_DISPAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8))
-//GxEPD2_3C<GxEPD2_154c, MAX_HEIGHT_3C(GxEPD2_154c)> display(GxEPD2_154c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_3C<GxEPD2_213c, MAX_HEIGHT_3C(GxEPD2_213c)> display(GxEPD2_213c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_3C<GxEPD2_290c, MAX_HEIGHT_3C(GxEPD2_290c)> display(GxEPD2_290c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_3C<GxEPD2_270c, MAX_HEIGHT_3C(GxEPD2_270c)> display(GxEPD2_270c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_3C<GxEPD2_420c, MAX_HEIGHT_3C(GxEPD2_420c)> display(GxEPD2_420c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_3C<GxEPD2_583c, MAX_HEIGHT_3C(GxEPD2_583c)> display(GxEPD2_583c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-//GxEPD2_3C<GxEPD2_750c, MAX_HEIGHT_3C(GxEPD2_750c)> display(GxEPD2_750c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-
-// ***** for mapping of Waveshare Universal e-Paper Raw Panel Driver Shield for Arduino / NUCLEO *****
-// the RST line is not connected through level converter, but has a pull up resistor and a pull down diode to the Arduino pin; this is safe for 5V Arduino
-// NOTE: the 11-pinholes for pin connectors are not through level converter, and the VCC pin is 5V, only FCP connector pins are through level converter
-// select one and adapt to your mapping
-//GxEPD2_BW<GxEPD2_154, MAX_HEIGHT(GxEPD2_154)> display(GxEPD2_154(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7));
-//GxEPD2_BW<GxEPD2_213, MAX_HEIGHT(GxEPD2_213)> display(GxEPD2_213(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDE0213B1, phased out
-//GxEPD2_BW<GxEPD2_213_B72, MAX_HEIGHT(GxEPD2_213_B72)> display(GxEPD2_213_B72(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEH0213B72
-//GxEPD2_BW<GxEPD2_213_flex, MAX_HEIGHT(GxEPD2_213_flex)> display(GxEPD2_213_flex(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEW0213I5F
-//GxEPD2_BW<GxEPD2_290, MAX_HEIGHT(GxEPD2_290)> display(GxEPD2_290(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7));
-//GxEPD2_BW<GxEPD2_290_T5, MAX_HEIGHT(GxEPD2_290_T5)> display(GxEPD2_290_T5(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEW029T5
-//GxEPD2_BW<GxEPD2_270, MAX_HEIGHT(GxEPD2_270)> display(GxEPD2_270(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7));
-//GxEPD2_BW<GxEPD2_420, MAX_HEIGHT(GxEPD2_420)> display(GxEPD2_420(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7));
-//GxEPD2_BW<GxEPD2_583, MAX_HEIGHT(GxEPD2_583)> display(GxEPD2_583(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7));
-//GxEPD2_BW<GxEPD2_750, MAX_HEIGHT(GxEPD2_750)> display(GxEPD2_750(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7));
-// 3-color e-papers
-#define MAX_HEIGHT_3C(EPD) (EPD::HEIGHT <= (MAX_DISPAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8) ? EPD::HEIGHT : (MAX_DISPAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8))
-//GxEPD2_3C<GxEPD2_154c, MAX_HEIGHT_3C(GxEPD2_154c)> display(GxEPD2_154c(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7));
-//GxEPD2_3C<GxEPD2_213c, MAX_HEIGHT_3C(GxEPD2_213c)> display(GxEPD2_213c(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7));
-//GxEPD2_3C<GxEPD2_290c, MAX_HEIGHT_3C(GxEPD2_290c)> display(GxEPD2_290c(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7));
-//GxEPD2_3C<GxEPD2_270c, MAX_HEIGHT_3C(GxEPD2_270c)> display(GxEPD2_270c(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7));
-//GxEPD2_3C<GxEPD2_420c, MAX_HEIGHT_3C(GxEPD2_420c)> display(GxEPD2_420c(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7));
-//GxEPD2_3C<GxEPD2_583c, MAX_HEIGHT_3C(GxEPD2_583c)> display(GxEPD2_583c(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7));
-//GxEPD2_3C<GxEPD2_750c, MAX_HEIGHT_3C(GxEPD2_750c)> display(GxEPD2_750c(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7));
+////GxEPD2_3C<GxEPD2_420c, MAX_HEIGHT_3C(GxEPD2_420c)> display(GxEPD2_420c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
+////GxEPD2_3C<GxEPD2_583c, MAX_HEIGHT_3C(GxEPD2_583c)> display(GxEPD2_583c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
+////GxEPD2_3C<GxEPD2_750c, MAX_HEIGHT_3C(GxEPD2_750c)> display(GxEPD2_750c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
 #endif
 
 #include "GxEPD2_boards_added.h"
@@ -303,19 +254,16 @@ void helloWorld()
   // center bounding box by transposition of origin:
   uint16_t x = ((display.width() - tbw) / 2) - tbx;
   uint16_t y = ((display.height() - tbh) / 2) - tby;
+  // full window mode is the initial mode, set it anyway
   display.setFullWindow();
-  display.firstPage();
-  do
-  {
-    display.fillScreen(GxEPD_WHITE);
-    display.setCursor(x, y);
-    display.print(HelloWorld);
-  }
-  while (display.nextPage());
+  display.fillScreen(GxEPD_WHITE);
+  display.setCursor(x, y);
+  display.print(HelloWorld);
+  display.display(false); // full update
   //Serial.println("helloWorld done");
 }
 
-void helloWorldForDummies()
+void helloWorldForDummiesNotPaged()
 {
   //Serial.println("helloWorld");
   const char text[] = "Hello World!";
@@ -335,29 +283,14 @@ void helloWorldForDummies()
   uint16_t y = ((display.height() - tbh) / 2) - tby;
   // full window mode is the initial mode, set it anyway
   display.setFullWindow();
-  // here we use paged drawing, even if the processor has enough RAM for full buffer
-  // so this can be used with any supported processor board.
-  // the cost in code overhead and execution time penalty is marginal
-  // tell the graphics class to use paged drawing mode
-  display.firstPage();
-  do
-  {
-    // this part of code is executed multiple times, as many as needed,
-    // in case of full buffer it is executed once
-    // IMPORTANT: each iteration needs to draw the same, to avoid strange effects
-    // use a copy of values that might change, don't read e.g. from analog or pins in the loop!
-    display.fillScreen(GxEPD_WHITE); // set the background to white (fill the buffer with value for white)
-    display.setCursor(x, y); // set the postition to start printing text
-    display.print(text); // print some text
-    // end of part executed multiple times
-  }
+  // here we use full buffered drawing
+  // only part of the display is used if page_height is less than HEIGHT
+  display.fillScreen(GxEPD_WHITE); // set the background to white (fill the buffer with value for white)
+  display.setCursor(x, y); // set the postition to start printing text
+  display.print(text); // print some text
   // tell the graphics class to transfer the buffer content (page) to the controller buffer
-  // the graphics class will command the controller to refresh to the screen when the last page has been transferred
-  // returns true if more pages need be drawn and transferred
-  // returns false if the last page has been transferred and the screen refreshed for panels without fast partial update
-  // returns false for panels with fast partial update when the controller buffer has been written once more, to make the differential buffers equal
-  // (for full buffered with fast partial update the (full) buffer is just transferred again, and false returned)
-  while (display.nextPage());
+  // and to refresh to the screen
+  display.display(false); // full update
   //Serial.println("helloWorld done");
 }
 
@@ -368,7 +301,8 @@ void helloFullScreenPartialMode()
   const char fpm[] = "fast partial mode";
   const char spm[] = "slow partial mode";
   const char npm[] = "no partial mode";
-  display.setPartialWindow(0, 0, display.width(), display.height());
+  // full window mode is the initial mode, set it anyway
+  display.setFullWindow();
   display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
   display.setTextColor(GxEPD_BLACK);
@@ -399,18 +333,14 @@ void helloFullScreenPartialMode()
   display.getTextBounds(HelloWorld, 0, 0, &tbx, &tby, &tbw, &tbh);
   uint16_t hwx = ((display.width() - tbw) / 2) - tbx;
   uint16_t hwy = ((display.height() - tbh) / 2) - tby;
-  display.firstPage();
-  do
-  {
-    display.fillScreen(GxEPD_WHITE);
-    display.setCursor(hwx, hwy);
-    display.print(HelloWorld);
-    display.setCursor(utx, uty);
-    display.print(fullscreen);
-    display.setCursor(umx, umy);
-    display.print(updatemode);
-  }
-  while (display.nextPage());
+  display.fillScreen(GxEPD_WHITE);
+  display.setCursor(hwx, hwy);
+  display.print(HelloWorld);
+  display.setCursor(utx, uty);
+  display.print(fullscreen);
+  display.setCursor(umx, umy);
+  display.print(updatemode);
+  display.display(true); // partial update
   //Serial.println("helloFullScreenPartialMode done");
 }
 
@@ -430,16 +360,13 @@ void helloArduino()
   // make the window big enough to cover (overwrite) descenders of previous text
   uint16_t wh = FreeMonoBold9pt7b.yAdvance;
   uint16_t wy = (display.height() / 4) - wh / 2;
-  display.setPartialWindow(0, wy, display.width(), wh);
-  display.firstPage();
-  do
-  {
-    display.fillScreen(GxEPD_WHITE);
-    //display.drawRect(x, y - tbh, tbw, tbh, GxEPD_BLACK);
-    display.setCursor(x, y);
-    display.print(HelloArduino);
-  }
-  while (display.nextPage());
+  // full window mode is the initial mode, set it anyway
+  display.setFullWindow();
+  // DO NOT display.fillScreen(GxEPD_WHITE); keep current content!
+  display.fillRect(0, wy, display.width(), wh, GxEPD_WHITE); // clear rect instead
+  display.setCursor(x, y);
+  display.print(HelloArduino);
+  display.displayWindow(0, wy, display.width(), wh);
   delay(1000);
   //Serial.println("helloArduino done");
 }
@@ -460,15 +387,13 @@ void helloEpaper()
   // make the window big enough to cover (overwrite) descenders of previous text
   uint16_t wh = FreeMonoBold9pt7b.yAdvance;
   uint16_t wy = (display.height() * 3 / 4) - wh / 2;
-  display.setPartialWindow(0, wy, display.width(), wh);
-  display.firstPage();
-  do
-  {
-    display.fillScreen(GxEPD_WHITE);
-    display.setCursor(x, y);
-    display.print(HelloEpaper);
-  }
-  while (display.nextPage());
+  // full window mode is the initial mode, set it anyway
+  display.setFullWindow();
+  // DO NOT display.fillScreen(GxEPD_WHITE); keep current content!
+  display.fillRect(0, wy, display.width(), wh, GxEPD_WHITE); // clear rect instead
+  display.setCursor(x, y);
+  display.print(HelloEpaper);
+  display.displayWindow(0, wy, display.width(), wh);
   //Serial.println("helloEpaper done");
 }
 
@@ -478,7 +403,7 @@ void helloEpaper()
 #else
 class PrintString : public Print, public String
 {
-public:
+  public:
     size_t write(uint8_t data) override
     {
       return concat(char(data));
@@ -501,36 +426,30 @@ void helloValue(double v, int digits)
   // show what happens, if we use the bounding box for partial window
   uint16_t wx = (display.width() - tbw) / 2;
   uint16_t wy = (display.height() * 3 / 4) - tbh / 2;
-  display.setPartialWindow(wx, wy, tbw, tbh);
-  display.firstPage();
-  do
-  {
-    display.fillScreen(GxEPD_WHITE);
-    display.setCursor(x, y);
-    display.print(valueString);
-  }
-  while (display.nextPage());
+  // full window mode is the initial mode, set it anyway
+  display.setFullWindow();
+  // DO NOT display.fillScreen(GxEPD_WHITE); keep current content!
+  display.fillRect(wx, wy, tbw, tbh, GxEPD_WHITE); // clear rect instead
+  display.setCursor(x, y);
+  display.print(valueString);
+  display.displayWindow(wx, wy, tbw, tbh);
   delay(2000);
   // make the partial window big enough to cover the previous text
   uint16_t ww = tbw; // remember window width
   display.getTextBounds(HelloEpaper, 0, 0, &tbx, &tby, &tbw, &tbh);
   // adjust, because HelloEpaper was aligned, not centered (could calculate this to be precise)
-  ww = max(ww, uint16_t(tbw + 12)); // 12 seems ok 
+  ww = max(ww, uint16_t(tbw + 12)); // 12 seems ok
   wx = (display.width() - tbw) / 2;
   // make the window big enough to cover (overwrite) descenders of previous text
   uint16_t wh = FreeMonoBold9pt7b.yAdvance;
   wy = (display.height() * 3 / 4) - wh / 2;
-  display.setPartialWindow(wx, wy, ww, wh);
+  // DO NOT display.fillScreen(GxEPD_WHITE); keep current content!
+  display.fillRect(wx, wy, ww, wh, GxEPD_WHITE); // clear rect instead
+  display.setCursor(x, y);
+  display.print(valueString);
+  display.displayWindow(wx, wy, ww, wh);
   // alternately use the whole width for partial window
-  //display.setPartialWindow(0, wy, display.width(), wh);
-  display.firstPage();
-  do
-  {
-    display.fillScreen(GxEPD_WHITE);
-    display.setCursor(x, y);
-    display.print(valueString);
-  }
-  while (display.nextPage());
+  //display.displayWindow(wx, wy, display.width(), wh);
   //Serial.println("helloValue done");
 }
 
@@ -550,14 +469,10 @@ void deepSleepTest()
   uint16_t x = ((display.width() - tbw) / 2) - tbx;
   uint16_t y = ((display.height() - tbh) / 2) - tby;
   display.setFullWindow();
-  display.firstPage();
-  do
-  {
-    display.fillScreen(GxEPD_WHITE);
-    display.setCursor(x, y);
-    display.print(hibernating);
-  }
-  while (display.nextPage());
+  display.fillScreen(GxEPD_WHITE);
+  display.setCursor(x, y);
+  display.print(hibernating);
+  display.display(false); // full update
   display.hibernate();
   delay(5000);
   display.getTextBounds(wokeup, 0, 0, &tbx, &tby, &tbw, &tbh);
@@ -566,16 +481,12 @@ void deepSleepTest()
   display.getTextBounds(from, 0, 0, &tbx, &tby, &tbw, &tbh);
   uint16_t fx = (display.width() - tbw) / 2;
   uint16_t fy = (display.height() * 2 / 3) + tbh / 2; // y is base line!
-  display.firstPage();
-  do
-  {
-    display.fillScreen(GxEPD_WHITE);
-    display.setCursor(wx, wy);
-    display.print(wokeup);
-    display.setCursor(fx, fy);
-    display.print(from);
-  }
-  while (display.nextPage());
+  display.fillScreen(GxEPD_WHITE);
+  display.setCursor(wx, wy);
+  display.print(wokeup);
+  display.setCursor(fx, fy);
+  display.print(from);
+  display.display(false); // full update
   delay(5000);
   display.getTextBounds(hibernating, 0, 0, &tbx, &tby, &tbw, &tbh);
   uint16_t hx = (display.width() - tbw) / 2;
@@ -583,16 +494,12 @@ void deepSleepTest()
   display.getTextBounds(again, 0, 0, &tbx, &tby, &tbw, &tbh);
   uint16_t ax = (display.width() - tbw) / 2;
   uint16_t ay = (display.height() * 2 / 3) + tbh / 2; // y is base line!
-  display.firstPage();
-  do
-  {
-    display.fillScreen(GxEPD_WHITE);
-    display.setCursor(hx, hy);
-    display.print(hibernating);
-    display.setCursor(ax, ay);
-    display.print(again);
-  }
-  while (display.nextPage());
+  display.fillScreen(GxEPD_WHITE);
+  display.setCursor(hx, hy);
+  display.print(hibernating);
+  display.setCursor(ax, ay);
+  display.print(again);
+  display.display(false); // full update
   display.hibernate();
   //Serial.println("deepSleepTest done");
 }
@@ -601,21 +508,17 @@ void showBox(uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool partial)
 {
   //Serial.println("showBox");
   display.setRotation(1);
+  display.setFullWindow();
+  display.fillScreen(GxEPD_WHITE);
+  display.fillRect(x, y, w, h, GxEPD_BLACK);
   if (partial)
   {
-    display.setPartialWindow(x, y, w, h);
+    display.displayWindow(x, y, w, h);
   }
   else
   {
-    display.setFullWindow();
+    display.display(false); // full update
   }
-  display.firstPage();
-  do
-  {
-    display.fillScreen(GxEPD_WHITE);
-    display.fillRect(x, y, w, h, GxEPD_BLACK);
-  }
-  while (display.nextPage());
   //Serial.println("showBox done");
 }
 
@@ -627,18 +530,14 @@ void drawCornerTest()
   for (uint16_t r = 0; r <= 4; r++)
   {
     display.setRotation(r);
-    display.firstPage();
-    do
-    {
-      display.fillScreen(GxEPD_WHITE);
-      display.fillRect(0, 0, 8, 8, GxEPD_BLACK);
-      display.fillRect(display.width() - 18, 0, 16, 16, GxEPD_BLACK);
-      display.fillRect(display.width() - 25, display.height() - 25, 24, 24, GxEPD_BLACK);
-      display.fillRect(0, display.height() - 33, 32, 32, GxEPD_BLACK);
-      display.setCursor(display.width() / 2, display.height() / 2);
-      display.print(display.getRotation());
-    }
-    while (display.nextPage());
+    display.fillScreen(GxEPD_WHITE);
+    display.fillRect(0, 0, 8, 8, GxEPD_BLACK);
+    display.fillRect(display.width() - 18, 0, 16, 16, GxEPD_BLACK);
+    display.fillRect(display.width() - 25, display.height() - 25, 24, 24, GxEPD_BLACK);
+    display.fillRect(0, display.height() - 33, 32, 32, GxEPD_BLACK);
+    display.setCursor(display.width() / 2, display.height() / 2);
+    display.print(display.getRotation());
+    display.display(false); // full update
     delay(2000);
   }
 }
@@ -648,12 +547,8 @@ void showFont(const char name[], const GFXfont* f)
   display.setFullWindow();
   display.setRotation(0);
   display.setTextColor(GxEPD_BLACK);
-  display.firstPage();
-  do
-  {
-    drawFont(name, f);
-  }
-  while (display.nextPage());
+  drawFont(name, f);
+  display.display(false); // full update
 }
 
 void drawFont(const char name[], const GFXfont* f)
@@ -697,25 +592,17 @@ void showPartialUpdate()
   uint16_t incr = display.epd2.hasFastPartialUpdate ? 1 : 3;
   display.setFont(&FreeMonoBold9pt7b);
   display.setTextColor(GxEPD_BLACK);
+  display.setFullWindow();
   // show where the update box is
   for (uint16_t r = 0; r < 4; r++)
   {
     display.setRotation(r);
-    display.setPartialWindow(box_x, box_y, box_w, box_h);
-    display.firstPage();
-    do
-    {
-      display.fillRect(box_x, box_y, box_w, box_h, GxEPD_BLACK);
-      //display.fillScreen(GxEPD_BLACK);
-    }
-    while (display.nextPage());
+    display.fillRect(box_x, box_y, box_w, box_h, GxEPD_BLACK);
+    //display.fillScreen(GxEPD_BLACK);
+    display.displayWindow(box_x, box_y, box_w, box_h);
     delay(2000);
-    display.firstPage();
-    do
-    {
-      display.fillRect(box_x, box_y, box_w, box_h, GxEPD_WHITE);
-    }
-    while (display.nextPage());
+    display.fillRect(box_x, box_y, box_w, box_h, GxEPD_WHITE);
+    display.displayWindow(box_x, box_y, box_w, box_h);
     delay(1000);
   }
   //return;
@@ -723,26 +610,17 @@ void showPartialUpdate()
   for (uint16_t r = 0; r < 4; r++)
   {
     display.setRotation(r);
-    display.setPartialWindow(box_x, box_y, box_w, box_h);
     for (uint16_t i = 1; i <= 10; i += incr)
     {
-      display.firstPage();
-      do
-      {
-        display.fillRect(box_x, box_y, box_w, box_h, GxEPD_WHITE);
-        display.setCursor(box_x, cursor_y);
-        display.print(value * i, 2);
-      }
-      while (display.nextPage());
+      display.fillRect(box_x, box_y, box_w, box_h, GxEPD_WHITE);
+      display.setCursor(box_x, cursor_y);
+      display.print(value * i, 2);
+      display.displayWindow(box_x, box_y, box_w, box_h);
       delay(500);
     }
     delay(1000);
-    display.firstPage();
-    do
-    {
-      display.fillRect(box_x, box_y, box_w, box_h, GxEPD_WHITE);
-    }
-    while (display.nextPage());
+    display.fillRect(box_x, box_y, box_w, box_h, GxEPD_WHITE);
+    display.displayWindow(box_x, box_y, box_w, box_h);
     delay(1000);
   }
 }
@@ -819,13 +697,9 @@ void drawBitmaps200x200()
     bool m = display.mirror(true);
     for (uint16_t i = 0; i < sizeof(bitmaps) / sizeof(char*); i++)
     {
-      display.firstPage();
-      do
-      {
-        display.fillScreen(GxEPD_WHITE);
-        display.drawInvertedBitmap(0, 0, bitmaps[i], display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
-      }
-      while (display.nextPage());
+      display.fillScreen(GxEPD_WHITE);
+      display.drawInvertedBitmap(0, 0, bitmaps[i], display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
+      display.display();
       delay(2000);
     }
     display.mirror(m);
@@ -892,13 +766,9 @@ void drawBitmaps104x212()
   {
     for (uint16_t i = 0; i < sizeof(bitmaps) / sizeof(char*); i++)
     {
-      display.firstPage();
-      do
-      {
-        display.fillScreen(GxEPD_WHITE);
-        display.drawBitmap(0, 0, bitmaps[i], display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
-      }
-      while (display.nextPage());
+      display.fillScreen(GxEPD_WHITE);
+      display.drawBitmap(0, 0, bitmaps[i], display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
+      display.display();
       delay(2000);
     }
   }
@@ -924,13 +794,9 @@ void drawBitmaps128x250()
     bool m = display.mirror(true);
     for (uint16_t i = 0; i < sizeof(bitmaps) / sizeof(char*); i++)
     {
-      display.firstPage();
-      do
-      {
-        display.fillScreen(GxEPD_WHITE);
-        display.drawInvertedBitmap(0, 0, bitmaps[i], display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
-      }
-      while (display.nextPage());
+      display.fillScreen(GxEPD_WHITE);
+      display.drawInvertedBitmap(0, 0, bitmaps[i], display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
+      display.display();
       delay(2000);
     }
     display.mirror(m);
@@ -957,13 +823,9 @@ void drawBitmaps128x296()
     bool m = display.mirror(true);
     for (uint16_t i = 0; i < sizeof(bitmaps) / sizeof(char*); i++)
     {
-      display.firstPage();
-      do
-      {
-        display.fillScreen(GxEPD_WHITE);
-        display.drawInvertedBitmap(0, 0, bitmaps[i], display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
-      }
-      while (display.nextPage());
+      display.fillScreen(GxEPD_WHITE);
+      display.drawInvertedBitmap(0, 0, bitmaps[i], display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
+      display.display();
       delay(2000);
     }
     display.mirror(m);
@@ -989,13 +851,9 @@ void drawBitmaps176x264()
   {
     for (uint16_t i = 0; i < sizeof(bitmaps) / sizeof(char*); i++)
     {
-      display.firstPage();
-      do
-      {
-        display.fillScreen(GxEPD_WHITE);
-        display.drawInvertedBitmap(0, 0, bitmaps[i], display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
-      }
-      while (display.nextPage());
+      display.fillScreen(GxEPD_WHITE);
+      display.drawInvertedBitmap(0, 0, bitmaps[i], display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
+      display.display();
       delay(2000);
     }
   }
@@ -1017,13 +875,9 @@ void drawBitmaps400x300()
   {
     for (uint16_t i = 0; i < sizeof(bitmaps) / sizeof(char*); i++)
     {
-      display.firstPage();
-      do
-      {
-        display.fillScreen(GxEPD_WHITE);
-        display.drawInvertedBitmap(0, 0, bitmaps[i], display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
-      }
-      while (display.nextPage());
+      display.fillScreen(GxEPD_WHITE);
+      display.drawInvertedBitmap(0, 0, bitmaps[i], display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
+      display.display();
       delay(2000);
     }
   }
@@ -1045,13 +899,9 @@ void drawBitmaps640x384()
   {
     for (uint16_t i = 0; i < sizeof(bitmaps) / sizeof(char*); i++)
     {
-      display.firstPage();
-      do
-      {
-        display.fillScreen(GxEPD_WHITE);
-        display.drawInvertedBitmap(0, 0, bitmaps[i], display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
-      }
-      while (display.nextPage());
+      display.fillScreen(GxEPD_WHITE);
+      display.drawInvertedBitmap(0, 0, bitmaps[i], display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
+      display.display();
       delay(2000);
     }
   }
@@ -1094,47 +944,39 @@ void drawBitmaps3c200x200()
   };
   if (display.epd2.panel == GxEPD2::GDEW0154Z04)
   {
-    display.firstPage();
-    do
+    display.fillScreen(GxEPD_WHITE);
+    // Bitmap3c200x200_black has 2 bits per pixel
+    // taken from Adafruit_GFX.cpp, modified
+    int16_t byteWidth = (display.epd2.WIDTH + 7) / 8; // Bitmap scanline pad = whole byte
+    uint8_t byte = 0;
+    for (int16_t j = 0; j < display.epd2.HEIGHT; j++)
     {
-      display.fillScreen(GxEPD_WHITE);
-      // Bitmap3c200x200_black has 2 bits per pixel
-      // taken from Adafruit_GFX.cpp, modified
-      int16_t byteWidth = (display.epd2.WIDTH + 7) / 8; // Bitmap scanline pad = whole byte
-      uint8_t byte = 0;
-      for (int16_t j = 0; j < display.epd2.HEIGHT; j++)
+      for (int16_t i = 0; i < display.epd2.WIDTH; i++)
       {
-        for (int16_t i = 0; i < display.epd2.WIDTH; i++)
+        if (i & 3) byte <<= 2;
+        else
         {
-          if (i & 3) byte <<= 2;
-          else
-          {
 #if defined(__AVR) || defined(ESP8266) || defined(ESP32)
-            byte = pgm_read_byte(&Bitmap3c200x200_black[j * byteWidth * 2 + i / 4]);
+          byte = pgm_read_byte(&Bitmap3c200x200_black[j * byteWidth * 2 + i / 4]);
 #else
-            byte = Bitmap3c200x200_black[j * byteWidth * 2 + i / 4];
+          byte = Bitmap3c200x200_black[j * byteWidth * 2 + i / 4];
 #endif
-          }
-          if (!(byte & 0x80))
-          {
-            display.drawPixel(i, j, GxEPD_BLACK);
-          }
+        }
+        if (!(byte & 0x80))
+        {
+          display.drawPixel(i, j, GxEPD_BLACK);
         }
       }
-      display.drawInvertedBitmap(0, 0, Bitmap3c200x200_red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
     }
-    while (display.nextPage());
+    display.drawInvertedBitmap(0, 0, Bitmap3c200x200_red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
+    display.display();
     delay(2000);
     for (uint16_t i = 0; i < sizeof(bitmap_pairs) / sizeof(bitmap_pair); i++)
     {
-      display.firstPage();
-      do
-      {
-        display.fillScreen(GxEPD_WHITE);
-        display.drawInvertedBitmap(0, 0, bitmap_pairs[i].black, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
-        display.drawInvertedBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
-      }
-      while (display.nextPage());
+      display.fillScreen(GxEPD_WHITE);
+      display.drawInvertedBitmap(0, 0, bitmap_pairs[i].black, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
+      display.drawInvertedBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
+      display.display();
       delay(2000);
     }
   }
@@ -1194,18 +1036,14 @@ void drawBitmaps3c104x212()
   {
     for (uint16_t i = 0; i < sizeof(bitmap_pairs) / sizeof(bitmap_pair); i++)
     {
-      display.firstPage();
-      do
+      display.fillScreen(GxEPD_WHITE);
+      display.drawInvertedBitmap(0, 0, bitmap_pairs[i].black, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
+      if (bitmap_pairs[i].red == WS_Bitmap3c104x212_red)
       {
-        display.fillScreen(GxEPD_WHITE);
-        display.drawInvertedBitmap(0, 0, bitmap_pairs[i].black, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
-        if (bitmap_pairs[i].red == WS_Bitmap3c104x212_red)
-        {
-          display.drawInvertedBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
-        }
-        else display.drawBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
+        display.drawInvertedBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
       }
-      while (display.nextPage());
+      else display.drawBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
+      display.display();
       delay(2000);
     }
   }
@@ -1234,18 +1072,14 @@ void drawBitmaps3c128x296()
   {
     for (uint16_t i = 0; i < sizeof(bitmap_pairs) / sizeof(bitmap_pair); i++)
     {
-      display.firstPage();
-      do
+      display.fillScreen(GxEPD_WHITE);
+      display.drawInvertedBitmap(0, 0, bitmap_pairs[i].black, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
+      if (bitmap_pairs[i].red == WS_Bitmap3c128x296_red)
       {
-        display.fillScreen(GxEPD_WHITE);
-        display.drawInvertedBitmap(0, 0, bitmap_pairs[i].black, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
-        if (bitmap_pairs[i].red == WS_Bitmap3c128x296_red)
-        {
-          display.drawInvertedBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
-        }
-        else display.drawBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
+        display.drawInvertedBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
       }
-      while (display.nextPage());
+      else display.drawBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
+      display.display();
       delay(2000);
     }
   }
@@ -1263,14 +1097,10 @@ void drawBitmaps3c176x264()
   {
     for (uint16_t i = 0; i < sizeof(bitmap_pairs) / sizeof(bitmap_pair); i++)
     {
-      display.firstPage();
-      do
-      {
-        display.fillScreen(GxEPD_WHITE);
-        display.drawBitmap(0, 0, bitmap_pairs[i].black, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
-        display.drawBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
-      }
-      while (display.nextPage());
+      display.fillScreen(GxEPD_WHITE);
+      display.drawBitmap(0, 0, bitmap_pairs[i].black, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
+      display.drawBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
+      display.display();
       delay(2000);
     }
   }
@@ -1294,14 +1124,10 @@ void drawBitmaps3c400x300()
   {
     for (uint16_t i = 0; i < sizeof(bitmap_pairs) / sizeof(bitmap_pair); i++)
     {
-      display.firstPage();
-      do
-      {
-        display.fillScreen(GxEPD_WHITE);
-        display.drawInvertedBitmap(0, 0, bitmap_pairs[i].black, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
-        display.drawInvertedBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
-      }
-      while (display.nextPage());
+      display.fillScreen(GxEPD_WHITE);
+      display.drawInvertedBitmap(0, 0, bitmap_pairs[i].black, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
+      display.drawInvertedBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
+      display.display();
       delay(2000);
     }
   }

@@ -67,7 +67,14 @@
 #### other supported panels
 - ED060SCT        6" grey levels, on Waveshare e-Paper IT8951 Driver HAT
 
-### Version 1.1.6
+### Version 1.1.7
+- enhanced support for full buffered, non-paged use, for processors with enough RAM
+- use void display(bool partial_update_mode = false); corresponds to update() in  GxEPD
+- use added void displayWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
+- use added writeImagePart(...), drawImagePart(...), used by displayWindow()
+- added example GxEPD2_NotPagedExample.ino
+- several fixes, e.g. parameter range check in setPartialWindow()
+#### Version 1.1.6
 - added support for GDEH0213B72 2.13" b/w, replacement for GDE0213B1
 - changed SPI speed for IT8951 Driver HAT to 24MHz for write, 10MHz for read
 - minor fixes, e.g. centering of text bounding box in GxEPD2_Example
