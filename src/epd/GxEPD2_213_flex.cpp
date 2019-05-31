@@ -19,63 +19,33 @@ GxEPD2_213_flex::GxEPD2_213_flex(int8_t cs, int8_t dc, int8_t rst, int8_t busy) 
 
 void GxEPD2_213_flex::clearScreen(uint8_t value)
 {
-  if (_initial)
+  writeScreenBuffer(value);
+  refresh(true);
+  writeScreenBuffer(value);
+}
+
+void GxEPD2_213_flex::writeScreenBuffer(uint8_t value)
+{
+  _initial_write = false; // initial full screen buffer clean done
+  if (!_using_partial_mode) _Init_Part();
+  _writeCommand(0x13); // set current
+  for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
-    _Init_Full();
+    _writeData(value);
+  }
+  if (_initial_refresh)
+  {
     _writeCommand(0x10); // preset previous
     for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
     {
       _writeData(0xFF); // 0xFF is white
     }
-    _writeCommand(0x13); // set current
-    for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
-    {
-      _writeData(value);
-    }
-    _Update_Full();
-    _initial = false;
   }
-  if (!_using_partial_mode) _Init_Part();
-  _writeCommand(0x91); // partial in
-  _setPartialRamArea(0, 0, WIDTH, HEIGHT);
-  _writeCommand(0x13);
-  for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
-  {
-    _writeData(value);
-  }
-  _Update_Part();
-  _setPartialRamArea(0, 0, WIDTH, HEIGHT);
-  _writeCommand(0x13);
-  for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
-  {
-    _writeData(value);
-  }
-  _Update_Part();
-  _writeCommand(0x92); // partial out
-  _initial = false;
-}
-
-void GxEPD2_213_flex::writeScreenBuffer(uint8_t value)
-{
-  if (_initial) clearScreen(value);
-  else _writeScreenBuffer(value);
-}
-
-void GxEPD2_213_flex::_writeScreenBuffer(uint8_t value)
-{
-  if (!_using_partial_mode) _Init_Part();
-  _writeCommand(0x91); // partial in
-  _setPartialRamArea(0, 0, WIDTH, HEIGHT);
-  _writeCommand(0x13);
-  for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
-  {
-    _writeData(value);
-  }
-  _writeCommand(0x92); // partial out
 }
 
 void GxEPD2_213_flex::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
+  if (_initial_write) writeScreenBuffer(); // initial full screen buffer clean
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
   int16_t wb = (w + 7) / 8; // width bytes, bitmaps are padded
   x -= x % 8; // byte boundary
@@ -123,6 +93,7 @@ void GxEPD2_213_flex::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, i
 void GxEPD2_213_flex::writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
                                      int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
+  if (_initial_write) writeScreenBuffer(); // initial full screen buffer clean
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
   if ((w_bitmap < 0) || (h_bitmap < 0) || (w < 0) || (h < 0)) return;
   if ((x_part < 0) || (x_part >= w_bitmap)) return;
@@ -242,11 +213,13 @@ void GxEPD2_213_flex::refresh(bool partial_update_mode)
   {
     if (_using_partial_mode) _Init_Full();
     _Update_Full();
+    _initial_refresh = false; // initial full update done
   }
 }
 
 void GxEPD2_213_flex::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
 {
+  if (_initial_refresh) return refresh(false); // initial update needs be full update
   x -= x % 8; // byte boundary
   w -= x % 8; // byte boundary
   int16_t x1 = x < 0 ? 0 : x; // limit

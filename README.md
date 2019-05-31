@@ -67,7 +67,14 @@
 #### other supported panels
 - ED060SCT        6" grey levels, on Waveshare e-Paper IT8951 Driver HAT
 
-### Version 1.1.7
+### Version 1.1.8
+- fix for incomplete download in GxEPD2_WiFi_Example
+- added missing method displayWindow() to GxEPD2_GFX base class
+- fix and clean up of initial refresh for panels with differential update
+- initial refresh needs to be full update, not "fast partial update", for these panels,
+- as the screen content may differ from the "previous buffer" content.
+- add clean of controller buffer(s) on initial write to controller, for partial update.
+#### Version 1.1.7
 - enhanced support for full buffered, non-paged use, for processors with enough RAM
 - use void display(bool partial_update_mode = false); corresponds to update() in  GxEPD
 - use added void displayWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h);

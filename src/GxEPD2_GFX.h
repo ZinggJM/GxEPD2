@@ -13,6 +13,7 @@
 #define _GxEPD2_GFX_H_
 
 #include <Adafruit_GFX.h>
+#include <GxEPD2_EPD.h>
 
 class GxEPD2_GFX : public Adafruit_GFX
 {
@@ -29,7 +30,15 @@ class GxEPD2_GFX : public Adafruit_GFX
     // pulldown_rst_mode true for alternate RST handling to avoid feeding 5V through RST pin
     virtual void init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode = false) = 0;
     virtual void fillScreen(uint16_t color) = 0; // 0x0 black, >0x0 white, to buffer
+    // display buffer content to screen, useful for full screen buffer
     virtual void display(bool partial_update_mode = false) = 0;
+    // display part of buffer content to screen, useful for full screen buffer
+    // displayWindow, use parameters according to actual rotation.
+    // x and w should be multiple of 8, for rotation 0 or 2,
+    // y and h should be multiple of 8, for rotation 1 or 3,
+    // else window is increased as needed,
+    // this is an addressing limitation of the e-paper controllers
+    virtual void displayWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h) = 0;
     virtual void setFullWindow() = 0;
     // setPartialWindow, use parameters according to actual rotation.
     // x and w should be multiple of 8, for rotation 0 or 2,

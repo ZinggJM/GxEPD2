@@ -354,7 +354,7 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
   Serial.println(String("http://") + host + path + filename);
   client.print(String("GET ") + path + filename + " HTTP/1.1\r\n" +
                "Host: " + host + "\r\n" +
-               "User-Agent: GxEPD2_Spiffs_Loader\r\n" +
+               "User-Agent: GxEPD2_WiFi_Example\r\n" +
                "Connection: close\r\n\r\n");
   Serial.println("request sent");
   while (client.connected())
@@ -443,7 +443,7 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
         bytes_read += skip(client, rowPosition - bytes_read);
         for (uint16_t row = 0; row < h; row++, rowPosition += rowSize) // for each line
         {
-          if (!connection_ok || !client.connected()) break;
+          if (!connection_ok || !(client.connected() || client.available())) break;
           delay(1); // yield() to avoid WDT
           uint32_t in_remain = rowSize;
           uint32_t in_idx = 0;
@@ -456,7 +456,7 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
           for (uint16_t col = 0; col < w; col++) // for each pixel
           {
             yield();
-            if (!connection_ok || !client.connected()) break;
+            if (!connection_ok || !(client.connected() || client.available())) break;
             // Time to read more pixel data?
             if (in_idx >= in_bytes) // ok, exact match for 24bit also (size IS multiple of 3)
             {
@@ -580,7 +580,7 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
   Serial.println(String("http://") + host + path + filename);
   client.print(String("GET ") + path + filename + " HTTP/1.1\r\n" +
                "Host: " + host + "\r\n" +
-               "User-Agent: GxEPD2_Spiffs_Loader\r\n" +
+               "User-Agent: GxEPD2_WiFi_Example\r\n" +
                "Connection: close\r\n\r\n");
   Serial.println("request sent");
   while (client.connected())
@@ -671,7 +671,7 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
         bytes_read += skip(client, rowPosition - bytes_read);
         for (uint16_t row = 0; row < h; row++, rowPosition += rowSize) // for each line
         {
-          if (!connection_ok || !client.connected()) break;
+          if (!connection_ok || !(client.connected() || client.available())) break;
           delay(1); // yield() to avoid WDT
           uint32_t in_remain = rowSize;
           uint32_t in_idx = 0;
@@ -682,7 +682,7 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
           for (uint16_t col = 0; col < w; col++) // for each pixel
           {
             yield();
-            if (!connection_ok || !client.connected()) break;
+            if (!connection_ok || !(client.connected() || client.available())) break;
             // Time to read more pixel data?
             if (in_idx >= in_bytes) // ok, exact match for 24bit also (size IS multiple of 3)
             {
@@ -830,7 +830,7 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
   Serial.println(String("https://") + host + path + filename);
   client.print(String("GET ") + path + filename + " HTTP/1.1\r\n" +
                "Host: " + host + "\r\n" +
-               "User-Agent: GxEPD2_Spiffs_Loader\r\n" +
+               "User-Agent: GxEPD2_WiFi_Example\r\n" +
                "Connection: close\r\n\r\n");
   Serial.println("request sent");
   while (client.connected())
@@ -919,7 +919,7 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
         bytes_read += skip(client, rowPosition - bytes_read);
         for (uint16_t row = 0; row < h; row++, rowPosition += rowSize) // for each line
         {
-          if (!connection_ok || !client.connected()) break;
+          if (!connection_ok || !(client.connected() || client.available())) break;
           delay(1); // yield() to avoid WDT
           uint32_t in_remain = rowSize;
           uint32_t in_idx = 0;
@@ -932,7 +932,7 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
           for (uint16_t col = 0; col < w; col++) // for each pixel
           {
             yield();
-            if (!connection_ok || !client.connected()) break;
+            if (!connection_ok || !(client.connected() || client.available())) break;
             // Time to read more pixel data?
             if (in_idx >= in_bytes) // ok, exact match for 24bit also (size IS multiple of 3)
             {
@@ -1077,7 +1077,7 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
   Serial.println(String("https://") + host + path + filename);
   client.print(String("GET ") + path + filename + " HTTP/1.1\r\n" +
                "Host: " + host + "\r\n" +
-               "User-Agent: GxEPD2_Spiffs_Loader\r\n" +
+               "User-Agent: GxEPD2_WiFi_Example\r\n" +
                "Connection: close\r\n\r\n");
   Serial.println("request sent");
   while (client.connected())
@@ -1168,7 +1168,7 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
         bytes_read += skip(client, rowPosition - bytes_read);
         for (uint16_t row = 0; row < h; row++, rowPosition += rowSize) // for each line
         {
-          if (!connection_ok || !client.connected()) break;
+          if (!connection_ok || !(client.connected() || client.available())) break;
           delay(1); // yield() to avoid WDT
           uint32_t in_remain = rowSize;
           uint32_t in_idx = 0;
@@ -1179,7 +1179,7 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
           for (uint16_t col = 0; col < w; col++) // for each pixel
           {
             yield();
-            if (!connection_ok || !client.connected()) break;
+            if (!connection_ok || !(client.connected() || client.available())) break;
             // Time to read more pixel data?
             if (in_idx >= in_bytes) // ok, exact match for 24bit also (size IS multiple of 3)
             {
@@ -1312,7 +1312,7 @@ uint32_t skip(BearSSL::WiFiClientSecure& client, int32_t bytes)
 {
   int32_t remain = bytes;
   uint32_t start = millis();
-  while (client.connected() && (remain > 0))
+  while ((client.connected() || client.available()) && (remain > 0))
   {
     if (client.available())
     {
@@ -1329,7 +1329,7 @@ uint32_t read(BearSSL::WiFiClientSecure& client, uint8_t* buffer, int32_t bytes)
 {
   int32_t remain = bytes;
   uint32_t start = millis();
-  while (client.connected() && (remain > 0))
+  while ((client.connected() || client.available()) && (remain > 0))
   {
     if (client.available())
     {
@@ -1349,7 +1349,7 @@ uint32_t skip(WiFiClient& client, int32_t bytes)
 {
   int32_t remain = bytes;
   uint32_t start = millis();
-  while (client.connected() && (remain > 0))
+  while ((client.connected() || client.available()) && (remain > 0))
   {
     if (client.available())
     {
@@ -1366,7 +1366,7 @@ uint32_t read(WiFiClient& client, uint8_t* buffer, int32_t bytes)
 {
   int32_t remain = bytes;
   uint32_t start = millis();
-  while (client.connected() && (remain > 0))
+  while ((client.connected() || client.available()) && (remain > 0))
   {
     if (client.available())
     {

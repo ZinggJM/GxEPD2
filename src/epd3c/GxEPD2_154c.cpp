@@ -61,7 +61,6 @@ void GxEPD2_154c::clearScreen(uint8_t black_value, uint8_t color_value)
     _writeData(color_value);
   }
   _Update_Full();
-  _initial = false;
 }
 
 void GxEPD2_154c::writeScreenBuffer(uint8_t value)

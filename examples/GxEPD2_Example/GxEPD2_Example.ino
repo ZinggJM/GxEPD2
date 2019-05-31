@@ -15,13 +15,14 @@
 
 // mapping suggestion from Waveshare SPI e-Paper to Wemos D1 mini
 // BUSY -> D2, RST -> D4, DC -> D3, CS -> D8, CLK -> D5, DIN -> D7, GND -> GND, 3.3V -> 3.3V
+// NOTE for ESP8266: using SS (GPIO15) for CS may cause boot mode problems, use different pin in case
 
 // mapping suggestion from Waveshare SPI e-Paper to generic ESP8266
 // BUSY -> GPIO4, RST -> GPIO2, DC -> GPIO0, CS -> GPIO15, CLK -> GPIO14, DIN -> GPIO13, GND -> GND, 3.3V -> 3.3V
+// NOTE for ESP8266: using SS (GPIO15) for CS may cause boot mode problems, use different pin in case
 
 // mapping of Waveshare e-Paper ESP8266 Driver Board
 // BUSY -> GPIO16, RST -> GPIO5, DC -> GPIO4, CS -> GPIO15, CLK -> GPIO14, DIN -> GPIO13, GND -> GND, 3.3V -> 3.3V
-
 // NOTE for ESP8266: using SS (GPIO15) for CS may cause boot mode problems, use different pin in case
 
 // mapping suggestion for ESP32, e.g. LOLIN32, see .../variants/.../pins_arduino.h for your board

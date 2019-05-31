@@ -23,6 +23,8 @@ GxEPD2_EPD::GxEPD2_EPD(int8_t cs, int8_t dc, int8_t rst, int8_t busy, int8_t bus
   _cs(cs), _dc(dc), _rst(rst), _busy(busy), _busy_level(busy_level), _busy_timeout(busy_timeout), _diag_enabled(false),
   _spi_settings(4000000, MSBFIRST, SPI_MODE0)
 {
+  _initial_write = true;
+  _initial_refresh = true;
   _power_is_on = false;
   _using_partial_mode = false;
   _hibernating = false;
@@ -35,7 +37,8 @@ void GxEPD2_EPD::init(uint32_t serial_diag_bitrate)
 
 void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode)
 {
-  _initial = initial;
+  _initial_write = initial;
+  _initial_refresh = initial;
   _pulldown_rst_mode = pulldown_rst_mode;
   _power_is_on = false;
   _using_partial_mode = false;
