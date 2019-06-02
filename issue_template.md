@@ -1,12 +1,15 @@
-## Please post only issues that are real issues with this library!
+### Please post only issues that errors in this library!
 - please use the Arduino Forum Displays for questions or enhancement suggestions
 
-### Expected Behavior
+#### Version number of the library used, should be the current one
+- this number is needed for later reference and tracking
 
-### Actual Behavior
+#### Expected Behavior
 
-### E-Paper module used
+#### Actual Behavior
 
-### Arduino / Processor module used
+#### E-Paper module used
 
-### Steps to reproduce the behavior or reduced but complete code example
+#### Arduino / Processor module used
+
+#### Steps to reproduce the behavior or reduced but complete code example
