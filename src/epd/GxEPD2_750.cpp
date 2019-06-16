@@ -159,7 +159,7 @@ void GxEPD2_750::writeNative(const uint8_t* data1, const uint8_t* data2, int16_t
   {
     if (_initial_write) writeScreenBuffer(); // initial full screen buffer clean
     delay(1); // yield() to avoid WDT on ESP8266 and ESP32
-    int16_t wb = (w + 1) / 2; // width bytes, bitmaps are padded
+    uint16_t wb = (w + 1) / 2; // width bytes, bitmaps are padded
     x -= x % 2; // byte boundary
     w = wb * 2; // byte boundary
     int16_t x1 = x < 0 ? 0 : x; // limit
@@ -181,7 +181,7 @@ void GxEPD2_750::writeNative(const uint8_t* data1, const uint8_t* data2, int16_t
       {
         uint8_t data;
         // use wb, h of bitmap for index!
-        int16_t idx = mirror_y ? j + dx / 2 + ((h - 1 - (i + dy))) * wb : j + dx / 2 + (i + dy) * wb;
+        uint16_t idx = mirror_y ? j + dx / 2 + uint16_t((h - 1 - (i + dy))) * wb : j + dx / 2 + uint16_t(i + dy) * wb;
         if (pgm)
         {
 #if defined(__AVR) || defined(ESP8266) || defined(ESP32)

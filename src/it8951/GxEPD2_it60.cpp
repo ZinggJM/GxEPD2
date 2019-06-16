@@ -248,7 +248,7 @@ void GxEPD2_it60::writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t
     {
       uint8_t data;
       // use wb_bitmap, h_bitmap of bitmap for index!
-      int16_t idx = mirror_y ? x_part / 8 + j + dx / 8 + ((h_bitmap - 1 - (y_part + i + dy))) * wb_bitmap : x_part / 8 + j + dx / 8 + (y_part + i + dy) * wb_bitmap;
+      uint32_t idx = mirror_y ? x_part / 8 + (j + dx / 8) + uint32_t((h_bitmap - 1 - (y_part + i + dy))) * uint32_t(wb_bitmap) : x_part / 8 + j + dx / 8 + uint32_t(y_part + i + dy) * uint32_t(wb_bitmap);
       if (pgm)
       {
 #if defined(__AVR) || defined(ESP8266) || defined(ESP32)
