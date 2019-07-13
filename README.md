@@ -48,27 +48,38 @@
 - https://github.com/olikraus/u8glib/wiki/tpictureloop
 
 ### Supported SPI e-paper panels from Good Display:
-- GDEP015OC1      1.54" b/w
-- GDEW0154Z04   1.54" b/w/r 200x200
-- GDE0213B1         2.13" b/w
-- GDEH0213B72       2.13" b/w, replacement for GDE0213B1
+- GDEP015OC1     1.54" b/w
+- GDEW0154Z04    1.54" b/w/r 200x200
+- GDE0213B1      2.13" b/w
+- GDEH0213B72    2.13" b/w, replacement for GDE0213B1
+- GDEH0213B73    2.13" b/w, new replacement for GDE0213B1, GDEH0213B72
 - GDEW0213I5F    2.13" b/w flexible
-- GDEW0213Z16   2.13" b/w/r
-- GDEH029A1        2.9" b/w
-- GDEW029T5       2.9" b/w
+- GDEW0213Z16    2.13" b/w/r
+- GDEH029A1      2.9" b/w
+- GDEW029T5      2.9" b/w
 - GDEW029Z10     2.9" b/w/r
+- GDEW026T0      2.6" b/w
 - GDEW027C44     2.7" b/w/r
 - GDEW027W3      2.7" b/w
-- GDEW042T2        4.2" b/w
-- GDEW042Z15      4.2" b/w/r
-- GDEW0583T7      5.83" b/w
-- GDEW075T8        7.5" b/w
-- GDEW075Z09      7.5" b/w/r
+- GDEW0371W7     3.7" b/w
+- GDEW042T2      4.2" b/w
+- GDEW042Z15     4.2" b/w/r
+- GDEW0583T7     5.83" b/w
+- GDEW075T8      7.5" b/w
+- GDEW075Z09     7.5" b/w/r
+- GDEW075Z08     7.5" b/w/r 800x480
 #### Supported SPI e-paper panels & boards from Waveshare: compare with Good Display, same panel
 #### other supported panels
 - ED060SCT        6" grey levels, on Waveshare e-Paper IT8951 Driver HAT
 
-### Version 1.1.9
+### Version 1.1.10
+- added support for GDEH0213B73 2.13" b/w, replacement for GDE0213B1, GDEH0213B72
+- added support for GDEW026T0 2.6" b/w 152x256
+- added support for GDEW0371W7 3.7" b/w 240x416
+- added support for GDEW075Z08 7.5" b/w/r 800x480
+- GDEW075Z08 does allow (slow) partial update, set usePartialUpdate = false to disable for better image
+- changed 4.2" b/w waveform table, for better result with actual panels
+#### Version 1.1.9
 - note for ESP8266 when using SS for CS: (wiring suggestion) 
 - connect 4.7k pull-down from GPIO15 to GND if your board or shield has level converters
 - fixes for large displays (use uint16_t for buffer index)

@@ -21,6 +21,7 @@
 #include "epd3c/GxEPD2_420c.h"
 #include "epd3c/GxEPD2_583c.h"
 #include "epd3c/GxEPD2_750c.h"
+#include "epd3c/GxEPD2_750c_Z08.h"
 
 #ifndef ENABLE_GxEPD2_GFX
 // default is off

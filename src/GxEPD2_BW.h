@@ -17,13 +17,17 @@
 #include "epd/GxEPD2_154.h"
 #include "epd/GxEPD2_213.h"
 #include "epd/GxEPD2_213_B72.h"
+#include "epd/GxEPD2_213_B73.h"
 #include "epd/GxEPD2_213_flex.h"
+#include "epd/GxEPD2_260.h"
 #include "epd/GxEPD2_290.h"
 #include "epd/GxEPD2_290_T5.h"
 #include "epd/GxEPD2_270.h"
+#include "epd/GxEPD2_371.h"
 #include "epd/GxEPD2_420.h"
 #include "epd/GxEPD2_583.h"
 #include "epd/GxEPD2_750.h"
+//#include "epd/GxEPD2_750_T7.h"
 #include "it8951/GxEPD2_it60.h"
 
 #ifndef ENABLE_GxEPD2_GFX

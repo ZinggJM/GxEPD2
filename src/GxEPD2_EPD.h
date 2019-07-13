@@ -85,7 +85,7 @@ class GxEPD2_EPD
     void _writeCommand(uint8_t c);
     void _writeData(uint8_t d);
     void _writeData(const uint8_t* data, uint16_t n);
-    void _writeDataPGM(const uint8_t* data, uint16_t n);
+    void _writeDataPGM(const uint8_t* data, uint16_t n, uint16_t fill_with_zeroes = 0);
     void _writeCommandData(const uint8_t* pCommandData, uint8_t datalen);
     void _writeCommandDataPGM(const uint8_t* pCommandData, uint8_t datalen);
   protected:
