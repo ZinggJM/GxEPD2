@@ -116,7 +116,7 @@ class GxEPD2_3C : public Adafruit_GFX
     }
 
     // init method with additional parameters:
-    // initial true for re-init after processor deep sleep wake up, if display power supply was kept
+    // initial false for re-init after processor deep sleep wake up, if display power supply was kept
     // only relevant for b/w displays with fast partial update
     // pulldown_rst_mode true for alternate RST handling to avoid feeding 5V through RST pin
     void init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode = false)

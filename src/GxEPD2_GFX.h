@@ -24,7 +24,7 @@ class GxEPD2_GFX : public Adafruit_GFX
     virtual bool mirror(bool m) = 0;
     virtual void init(uint32_t serial_diag_bitrate = 0) = 0; // serial_diag_bitrate = 0 : disabled
     // init method with additional parameters:
-    // initial true for re-init after processor deep sleep wake up, if display power supply was kept
+    // initial false for re-init after processor deep sleep wake up, if display power supply was kept
     // this can be used to avoid the repeated initial full refresh on displays with fast partial update
     // NOTE: garbage will result on fast partial update displays, if initial full update is omitted after power loss
     // pulldown_rst_mode true for alternate RST handling to avoid feeding 5V through RST pin

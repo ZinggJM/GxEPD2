@@ -40,10 +40,13 @@
 //GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display(GxEPD2_154(/*CS=A2*/ SS, /*DC=*/ A1, /*RST=*/ A0, /*BUSY=*/ D4));
 //GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display(GxEPD2_213(/*CS=A2*/ SS, /*DC=*/ A1, /*RST=*/ A0, /*BUSY=*/ D4)); // GDE0213B1, phased out
 GxEPD2_BW<GxEPD2_213_B72, GxEPD2_213_B72::HEIGHT> display(GxEPD2_213_B72(/*CS=A2*/ SS, /*DC=*/ A1, /*RST=*/ A0, /*BUSY=*/ D4)); // GDEH0213B72
+//GxEPD2_BW<GxEPD2_213_B73, GxEPD2_213_B73::HEIGHT> display(GxEPD2_213_B73(/*CS=A2*/ SS, /*DC=*/ A1, /*RST=*/ A0, /*BUSY=*/ D4)); // GDEH0213B73
 //GxEPD2_BW<GxEPD2_213_flex, GxEPD2_213_flex::HEIGHT> display(GxEPD2_213_flex(/*CS=A2*/ SS, /*DC=*/ A1, /*RST=*/ A0, /*BUSY=*/ D4)); // GDEW0213I5F
 //GxEPD2_BW<GxEPD2_290, GxEPD2_290::HEIGHT> display(GxEPD2_290(/*CS=A2*/ SS, /*DC=*/ A1, /*RST=*/ A0, /*BUSY=*/ D4));
 //GxEPD2_BW<GxEPD2_290_T5, GxEPD2_290_T5::HEIGHT> display(GxEPD2_290_T5(/*CS=A2*/ SS, /*DC=*/ A1, /*RST=*/ A0, /*BUSY=*/ D4)); // GDEW029T5
+//GxEPD2_BW<GxEPD2_260, GxEPD2_260::HEIGHT> display(GxEPD2_260(/*CS=A2*/ SS, /*DC=*/ A1, /*RST=*/ A0, /*BUSY=*/ D4));
 //GxEPD2_BW<GxEPD2_270, GxEPD2_270::HEIGHT> display(GxEPD2_270(/*CS=A2*/ SS, /*DC=*/ A1, /*RST=*/ A0, /*BUSY=*/ D4));
+//GxEPD2_BW<GxEPD2_371, GxEPD2_371::HEIGHT> display(GxEPD2_371(/*CS=A2*/ SS, /*DC=*/ A1, /*RST=*/ A0, /*BUSY=*/ D4));
 //GxEPD2_BW<GxEPD2_420, GxEPD2_420::HEIGHT> display(GxEPD2_420(/*CS=A2*/ SS, /*DC=*/ A1, /*RST=*/ A0, /*BUSY=*/ D4));
 //GxEPD2_BW < GxEPD2_583, GxEPD2_583::HEIGHT / 2 > display(GxEPD2_583(/*CS=A2*/ SS, /*DC=*/ A1, /*RST=*/ A0, /*BUSY=*/ D4));
 //GxEPD2_BW < GxEPD2_750, GxEPD2_750::HEIGHT / 2 > display(GxEPD2_750(/*CS=A2*/ SS, /*DC=*/ A1, /*RST=*/ A0, /*BUSY=*/ D4));
@@ -55,6 +58,7 @@ GxEPD2_BW<GxEPD2_213_B72, GxEPD2_213_B72::HEIGHT> display(GxEPD2_213_B72(/*CS=A2
 //GxEPD2_3C<GxEPD2_420c, GxEPD2_420c::HEIGHT> display(GxEPD2_420c(/*CS=A2*/ SS, /*DC=*/ A1, /*RST=*/ A0, /*BUSY=*/ D4));
 //GxEPD2_3C<GxEPD2_583c, GxEPD2_583c::HEIGHT / 4 > display(GxEPD2_583c(/*CS=A2*/ SS, /*DC=*/ A1, /*RST=*/ A0, /*BUSY=*/ D4));
 //GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT / 4 > display(GxEPD2_750c(/*CS=A2*/ SS, /*DC=*/ A1, /*RST=*/ A0, /*BUSY=*/ D4));
+//GxEPD2_3C<GxEPD2_750c_Z08, GxEPD2_750c_Z08::HEIGHT / 4 > display(GxEPD2_750c_Z08(/*CS=A2*/ SS, /*DC=*/ A1, /*RST=*/ A0, /*BUSY=*/ D4)); // GDEW075Z08 800x480
 #endif
 
 // comment out unused bitmaps to reduce code space used

@@ -229,10 +229,10 @@ void GxEPD2_420::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
   w1 -= x1 - x;
   h1 -= y1 - y;
   if (!_using_partial_mode) _Init_Part();
-  _writeCommand(0x91); // partial in
+  if (usePartialUpdateWindow) _writeCommand(0x91); // partial in
   _setPartialRamArea(x1, y1, w1, h1);
   _Update_Part();
-  _writeCommand(0x92); // partial out
+  if (usePartialUpdateWindow) _writeCommand(0x92); // partial out
 }
 
 void GxEPD2_420::powerOff(void)
@@ -290,13 +290,31 @@ void GxEPD2_420::_PowerOff()
 void GxEPD2_420::_InitDisplay()
 {
   if (_hibernating) _reset();
-  _writeCommand(0x06); // boost
-  _writeData(0x17);
-  _writeData(0x17);
-  _writeData(0x17);
-  _writeCommand(0x00);
-  //_writeData(0x1f); // LUT from OTP Pixel with B/W.
-  _writeData(0x3F); //300x400 B/W mode, LUT set by register
+  _writeCommand(0x01); // POWER SETTING
+  _writeData (0x03);   // VDS_EN, VDG_EN internal
+  _writeData (0x00);   // VCOM_HV, VGHL_LV=16V
+  _writeData (0x2b);   // VDH=11V
+  _writeData (0x2b);   // VDL=11V
+  _writeCommand(0x06); // boost soft start
+  _writeData (0x17);   // A
+  _writeData (0x17);   // B
+  _writeData (0x17);   // C
+  _writeCommand(0x00); // panel setting
+  _writeData(0x3f);    // 300x400 B/W mode, LUT set by register
+  _writeCommand(0x30); // PLL setting
+  _writeData (0x3a);   // 3a 100HZ   29 150Hz 39 200HZ 31 171HZ
+  _writeCommand(0x61); // resolution setting
+  _writeData (WIDTH / 256);
+  _writeData (WIDTH % 256);
+  _writeData (HEIGHT / 256);
+  _writeData (HEIGHT % 256);
+  _writeCommand(0x82); // vcom_DC setting
+  //_writeData (0x08);   // -0.1 + 8 * -0.05 = -0.5V from demo
+  _writeData (0x12);   // -0.1 + 18 * -0.05 = -1.0V from OTP, slightly better
+  //_writeData (0x1c);   // -0.1 + 28 * -0.05 = -1.5V test, worse
+  _writeCommand(0x50); // VCOM AND DATA INTERVAL SETTING
+  //_writeData(0x97);    // WBmode:VBDF 17|D7 VBDW 97 VBDB 57   WBRmode:VBDF F7 VBDW 77 VBDB 37  VBDR B7
+  _writeData(0xd7);    // border floating to avoid flashing
 }
 
 const unsigned char GxEPD2_420::lut_20_vcom0_full[] PROGMEM =
@@ -355,72 +373,58 @@ const unsigned char GxEPD2_420::lut_24_bb_full[] PROGMEM =
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-// original wavetable from GxEPD, optimized for the display I have (modified Ben Krasnow version)
-//#define TP0A  2 // sustain phase for bb and ww, change phase for bw and wb
-//#define TP0B 45 // change phase for bw and wb
+// partial update waveform
 
-// same waveform as demo wavetable from Good Display:
-#define TP0A  0   // sustain phase for bb and ww, change phase for bw and wb
-#define TP0B 0x19 // change phase for bw and wb
+// same waveform as by demo code from Good Display
+//#define T1  0 // color change charge balance pre-phase
+//#define T2  0 // color change or sustain charge balance pre-phase
+//#define T3  0 // color change or sustain phase
+//#define T4 25 // color change phase
+
+// new waveform created by Jean-Marc Zingg for the actual panel
+#define T1 25 // color change charge balance pre-phase
+#define T2  1 // color change or sustain charge balance pre-phase
+#define T3  2 // color change or sustain phase
+#define T4 25 // color change phase
+
+// for new waveform without sustain phase: uncomment next 2 lines, not good for fat fonts
+//#define T2  0 // color change or sustain charge balance pre-phase // 0 no sustain
+//#define T3  0 // color change or sustain phase // 0 no sustain
+
+// "balanced flash once" variant
+//#define T1  0 // color change charge balance pre-phase
+//#define T2 25 // color change or sustain charge balance pre-phase
+//#define T3 25 // color change or sustain phase
+//#define T4  0 // color change phase
 
 const unsigned char GxEPD2_420::lut_20_vcom0_partial[] PROGMEM =
 {
-  0x00,
-  TP0A, TP0B, 0x01, 0x00, 0x01,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, T1, T2, T3, T4, 1, // 00 00 00 00
+  0x00,  1,  0,  0,  0, 1, // gnd phase
 };
 
 const unsigned char GxEPD2_420::lut_21_ww_partial[] PROGMEM =
-{
-  0x80, // 10 00 00 00
-  TP0A, TP0B, 0x01, 0x00, 0x01,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+{ // 10 w
+  0x18, T1, T2, T3, T4, 1, // 00 01 10 00
+  0x00,  1,  0,  0,  0, 1, // gnd phase
 };
 
 const unsigned char GxEPD2_420::lut_22_bw_partial[] PROGMEM =
-{
-  0xA0, // 10 10 00 00
-  TP0A, TP0B, 0x01, 0x00, 0x01,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+{ // 10 w
+  0x5A, T1, T2, T3, T4, 1, // 01 01 10 10
+  0x00,  1,  0,  0,  0, 1, // gnd phase
 };
 
 const unsigned char GxEPD2_420::lut_23_wb_partial[] PROGMEM =
-{
-  0x50, // 01 01 00 00
-  TP0A, TP0B, 0x01, 0x00, 0x01,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+{ // 01 b
+  0xA5, T1, T2, T3, T4, 1, // 10 10 01 01
+  0x00,  1,  0,  0,  0, 1, // gnd phase
 };
 
 const unsigned char GxEPD2_420::lut_24_bb_partial[] PROGMEM =
-{
-  0x40, // 01 00 00 00
-  TP0A, TP0B, 0x01, 0x00, 0x01,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+{ // 01 b
+  0x24, T1, T2, T3, T4, 1, // 00 10 01 00
+  0x00,  1,  0,  0,  0, 1, // gnd phase
 };
 
 void GxEPD2_420::_Init_Full()
@@ -444,15 +448,15 @@ void GxEPD2_420::_Init_Part()
 {
   _InitDisplay();
   _writeCommand(0x20);
-  _writeDataPGM(lut_20_vcom0_partial, sizeof(lut_20_vcom0_partial));
+  _writeDataPGM(lut_20_vcom0_partial, sizeof(lut_20_vcom0_partial), 44 - sizeof(lut_20_vcom0_partial));
   _writeCommand(0x21);
-  _writeDataPGM(lut_21_ww_partial, sizeof(lut_21_ww_partial));
+  _writeDataPGM(lut_21_ww_partial, sizeof(lut_21_ww_partial), 42 - sizeof(lut_21_ww_partial));
   _writeCommand(0x22);
-  _writeDataPGM(lut_22_bw_partial, sizeof(lut_22_bw_partial));
+  _writeDataPGM(lut_22_bw_partial, sizeof(lut_22_bw_partial), 42 - sizeof(lut_22_bw_partial));
   _writeCommand(0x23);
-  _writeDataPGM(lut_23_wb_partial, sizeof(lut_23_wb_partial));
+  _writeDataPGM(lut_23_wb_partial, sizeof(lut_23_wb_partial), 42 - sizeof(lut_23_wb_partial));
   _writeCommand(0x24);
-  _writeDataPGM(lut_24_bb_partial, sizeof(lut_24_bb_partial));
+  _writeDataPGM(lut_24_bb_partial, sizeof(lut_24_bb_partial), 42 - sizeof(lut_24_bb_partial));
   _PowerOn();
   _using_partial_mode = true;
 }

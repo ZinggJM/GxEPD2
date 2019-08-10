@@ -25,11 +25,12 @@ class GxEPD2_260 : public GxEPD2_EPD
     static const GxEPD2::Panel panel = GxEPD2::GDEW026T0;
     static const bool hasColor = false;
     static const bool hasPartialUpdate = true;
+    static const bool usePartialUpdateWindow = false; // set false for better image
     static const bool hasFastPartialUpdate = true;
     static const uint16_t power_on_time = 60; // ms, e.g. 58296us
     static const uint16_t power_off_time = 20; // ms, e.g. 19748us
     static const uint16_t full_refresh_time = 1600; // ms, e.g. 1543246us
-    static const uint16_t partial_refresh_time = 600; // ms, e.g. 514116us
+    static const uint16_t partial_refresh_time = 1300; // ms, e.g. 1228991us
     // constructor
     GxEPD2_260(int8_t cs, int8_t dc, int8_t rst, int8_t busy);
     // methods (virtual)

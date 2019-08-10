@@ -230,10 +230,10 @@ void GxEPD2_371::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
   w1 -= x1 - x;
   h1 -= y1 - y;
   if (!_using_partial_mode) _Init_Part();
-  _writeCommand(0x91); // partial in
+  if (usePartialUpdateWindow) _writeCommand(0x91); // partial in
   _setPartialRamArea(x1, y1, w1, h1);
   _Update_Part();
-  _writeCommand(0x92); // partial out
+  if (usePartialUpdateWindow) _writeCommand(0x92); // partial out
 }
 
 void GxEPD2_371::powerOff(void)
@@ -264,7 +264,7 @@ void GxEPD2_371::_setPartialRamArea(uint16_t x, uint16_t y, uint16_t w, uint16_t
   _writeData(y % 256);
   _writeData(ye / 256);
   _writeData(ye % 256);
-  _writeData(0x00);
+  _writeData(0x01);
 }
 
 void GxEPD2_371::_PowerOn()
@@ -281,6 +281,8 @@ void GxEPD2_371::_PowerOff()
 {
   if (_power_is_on)
   {
+    _writeCommand(0x03); // power off sequence
+    _writeData(0x30);
     _writeCommand(0x02); // power off
     _waitWhileBusy("_PowerOff", power_off_time);
   }
@@ -291,25 +293,74 @@ void GxEPD2_371::_PowerOff()
 void GxEPD2_371::_InitDisplay()
 {
   if (_hibernating) _reset();
+  _writeCommand(0x01); // power setting
+  _writeData (0x07);
+  _writeData (0x07);   // VGH=20V,VGL=-20V
+  _writeData (0x3f);   // VDH=15V
+  _writeData (0x3f);   // VDL=-15V
   _writeCommand(0x06); // boost soft start
   _writeData (0x17);   // A
   _writeData (0x17);   // B
   _writeData (0x1d);   // C
   _PowerOn();
   _writeCommand(0x00); // panel setting
-  _writeData(0x1f);    // LUT from OTP, 128x296
+  _writeData(0x1f);    // LUT from OTP
   _writeCommand(0x61); // resolution setting
   _writeData (WIDTH);
   _writeData (HEIGHT / 256);
   _writeData (HEIGHT % 256);
-  _writeCommand(0x50);
-  _writeData (0x23);
-  _writeData (0x07);
+  _writeCommand(0x82); // vcom_DC setting
+  _writeData (0x1C);
+  _writeCommand(0x50); // VCOM AND DATA INTERVAL SETTING
+  _writeData(0x29);    // LUTKW, N2OCP: copy new to old
+  _writeData(0x07);
 }
+
+// experimental partial screen update LUTs with balanced charge
+// LUTs are filled with zeroes
+
+#define T1 35 // charge balance pre-phase
+#define T2  0 // optional extension
+#define T3 35 // color change phase (b/w)
+#define T4  0 // optional extension for one color
+
+const unsigned char GxEPD2_371::lut_20_LUTC_partial[] PROGMEM =
+{
+  0x00, T1, T2, T3, T4, 1, // 00 00 00 00
+};
+
+const unsigned char GxEPD2_371::lut_21_LUTWW_partial[] PROGMEM =
+{ // 10 w
+  0x00, T1, T2, T3, T4, 1, // 00 00 00 00
+};
+
+const unsigned char GxEPD2_371::lut_22_LUTKW_partial[] PROGMEM =
+{ // 10 w
+  0x48, T1, T2, T3, T4, 1, // 01 00 10 00
+  //0x5A, T1, T2, T3, T4, 1, // 01 01 10 10 more white
+};
+
+const unsigned char GxEPD2_371::lut_23_LUTWK_partial[] PROGMEM =
+{ // 01 b
+  0x84, T1, T2, T3, T4, 1, // 10 00 01 00
+  //0xA5, T1, T2, T3, T4, 1, // 10 10 01 01 more black
+};
+
+const unsigned char GxEPD2_371::lut_24_LUTKK_partial[] PROGMEM =
+{ // 01 b
+  0x00, T1, T2, T3, T4, 1, // 00 00 00 00
+};
+
+const unsigned char GxEPD2_371::lut_25_LUTBD_partial[] PROGMEM =
+{
+  0x00, T1, T2, T3, T4, 1, // 00 00 00 00
+};
 
 void GxEPD2_371::_Init_Full()
 {
   _InitDisplay();
+  _writeCommand(0x00); // panel setting
+  _writeData(0x1f);    // full update LUT from OTP
   _PowerOn();
   _using_partial_mode = false;
 }
@@ -317,6 +368,23 @@ void GxEPD2_371::_Init_Full()
 void GxEPD2_371::_Init_Part()
 {
   _InitDisplay();
+  _writeCommand(0x00); //panel setting
+  _writeData(hasFastPartialUpdate ? 0x3f : 0x1f); // partial update LUT from registers
+  _writeCommand(0x50); // VCOM AND DATA INTERVAL SETTING
+  _writeData(0x39);    // LUTBD, N2OCP: copy new to old
+  _writeData(0x07);
+  _writeCommand(0x20);
+  _writeDataPGM(lut_20_LUTC_partial, sizeof(lut_20_LUTC_partial), 42 - sizeof(lut_20_LUTC_partial));
+  _writeCommand(0x21);
+  _writeDataPGM(lut_21_LUTWW_partial, sizeof(lut_21_LUTWW_partial), 42 - sizeof(lut_21_LUTWW_partial));
+  _writeCommand(0x22);
+  _writeDataPGM(lut_22_LUTKW_partial, sizeof(lut_22_LUTKW_partial), 42 - sizeof(lut_22_LUTKW_partial));
+  _writeCommand(0x23);
+  _writeDataPGM(lut_23_LUTWK_partial, sizeof(lut_23_LUTWK_partial), 42 - sizeof(lut_23_LUTWK_partial));
+  _writeCommand(0x24);
+  _writeDataPGM(lut_24_LUTKK_partial, sizeof(lut_24_LUTKK_partial), 42 - sizeof(lut_24_LUTKK_partial));
+  _writeCommand(0x25);
+  _writeDataPGM(lut_25_LUTBD_partial, sizeof(lut_25_LUTBD_partial), 42 - sizeof(lut_25_LUTBD_partial));
   _PowerOn();
   _using_partial_mode = true;
 }

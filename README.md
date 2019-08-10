@@ -72,7 +72,15 @@
 #### other supported panels
 - ED060SCT        6" grey levels, on Waveshare e-Paper IT8951 Driver HAT
 
-### Version 1.1.10
+### Version 1.2.0
+- added "fast partial update" (differential update) for GDEW0371W7 3.7" b/w 240x416
+- improved differential update waveform for GDEW026T0 2.6" b/w 152x256
+- fixed init code & improved differential update for GDEW042T2 4.2" b/w 300x400
+- note that all differential refresh waveforms are a compromise (ghosting, big font use)
+- parameters for differential waveform for these display can easily be changed for experimenting
+- GDEW042T2 would have greyed background without sustain phase
+- GDEW042T2 needs multiple full refreshes after extended use of partial updates
+#### Version 1.1.10
 - added support for GDEH0213B73 2.13" b/w, replacement for GDE0213B1, GDEH0213B72
 - added support for GDEW026T0 2.6" b/w 152x256
 - added support for GDEW0371W7 3.7" b/w 240x416
