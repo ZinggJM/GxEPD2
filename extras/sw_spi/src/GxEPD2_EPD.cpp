@@ -8,6 +8,15 @@
 // Version: see library.properties
 //
 // Library: https://github.com/ZinggJM/GxEPD2
+//
+// This is a modified class GxEPD2_EPD that allows to use SW SPI with GxEPD2 and to read from DIN pin
+// read the README.MD or README.txr
+//
+// To use SW SPI with GxEPD2:
+// - copy the files GxEPD2_EPD.h and GxEPD2_EPD.cpp from the subdirectoy .src to the .src directory of the library.
+// - add the special call to the added init method BEFORE the normal init method:
+//   display.epd2.init(SW_SCK, SW_MOSI, 115200, true, false); // define or replace SW_SCK, SW_MOSI
+//   display.init(115200); // needed to init upper level
 
 #include "GxEPD2_EPD.h"
 
@@ -20,6 +29,7 @@
 GxEPD2_EPD::GxEPD2_EPD(int8_t cs, int8_t dc, int8_t rst, int8_t busy, int8_t busy_level, uint32_t busy_timeout,
                        uint16_t w, uint16_t h, GxEPD2::Panel p, bool c, bool pu, bool fpu) :
   WIDTH(w), HEIGHT(h), panel(p), hasColor(c), hasPartialUpdate(pu), hasFastPartialUpdate(fpu),
+  _sck(-1), _mosi(-1),
   _cs(cs), _dc(dc), _rst(rst), _busy(busy), _busy_level(busy_level), _busy_timeout(busy_timeout), _diag_enabled(false),
   _spi_settings(4000000, MSBFIRST, SPI_MODE0)
 {
@@ -63,7 +73,21 @@ void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_
   {
     pinMode(_busy, INPUT);
   }
-  SPI.begin();
+  if (_sck < 0) SPI.begin();
+}
+
+void GxEPD2_EPD::init(int8_t sck, int8_t mosi, uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode)
+{
+  if ((sck >= 0) && (mosi >= 0))
+  {
+    _sck = sck;
+    _mosi = mosi;
+    digitalWrite(_sck, LOW);
+    digitalWrite(_mosi, LOW);
+    pinMode(_sck, OUTPUT);
+    pinMode(_mosi, OUTPUT);
+  } else _sck = -1;
+  init(serial_diag_bitrate, initial, pulldown_rst_mode);
 }
 
 void GxEPD2_EPD::_reset()
@@ -127,98 +151,181 @@ void GxEPD2_EPD::_waitWhileBusy(const char* comment, uint16_t busy_time)
 
 void GxEPD2_EPD::_writeCommand(uint8_t c)
 {
-  SPI.beginTransaction(_spi_settings);
+  _beginTransaction(_spi_settings);
   if (_dc >= 0) digitalWrite(_dc, LOW);
   if (_cs >= 0) digitalWrite(_cs, LOW);
-  SPI.transfer(c);
+  _transfer(c);
   if (_cs >= 0) digitalWrite(_cs, HIGH);
   if (_dc >= 0) digitalWrite(_dc, HIGH);
-  SPI.endTransaction();
+  _endTransaction();
 }
 
 void GxEPD2_EPD::_writeData(uint8_t d)
 {
-  SPI.beginTransaction(_spi_settings);
+  _beginTransaction(_spi_settings);
   if (_cs >= 0) digitalWrite(_cs, LOW);
-  SPI.transfer(d);
+  _transfer(d);
   if (_cs >= 0) digitalWrite(_cs, HIGH);
-  SPI.endTransaction();
+  _endTransaction();
 }
 
 void GxEPD2_EPD::_writeData(const uint8_t* data, uint16_t n)
 {
-  SPI.beginTransaction(_spi_settings);
+  _beginTransaction(_spi_settings);
   if (_cs >= 0) digitalWrite(_cs, LOW);
-  for (uint16_t i = 0; i < n; i++)
+  for (uint8_t i = 0; i < n; i++)
   {
-    SPI.transfer(*data++);
+    _transfer(*data++);
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);
-  SPI.endTransaction();
+  _endTransaction();
 }
 
 void GxEPD2_EPD::_writeDataPGM(const uint8_t* data, uint16_t n, int16_t fill_with_zeroes)
 {
-  SPI.beginTransaction(_spi_settings);
+  _beginTransaction(_spi_settings);
   if (_cs >= 0) digitalWrite(_cs, LOW);
-  for (uint16_t i = 0; i < n; i++)
+  for (uint8_t i = 0; i < n; i++)
   {
-    SPI.transfer(pgm_read_byte(&*data++));
+    _transfer(pgm_read_byte(&*data++));
   }
   while (fill_with_zeroes > 0)
   {
-    SPI.transfer(0x00);
+    _transfer(0x00);
     fill_with_zeroes--;
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);
-  SPI.endTransaction();
+  _endTransaction();
 }
 
 void GxEPD2_EPD::_writeDataPGM_sCS(const uint8_t* data, uint16_t n, int16_t fill_with_zeroes)
 {
-  SPI.beginTransaction(_spi_settings);
+  _beginTransaction(_spi_settings);
   for (uint8_t i = 0; i < n; i++)
   {
     if (_cs >= 0) digitalWrite(_cs, LOW);
-    SPI.transfer(pgm_read_byte(&*data++));
+    _transfer(pgm_read_byte(&*data++));
     if (_cs >= 0) digitalWrite(_cs, HIGH);
   }
   while (fill_with_zeroes > 0)
   {
     if (_cs >= 0) digitalWrite(_cs, LOW);
-    SPI.transfer(0x00);
+    _transfer(0x00);
     fill_with_zeroes--;
     if (_cs >= 0) digitalWrite(_cs, HIGH);
   }
-  SPI.endTransaction();
+  _endTransaction();
 }
 
 void GxEPD2_EPD::_writeCommandData(const uint8_t* pCommandData, uint8_t datalen)
 {
-  SPI.beginTransaction(_spi_settings);
+  _beginTransaction(_spi_settings);
   if (_dc >= 0) digitalWrite(_dc, LOW);
   if (_cs >= 0) digitalWrite(_cs, LOW);
-  SPI.transfer(*pCommandData++);
+  _transfer(*pCommandData++);
   if (_dc >= 0) digitalWrite(_dc, HIGH);
   for (uint8_t i = 0; i < datalen - 1; i++)  // sub the command
   {
-    SPI.transfer(*pCommandData++);
+    _transfer(*pCommandData++);
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);
-  SPI.endTransaction();
+  _endTransaction();
 }
 
 void GxEPD2_EPD::_writeCommandDataPGM(const uint8_t* pCommandData, uint8_t datalen)
 {
-  SPI.beginTransaction(_spi_settings);
+  _beginTransaction(_spi_settings);
   if (_dc >= 0) digitalWrite(_dc, LOW);
   if (_cs >= 0) digitalWrite(_cs, LOW);
-  SPI.transfer(pgm_read_byte(&*pCommandData++));
+  _transfer(pgm_read_byte(&*pCommandData++));
   if (_dc >= 0) digitalWrite(_dc, HIGH);
   for (uint8_t i = 0; i < datalen - 1; i++)  // sub the command
   {
-    SPI.transfer(pgm_read_byte(&*pCommandData++));
+    _transfer(pgm_read_byte(&*pCommandData++));
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);
-  SPI.endTransaction();
+  _endTransaction();
+}
+
+void GxEPD2_EPD::_beginTransaction(const SPISettings& settings)
+{
+  if (_sck < 0) SPI.beginTransaction(settings);
+}
+
+void GxEPD2_EPD::_transfer(uint8_t data)
+{
+  if (_sck < 0) SPI.transfer(data);
+  else
+  {
+    for (int i = 0; i < 8; i++)
+    {
+      digitalWrite(_mosi, (data & 0x80) ? HIGH : LOW);
+      data <<= 1;
+      digitalWrite(_sck, HIGH);
+      digitalWrite(_sck, LOW);
+    }
+  }
+}
+
+void GxEPD2_EPD::_endTransaction()
+{
+  if (_sck < 0) SPI.endTransaction();
+}
+
+uint8_t GxEPD2_EPD::_readData()
+{
+  uint8_t data = 0;
+  _beginTransaction(_spi_settings);
+  if (_cs >= 0) digitalWrite(_cs, LOW);
+  if (_sck < 0)
+  {
+    data = SPI.transfer(0);
+  }
+  else
+  {
+    pinMode(_mosi, INPUT);
+    for (int i = 0; i < 8; i++)
+    {
+      data <<= 1;
+      digitalWrite(_sck, HIGH);
+      data |= digitalRead(_mosi);
+      digitalWrite(_sck, LOW);
+    }
+    pinMode(_mosi, OUTPUT);
+  }
+  if (_cs >= 0) digitalWrite(_cs, HIGH);
+  _endTransaction();
+  return data;
+}
+
+void GxEPD2_EPD::_readData(uint8_t* data, uint16_t n)
+{
+  _beginTransaction(_spi_settings);
+  if (_cs >= 0) digitalWrite(_cs, LOW);
+  if (_sck < 0)
+  {
+    for (uint8_t i = 0; i < n; i++)
+    {
+      *data++ = SPI.transfer(0);
+    }
+  }
+  else
+  {
+    pinMode(_mosi, INPUT);
+    for (uint8_t i = 0; i < n; i++)
+    {
+      *data = 0;
+      for (int i = 0; i < 8; i++)
+      {
+        *data <<= 1;
+        digitalWrite(_sck, HIGH);
+        *data |= digitalRead(_mosi);
+        digitalWrite(_sck, LOW);
+      }
+      data++;
+    }
+    pinMode(_mosi, OUTPUT);
+  }
+  if (_cs >= 0) digitalWrite(_cs, HIGH);
+  _endTransaction();
 }

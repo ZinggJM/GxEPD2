@@ -388,7 +388,9 @@ const unsigned char GxEPD2_260::lut_24_bb_full[] PROGMEM =
 #define T3  6 // color change or sustain phase
 #define T4 60 // color change phase
 
-// for new waveform without sustain phase: uncomment next 2 lines, good enough for fat fonts
+// for new waveform without sustain phase: uncomment next 4 lines, good enough for fat fonts
+#undef T2
+#undef T3
 #define T2  0 // color change or sustain charge balance pre-phase
 #define T3  0 // color change or sustain phase
 

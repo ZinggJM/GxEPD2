@@ -75,7 +75,6 @@ class GxEPD2_270 : public GxEPD2_EPD
     void _Init_Part();
     void _Update_Full();
     void _Update_Part();
-    void _writeDataPGM(const uint8_t* data, uint16_t n);
   private:
     static const unsigned char lut_20_vcomDC[];
     static const unsigned char lut_21_ww[];

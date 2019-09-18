@@ -146,6 +146,7 @@ class GxEPD2_3C : public Adafruit_GFX
     {
       epd2.writeImage(_black_buffer, _color_buffer, 0, 0, WIDTH, _page_height);
       epd2.refresh(partial_update_mode);
+      if (!partial_update_mode) epd2.powerOff();
     }
 
     // display part of buffer content to screen, useful for full screen buffer

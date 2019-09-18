@@ -8,6 +8,16 @@
 // Version: see library.properties
 //
 // Library: https://github.com/ZinggJM/GxEPD2
+//
+// This is a modified class GxEPD2_EPD that allows to use SW SPI with GxEPD2 and to read from DIN pin
+// read the README.MD or README.txt
+//
+// To use SW SPI with GxEPD2:
+// - copy the files GxEPD2_EPD.h and GxEPD2_EPD.cpp from the subdirectoy .src to the .src directory of the library.
+// - add the special call to the added init method BEFORE the normal init method:
+//   display.epd2.init(SW_SCK, SW_MOSI, 115200, true, false); // define or replace SW_SCK, SW_MOSI
+//   display.init(115200); // needed to init upper level
+
 
 #ifndef _GxEPD2_EPD_H_
 #define _GxEPD2_EPD_H_
@@ -16,8 +26,6 @@
 #include <SPI.h>
 
 #include <GxEPD2.h>
-
-#pragma GCC diagnostic ignored "-Wunused-parameter"
 
 class GxEPD2_EPD
 {
@@ -34,6 +42,7 @@ class GxEPD2_EPD
                uint16_t w, uint16_t h, GxEPD2::Panel p, bool c, bool pu, bool fpu);
     virtual void init(uint32_t serial_diag_bitrate = 0); // serial_diag_bitrate = 0 : disabled
     virtual void init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode = false);
+    virtual void init(int8_t sck, int8_t mosi, uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode = false);
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     virtual void clearScreen(uint8_t value) = 0; // init controller memory and screen (default white)
     virtual void writeScreenBuffer(uint8_t value) = 0; // init controller memory (default white)
@@ -64,10 +73,10 @@ class GxEPD2_EPD
     // write to controller memory, with screen refresh; x and w should be multiple of 8
     virtual void drawImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
     virtual void drawImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                                int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
+                               int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
     virtual void drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
     virtual void drawImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                                int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
+                               int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
     virtual void refresh(bool partial_update_mode = false) = 0; // screen refresh from controller memory to full screen
     virtual void refresh(int16_t x, int16_t y, int16_t w, int16_t h) = 0; // screen refresh from controller memory, partial screen
     virtual void powerOff() = 0; // turns off generation of panel driving voltages, avoids screen fading over time
@@ -83,20 +92,27 @@ class GxEPD2_EPD
     };
   protected:
     void _reset();
-    void _waitWhileBusy(const char* comment = 0, uint16_t busy_time = 5000);
-    void _writeCommand(uint8_t c);
-    void _writeData(uint8_t d);
-    void _writeData(const uint8_t* data, uint16_t n);
     void _writeDataPGM(const uint8_t* data, uint16_t n, int16_t fill_with_zeroes = 0);
     void _writeDataPGM_sCS(const uint8_t* data, uint16_t n, int16_t fill_with_zeroes = 0);
     void _writeCommandData(const uint8_t* pCommandData, uint8_t datalen);
     void _writeCommandDataPGM(const uint8_t* pCommandData, uint8_t datalen);
+    void _beginTransaction(const SPISettings& settings);
+    void _transfer(uint8_t data);
+    void _endTransaction();
+  public:
+    void _waitWhileBusy(const char* comment = 0, uint16_t busy_time = 5000);
+    void _writeCommand(uint8_t c);
+    void _writeData(uint8_t d);
+    void _writeData(const uint8_t* data, uint16_t n);
+    uint8_t _readData();
+    void _readData(uint8_t* data, uint16_t n);
   protected:
+    int8_t _sck, _mosi;
     int8_t _cs, _dc, _rst, _busy, _busy_level;
     uint32_t _busy_timeout;
     bool _diag_enabled, _pulldown_rst_mode;
     SPISettings _spi_settings;
-    bool _initial_write, _initial_refresh; 
+    bool _initial_write, _initial_refresh;
     bool _power_is_on, _using_partial_mode, _hibernating;
 };
 

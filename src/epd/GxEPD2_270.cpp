@@ -466,15 +466,15 @@ void GxEPD2_270::_Init_Full()
   _writeCommand(0x50); //VCOM AND DATA INTERVAL SETTING
   _writeData(0x97);    //WBmode:VBDF 17|D7 VBDW 97 VBDB 57   WBRmode:VBDF F7 VBDW 77 VBDB 37  VBDR B7
   _writeCommand(0x20);
-  _writeDataPGM(lut_20_vcomDC, sizeof(lut_20_vcomDC));
+  _writeDataPGM_sCS(lut_20_vcomDC, sizeof(lut_20_vcomDC));
   _writeCommand(0x21);
-  _writeDataPGM(lut_21_ww, sizeof(lut_21_ww));
+  _writeDataPGM_sCS(lut_21_ww, sizeof(lut_21_ww));
   _writeCommand(0x22);
-  _writeDataPGM(lut_22_bw, sizeof(lut_22_bw));
+  _writeDataPGM_sCS(lut_22_bw, sizeof(lut_22_bw));
   _writeCommand(0x23);
-  _writeDataPGM(lut_23_wb, sizeof(lut_23_wb));
+  _writeDataPGM_sCS(lut_23_wb, sizeof(lut_23_wb));
   _writeCommand(0x24);
-  _writeDataPGM(lut_24_bb, sizeof(lut_24_bb));
+  _writeDataPGM_sCS(lut_24_bb, sizeof(lut_24_bb));
   _PowerOn();
   _using_partial_mode = false;
 }
@@ -485,15 +485,15 @@ void GxEPD2_270::_Init_Part()
   _writeCommand(0x50); //VCOM AND DATA INTERVAL SETTING
   _writeData(0x17);    //WBmode:VBDF 17|D7 VBDW 97 VBDB 57   WBRmode:VBDF F7 VBDW 77 VBDB 37  VBDR B7
   _writeCommand(0x20);
-  _writeDataPGM(lut_20_vcomDC_partial, sizeof(lut_20_vcomDC_partial));
+  _writeDataPGM_sCS(lut_20_vcomDC_partial, sizeof(lut_20_vcomDC_partial));
   _writeCommand(0x21);
-  _writeDataPGM(lut_21_ww_partial, sizeof(lut_21_ww_partial));
+  _writeDataPGM_sCS(lut_21_ww_partial, sizeof(lut_21_ww_partial));
   _writeCommand(0x22);
-  _writeDataPGM(lut_22_bw_partial, sizeof(lut_22_bw_partial));
+  _writeDataPGM_sCS(lut_22_bw_partial, sizeof(lut_22_bw_partial));
   _writeCommand(0x23);
-  _writeDataPGM(lut_23_wb_partial, sizeof(lut_23_wb_partial));
+  _writeDataPGM_sCS(lut_23_wb_partial, sizeof(lut_23_wb_partial));
   _writeCommand(0x24);
-  _writeDataPGM(lut_24_bb_partial, sizeof(lut_24_bb_partial));
+  _writeDataPGM_sCS(lut_24_bb_partial, sizeof(lut_24_bb_partial));
   _PowerOn();
   _using_partial_mode = true;
 }
@@ -508,16 +508,4 @@ void GxEPD2_270::_Update_Part()
 {
   _writeCommand(0x12); //display refresh
   _waitWhileBusy("_Update_Part", partial_refresh_time);
-}
-
-void GxEPD2_270::_writeDataPGM(const uint8_t* data, uint16_t n)
-{
-  SPI.beginTransaction(_spi_settings);
-  for (uint8_t i = 0; i < n; i++)
-  {
-    if (_cs >= 0) digitalWrite(_cs, LOW);
-    SPI.transfer(pgm_read_byte(&*data++));
-    if (_cs >= 0) digitalWrite(_cs, HIGH);
-  }
-  SPI.endTransaction();
 }

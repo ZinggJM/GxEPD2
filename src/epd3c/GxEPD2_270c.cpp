@@ -310,18 +310,6 @@ void GxEPD2_270c::hibernate()
   }
 }
 
-void GxEPD2_270c::_writeData_nCS(const uint8_t* data, uint16_t n)
-{
-  SPI.beginTransaction(_spi_settings);
-  for (uint8_t i = 0; i < n; i++)
-  {
-    if (_cs >= 0) digitalWrite(_cs, LOW);
-    SPI.transfer(pgm_read_byte(&*data++));
-    if (_cs >= 0) digitalWrite(_cs, HIGH);
-  }
-  SPI.endTransaction();
-}
-
 void GxEPD2_270c::_setPartialRamArea_270c(uint8_t cmd, uint16_t x, uint16_t y, uint16_t w, uint16_t h)
 {
   w = (w + 7 + (x % 8)) & 0xfff8; // byte boundary exclusive (round up)
@@ -456,15 +444,15 @@ void GxEPD2_270c::_Init_Full()
 {
   _InitDisplay();
   _writeCommand(0x20); //vcom
-  _writeData_nCS(lut_20_vcomDC, sizeof(lut_20_vcomDC));
+  _writeDataPGM_sCS(lut_20_vcomDC, sizeof(lut_20_vcomDC));
   _writeCommand(0x21); //ww --
-  _writeData_nCS(lut_21, sizeof(lut_21));
+  _writeDataPGM_sCS(lut_21, sizeof(lut_21));
   _writeCommand(0x22); //bw r
-  _writeData_nCS(lut_22_red, sizeof(lut_22_red));
+  _writeDataPGM_sCS(lut_22_red, sizeof(lut_22_red));
   _writeCommand(0x23); //wb w
-  _writeData_nCS(lut_23_white, sizeof(lut_23_white));
+  _writeDataPGM_sCS(lut_23_white, sizeof(lut_23_white));
   _writeCommand(0x24); //bb b
-  _writeData_nCS(lut_24_black, sizeof(lut_24_black));
+  _writeDataPGM_sCS(lut_24_black, sizeof(lut_24_black));
   _PowerOn();
 }
 
@@ -472,15 +460,15 @@ void GxEPD2_270c::_Init_Part()
 {
   _InitDisplay();
   _writeCommand(0x20); //vcom
-  _writeData_nCS(lut_20_vcomDC, sizeof(lut_20_vcomDC));
+  _writeDataPGM_sCS(lut_20_vcomDC, sizeof(lut_20_vcomDC));
   _writeCommand(0x21); //ww --
-  _writeData_nCS(lut_21, sizeof(lut_21));
+  _writeDataPGM_sCS(lut_21, sizeof(lut_21));
   _writeCommand(0x22); //bw r
-  _writeData_nCS(lut_22_red, sizeof(lut_22_red));
+  _writeDataPGM_sCS(lut_22_red, sizeof(lut_22_red));
   _writeCommand(0x23); //wb w
-  _writeData_nCS(lut_23_white, sizeof(lut_23_white));
+  _writeDataPGM_sCS(lut_23_white, sizeof(lut_23_white));
   _writeCommand(0x24); //bb b
-  _writeData_nCS(lut_24_black, sizeof(lut_24_black));
+  _writeDataPGM_sCS(lut_24_black, sizeof(lut_24_black));
   _PowerOn();
 }
 

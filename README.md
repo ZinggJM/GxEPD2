@@ -66,12 +66,19 @@
 - GDEW042Z15     4.2" b/w/r
 - GDEW0583T7     5.83" b/w
 - GDEW075T8      7.5" b/w
+- GDEW075T7      7.5" b/w 800x480
 - GDEW075Z09     7.5" b/w/r
 - GDEW075Z08     7.5" b/w/r 800x480
 #### Supported SPI e-paper panels & boards from Waveshare: compare with Good Display, same panel
 #### other supported panels
 - ED060SCT        6" grey levels, on Waveshare e-Paper IT8951 Driver HAT
 
+### Version 1.2.1
+- added support for GDEW075T7 7.5" b/w 800x480
+- GDEW075T7 has differential update (1.6s) using a charge balancing waveform
+- added optional SW SPI support, see /extras/sw_spi/README
+- added /extras/tests/GxEPD2_RefreshTests/GxEPD2_RefreshTests.ino, for waveform tuning
+- minor fixes 
 ### Version 1.2.0
 - added "fast partial update" (differential update) for GDEW0371W7 3.7" b/w 240x416
 - improved differential update waveform for GDEW026T0 2.6" b/w 152x256

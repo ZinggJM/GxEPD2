@@ -328,16 +328,6 @@ void GxEPD2_213_B73::_InitDisplay()
   _writeData(0xF9);
   _writeData(0x00);
   _writeData(0x00);
-  _writeCommand(0x11); //data entry mode
-  _writeData(0x01);
-  _writeCommand(0x44); //set Ram-X address start/end position
-  _writeData(0x00);
-  _writeData(0x0F);    //0x0C-->(15+1)*8=128
-  _writeCommand(0x45); //set Ram-Y address start/end position
-  _writeData(0xF9);   //0xF9-->(249+1)=250
-  _writeData(0x00);
-  _writeData(0x00);
-  _writeData(0x00);
   _writeCommand(0x3C); //BorderWavefrom
   _writeData(0x03);
   _writeCommand(0x2C); //VCOM Voltage
@@ -352,11 +342,6 @@ void GxEPD2_213_B73::_InitDisplay()
   _writeData(0x2C);
   _writeCommand(0x3B); //Gate time
   _writeData(0x0B);
-  _writeCommand(0x4E); // set RAM x address count to 0;
-  _writeData(0x00);
-  _writeCommand(0x4F); // set RAM y address count to 0X127;
-  _writeData(0xF9);
-  _writeData(0x00);
   _setPartialRamArea(0, 0, WIDTH, HEIGHT);
 }
 
@@ -420,15 +405,6 @@ void GxEPD2_213_B73::_Init_Part()
   _writeData(0x26);    // NA ??
   _writeCommand(0x32);
   _writeDataPGM(LUT_DATA_part, sizeof(LUT_DATA_part));
-  // the demo code uses Mode 2 with Ping Pong (P 29), doesn't work with GxEPD2
-  //  _writeCommand(0x37); // Write Register for Display Option
-  //  _writeData(0x00);
-  //  _writeData(0x00);
-  //  _writeData(0x00);
-  //  _writeData(0x00);
-  //  _writeData(0x00);
-  //  _writeData(0x40); // enable Ping Pong for Mode 2
-  //  _writeData(0x00);
   _PowerOn();
   _using_partial_mode = true;
 }
@@ -444,8 +420,7 @@ void GxEPD2_213_B73::_Update_Full()
 void GxEPD2_213_B73::_Update_Part()
 {
   _writeCommand(0x22);
-  // _writeData(0x0C); // the demo code uses Mode 2 with Ping Pong
-  _writeData(0x04); // use Mode 1 for GxEPD2
+  _writeData(0xc4);
   _writeCommand(0x20);
   _waitWhileBusy("_Update_Part", partial_refresh_time);
 }

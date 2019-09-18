@@ -27,7 +27,7 @@
 #include "epd/GxEPD2_420.h"
 #include "epd/GxEPD2_583.h"
 #include "epd/GxEPD2_750.h"
-//#include "epd/GxEPD2_750_T7.h"
+#include "epd/GxEPD2_750_T7.h"
 #include "it8951/GxEPD2_it60.h"
 
 #ifndef ENABLE_GxEPD2_GFX
@@ -154,6 +154,7 @@ class GxEPD2_BW : public Adafruit_GFX
       {
         epd2.writeImageAgain(_buffer, 0, 0, WIDTH, _page_height);
       }
+      if (!partial_update_mode) epd2.powerOff();
     }
 
     // display part of buffer content to screen, useful for full screen buffer
@@ -174,7 +175,7 @@ class GxEPD2_BW : public Adafruit_GFX
       epd2.refresh(x, y, w, h);
       if (epd2.hasFastPartialUpdate)
       {
-        epd2.writeImagePartAgain(_buffer, x, y, WIDTH, _page_height, x, y, w, h);
+        epd2.writeImagePartAgain(_buffer, x, y_part, WIDTH, _page_height, x, y, w, h);
       }
     }
 
@@ -236,8 +237,8 @@ class GxEPD2_BW : public Adafruit_GFX
           {
             epd2.writeImageAgain(_buffer, 0, 0, WIDTH, HEIGHT);
             //epd2.refresh(true); // not needed
-            epd2.powerOff();
           }
+          epd2.powerOff();
         }
         return false;
       }
@@ -465,7 +466,7 @@ class GxEPD2_BW : public Adafruit_GFX
       epd2.drawImage(bitmap, x, y, w, h, invert, mirror_y, pgm);
     }
     void drawImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                        int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false)
+                       int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false)
     {
       epd2.drawImagePart(bitmap, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
     }
@@ -478,12 +479,12 @@ class GxEPD2_BW : public Adafruit_GFX
       epd2.drawImage(black, color, x, y, w, h, false, false, false);
     }
     void drawImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                        int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+                       int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
     {
       epd2.drawImagePart(black, color, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
     }
     void drawImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                        int16_t x, int16_t y, int16_t w, int16_t h)
+                       int16_t x, int16_t y, int16_t w, int16_t h)
     {
       epd2.drawImagePart(black, color, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, false, false, false);
     }
