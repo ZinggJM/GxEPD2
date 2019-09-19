@@ -849,10 +849,15 @@ void drawBitmaps()
 #ifdef _GxBitmaps200x200_H_
 void drawBitmaps200x200()
 {
-#if defined(__AVR)
+#if defined(ARDUINO_AVR_PRO)
   const unsigned char* bitmaps[] =
   {
-    logo200x200, first200x200 //, second200x200, third200x200, fourth200x200, fifth200x200, sixth200x200, senventh200x200, eighth200x200
+    logo200x200
+  };
+#elif defined(__AVR)
+  const unsigned char* bitmaps[] =
+  {
+    logo200x200, first200x200
   };
 #elif defined(_BOARD_GENERIC_STM32F103C_H_)
   const unsigned char* bitmaps[] =
