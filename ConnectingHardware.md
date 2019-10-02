@@ -49,32 +49,18 @@
 ```
    connection to the e-Paper display is through DESTM32-S2 connection board, available from Good Display
 
-
-
    DESTM32-S2 pinout (top, component side view):
 
          |-------------------------------------------------
-
          |  VCC  |o o| VCC 5V  not needed
-
          |  GND  |o o| GND     GND
-
          |  3.3  |o o| 3.3     3.3V
-
          |  nc   |o o| nc
-
          |  nc   |o o| nc
-
          |  nc   |o o| nc
-
    MOSI  |  DIN  |o o| CLK     SCK
-
    SS    |  CS   |o o| DC      e.g. D3
-
    D4    |  RST  |o o| BUSY    e.g. D2
-
          |  nc   |o o| BS      GND
-
          |-------------------------------------------------
-
 ```
