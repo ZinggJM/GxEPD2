@@ -49,7 +49,7 @@
 ```
    connection to the e-Paper display is through DESTM32-S2 connection board, available from Good Display
 
-   DESTM32-S2 pinout (top, component side view):
+   DESTM32-S2 pinout (top, component side view, solder side of connector):
 
          |-------------------------------------------------
          |  VCC  |o o| VCC 5V  not needed
