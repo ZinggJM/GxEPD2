@@ -74,7 +74,10 @@
 #### other supported panels
 - ED060SCT        6" grey levels, on Waveshare e-Paper IT8951 Driver HAT
 
-### Version 1.2.1
+### Version 1.2.2
+- fixed BMP handling, e.g. for BMPs created by ImageMagick
+- see also Arduino Forum Topic https://forum.arduino.cc/index.php?topic=642343.0
+#### Version 1.2.1
 - added support for GDEW075T7 7.5" b/w 800x480
 - GDEW075T7 has differential update (1.6s) using a charge balancing waveform
 - added optional SW SPI support, see /extras/sw_spi/README

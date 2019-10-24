@@ -266,6 +266,22 @@ void drawBitmaps_test()
   delay(2000);
   drawBitmapFromSD("bb4.bmp", 0, 0);
   delay(2000);
+  drawBitmapFromSD("output5.bmp", 0, 0);
+  delay(2000);
+  drawBitmapFromSD("output6.bmp", 0, 0);
+  delay(2000);
+  drawBitmapFromSD("tractor_1.bmp", 0, 0);
+  delay(2000);
+  drawBitmapFromSD("tractor_4.bmp", 0, 0);
+  delay(2000);
+  drawBitmapFromSD("tractor_8.bmp", 0, 0);
+  delay(2000);
+  drawBitmapFromSD("tractor_11.bmp", 0, 0);
+  delay(2000);
+  drawBitmapFromSD("tractor_44.bmp", 0, 0);
+  delay(2000);
+  drawBitmapFromSD("tractor_88.bmp", 0, 0);
+  delay(2000);
 }
 
 void drawBitmapsBuffered_200x200()
@@ -338,7 +354,7 @@ void drawBitmapsBuffered_test()
 
 static const uint16_t input_buffer_pixels = 20; // may affect performance
 
-static const uint16_t max_row_width = 640; // for up to 7.5" display
+static const uint16_t max_row_width = 800; // for up to 7.5" display 800x480
 static const uint16_t max_palette_pixels = 256; // for depth <= 8
 
 uint8_t input_buffer[3 * input_buffer_pixels]; // up to depth 24
@@ -417,13 +433,15 @@ void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_colo
         if (depth <= 8)
         {
           if (depth < 8) bitmask >>= depth;
-          file.seekSet(54); //palette is always @ 54
+          //file.seekSet(54); //palette is always @ 54
+          file.seekSet(imageOffset - (4 << depth)); // 54 for regular, diff for colorsimportant
           for (uint16_t pn = 0; pn < (1 << depth); pn++)
           {
             blue  = file.read();
             green = file.read();
             red   = file.read();
             file.read();
+            //Serial.print(red); Serial.print(" "); Serial.print(green); Serial.print(" "); Serial.println(blue);
             whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
             colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
             if (0 == pn % 8) mono_palette_buffer[pn / 8] = 0;
@@ -605,7 +623,8 @@ void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool 
         if (depth <= 8)
         {
           if (depth < 8) bitmask >>= depth;
-          file.seekSet(54); //palette is always @ 54
+          //file.seekSet(54); //palette is always @ 54
+          file.seekSet(imageOffset - (4 << depth)); //54 for regular, diff for colorsimportant
           for (uint16_t pn = 0; pn < (1 << depth); pn++)
           {
             blue  = file.read();
@@ -739,4 +758,3 @@ uint32_t read32(SdFile& f)
   ((uint8_t *)&result)[3] = f.read(); // MSB
   return result;
 }
-

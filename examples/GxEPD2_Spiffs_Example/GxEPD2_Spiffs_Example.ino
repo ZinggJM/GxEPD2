@@ -136,6 +136,7 @@ void setup()
   {
     drawBitmaps_200x200();
     drawBitmaps_other();
+    //drawBitmaps_test();
   }
 
   Serial.println("GxEPD2_Spiffs_Example done");
@@ -195,6 +196,26 @@ void drawBitmaps_other()
   delay(2000);
 }
 
+void drawBitmaps_test()
+{
+  drawBitmapFromSpiffs("output5.bmp", 0, 0);
+  delay(2000);
+  drawBitmapFromSpiffs("output6.bmp", 0, 0);
+  delay(2000);
+  drawBitmapFromSpiffs("tractor_1.bmp", 0, 0);
+  delay(2000);
+  drawBitmapFromSpiffs("tractor_4.bmp", 0, 0);
+  delay(2000);
+  drawBitmapFromSpiffs("tractor_8.bmp", 0, 0);
+  delay(2000);
+  drawBitmapFromSpiffs("tractor_11.bmp", 0, 0);
+  delay(2000);
+  drawBitmapFromSpiffs("tractor_44.bmp", 0, 0);
+  delay(2000);
+  drawBitmapFromSpiffs("tractor_88.bmp", 0, 0);
+  delay(2000);
+}
+
 void drawBitmapsBuffered_200x200()
 {
   int16_t x = (display.width() - 200) / 2;
@@ -245,9 +266,9 @@ void drawBitmapsBuffered_other()
   delay(2000);
 }
 
-static const uint16_t input_buffer_pixels = 640; // may affect performance
+static const uint16_t input_buffer_pixels = 800; // may affect performance
 
-static const uint16_t max_row_width = 640; // for up to 7.5" display
+static const uint16_t max_row_width = 800; // for up to 7.5" display 800x480
 static const uint16_t max_palette_pixels = 256; // for depth <= 8
 
 uint8_t input_buffer[3 * input_buffer_pixels]; // up to depth 24
@@ -322,7 +343,8 @@ void drawBitmapFromSpiffs(const char *filename, int16_t x, int16_t y, bool with_
         if (depth <= 8)
         {
           if (depth < 8) bitmask >>= depth;
-          file.seek(54); //palette is always @ 54
+          //file.seek(54); //palette is always @ 54
+          file.seek(imageOffset - (4 << depth)); // 54 for regular, diff for colorsimportant
           for (uint16_t pn = 0; pn < (1 << depth); pn++)
           {
             blue  = file.read();
@@ -506,7 +528,8 @@ void drawBitmapFromSpiffs_Buffered(const char *filename, int16_t x, int16_t y, b
         if (depth <= 8)
         {
           if (depth < 8) bitmask >>= depth;
-          file.seek(54); //palette is always @ 54
+          //file.seek(54); //palette is always @ 54
+          file.seek(imageOffset - (4 << depth)); // 54 for regular, diff for colorsimportant
           for (uint16_t pn = 0; pn < (1 << depth); pn++)
           {
             blue  = file.read();
@@ -640,4 +663,3 @@ uint32_t read32(fs::File& f)
   ((uint8_t *)&result)[3] = f.read(); // MSB
   return result;
 }
-

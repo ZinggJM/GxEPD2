@@ -260,6 +260,22 @@ void drawBitmaps_test()
   int16_t h2 = display.height() / 2;
   showBitmapFrom_HTTPS(host_rawcontent, path_prenticedavid, "betty_4.bmp", fp_rawcontent, w2 - 102, h2 - 126);
   delay(2000);
+  showBitmapFrom_HTTPS(host_rawcontent, path_rawcontent, "output5.bmp", fp_rawcontent, 0, 0);
+  delay(2000);
+  showBitmapFrom_HTTPS(host_rawcontent, path_rawcontent, "output6.bmp", fp_rawcontent, 0, 0);
+  delay(2000);
+  showBitmapFrom_HTTPS(host_rawcontent, path_rawcontent, "tractor_1.bmp", fp_rawcontent, 0, 0);
+  delay(2000);
+  showBitmapFrom_HTTPS(host_rawcontent, path_rawcontent, "tractor_4.bmp", fp_rawcontent, 0, 0);
+  delay(2000);
+  showBitmapFrom_HTTPS(host_rawcontent, path_rawcontent, "tractor_8.bmp", fp_rawcontent, 0, 0);
+  delay(2000);
+  showBitmapFrom_HTTPS(host_rawcontent, path_rawcontent, "tractor_11.bmp", fp_rawcontent, 0, 0);
+  delay(2000);
+  showBitmapFrom_HTTPS(host_rawcontent, path_rawcontent, "tractor_44.bmp", fp_rawcontent, 0, 0);
+  delay(2000);
+  showBitmapFrom_HTTPS(host_rawcontent, path_rawcontent, "tractor_88.bmp", fp_rawcontent, 0, 0);
+  delay(2000);
 }
 
 void drawBitmapsBuffered_200x200()
@@ -324,9 +340,9 @@ void drawBitmapsBuffered_test()
   delay(2000);
 }
 
-static const uint16_t input_buffer_pixels = 640; // may affect performance
+static const uint16_t input_buffer_pixels = 800; // may affect performance
 
-static const uint16_t max_row_width = 640; // for up to 7.5" display
+static const uint16_t max_row_width = 800; // for up to 7.5" display 800x480
 static const uint16_t max_palette_pixels = 256; // for depth <= 8
 
 uint8_t input_buffer[3 * input_buffer_pixels]; // up to depth 24
@@ -421,7 +437,8 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
         if (depth <= 8)
         {
           if (depth < 8) bitmask >>= depth;
-          bytes_read += skip(client, 54 - bytes_read); //palette is always @ 54
+          //bytes_read += skip(client, 54 - bytes_read); //palette is always @ 54
+          bytes_read += skip(client, imageOffset - (4 << depth) - bytes_read); // 54 for regular, diff for colorsimportant
           for (uint16_t pn = 0; pn < (1 << depth); pn++)
           {
             blue  = client.read();
@@ -647,7 +664,8 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
         if (depth <= 8)
         {
           if (depth < 8) bitmask >>= depth;
-          bytes_read += skip(client, 54 - bytes_read); //palette is always @ 54
+          //bytes_read += skip(client, 54 - bytes_read); //palette is always @ 54
+          bytes_read += skip(client, imageOffset - (4 << depth) - bytes_read); // 54 for regular, diff for colorsimportant
           for (uint16_t pn = 0; pn < (1 << depth); pn++)
           {
             blue  = client.read();
@@ -897,7 +915,8 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
         if (depth <= 8)
         {
           if (depth < 8) bitmask >>= depth;
-          bytes_read += skip(client, 54 - bytes_read); //palette is always @ 54
+          //bytes_read += skip(client, 54 - bytes_read); //palette is always @ 54
+          bytes_read += skip(client, imageOffset - (4 << depth) - bytes_read); // 54 for regular, diff for colorsimportant
           for (uint16_t pn = 0; pn < (1 << depth); pn++)
           {
             blue  = client.read();
@@ -1144,7 +1163,8 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
         if (depth <= 8)
         {
           if (depth < 8) bitmask >>= depth;
-          bytes_read += skip(client, 54 - bytes_read); //palette is always @ 54
+          //bytes_read += skip(client, 54 - bytes_read); //palette is always @ 54
+          bytes_read += skip(client, imageOffset - (4 << depth) - bytes_read); // 54 for regular, diff for colorsimportant
           for (uint16_t pn = 0; pn < (1 << depth); pn++)
           {
             blue  = client.read();
