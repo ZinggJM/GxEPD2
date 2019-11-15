@@ -11,7 +11,7 @@
 
 // Supporting Arduino Forum Topics:
 // Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
-// Good Dispay ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
+// Good Display ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
 
 // mapping suggestion from Waveshare SPI e-Paper to Wemos D1 mini
 // BUSY -> D2, RST -> D4, DC -> D3, CS -> D8, CLK -> D5, DIN -> D7, GND -> GND, 3.3V -> 3.3V

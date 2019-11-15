@@ -11,7 +11,7 @@
 
 // Supporting Arduino Forum Topics:
 // Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
-// Good Dispay ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
+// Good Display ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
 
 #if defined(ESP32)
 #include "SPIFFS.h"
