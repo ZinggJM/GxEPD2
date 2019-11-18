@@ -31,16 +31,20 @@ void GxEPD2_420::writeScreenBuffer(uint8_t value)
   if (_initial_refresh)
   {
     _writeCommand(0x10); // init old data
+    _beginWriteDataBulk();
     for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
     {
-      _writeData(value);
+      _doWriteDataBulk(value);
     }
+    _endWriteDataBulk();
   }
   _writeCommand(0x13);
+  _beginWriteDataBulk();
   for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
-    _writeData(value);
+    _doWriteDataBulk(value);
   }
+  _endWriteDataBulk();
 }
 
 void GxEPD2_420::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
@@ -63,6 +67,7 @@ void GxEPD2_420::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_
   _writeCommand(0x91); // partial in
   _setPartialRamArea(x1, y1, w1, h1);
   _writeCommand(0x13);
+  _beginWriteDataBulk();
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -83,9 +88,10 @@ void GxEPD2_420::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_
         data = bitmap[idx];
       }
       if (invert) data = ~data;
-      _writeData(data);
+      _doWriteDataBulk(data);
     }
   }
+  _endWriteDataBulk();
   _writeCommand(0x92); // partial out
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
@@ -117,6 +123,7 @@ void GxEPD2_420::writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t 
   _writeCommand(0x91); // partial in
   _setPartialRamArea(x1, y1, w1, h1);
   _writeCommand(0x13);
+  _beginWriteDataBulk();
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -137,9 +144,10 @@ void GxEPD2_420::writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t 
         data = bitmap[idx];
       }
       if (invert) data = ~data;
-      _writeData(data);
+      _doWriteDataBulk(data);
     }
   }
+  _endWriteDataBulk();
   _writeCommand(0x92); // partial out
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
