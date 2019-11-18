@@ -31,7 +31,7 @@ class GxEPD2_EPD
     const bool hasFastPartialUpdate;
     // constructor
     GxEPD2_EPD(int8_t cs, int8_t dc, int8_t rst, int8_t busy, int8_t busy_level, uint32_t busy_timeout,
-               uint16_t w, uint16_t h, GxEPD2::Panel p, bool c, bool pu, bool fpu);
+               uint16_t w, uint16_t h, GxEPD2::Panel p, bool c, bool pu, bool fpu, uint32_t spi_max_baud=4000000);
     virtual void init(uint32_t serial_diag_bitrate = 0); // serial_diag_bitrate = 0 : disabled
     virtual void init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode = false);
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
