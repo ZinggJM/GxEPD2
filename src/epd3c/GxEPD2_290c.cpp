@@ -292,8 +292,10 @@ void GxEPD2_290c::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
   w1 -= x1 - x;
   h1 -= y1 - y;
   _Init_Part();
+  if (usePartialUpdateWindow) _writeCommand(0x91); // partial in
   _setPartialRamArea(x1, y1, w1, h1);
   _Update_Part();
+  if (usePartialUpdateWindow) _writeCommand(0x92); // partial out
 }
 
 void GxEPD2_290c::powerOff()
@@ -375,6 +377,8 @@ void GxEPD2_290c::_Init_Full()
 void GxEPD2_290c::_Init_Part()
 {
   _InitDisplay();
+  _writeCommand(0X50);
+  _writeData(0xF7);    //WBmode:VBDF 17|D7 VBDW 97 VBDB 57   WBRmode:VBDF F7 VBDW 77 VBDB 37  VBDR B7
   _PowerOn();
 }
 

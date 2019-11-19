@@ -1,4 +1,4 @@
-// GxEPD2_MultiDisplayExample : Display Library example for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
+// GxEPD2_T_MultiDisplayExample: Display Library example for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 // Requires HW SPI and Adafruit_GFX. Caution: these e-papers require 3.3V supply AND data lines!
 //
 // Display Library based on Demo Example from Good Display: http://www.good-display.com/download_list/downloadcategoryid=34&isMode=false.html
@@ -11,7 +11,7 @@
 
 // Supporting Arduino Forum Topics:
 // Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
-// Good Display ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
+// Good Dispay ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
 
 // mapping suggestion from Waveshare SPI e-Paper to Wemos D1 mini
 // BUSY -> D2, RST -> D4, DC -> D3, CS -> D8, CLK -> D5, DIN -> D7, GND -> GND, 3.3V -> 3.3V
@@ -31,10 +31,6 @@
 
 // mapping suggestion for AVR, UNO, NANO etc.
 // BUSY -> 7, RST -> 9, DC -> 8, CS-> 10, CLK -> 13, DIN -> 11
-
-// base class GxEPD2_GFX can be used to pass references or pointers to the display instance as parameter
-// enable GxEPD2_GFX base class
-#define ENABLE_GxEPD2_GFX 1 
 
 #include <GxEPD2_BW.h>
 #include <GxEPD2_3C.h>
@@ -114,6 +110,31 @@ GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT> display4(GxEPD2_750c(/*CS=*/ CS_4, /
 #include "bitmaps/Bitmaps3c128x296.h" // 2.9"  b/w/r
 #include "bitmaps/Bitmaps3c176x264.h" // 2.7"  b/w/r
 #include "bitmaps/Bitmaps3c400x300.h" // 4.2"  b/w/r
+
+// This example uses template functions for use of display instance reference parameter. 
+// This makes it complicated, because of the GxEPD2_BW and GxEPD2_3C template classes.
+// The example GxEPD2_MultiDisplayExample uses a common base class and is easier to use.
+
+// the compiler needs separate declarations for template functions 
+
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void helloWorld(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void helloFullScreenPartialMode(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void helloArduino(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void helloEpaper(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void showBox(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display, uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool partial);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawCornerTest(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void showFont(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display, const char name[], const GFXfont* f);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void showPartialUpdate(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display);
 
 void setup()
 {
@@ -198,8 +219,10 @@ void loop()
 {
 }
 
-
-void helloWorld(GxEPD2_GFX& display)
+//template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+//void helloWorld(GxGFX_Type<GxEPD2_Type, page_height>& display)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void helloWorld(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display)
 {
   //Serial.println("helloWorld");
   display.setRotation(1);
@@ -219,8 +242,8 @@ void helloWorld(GxEPD2_GFX& display)
   //Serial.println("helloWorld done");
 }
 
-
-void helloFullScreenPartialMode(GxEPD2_GFX& display)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void helloFullScreenPartialMode(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display)
 {
   //Serial.println("helloFullScreenPartialMode");
   display.setPartialWindow(0, 0, display.width(), display.height());
@@ -258,8 +281,8 @@ void helloFullScreenPartialMode(GxEPD2_GFX& display)
   //Serial.println("helloFullScreenPartialMode done");
 }
 
-
-void helloArduino(GxEPD2_GFX& display)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void helloArduino(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display)
 {
   //Serial.println("helloArduino");
   display.setRotation(1);
@@ -280,8 +303,8 @@ void helloArduino(GxEPD2_GFX& display)
   //Serial.println("helloArduino done");
 }
 
-
-void helloEpaper(GxEPD2_GFX& display)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void helloEpaper(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display)
 {
   //Serial.println("helloEpaper");
   display.setRotation(1);
@@ -301,8 +324,8 @@ void helloEpaper(GxEPD2_GFX& display)
   //Serial.println("helloEpaper done");
 }
 
-
-void showBox(GxEPD2_GFX& display, uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool partial)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void showBox(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display, uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool partial)
 {
   //Serial.println("showBox");
   display.setRotation(1);
@@ -324,8 +347,8 @@ void showBox(GxEPD2_GFX& display, uint16_t x, uint16_t y, uint16_t w, uint16_t h
   //Serial.println("showBox done");
 }
 
-
-void drawCornerTest(GxEPD2_GFX& display)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawCornerTest(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display)
 {
   display.setFullWindow();
   display.setFont(&FreeMonoBold9pt7b);
@@ -349,8 +372,8 @@ void drawCornerTest(GxEPD2_GFX& display)
   }
 }
 
-
-void showFont(GxEPD2_GFX& display, const char name[], const GFXfont* f)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void showFont(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display, const char name[], const GFXfont* f)
 {
   display.setFullWindow();
   display.setRotation(0);
@@ -363,11 +386,11 @@ void showFont(GxEPD2_GFX& display, const char name[], const GFXfont* f)
   while (display.nextPage());
 }
 
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawFont(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display, const char name[], const GFXfont* f);
 
-//void drawFont(GxEPD2_GFX& display, const char name[], const GFXfont* f);
-
-
-void drawFont(GxEPD2_GFX& display, const char name[], const GFXfont* f)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawFont(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display, const char name[], const GFXfont* f)
 {
   //display.setRotation(0);
   display.fillScreen(GxEPD_WHITE);
@@ -388,8 +411,8 @@ void drawFont(GxEPD2_GFX& display, const char name[], const GFXfont* f)
   display.println("pqrstuvwxyz{|}~ ");
 }
 
-
-void showPartialUpdate(GxEPD2_GFX& display)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void showPartialUpdate(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display)
 {
   // some useful background
   helloWorld(display);
@@ -455,10 +478,10 @@ void showPartialUpdate(GxEPD2_GFX& display)
 
 
 #ifdef _GxBitmaps200x200_H_
-
-void drawBitmaps200x200(GxEPD2_GFX& display);
-
-void drawBitmaps200x200(GxEPD2_GFX& display)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps200x200(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps200x200(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display)
 {
 #if defined(__AVR)
   const unsigned char* bitmaps[] =
@@ -531,10 +554,10 @@ void drawBitmaps200x200(GxEPD2_GFX& display)
 #endif
 
 #ifdef _GxBitmaps128x250_H_
-
-void drawBitmaps128x250(GxEPD2_GFX& display);
-
-void drawBitmaps128x250(GxEPD2_GFX& display)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps128x250(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps128x250(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display)
 {
 #if !defined(__AVR)
   const unsigned char* bitmaps[] =
@@ -567,10 +590,10 @@ void drawBitmaps128x250(GxEPD2_GFX& display)
 #endif
 
 #ifdef _GxBitmaps128x296_H_
-
-void drawBitmaps128x296(GxEPD2_GFX& display);
-
-void drawBitmaps128x296(GxEPD2_GFX& display)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps128x296(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps128x296(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display)
 {
 #if !defined(__AVR)
   const unsigned char* bitmaps[] =
@@ -603,10 +626,10 @@ void drawBitmaps128x296(GxEPD2_GFX& display)
 #endif
 
 #ifdef _GxBitmaps176x264_H_
-
-void drawBitmaps176x264(GxEPD2_GFX& display);
-
-void drawBitmaps176x264(GxEPD2_GFX& display)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps176x264(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps176x264(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display)
 {
   const unsigned char* bitmaps[] =
   {
@@ -630,10 +653,10 @@ void drawBitmaps176x264(GxEPD2_GFX& display)
 #endif
 
 #ifdef _GxBitmaps400x300_H_
-
-void drawBitmaps400x300(GxEPD2_GFX& display);
-
-void drawBitmaps400x300(GxEPD2_GFX& display)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps400x300(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps400x300(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display)
 {
 #if !defined(__AVR)
   const unsigned char* bitmaps[] =
@@ -661,10 +684,10 @@ void drawBitmaps400x300(GxEPD2_GFX& display)
 #endif
 
 #ifdef _GxBitmaps640x384_H_
-
-void drawBitmaps640x384(GxEPD2_GFX& display);
-
-void drawBitmaps640x384(GxEPD2_GFX& display)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps640x384(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps640x384(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display)
 {
 #if !defined(__AVR)
   const unsigned char* bitmaps[] =
@@ -698,10 +721,10 @@ struct bitmap_pair
 };
 
 #ifdef _GxBitmaps3c200x200_H_
-
-void drawBitmaps3c200x200(GxEPD2_GFX& display);
-
-void drawBitmaps3c200x200(GxEPD2_GFX& display)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps3c200x200(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps3c200x200(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display)
 {
   bitmap_pair bitmap_pairs[] =
   {
@@ -789,10 +812,10 @@ void drawBitmaps3c200x200(GxEPD2_GFX& display)
 #endif
 
 #ifdef _GxBitmaps3c104x212_H_
-
-void drawBitmaps3c104x212(GxEPD2_GFX& display);
-
-void drawBitmaps3c104x212(GxEPD2_GFX& display)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps3c104x212(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps3c104x212(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display)
 {
 #if !defined(__AVR)
   bitmap_pair bitmap_pairs[] =
@@ -832,10 +855,10 @@ void drawBitmaps3c104x212(GxEPD2_GFX& display)
 #endif
 
 #ifdef _GxBitmaps3c128x296_H_
-
-void drawBitmaps3c128x296(GxEPD2_GFX& display);
-
-void drawBitmaps3c128x296(GxEPD2_GFX& display)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps3c128x296(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps3c128x296(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display)
 {
 #if !defined(__AVR)
   bitmap_pair bitmap_pairs[] =
@@ -875,10 +898,10 @@ void drawBitmaps3c128x296(GxEPD2_GFX& display)
 #endif
 
 #ifdef _GxBitmaps3c176x264_H_
-
-void drawBitmaps3c176x264(GxEPD2_GFX& display);
-
-void drawBitmaps3c176x264(GxEPD2_GFX& display)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps3c176x264(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps3c176x264(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display)
 {
   bitmap_pair bitmap_pairs[] =
   {
@@ -903,10 +926,10 @@ void drawBitmaps3c176x264(GxEPD2_GFX& display)
 #endif
 
 #ifdef _GxBitmaps3c400x300_H_
-
-void drawBitmaps3c400x300(GxEPD2_GFX& display);
-
-void drawBitmaps3c400x300(GxEPD2_GFX& display)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps3c400x300(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display);
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps3c400x300(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display)
 {
 #if !defined(__AVR)
   bitmap_pair bitmap_pairs[] =
@@ -936,8 +959,8 @@ void drawBitmaps3c400x300(GxEPD2_GFX& display)
 }
 #endif
 
-
-void drawBitmaps(GxEPD2_GFX& display)
+template<typename GxEPD2_Type, template<typename, const uint16_t> class GxGFX_Type>
+void drawBitmaps(GxGFX_Type<GxEPD2_Type, GxEPD2_Type::HEIGHT>& display)
 {
   display.setFullWindow();
   display.setRotation(0);

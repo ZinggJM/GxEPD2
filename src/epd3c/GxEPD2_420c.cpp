@@ -292,8 +292,10 @@ void GxEPD2_420c::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
   w1 -= x1 - x;
   h1 -= y1 - y;
   _Init_Part();
+  if (usePartialUpdateWindow) _writeCommand(0x91); // partial in
   _setPartialRamArea(x1, y1, w1, h1);
   _Update_Part();
+  if (usePartialUpdateWindow) _writeCommand(0x92); // partial out
 }
 
 void GxEPD2_420c::powerOff()
@@ -357,6 +359,13 @@ void GxEPD2_420c::_InitDisplay()
   _writeData(0x17);
   _writeCommand(0x00);
   _writeData(0x0f); // LUT from OTP Pixel with B/W/R.
+  _writeCommand(0x61); // resolution setting
+  _writeData (WIDTH / 256);
+  _writeData (WIDTH % 256);
+  _writeData (HEIGHT / 256);
+  _writeData (HEIGHT % 256);
+  _writeCommand(0x50); // VCOM AND DATA INTERVAL SETTING
+  _writeData(0xf7);    // WBmode:VBDF 17|D7 VBDW 97 VBDB 57   WBRmode:VBDF F7 VBDW 77 VBDB 37  VBDR B7
 }
 
 void GxEPD2_420c::_Init_Full()

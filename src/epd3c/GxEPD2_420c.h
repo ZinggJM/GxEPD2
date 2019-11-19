@@ -24,6 +24,7 @@ class GxEPD2_420c : public GxEPD2_EPD
     static const GxEPD2::Panel panel = GxEPD2::GDEW042Z15;
     static const bool hasColor = true;
     static const bool hasPartialUpdate = true;
+    static const bool usePartialUpdateWindow = false; // needs be false to work
     static const bool hasFastPartialUpdate = false;
     static const uint16_t power_on_time = 40; // ms, e.g. 38006us
     static const uint16_t power_off_time = 30; // ms, e.g. 20292us

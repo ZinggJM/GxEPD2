@@ -63,6 +63,8 @@ class GxEPD2_GFX : public Adafruit_GFX
                                 int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm) = 0;
     virtual void writeImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
                                 int16_t x, int16_t y, int16_t w, int16_t h) = 0; // default options false
+    // write sprite of native data to controller memory, without screen refresh; x and w should be multiple of 8
+    virtual void writeNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
     // write to controller memory, with screen refresh; x and w should be multiple of 8
     virtual void drawImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
     virtual void drawImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
@@ -73,6 +75,8 @@ class GxEPD2_GFX : public Adafruit_GFX
                                 int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm) = 0;
     virtual void drawImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
                                 int16_t x, int16_t y, int16_t w, int16_t h) = 0; // default options false
+    // write sprite of native data to controller memory, with screen refresh; x and w should be multiple of 8
+    virtual void drawNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
     virtual void refresh(bool partial_update_mode = false) = 0; // screen refresh from controller memory to full screen
     virtual void refresh(int16_t x, int16_t y, int16_t w, int16_t h) = 0; // screen refresh from controller memory, partial screen
     virtual void powerOff() = 0; // turns off generation of panel driving voltages, avoids screen fading over time

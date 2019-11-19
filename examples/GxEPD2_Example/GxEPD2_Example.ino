@@ -241,6 +241,9 @@
 
 #if !defined(__AVR) && !defined(_BOARD_GENERIC_STM32F103C_H_)
 
+// note 16.11.2019: the compiler may exclude code based on constant if statements (display.epd2.panel == constant),
+//                  therefore bitmaps may get optimized out by the linker
+
 // comment out unused bitmaps to reduce code space used
 #include "bitmaps/Bitmaps200x200.h" // 1.54" b/w
 #include "bitmaps/Bitmaps104x212.h" // 2.13" b/w flexible GDEW0213I5F

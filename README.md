@@ -74,7 +74,14 @@
 #### other supported panels
 - ED060SCT        6" grey levels, on Waveshare e-Paper IT8951 Driver HAT
 
-### Version 1.2.2
+### Version 1.2.3
+- fixed partial update for 2.13" 3-color and 2.9" 3-color e-paper
+- partial update can be disabled with attribute usePartialUpdateWindow = false
+- added GxEPD2_GFX_Example to show uses of GxEPD2_GFX base class
+- replaced GxEPD2_MultiDisplayExample code, same code as GxEPD2_GFX_MultiDisplayExample
+- added extras/examples/GxEPD2_T_MultiDisplayExample, alternate example using template functions
+- major and minor fixes, such as typos that survived too long
+#### Version 1.2.2
 - fixed BMP handling, e.g. for BMPs created by ImageMagick
 - see also Arduino Forum Topic https://forum.arduino.cc/index.php?topic=642343.0
 #### Version 1.2.1
