@@ -1,7 +1,7 @@
 // GxEPD2_GFX_MultiDisplayExample : Display Library example for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
-// Requires HW SPI and Adafruit_GFX. Caution: these e-papers require 3.3V supply AND data lines!
+// Requires HW SPI and Adafruit_GFX. Caution: the e-paper panels require 3.3V supply AND data lines!
 //
-// Display Library based on Demo Example from Good Display: http://www.good-display.com/download_list/downloadcategoryid=34&isMode=false.html
+// Display Library based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
 //
 // Author: Jean-Marc Zingg
 //
@@ -55,7 +55,8 @@
 // BUSY lines can be or-ed with diodes and pullup resistor for displays with BUSY active LOW
 //#define BUSY_L_x 4 // BUSY = D2(4)
 // select one and adapt to your mapping, can use full buffer size (full HEIGHT)
-GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display1(GxEPD2_154(/*CS=*/ CS_1, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x));
+//GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display1(GxEPD2_154(/*CS=*/ CS_1, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x)); // GDEP015OC1 no longer available
+GxEPD2_BW<GxEPD2_154_D67, GxEPD2_154_D67::HEIGHT> display1(GxEPD2_154_D67(/*CS=*/ CS_1, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x)); // GDEH0154D67
 GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display2(GxEPD2_213(/*CS=*/ CS_2, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x));
 GxEPD2_BW<GxEPD2_290, GxEPD2_290::HEIGHT> display3(GxEPD2_290(/*CS=*/ CS_3, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x));
 //GxEPD2_BW<GxEPD2_270, GxEPD2_270::HEIGHT> display(GxEPD2_270(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
@@ -86,7 +87,8 @@ GxEPD2_BW<GxEPD2_290, GxEPD2_290::HEIGHT> display3(GxEPD2_290(/*CS=*/ CS_3, /*DC
 // BUSY lines can be or-ed with diodes and pullup resistor for displays with BUSY active LOW
 #define BUSY_L_x 15 // BUSY = 15
 // select one and adapt to your mapping, can use full buffer size (full HEIGHT)
-GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display1(GxEPD2_154(/*CS=*/ CS_1, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x));
+//GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display1(GxEPD2_154(/*CS=*/ CS_1, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x)); // GDEP015OC1 no longer available
+GxEPD2_BW<GxEPD2_154_D67, GxEPD2_154_D67::HEIGHT> display1(GxEPD2_154_D67(/*CS=*/ CS_1, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x)); // GDEH0154D67
 GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display2(GxEPD2_213(/*CS=*/ CS_2, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x));
 GxEPD2_BW<GxEPD2_290, GxEPD2_290::HEIGHT> display3(GxEPD2_290(/*CS=*/ CS_3, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x));
 //GxEPD2_BW<GxEPD2_270, GxEPD2_270::HEIGHT> display(GxEPD2_270(/*CS=*/ CS_x, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
@@ -476,7 +478,7 @@ void drawBitmaps200x200(GxEPD2_GFX& display)
     logo200x200, first200x200, second200x200, third200x200, fourth200x200, fifth200x200, sixth200x200, senventh200x200, eighth200x200
   };
 #endif
-  if (display.epd2.panel == GxEPD2::GDEP015OC1)
+  if ((display.epd2.panel == GxEPD2::GDEP015OC1) || (display.epd2.panel == GxEPD2::GDEH0154D67))
   {
     bool m = display.mirror(true);
     for (uint16_t i = 0; i < sizeof(bitmaps) / sizeof(char*); i++)
@@ -514,6 +516,12 @@ void drawBitmaps200x200(GxEPD2_GFX& display)
       display.writeScreenBuffer(); // use default for white
       display.writeImage(bitmaps[i], x, y, 200, 200, false, mirror_y, true);
       display.refresh(true);
+      if (display.epd2.hasFastPartialUpdate)
+      {
+        // for differential update: set previous buffer equal to current buffer in controller
+        display.epd2.writeScreenBufferAgain(); // use default for white
+        display.epd2.writeImageAgain(bitmaps[i], x, y, 200, 200, false, mirror_y, true);
+      }
       delay(2000);
       x += 40;
       y += 40;
@@ -978,5 +986,3 @@ void drawBitmaps(GxEPD2_GFX& display)
   drawBitmaps3c200x200(display);
 #endif
 }
-
-

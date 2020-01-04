@@ -1,6 +1,6 @@
 // GxEPD2_SD_WriteBitmap: utility for Display Library for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 //
-// based on Demo Example from Good Display: http://www.good-display.com/download_list/downloadcategoryid=34&isMode=false.html
+// Display Library based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
 //
 // Author: Jean-Marc Zingg
 //
@@ -211,5 +211,3 @@ void write32(FileClass& f, uint32_t v)
   f.write(uint8_t(v >> 16));
   f.write(uint8_t(v >> 24));
 }
-
-

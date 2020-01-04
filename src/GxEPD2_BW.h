@@ -15,6 +15,7 @@
 #include <Adafruit_GFX.h>
 #include "GxEPD2_EPD.h"
 #include "epd/GxEPD2_154.h"
+#include "epd/GxEPD2_154_D67.h"
 #include "epd/GxEPD2_213.h"
 #include "epd/GxEPD2_213_B72.h"
 #include "epd/GxEPD2_213_B73.h"

@@ -50,6 +50,7 @@
 
 ### Supported SPI e-paper panels from Good Display:
 - GDEP015OC1     1.54" b/w
+- GDEH0154D67    1.54" b/w, replacement for GDEP015OC1
 - GDEW0154Z04    1.54" b/w/r 200x200
 - GDE0213B1      2.13" b/w
 - GDEH0213B72    2.13" b/w, replacement for GDE0213B1
@@ -74,7 +75,12 @@
 #### other supported panels
 - ED060SCT        6" grey levels, on Waveshare e-Paper IT8951 Driver HAT
 
-### Version 1.2.3
+### Version 1.2.4
+- added support for GDEH0154D67 1.54" b/w, replacement for GDEP015OC1
+- added GxEPD2_SerialFlash_Loader, WiFi bitmap downloader for SPI-flash
+- added GxEPD2_SerialFlash_Example, SPI-flash example, e.g. for Winbond 25Q16BVSIG
+- minor fixes and comment cleanups
+#### Version 1.2.3
 - fixed partial update for 2.13" 3-color and 2.9" 3-color e-paper
 - partial update can be disabled with attribute usePartialUpdateWindow = false
 - added GxEPD2_GFX_Example to show uses of GxEPD2_GFX base class

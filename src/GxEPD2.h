@@ -30,6 +30,7 @@ class GxEPD2
     enum Panel
     {
       GDEP015OC1, Waveshare_1_54_bw = GDEP015OC1,
+      GDEH0154D67, Waveshare_1_54_bw_D67 = GDEH0154D67,
       GDE0213B1,  Waveshare_2_13_bw = GDE0213B1,
       GDEH0213B72,  Waveshare_2_13_bw_B72 = GDEH0213B72,
       GDEH0213B73,  Waveshare_2_13_bw_B73 = GDEH0213B73,

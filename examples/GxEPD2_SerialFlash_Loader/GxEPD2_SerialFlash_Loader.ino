@@ -1,25 +1,28 @@
-// GxEPD2_Spiffs_Loader : Display Library example for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
-// Requires HW SPI and Adafruit_GFX. Caution: the e-paper panels require 3.3V supply AND data lines!
+// GxEPD2_SerialFlash_Loader : Display Library example for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 //
-// Display Library based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
+// Display Library based on Demo Example from Good Display: http://www.good-display.com/download_list/downloadcategoryid=34&isMode=false.html
 //
 // Author: Jean-Marc Zingg
 //
 // Version: see library.properties
 //
 // Library: https://github.com/ZinggJM/GxEPD2
+//
+// this example uses the SerialFlash library from: https://github.com/PaulStoffregen/SerialFlash
+// with a modification for use with ESP32 or the STM32 package available here: https://github.com/ZinggJM/SerialFlash
+// download it as .zip file and install with Library Mananger method "Add .ZIP Library..."
+//
+// this example can run on ESP6266 or ESP32 using WiFi connection
 
 // Supporting Arduino Forum Topics:
 // Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
 // Good Display ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
 
-#if defined(ESP32)
-#include "SPIFFS.h"
-// set formatOnFail = true for initial format of ESP32 SPIFFS (e.g. if error occured)
-const bool formatOnFail = false;
-#endif
+#include <SerialFlash.h>
 
-#include <FS.h>
+// digital pin for flash chip CS pin:
+//const int FlashChipSelect = SS; // for standard slave select pin
+const int FlashChipSelect = 5; // use D1 on my Wemos D1 mini wired for e-papers
 
 #if defined (ESP8266)
 #include <ESP8266WiFi.h>
@@ -48,7 +51,7 @@ void setup()
 {
   Serial.begin(115200);
   Serial.println();
-  Serial.println("GxEPD2_Spiffs_Loader");
+  Serial.println("GxEPD2_SerialFlash_Loader");
 
 #ifdef RE_INIT_NEEDED
   WiFi.persistent(true);
@@ -89,22 +92,57 @@ void setup()
   // Print the IP address
   Serial.println(WiFi.localIP());
 
-#if defined(ESP32)
-  SPIFFS.begin(formatOnFail);
-#else
-  SPIFFS.begin();
-#endif
-  Serial.println("SPIFFS started");
+  if (!SerialFlash.begin(FlashChipSelect)) 
+  {
+    Serial.println("Unable to access SPI Flash chip");
+    return;
+  }
+  Serial.println("SerialFlash started");
+  eraseSerialFlash();
   listFiles();
-  //deleteFiles();
   downloadBitmaps_200x200();
   downloadBitmaps_other();
-  //downloadBitmaps_test();
+  downloadBitmaps_test();
   listFiles();
 }
 
 void loop()
 {
+}
+
+void listFiles()
+{
+  Serial.println("All Files on SPI Flash chip:");
+  SerialFlash.opendir();
+  while (1) 
+  {
+    char filename[64];
+    uint32_t filesize;
+
+    if (SerialFlash.readdir(filename, sizeof(filename), filesize)) 
+    {
+      Serial.print("  ");
+      Serial.print(filename);
+      spaces(20 - strlen(filename));
+      Serial.print("  ");
+      Serial.print(filesize);
+      Serial.print(" bytes");
+      Serial.println();
+    } 
+    else 
+    {
+      Serial.println("no more files...");
+      break; // no more files
+    }
+  }
+}
+
+void spaces(int num) 
+{
+  for (int i=0; i < num; i++) 
+  {
+    Serial.print(" ");
+  }
 }
 
 void downloadBitmaps_200x200()
@@ -148,31 +186,6 @@ void downloadBitmaps_test()
   downloadFile_HTTPS(host_rawcontent, path_rawcontent, "tractor_88.bmp", fp_rawcontent, "tractor_88.bmp");
 }
 
-void deleteFiles()
-{
-  SPIFFS.remove("logo200x200.bmp");
-  SPIFFS.remove("first200x200.bmp");
-  SPIFFS.remove("second200x200.bmp");
-  SPIFFS.remove("third200x200.bmp");
-  SPIFFS.remove("fourth200x200.bmp");
-  SPIFFS.remove("fifth200x200.bmp");
-  SPIFFS.remove("sixth200x200.bmp");
-  SPIFFS.remove("seventh200x200.bmp");
-  SPIFFS.remove("eighth200x200.bmp");
-  SPIFFS.remove("chanceflurries.bmp");
-  SPIFFS.remove("betty_1.bmp");
-  SPIFFS.remove("betty_4.bmp");
-  SPIFFS.remove("marilyn_240x240x8.bmp");
-  SPIFFS.remove("miniwoof.bmp");
-  SPIFFS.remove("test.bmp");
-  SPIFFS.remove("tiger.bmp");
-  SPIFFS.remove("tiger_178x160x4.bmp");
-  SPIFFS.remove("tiger_240x317x4.bmp");
-  SPIFFS.remove("tiger_320x200x24.bmp");
-  SPIFFS.remove("tiger16T.bmp");
-  SPIFFS.remove("woof.bmp");
-}
-
 void downloadFile_HTTP(const char* host, const char* path, const char* filename, const char* target)
 {
   WiFiClient client;
@@ -187,10 +200,11 @@ void downloadFile_HTTP(const char* host, const char* path, const char* filename,
   Serial.println(String("http://") + host + path + filename);
   client.print(String("GET ") + path + filename + " HTTP/1.1\r\n" +
                "Host: " + host + "\r\n" +
-               "User-Agent: GxEPD2_Spiffs_Loader\r\n" +
+               "User-Agent: GxEPD2_SerialFlash_Loader\r\n" +
                "Connection: close\r\n\r\n");
   Serial.println("request sent");
   bool ok = false;
+  int32_t content_length = 0;
   while (client.connected() || client.available())
   {
     String line = client.readStringUntil('\n');
@@ -202,6 +216,11 @@ void downloadFile_HTTP(const char* host, const char* path, const char* filename,
     }
     if (!ok) Serial.println(line);
     //Serial.println(line);
+    if (line.startsWith("Content-Length: "))
+    {
+      content_length = line.substring(16, line.length()).toInt();
+      Serial.print("content_length is "); Serial.println(content_length);
+    }
     if (line == "\r")
     {
       Serial.println("headers received");
@@ -215,11 +234,13 @@ void downloadFile_HTTP(const char* host, const char* path, const char* filename,
   Serial.write(buffer[0]); Serial.write(buffer[1]); Serial.println();
 #endif
   size_t total = 0;
-#if defined(ESP32)
-  fs::File file = SPIFFS.open(String("/") + target, "w+");
-#else
-  fs::File file = SPIFFS.open(target, "w+");
-#endif
+  //if (!SerialFlash.createErasable(target, content_length)) // would use much more space
+  if (!SerialFlash.create(target, content_length))
+  {
+    Serial.print(target); Serial.println(" create failed");
+    return;
+  }
+  SerialFlashFile file = SerialFlash.open(target);
   if (!file)
   {
     Serial.print(target); Serial.println(" open failed");
@@ -277,10 +298,11 @@ void downloadFile_HTTPS(const char* host, const char* path, const char* filename
   Serial.println(String("https://") + host + path + filename);
   client.print(String("GET ") + path + filename + " HTTP/1.1\r\n" +
                "Host: " + host + "\r\n" +
-               "User-Agent: GxEPD2_Spiffs_Loader\r\n" +
+               "User-Agent: GxEPD2_SerialFlash_Loader\r\n" +
                "Connection: close\r\n\r\n");
   Serial.println("request sent");
   bool ok = false;
+  int32_t content_length = 0;
   while (client.connected() || client.available())
   {
     String line = client.readStringUntil('\n');
@@ -291,7 +313,12 @@ void downloadFile_HTTPS(const char* host, const char* path, const char* filename
       //if (!ok) Serial.println(line);
     }
     if (!ok) Serial.println(line);
-    //Serial.println(line);
+    //Serial.print("line: "); Serial.println(line);
+    if (line.startsWith("Content-Length: "))
+    {
+      content_length = line.substring(16, line.length()).toInt();
+      Serial.print("content_length is "); Serial.println(content_length);
+    }
     if (line == "\r")
     {
       Serial.println("headers received");
@@ -299,17 +326,20 @@ void downloadFile_HTTPS(const char* host, const char* path, const char* filename
     }
   }
   if (!ok) return;
+  //return;
   uint8_t buffer[512];
 #if defined(ESP8266)
   client.peekBytes(buffer, 2);
   Serial.write(buffer[0]); Serial.write(buffer[1]); Serial.println();
 #endif
   size_t total = 0;
-#if defined(ESP32)
-  fs::File file = SPIFFS.open(String("/") + target, "w+");
-#else
-  fs::File file = SPIFFS.open(target, "w+");
-#endif
+  //if (!SerialFlash.createErasable(target, content_length)) // would use much more space
+  if (!SerialFlash.create(target, content_length))
+  {
+    Serial.print(target); Serial.println(" create failed");
+    return;
+  }
+  SerialFlashFile file = SerialFlash.open(target);
   if (!file)
   {
     Serial.print(target); Serial.println(" open failed");
@@ -349,4 +379,59 @@ void downloadFile_HTTPS(const char* host, const char* path, const char* filename
   }
   file.close();
   Serial.print("done, "); Serial.print(total); Serial.println(" bytes transferred");
+}
+
+void eraseSerialFlash()
+{
+  unsigned char id[5];
+  SerialFlash.readID(id);
+  unsigned long size = SerialFlash.capacity(id);
+  unsigned long startMillis = millis();
+
+  if (size > 0) 
+  {
+    Serial.print("Flash Memory has ");
+    Serial.print(size);
+    Serial.println(" bytes.");
+    Serial.println("Erasing ALL Flash Memory:");
+    // Estimate the (lengthy) wait time.
+    Serial.print("  estimated wait: ");
+    int seconds = (float)size / eraseBytesPerSecond(id) + 0.5;
+    Serial.print(seconds);
+    Serial.println(" seconds.");
+    Serial.println("  Yes, full chip erase is SLOW!");
+    SerialFlash.eraseAll();
+    unsigned long dotMillis = millis();
+    unsigned char dotcount = 0;
+    while (SerialFlash.ready() == false) 
+    {
+      if (millis() - dotMillis > 1000) 
+      {
+        dotMillis = dotMillis + 1000;
+        Serial.print(".");
+        dotcount = dotcount + 1;
+        if (dotcount >= 60) 
+        {
+          Serial.println();
+          dotcount = 0;
+        }
+      }
+      yield();
+    }
+    if (dotcount > 0) Serial.println();
+    Serial.println("Erase completed");
+    unsigned long elapsed = millis() - startMillis;
+    Serial.print("  actual wait: ");
+    Serial.print(elapsed / 1000ul);
+    Serial.println(" seconds.");
+  }
+}
+
+float eraseBytesPerSecond(const unsigned char *id) 
+{
+  if (id[0] == 0x20) return 152000.0; // Micron
+  if (id[0] == 0x01) return 500000.0; // Spansion
+  if (id[0] == 0xEF) return 419430.0; // Winbond
+  if (id[0] == 0xC2) return 279620.0; // Macronix
+  return 320000.0; // guess?
 }
