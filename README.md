@@ -80,6 +80,7 @@
 - added GxEPD2_SerialFlash_Loader, WiFi bitmap downloader for SPI-flash
 - added GxEPD2_SerialFlash_Example, SPI-flash example, e.g. for Winbond 25Q16BVSIG
 - minor fixes and comment cleanups
+- fix refresh(false) in upper layer: add powerOff() after full refresh
 #### Version 1.2.3
 - fixed partial update for 2.13" 3-color and 2.9" 3-color e-paper
 - partial update can be disabled with attribute usePartialUpdateWindow = false
