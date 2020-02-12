@@ -1,3 +1,5 @@
+## Issues are disabled. Use Arduino Forum Displays.
+
 ### Please post only issues that errors in this library!
 - please use the Arduino Forum Displays for questions or enhancement suggestions
 

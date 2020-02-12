@@ -10,6 +10,8 @@
 // Version: see library.properties
 //
 // Library: https://github.com/ZinggJM/GxEPD2
+//
+// note that BMP bitmaps are drawn at physical position in physical orientation of the screen
 
 // Supporting Arduino Forum Topics:
 // Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
@@ -127,6 +129,17 @@
 //GxEPD2_3C<GxEPD2_583c, GxEPD2_583c::HEIGHT> display(GxEPD2_583c(/*CS=5*/ EPD_CS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
 //GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT> display(GxEPD2_750c(/*CS=5*/ EPD_CS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
 //GxEPD2_3C<GxEPD2_750c_Z08, GxEPD2_750c_Z08::HEIGHT> display(GxEPD2_750c_Z08(/*CS=5*/ EPD_CS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEW075Z08 800x480
+
+// grey levels parallel IF e-papers on Waveshare e-Paper IT8951 Driver HAT
+// HRDY -> 4, RST -> 16, CS -> SS(5), SCK -> SCK(18), MOSI -> MOSI(23), MISO -> MISO(19), GND -> GND, 5V -> 5V
+// note: 5V supply needs to be exact and strong; 5V over diode from USB (e.g. Wemos D1 mini) doesn't work!
+//GxEPD2_BW<GxEPD2_it60, GxEPD2_it60::HEIGHT> display(GxEPD2_it60(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
+
+// Waveshare 12.48 b/w SPI display board and frame or Good Display 12.48 b/w panel GDEW1248T3
+// general constructor for use with all parameters, e.g. for Waveshare ESP32 driver board mounted on connection board
+//GxEPD2_BW < GxEPD2_1248, GxEPD2_1248::HEIGHT / 4 >
+//display(GxEPD2_1248(/*sck=*/ 13, /*miso=*/ 12, /*mosi=*/ 14, /*cs_m1=*/ 23, /*cs_s1=*/ 22, /*cs_m2=*/ 16, /*cs_s2=*/ 19,
+//                             /*dc1=*/ 25, /*dc2=*/ 17, /*rst1=*/ 33, /*rst2=*/ 5, /*busy_m1=*/ 32, /*busy_s1=*/ 26, /*busy_m2=*/ 18, /*busy_s2=*/ 4));
 #endif
 
 #if defined (ESP8266)
@@ -152,9 +165,11 @@ const char* host_rawcontent   = "raw.githubusercontent.com";
 const char* path_rawcontent   = "/ZinggJM/GxEPD2/master/extras/bitmaps/";
 const char* path_prenticedavid   = "/prenticedavid/MCUFRIEND_kbv/master/extras/bitmaps/";
 
+// note that BMP bitmaps are drawn at physical position in physical orientation of the screen
 void showBitmapFrom_HTTP(const char* host, const char* path, const char* filename, int16_t x, int16_t y, bool with_color = true);
 void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filename, const char* fingerprint, int16_t x, int16_t y, bool with_color = true);
 
+// draws BMP bitmap according to set orientation
 void showBitmapFrom_HTTP_Buffered(const char* host, const char* path, const char* filename, int16_t x, int16_t y, bool with_color = true);
 void showBitmapFrom_HTTPS_Buffered(const char* host, const char* path, const char* filename, const char* fingerprint, int16_t x, int16_t y, bool with_color = true);
 
@@ -386,7 +401,7 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
   bool valid = false; // valid format to be handled
   bool flip = true; // bitmap is stored bottom-to-top
   uint32_t startTime = millis();
-  if ((x >= display.width()) || (y >= display.height())) return;
+  if ((x >= display.epd2.WIDTH) || (y >= display.epd2.HEIGHT)) return;
   Serial.println(); Serial.print("downloading file \""); Serial.print(filename);  Serial.println("\"");
   Serial.print("connecting to "); Serial.println(host);
   if (!client.connect(host, httpPort))
@@ -452,8 +467,8 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
       }
       uint16_t w = width;
       uint16_t h = height;
-      if ((x + w - 1) >= display.width())  w = display.width()  - x;
-      if ((y + h - 1) >= display.height()) h = display.height() - y;
+      if ((x + w - 1) >= display.epd2.WIDTH)  w = display.epd2.WIDTH  - x;
+      if ((y + h - 1) >= display.epd2.HEIGHT) h = display.epd2.HEIGHT - y;
       if (w <= max_row_width) // handle with direct drawing
       {
         valid = true;
@@ -847,7 +862,7 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
   bool valid = false; // valid format to be handled
   bool flip = true; // bitmap is stored bottom-to-top
   uint32_t startTime = millis();
-  if ((x >= display.width()) || (y >= display.height())) return;
+  if ((x >= display.epd2.WIDTH) || (y >= display.epd2.HEIGHT)) return;
   Serial.println(); Serial.print("downloading file \""); Serial.print(filename);  Serial.println("\"");
   Serial.print("connecting to "); Serial.println(host);
 #if USE_BearSSL
@@ -930,8 +945,8 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
       }
       uint16_t w = width;
       uint16_t h = height;
-      if ((x + w - 1) >= display.width())  w = display.width()  - x;
-      if ((y + h - 1) >= display.height()) h = display.height() - y;
+      if ((x + w - 1) >= display.epd2.WIDTH)  w = display.epd2.WIDTH  - x;
+      if ((y + h - 1) >= display.epd2.HEIGHT) h = display.epd2.HEIGHT - y;
       if (w <= max_row_width) // handle with direct drawing
       {
         valid = true;

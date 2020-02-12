@@ -44,6 +44,7 @@ class GxEPD2
       GDEW0583T7, Waveshare_5_83_bw = GDEW0583T7,
       GDEW075T8,  Waveshare_7_5_bw = GDEW075T8,
       GDEW075T7,  Waveshare_7_5_bw_T7 = GDEW075T7,
+      GDEW1248T3, Waveshare_12_24_bw = GDEW1248T3,
       ED060SCT, // on Waveshare IT8951 Driver HAT
       // 3-color
       GDEW0154Z04, Waveshare_1_54_bwr = GDEW0154Z04,

@@ -10,6 +10,8 @@
 // Version: see library.properties
 //
 // Library: https://github.com/ZinggJM/GxEPD2
+//
+// note that BMP bitmaps are drawn at physical position in physical orientation of the screen
 
 // Supporting Arduino Forum Topics:
 // Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
@@ -108,12 +110,25 @@
 //GxEPD2_3C<GxEPD2_270c, GxEPD2_270c::HEIGHT> display(GxEPD2_270c(/*CS=5*/ EPD_CS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
 //GxEPD2_3C<GxEPD2_420c, GxEPD2_420c::HEIGHT> display(GxEPD2_420c(/*CS=5*/ EPD_CS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
 //GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT> display(GxEPD2_750c(/*CS=5*/ EPD_CS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
+
+// grey levels parallel IF e-papers on Waveshare e-Paper IT8951 Driver HAT
+// HRDY -> 4, RST -> 16, CS -> SS(5), SCK -> SCK(18), MOSI -> MOSI(23), MISO -> MISO(19), GND -> GND, 5V -> 5V
+// note: 5V supply needs to be exact and strong; 5V over diode from USB (e.g. Wemos D1 mini) doesn't work!
+//GxEPD2_BW<GxEPD2_it60, GxEPD2_it60::HEIGHT> display(GxEPD2_it60(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
+
+// Waveshare 12.48 b/w SPI display board and frame or Good Display 12.48 b/w panel GDEW1248T3
+// general constructor for use with all parameters, e.g. for Waveshare ESP32 driver board mounted on connection board
+//GxEPD2_BW < GxEPD2_1248, GxEPD2_1248::HEIGHT / 4 >
+//display(GxEPD2_1248(/*sck=*/ 13, /*miso=*/ 12, /*mosi=*/ 14, /*cs_m1=*/ 23, /*cs_s1=*/ 22, /*cs_m2=*/ 16, /*cs_s2=*/ 19,
+//                             /*dc1=*/ 25, /*dc2=*/ 17, /*rst1=*/ 33, /*rst2=*/ 5, /*busy_m1=*/ 32, /*busy_s1=*/ 26, /*busy_m2=*/ 18, /*busy_s2=*/ 4));
 #endif
 
 // function declaration with default parameter
+// note that BMP bitmaps are drawn at physical position in physical orientation of the screen
 void drawBitmapFromSpiffs(const char *filename, int16_t x, int16_t y, bool with_color = true);
 
 // bitmap drawing using buffered graphics, e.g. for small bitmaps or for GxEPD2_154c
+// draws BMP bitmap according to set orientation
 // partial_update selects refresh mode (not effective for GxEPD2_154c)
 // overwrite = true does not clear buffer before drawing, use only if buffer is full height
 void drawBitmapFromSpiffs_Buffered(const char *filename, int16_t x, int16_t y, bool with_color = true, bool partial_update = false, bool overwrite = false);
@@ -124,7 +139,7 @@ void setup()
   Serial.println();
   Serial.println("GxEPD2_Spiffs_Example");
 
-  display.init();
+  display.init(115200);
 
   SPIFFS.begin();
   Serial.println("SPIFFS started");
@@ -286,7 +301,7 @@ void drawBitmapFromSpiffs(const char *filename, int16_t x, int16_t y, bool with_
   bool valid = false; // valid format to be handled
   bool flip = true; // bitmap is stored bottom-to-top
   uint32_t startTime = millis();
-  if ((x >= display.width()) || (y >= display.height())) return;
+  if ((x >= display.epd2.WIDTH) || (y >= display.epd2.HEIGHT)) return;
   Serial.println();
   Serial.print("Loading image '");
   Serial.print(filename);
@@ -333,8 +348,8 @@ void drawBitmapFromSpiffs(const char *filename, int16_t x, int16_t y, bool with_
       }
       uint16_t w = width;
       uint16_t h = height;
-      if ((x + w - 1) >= display.width())  w = display.width()  - x;
-      if ((y + h - 1) >= display.height()) h = display.height() - y;
+      if ((x + w - 1) >= display.epd2.WIDTH)  w = display.epd2.WIDTH  - x;
+      if ((y + h - 1) >= display.epd2.HEIGHT) h = display.epd2.HEIGHT - y;
       if (w <= max_row_width) // handle with direct drawing
       {
         valid = true;

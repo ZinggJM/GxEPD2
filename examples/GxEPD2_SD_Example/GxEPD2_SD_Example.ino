@@ -10,6 +10,8 @@
 // Version: see library.properties
 //
 // Library: https://github.com/ZinggJM/GxEPD2
+//
+// note that BMP bitmaps are drawn at physical position in physical orientation of the screen
 
 // Supporting Arduino Forum Topics:
 // Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
@@ -160,9 +162,11 @@ SdFat SD;
 #endif
 
 // function declaration with default parameter
+// note that BMP bitmaps are drawn at physical position in physical orientation of the screen
 void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_color = true);
 
 // bitmap drawing using buffered graphics, e.g. for small bitmaps or for GxEPD2_154c
+// draws BMP bitmap according to set orientation
 // partial_update selects refresh mode (not effective for GxEPD2_154c)
 // overwrite = true does not clear buffer before drawing, use only if buffer is full height
 void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool with_color = true, bool partial_update = false, bool overwrite = false);
@@ -373,7 +377,7 @@ void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_colo
   bool valid = false; // valid format to be handled
   bool flip = true; // bitmap is stored bottom-to-top
   uint32_t startTime = millis();
-  if ((x >= display.width()) || (y >= display.height())) return;
+  if ((x >= display.epd2.WIDTH) || (y >= display.epd2.HEIGHT)) return;
   Serial.println();
   Serial.print("Loading image '");
   Serial.print(filename);
@@ -424,8 +428,8 @@ void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_colo
       }
       uint16_t w = width;
       uint16_t h = height;
-      if ((x + w - 1) >= display.width())  w = display.width()  - x;
-      if ((y + h - 1) >= display.height()) h = display.height() - y;
+      if ((x + w - 1) >= display.epd2.WIDTH)  w = display.epd2.WIDTH  - x;
+      if ((y + h - 1) >= display.epd2.HEIGHT) h = display.epd2.HEIGHT - y;
       if (w <= max_row_width) // handle with direct drawing
       {
         valid = true;

@@ -29,6 +29,7 @@
 #include "epd/GxEPD2_583.h"
 #include "epd/GxEPD2_750.h"
 #include "epd/GxEPD2_750_T7.h"
+#include "epd/GxEPD2_1248.h"
 #include "it8951/GxEPD2_it60.h"
 
 #ifndef ENABLE_GxEPD2_GFX
@@ -50,7 +51,7 @@ class GxEPD2_BW : public Adafruit_GFX
   public:
     GxEPD2_Type epd2;
 #if ENABLE_GxEPD2_GFX
-    GxEPD2_BW(GxEPD2_Type epd2_instance) : epd2(epd2_instance), GxEPD2_GFX(epd2, GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT)
+    GxEPD2_BW(GxEPD2_Type epd2_instance) : GxEPD2_GFX(epd2, GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
 #else
     GxEPD2_BW(GxEPD2_Type epd2_instance) : Adafruit_GFX(GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
 #endif

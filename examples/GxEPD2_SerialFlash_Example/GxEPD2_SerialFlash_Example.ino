@@ -14,6 +14,8 @@
 // this example uses the SerialFlash library from: https://github.com/PaulStoffregen/SerialFlash
 // with a modification for use with ESP32 or the STM32 package available here: https://github.com/ZinggJM/SerialFlash
 // download it as .zip file and install with Library Mananger method "Add .ZIP Library..."
+//
+// note that BMP bitmaps are drawn at physical position in physical orientation of the screen
 
 // Supporting Arduino Forum Topics:
 // Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
@@ -49,11 +51,10 @@
 
 #include <SerialFlash.h>
 
-const int FlashChipSelect = D1; // digital pin for flash chip CS pin
-
 #define EPD_CS SS
 
 #if defined (ESP8266)
+const int FlashChipSelect = D1; // digital pin for flash chip CS pin
 // select one and adapt to your mapping, can use full buffer size (full HEIGHT)
 //GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display(GxEPD2_154(/*CS=D8*/ EPD_CS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEP015OC1 no longer available
 //GxEPD2_BW<GxEPD2_154_D67, GxEPD2_154_D67::HEIGHT> display(GxEPD2_154_D67(/*CS=D8*/ EPD_CS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEH0154D67
@@ -115,6 +116,7 @@ const int FlashChipSelect = D1; // digital pin for flash chip CS pin
 #endif
 
 #if defined(ESP32)
+const int FlashChipSelect = 17; // as used with my ESP32 breadboard
 // select one and adapt to your mapping, can use full buffer size (full HEIGHT)
 //GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display(GxEPD2_154(/*CS=5*/ EPD_CS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEP015OC1 no longer available
 //GxEPD2_BW<GxEPD2_154_D67, GxEPD2_154_D67::HEIGHT> display(GxEPD2_154_D67(/*CS=5*/ EPD_CS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEH0154D67
@@ -143,9 +145,11 @@ const int FlashChipSelect = D1; // digital pin for flash chip CS pin
 #endif
 
 // function declaration with default parameter
+// note that BMP bitmaps are drawn at physical position in physical orientation of the screen
 void drawBitmapFromSerialFlash(const char *filename, int16_t x, int16_t y, bool with_color = true);
 
 // bitmap drawing using buffered graphics, e.g. for small bitmaps or for GxEPD2_154c
+// draws BMP bitmap according to set orientation
 // partial_update selects refresh mode (not effective for GxEPD2_154c)
 // overwrite = true does not clear buffer before drawing, use only if buffer is full height
 void drawBitmapFromSerialFlash_Buffered(const char *filename, int16_t x, int16_t y, bool with_color = true, bool partial_update = false, bool overwrite = false);
@@ -357,7 +361,7 @@ void drawBitmapFromSerialFlash(const char *filename, int16_t x, int16_t y, bool 
   bool valid = false; // valid format to be handled
   bool flip = true; // bitmap is stored bottom-to-top
   uint32_t startTime = millis();
-  if ((x >= display.width()) || (y >= display.height())) return;
+  if ((x >= display.epd2.WIDTH) || (y >= display.epd2.HEIGHT)) return;
   Serial.println();
   Serial.print("Loading image '");
   Serial.print(filename);
@@ -400,8 +404,8 @@ void drawBitmapFromSerialFlash(const char *filename, int16_t x, int16_t y, bool 
       }
       uint16_t w = width;
       uint16_t h = height;
-      if ((x + w - 1) >= display.width())  w = display.width()  - x;
-      if ((y + h - 1) >= display.height()) h = display.height() - y;
+      if ((x + w - 1) >= display.epd2.WIDTH)  w = display.epd2.WIDTH  - x;
+      if ((y + h - 1) >= display.epd2.HEIGHT) h = display.epd2.HEIGHT - y;
       if (w <= max_row_width) // handle with direct drawing
       {
         valid = true;
