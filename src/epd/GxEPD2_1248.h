@@ -121,8 +121,8 @@ class GxEPD2_1248 : public GxEPD2_EPD
       public:
         const uint16_t WIDTH, HEIGHT;
       private:
-        int8_t _cs, _dc;
         bool _rev_scan;
+        int8_t _cs, _dc;
         const SPISettings _spi_settings;
     };
     ScreenPart M1, S1, M2, S2;
