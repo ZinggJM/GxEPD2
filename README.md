@@ -80,7 +80,10 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.2.5
+### Version 1.2.6
+- slightly improved differential refresh for GDEW1248T3
+- minor fixes
+#### Version 1.2.5
 - added support for GDEW1248T3 12.84" b/w panel on Waveshare 12.48 e-paper display frame
 - tested with Waveshare Epaper ESP32 Driver Board mounted on connection board
 - tested with Arduino UNO mounted on connection board, is extremely slow

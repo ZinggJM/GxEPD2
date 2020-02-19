@@ -96,6 +96,9 @@ class GxEPD2_1248 : public GxEPD2_EPD
     void _waitWhileAnyBusy(const char* comment = 0, uint16_t busy_time = 5000);
     void _getMasterTemperature();
   private:
+    friend class GDEW1248T3_OTP;
+    void _readController(uint8_t cmd, uint8_t* data, uint16_t n, int8_t cs = -1, int8_t dc = -1);
+  private:
     int8_t _sck, _miso, _mosi, _dc1, _dc2, _rst1, _rst2;
     int8_t _cs_m1, _cs_s1, _cs_m2, _cs_s2;
     int8_t _busy_m1, _busy_s1, _busy_m2, _busy_s2;
@@ -121,8 +124,8 @@ class GxEPD2_1248 : public GxEPD2_EPD
       public:
         const uint16_t WIDTH, HEIGHT;
       private:
-        int8_t _cs, _dc;
         bool _rev_scan;
+        int8_t _cs, _dc;
         const SPISettings _spi_settings;
     };
     ScreenPart M1, S1, M2, S2;

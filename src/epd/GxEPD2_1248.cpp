@@ -22,7 +22,7 @@ GxEPD2_1248::GxEPD2_1248(int8_t sck, int8_t miso, int8_t mosi,
   GxEPD2_EPD(cs_m1, dc1, rst1, busy_m1, LOW, 10000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate),
   _sck(sck), _miso(miso), _mosi(mosi), _dc1(dc1), _dc2(dc2), _rst1(rst1), _rst2(rst2),
   _cs_m1(cs_m1), _cs_s1(cs_s1), _cs_m2(cs_m2), _cs_s2(cs_s2),
-  _busy_m1(busy_m1), _busy_s1(busy_s1), _busy_m2(busy_m2), _busy_s2(busy_s2), 
+  _busy_m1(busy_m1), _busy_s1(busy_s1), _busy_m2(busy_m2), _busy_s2(busy_s2),
   _temperature(20),
   M1(648, 492, false, cs_m1, dc1),
   S1(656, 492, false, cs_s1, dc1),
@@ -271,7 +271,6 @@ void GxEPD2_1248::hibernate()
     _writeCommandAll(0x07); // deep sleep
     _writeDataAll(0xA5);    // check code
     _hibernating = true;
-    _initial_write = true;
   }
 }
 
@@ -293,8 +292,6 @@ void GxEPD2_1248::_initSPI()
   {
     SPI.end();
     SPI.begin(_sck, _miso, _mosi, _cs_m1);
-    //void* bus = SPI.bus();
-    //Serial.print("SPI.bus() : 0x"); Serial.println(uint32_t(bus), HEX);
   }
   else SPI.begin();
 #else
@@ -407,10 +404,20 @@ void GxEPD2_1248::_InitDisplay()
 // experimental partial screen update LUTs with balanced charge
 // LUTs are filled with zeroes
 
-#define T1 35 // charge balance pre-phase
-#define T2  0 // optional extension
-#define T3 35 // color change phase (b/w)
-#define T4  0 // optional extension for one color
+//#define T1 35 // charge balance pre-phase
+//#define T2  0 // optional extension
+//#define T3 35 // color change phase (b/w)
+//#define T4  0 // optional extension for one color
+
+//#define T1 20 // charge balance pre-phase
+//#define T2 10 // optional extension
+//#define T3 20 // color change phase (b/w)
+//#define T4 10 // optional extension for one color
+
+#define T1 25 // charge balance pre-phase
+#define T2 10 // optional extension
+#define T3 25 // color change phase (b/w)
+#define T4 10 // optional extension for one color
 
 const unsigned char GxEPD2_1248::lut_20_LUTC_partial[] PROGMEM =
 {
@@ -424,8 +431,8 @@ const unsigned char GxEPD2_1248::lut_21_LUTWW_partial[] PROGMEM =
 
 const unsigned char GxEPD2_1248::lut_22_LUTKW_partial[] PROGMEM =
 { // 10 w
-  0x48, T1, T2, T3, T4, 1, // 01 00 10 00
-  //0x5A, T1, T2, T3, T4, 1, // 01 01 10 10 more white
+  //0x48, T1, T2, T3, T4, 1, // 01 00 10 00
+  0x5A, T1, T2, T3, T4, 1, // 01 01 10 10 more white
 };
 
 const unsigned char GxEPD2_1248::lut_23_LUTWK_partial[] PROGMEM =
@@ -472,8 +479,9 @@ void GxEPD2_1248::_Init_Part()
   M2.writeData(0x33);
   S2.writeCommand(0x00);
   S2.writeData(0x33);
+  _writeCommandAll(0x82); // vcom_DC setting
+  _writeDataAll (0x1C);
   _writeCommandAll(0x50); // VCOM AND DATA INTERVAL SETTING
-  //_writeDataAll(0x39);    // LUTBD, N2OCP: copy new to old
   _writeDataAll(0x31);  //Border KW
   _writeDataAll(0x07);
   _writeCommandAll(0x20);
@@ -595,7 +603,6 @@ void GxEPD2_1248::_waitWhileAnyBusy(const char* comment, uint16_t busy_time)
     unsigned long start = micros();
     while (1)
     {
-      _writeCommandAll(0x71);
       delay(1); // add some margin to become active
       bool nb_m1 = _busy_m1 >= 0 ? _busy_level != digitalRead(_busy_m1) : true;
       bool nb_s1 = _busy_m1 >= 0 ? _busy_level != digitalRead(_busy_s1) : true;
@@ -630,6 +637,7 @@ void GxEPD2_1248::_getMasterTemperature()
   M1.writeCommand(0x40);
   _waitWhileAnyBusy("getMasterTemperature", 300);
   SPI.end();
+  pinMode(_mosi, INPUT);
   delay(100);
   digitalWrite(_sck, HIGH);
   pinMode(_sck, OUTPUT);
@@ -653,6 +661,45 @@ void GxEPD2_1248::_getMasterTemperature()
   {
     Serial.print("Master Temperature is "); Serial.println(value);
   }
+}
+
+void GxEPD2_1248::_readController(uint8_t cmd, uint8_t* data, uint16_t n, int8_t cs, int8_t dc)
+{
+  if (cs < 0) cs = _cs_m1;
+  if (dc < 0) dc = _dc1;
+  SPI.beginTransaction(_spi_settings);
+  digitalWrite(cs, LOW);
+  digitalWrite(dc, LOW);
+  SPI.transfer(cmd);
+  digitalWrite(dc, HIGH);
+  digitalWrite(cs, HIGH);
+  SPI.endTransaction();
+  _waitWhileAnyBusy("_readController", 300);
+  SPI.end();
+  pinMode(_mosi, INPUT);
+  delay(100);
+  digitalWrite(_sck, HIGH);
+  pinMode(_sck, OUTPUT);
+  digitalWrite(cs, LOW);
+  pinMode(_mosi, INPUT);
+  for (uint16_t j = 0; j < n; j++)
+  {
+    uint8_t value = 0;
+    for (uint16_t i = 0; i < 8; i++)
+    {
+      digitalWrite(_sck, LOW);
+      value <<= 1;
+      delayMicroseconds(2);
+      if (digitalRead(_mosi)) value |= 0x01;
+      delayMicroseconds(2);
+      digitalWrite(_sck, HIGH);
+      delayMicroseconds(2);
+    }
+    data[j] = value;
+  }
+  digitalWrite(cs, HIGH);
+  pinMode(_sck, INPUT);
+  _initSPI();
 }
 
 GxEPD2_1248::ScreenPart::ScreenPart(uint16_t width, uint16_t height, bool rev_scan, int8_t cs, int8_t dc) :

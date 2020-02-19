@@ -962,6 +962,10 @@ void drawBitmaps200x200()
   display.writeImage(bitmaps[0], int16_t(0), 0, 200, 200, false, mirror_y, true);
   display.writeImage(bitmaps[0], int16_t(int16_t(display.epd2.WIDTH) - 200), int16_t(display.epd2.HEIGHT) - 200, 200, 200, false, mirror_y, true);
   display.refresh(true);
+  // for differential update: set previous buffer equal to current buffer in controller
+  display.epd2.writeScreenBufferAgain(); // use default for white
+  display.epd2.writeImageAgain(bitmaps[0], int16_t(0), 0, 200, 200, false, mirror_y, true);
+  display.epd2.writeImageAgain(bitmaps[0], int16_t(int16_t(display.epd2.WIDTH) - 200), int16_t(display.epd2.HEIGHT) - 200, 200, 200, false, mirror_y, true);
   delay(2000);
 }
 #endif
