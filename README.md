@@ -80,7 +80,10 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.2.6
+### Version 1.2.7
+- fix paged drawing of initial screen on GDEH029A1
+- sometimes true is false, if applied the wrong way round
+#### Version 1.2.6
 - slightly improved differential refresh for GDEW1248T3
 - minor fixes
 #### Version 1.2.5

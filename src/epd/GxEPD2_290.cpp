@@ -19,7 +19,7 @@ GxEPD2_290::GxEPD2_290(int8_t cs, int8_t dc, int8_t rst, int8_t busy) :
 
 void GxEPD2_290::clearScreen(uint8_t value)
 {
-  _initial_write = true; // initial full screen buffer clean done
+  _initial_write = false; // initial full screen buffer clean done
   if (_initial_refresh)
   {
     _Init_Full();
