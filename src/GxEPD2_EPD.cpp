@@ -222,3 +222,20 @@ void GxEPD2_EPD::_writeCommandDataPGM(const uint8_t* pCommandData, uint8_t datal
   if (_cs >= 0) digitalWrite(_cs, HIGH);
   SPI.endTransaction();
 }
+
+void GxEPD2_EPD::_startTransfer()
+{
+  SPI.beginTransaction(_spi_settings);
+  if (_cs >= 0) digitalWrite(_cs, LOW);
+}
+
+void GxEPD2_EPD::_transfer(uint8_t value)
+{
+  SPI.transfer(value);
+}
+
+void GxEPD2_EPD::_endTransfer()
+{
+  if (_cs >= 0) digitalWrite(_cs, HIGH);
+  SPI.endTransaction();
+}

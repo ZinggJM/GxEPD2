@@ -30,15 +30,19 @@ void GxEPD2_750c_Z08::clearScreen(uint8_t black_value, uint8_t color_value)
   _writeCommand(0x91); // partial in
   _setPartialRamArea(0, 0, WIDTH, HEIGHT);
   _writeCommand(0x10);
+  _startTransfer();
   for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
-    _writeData(black_value);
+    _transfer(black_value);
   }
+  _endTransfer();
   _writeCommand(0x13);
+  _startTransfer();
   for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
-    _writeData(~color_value);
+    _transfer(~color_value);
   }
+  _endTransfer();
   _Update_Part();
   _writeCommand(0x92); // partial out
 }
@@ -55,15 +59,19 @@ void GxEPD2_750c_Z08::writeScreenBuffer(uint8_t black_value, uint8_t color_value
   _writeCommand(0x91); // partial in
   _setPartialRamArea(0, 0, WIDTH, HEIGHT);
   _writeCommand(0x10);
+  _startTransfer();
   for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
-    _writeData(black_value);
+    _transfer(black_value);
   }
+  _endTransfer();
   _writeCommand(0x13);
+  _startTransfer();
   for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
-    _writeData(~color_value);
+    _transfer(~color_value);
   }
+  _endTransfer();
   _writeCommand(0x92); // partial out
 }
 
@@ -92,6 +100,7 @@ void GxEPD2_750c_Z08::writeImage(const uint8_t* black, const uint8_t* color, int
   _writeCommand(0x91); // partial in
   _setPartialRamArea(x1, y1, w1, h1);
   _writeCommand(0x10);
+  _startTransfer();
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -115,10 +124,12 @@ void GxEPD2_750c_Z08::writeImage(const uint8_t* black, const uint8_t* color, int
         }
         if (invert) data = ~data;
       }
-      _writeData(data);
+      _transfer(data);
     }
   }
+  _endTransfer();
   _writeCommand(0x13);
+  _startTransfer();
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -142,9 +153,10 @@ void GxEPD2_750c_Z08::writeImage(const uint8_t* black, const uint8_t* color, int
         }
         if (invert) data = ~data;
       }
-      _writeData(~data);
+      _transfer(~data);
     }
   }
+  _endTransfer();
   _writeCommand(0x92); // partial out
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
@@ -182,6 +194,7 @@ void GxEPD2_750c_Z08::writeImagePart(const uint8_t* black, const uint8_t* color,
   _writeCommand(0x91); // partial in
   _setPartialRamArea(x1, y1, w1, h1);
   _writeCommand(0x10);
+  _startTransfer();
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -202,10 +215,12 @@ void GxEPD2_750c_Z08::writeImagePart(const uint8_t* black, const uint8_t* color,
         data = black[idx];
       }
       if (invert) data = ~data;
-      _writeData(data);
+      _transfer(data);
     }
   }
+  _endTransfer();
   _writeCommand(0x13);
+  _startTransfer();
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -229,9 +244,10 @@ void GxEPD2_750c_Z08::writeImagePart(const uint8_t* black, const uint8_t* color,
         }
         if (invert) data = ~data;
       }
-      _writeData(~data);
+      _transfer(~data);
     }
   }
+  _endTransfer();
   _writeCommand(0x92); // partial out
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }

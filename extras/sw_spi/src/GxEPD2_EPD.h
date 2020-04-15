@@ -97,8 +97,11 @@ class GxEPD2_EPD
     void _writeCommandData(const uint8_t* pCommandData, uint8_t datalen);
     void _writeCommandDataPGM(const uint8_t* pCommandData, uint8_t datalen);
     void _beginTransaction(const SPISettings& settings);
-    void _transfer(uint8_t data);
+    void _spi_write(uint8_t data);
     void _endTransaction();
+    void _startTransfer() {};
+    void _transfer(uint8_t value) {_writeData(value);};
+    void _endTransfer() {};
   public:
     void _waitWhileBusy(const char* comment = 0, uint16_t busy_time = 5000);
     void _writeCommand(uint8_t c);

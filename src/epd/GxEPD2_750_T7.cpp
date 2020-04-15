@@ -30,17 +30,21 @@ void GxEPD2_750_T7::writeScreenBuffer(uint8_t value)
   _initial_write = false; // initial full screen buffer clean done
   if (!_using_partial_mode) _Init_Part();
   _writeCommand(0x13); // set current
+  _startTransfer();
   for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
-    _writeData(value);
+    _transfer(value);
   }
+  _endTransfer();
   if (_initial_refresh)
   {
     _writeCommand(0x10); // preset previous
+    _startTransfer();
     for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
     {
-      _writeData(0xFF); // 0xFF is white
+      _transfer(0xFF); // 0xFF is white
     }
+    _endTransfer();
   }
 }
 
@@ -64,6 +68,7 @@ void GxEPD2_750_T7::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int
   _writeCommand(0x91); // partial in
   _setPartialRamArea(x1, y1, w1, h1);
   _writeCommand(0x13);
+  _startTransfer();
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -84,9 +89,10 @@ void GxEPD2_750_T7::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int
         data = bitmap[idx];
       }
       if (invert) data = ~data;
-      _writeData(data);
+      _transfer(data);
     }
   }
+  _endTransfer();
   _writeCommand(0x92); // partial out
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
@@ -118,6 +124,7 @@ void GxEPD2_750_T7::writeImagePart(const uint8_t bitmap[], int16_t x_part, int16
   _writeCommand(0x91); // partial in
   _setPartialRamArea(x1, y1, w1, h1);
   _writeCommand(0x13);
+  _startTransfer();
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -138,9 +145,10 @@ void GxEPD2_750_T7::writeImagePart(const uint8_t bitmap[], int16_t x_part, int16
         data = bitmap[idx];
       }
       if (invert) data = ~data;
-      _writeData(data);
+      _transfer(data);
     }
   }
+  _endTransfer();
   _writeCommand(0x92); // partial out
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }

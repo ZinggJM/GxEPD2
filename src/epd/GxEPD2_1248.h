@@ -121,6 +121,9 @@ class GxEPD2_1248 : public GxEPD2_EPD
         void writeData(uint8_t d);
       private:
         void _setPartialRamArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
+        void _startTransfer();
+        void _transfer(uint8_t value);
+        void _endTransfer();
       public:
         const uint16_t WIDTH, HEIGHT;
       private:

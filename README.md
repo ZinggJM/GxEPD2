@@ -80,7 +80,9 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.2.7
+### Version 1.2.8
+- improved transfer speed for the bigger displays (3.71" and up)
+#### Version 1.2.7
 - fix paged drawing of initial screen on GDEH029A1
 - sometimes true is false, if applied the wrong way round
 #### Version 1.2.6

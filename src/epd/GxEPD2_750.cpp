@@ -29,10 +29,12 @@ void GxEPD2_750::writeScreenBuffer(uint8_t value)
   if (!_using_partial_mode) _Init_Part();
   if (value == 0xFF) value = 0x33; // white value for this controller
   _writeCommand(0x10);
+  _startTransfer();
   for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 2; i++)
   {
-    _writeData(value);
+    _transfer(value);
   }
+  _endTransfer();
 }
 
 void GxEPD2_750::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
@@ -55,6 +57,7 @@ void GxEPD2_750::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_
   _writeCommand(0x91); // partial in
   _setPartialRamArea(x1, y1, w1, h1);
   _writeCommand(0x10);
+  _startTransfer();
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -78,6 +81,7 @@ void GxEPD2_750::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_
       _send8pixel(~data);
     }
   }
+  _endTransfer();
   _writeCommand(0x92); // partial out
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
@@ -109,6 +113,7 @@ void GxEPD2_750::writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t 
   _writeCommand(0x91); // partial in
   _setPartialRamArea(x1, y1, w1, h1);
   _writeCommand(0x10);
+  _startTransfer();
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -132,6 +137,7 @@ void GxEPD2_750::writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t 
       _send8pixel(~data);
     }
   }
+  _endTransfer();
   _writeCommand(0x92); // partial out
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
@@ -175,6 +181,7 @@ void GxEPD2_750::writeNative(const uint8_t* data1, const uint8_t* data2, int16_t
     _writeCommand(0x91); // partial in
     _setPartialRamArea(x1, y1, w1, h1);
     _writeCommand(0x10);
+    _startTransfer();
     for (int16_t i = 0; i < h1; i++)
     {
       for (int16_t j = 0; j < w1 / 2; j++)
@@ -195,9 +202,10 @@ void GxEPD2_750::writeNative(const uint8_t* data1, const uint8_t* data2, int16_t
           data = data1[idx];
         }
         if (invert) data = ~data;
-        _writeData(data);
+        _transfer(data);
       }
     }
+    _endTransfer();
     _writeCommand(0x92); // partial out
     delay(1); // yield() to avoid WDT on ESP8266 and ESP32
   }
@@ -289,7 +297,7 @@ void GxEPD2_750::_send8pixel(uint8_t data)
     j++;
     t |= data & 0x80 ? 0x00 : 0x03;
     data <<= 1;
-    _writeData(t);
+    _transfer(t);
   }
 }
 

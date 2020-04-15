@@ -745,6 +745,7 @@ void GxEPD2_1248::ScreenPart::writeImagePart(uint8_t command, const uint8_t bitm
   delay(1);
   _setPartialRamArea(x1, y1, w1, h1);
   writeCommand(command);
+  _startTransfer();
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -765,9 +766,10 @@ void GxEPD2_1248::ScreenPart::writeImagePart(uint8_t command, const uint8_t bitm
         data = bitmap[idx];
       }
       if (invert) data = ~data;
-      writeData(data);
+      _transfer(data);
     }
   }
+  _endTransfer();
   writeCommand(0x92); // partial out
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
@@ -808,4 +810,21 @@ void GxEPD2_1248::ScreenPart::_setPartialRamArea(uint16_t x, uint16_t y, uint16_
   writeData(ye / 256);
   writeData(ye % 256);
   writeData(0x01);
+}
+
+void GxEPD2_1248::ScreenPart::_startTransfer()
+{
+  SPI.beginTransaction(_spi_settings);
+  if (_cs >= 0) digitalWrite(_cs, LOW);
+}
+
+void GxEPD2_1248::ScreenPart::_transfer(uint8_t value)
+{
+  SPI.transfer(value);
+}
+
+void GxEPD2_1248::ScreenPart::_endTransfer()
+{
+  if (_cs >= 0) digitalWrite(_cs, HIGH);
+  SPI.endTransaction();
 }

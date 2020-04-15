@@ -154,7 +154,7 @@ void GxEPD2_EPD::_writeCommand(uint8_t c)
   _beginTransaction(_spi_settings);
   if (_dc >= 0) digitalWrite(_dc, LOW);
   if (_cs >= 0) digitalWrite(_cs, LOW);
-  _transfer(c);
+  _spi_write(c);
   if (_cs >= 0) digitalWrite(_cs, HIGH);
   if (_dc >= 0) digitalWrite(_dc, HIGH);
   _endTransaction();
@@ -164,7 +164,7 @@ void GxEPD2_EPD::_writeData(uint8_t d)
 {
   _beginTransaction(_spi_settings);
   if (_cs >= 0) digitalWrite(_cs, LOW);
-  _transfer(d);
+  _spi_write(d);
   if (_cs >= 0) digitalWrite(_cs, HIGH);
   _endTransaction();
 }
@@ -175,7 +175,7 @@ void GxEPD2_EPD::_writeData(const uint8_t* data, uint16_t n)
   if (_cs >= 0) digitalWrite(_cs, LOW);
   for (uint8_t i = 0; i < n; i++)
   {
-    _transfer(*data++);
+    _spi_write(*data++);
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);
   _endTransaction();
@@ -187,11 +187,11 @@ void GxEPD2_EPD::_writeDataPGM(const uint8_t* data, uint16_t n, int16_t fill_wit
   if (_cs >= 0) digitalWrite(_cs, LOW);
   for (uint8_t i = 0; i < n; i++)
   {
-    _transfer(pgm_read_byte(&*data++));
+    _spi_write(pgm_read_byte(&*data++));
   }
   while (fill_with_zeroes > 0)
   {
-    _transfer(0x00);
+    _spi_write(0x00);
     fill_with_zeroes--;
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);
@@ -204,13 +204,13 @@ void GxEPD2_EPD::_writeDataPGM_sCS(const uint8_t* data, uint16_t n, int16_t fill
   for (uint8_t i = 0; i < n; i++)
   {
     if (_cs >= 0) digitalWrite(_cs, LOW);
-    _transfer(pgm_read_byte(&*data++));
+    _spi_write(pgm_read_byte(&*data++));
     if (_cs >= 0) digitalWrite(_cs, HIGH);
   }
   while (fill_with_zeroes > 0)
   {
     if (_cs >= 0) digitalWrite(_cs, LOW);
-    _transfer(0x00);
+    _spi_write(0x00);
     fill_with_zeroes--;
     if (_cs >= 0) digitalWrite(_cs, HIGH);
   }
@@ -222,11 +222,11 @@ void GxEPD2_EPD::_writeCommandData(const uint8_t* pCommandData, uint8_t datalen)
   _beginTransaction(_spi_settings);
   if (_dc >= 0) digitalWrite(_dc, LOW);
   if (_cs >= 0) digitalWrite(_cs, LOW);
-  _transfer(*pCommandData++);
+  _spi_write(*pCommandData++);
   if (_dc >= 0) digitalWrite(_dc, HIGH);
   for (uint8_t i = 0; i < datalen - 1; i++)  // sub the command
   {
-    _transfer(*pCommandData++);
+    _spi_write(*pCommandData++);
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);
   _endTransaction();
@@ -237,11 +237,11 @@ void GxEPD2_EPD::_writeCommandDataPGM(const uint8_t* pCommandData, uint8_t datal
   _beginTransaction(_spi_settings);
   if (_dc >= 0) digitalWrite(_dc, LOW);
   if (_cs >= 0) digitalWrite(_cs, LOW);
-  _transfer(pgm_read_byte(&*pCommandData++));
+  _spi_write(pgm_read_byte(&*pCommandData++));
   if (_dc >= 0) digitalWrite(_dc, HIGH);
   for (uint8_t i = 0; i < datalen - 1; i++)  // sub the command
   {
-    _transfer(pgm_read_byte(&*pCommandData++));
+    _spi_write(pgm_read_byte(&*pCommandData++));
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);
   _endTransaction();
@@ -252,7 +252,7 @@ void GxEPD2_EPD::_beginTransaction(const SPISettings& settings)
   if (_sck < 0) SPI.beginTransaction(settings);
 }
 
-void GxEPD2_EPD::_transfer(uint8_t data)
+void GxEPD2_EPD::_spi_write(uint8_t data)
 {
   if (_sck < 0) SPI.transfer(data);
   else

@@ -95,6 +95,9 @@ class GxEPD2_EPD
     void _writeDataPGM_sCS(const uint8_t* data, uint16_t n, int16_t fill_with_zeroes = 0);
     void _writeCommandData(const uint8_t* pCommandData, uint8_t datalen);
     void _writeCommandDataPGM(const uint8_t* pCommandData, uint8_t datalen);
+    void _startTransfer();
+    void _transfer(uint8_t value);
+    void _endTransfer();
   protected:
     int8_t _cs, _dc, _rst, _busy, _busy_level;
     uint32_t _busy_timeout;
