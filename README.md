@@ -51,6 +51,9 @@
 ### Supported SPI e-paper panels from Good Display:
 - GDEP015OC1     1.54" b/w
 - GDEH0154D67    1.54" b/w, replacement for GDEP015OC1
+- GDEW0154T8     1.54" b/w 152x152
+- GDEW0154M09    1.54" b/w 200x200
+- GDEW0154M10    1.54" b/w 152x152 DES
 - GDEW0154Z04    1.54" b/w/r 200x200
 - GDE0213B1      2.13" b/w
 - GDEH0213B72    2.13" b/w, replacement for GDE0213B1
@@ -67,6 +70,7 @@
 - GDEW042T2      4.2" b/w
 - GDEW042Z15     4.2" b/w/r
 - GDEW0583T7     5.83" b/w
+- GDEW0583T8     5.83" b/w 648x460
 - GDEW075T8      7.5" b/w
 - GDEW075T7      7.5" b/w 800x480
 - GDEW075Z09     7.5" b/w/r
@@ -80,7 +84,14 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.2.8
+### Version 1.2.9
+- added support for GDEW0154T8 1.54" b/w 152x152
+- added support for GDEW0154M09 1.54" b/w 200x200
+- added support for GDEW0154M10 1.54" b/w 152x152 DES
+- added support for GDEW0583T8 5.83" b/w 648x460
+- added option to use class GFX of library GFX_Root instead of Adafruit_GFX
+- differential update on GDEW0154M10 is experimental, there is no partial update demo yet
+#### Version 1.2.8
 - improved transfer speed for the bigger displays (3.71" and up)
 #### Version 1.2.7
 - fix paged drawing of initial screen on GDEH029A1

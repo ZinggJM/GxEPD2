@@ -196,4 +196,4 @@ const GFXglyph Open_Sans_ExtraBold_120Glyphs[] PROGMEM = {
 	  { 56585,  44, 107,  53,    4,  -87 } // '}'
 };
 const GFXfont Open_Sans_ExtraBold_120 PROGMEM = {
-(uint8_t  *)Open_Sans_ExtraBold_120Bitmaps,(GFXglyph *)Open_Sans_ExtraBold_120Glyphs,0x20, 0x7E, -91};
+(uint8_t  *)Open_Sans_ExtraBold_120Bitmaps,(GFXglyph *)Open_Sans_ExtraBold_120Glyphs,0x20, 0x7E, 0xA5};

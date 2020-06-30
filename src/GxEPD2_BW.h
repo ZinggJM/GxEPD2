@@ -12,10 +12,30 @@
 #ifndef _GxEPD2_BW_H_
 #define _GxEPD2_BW_H_
 
+// uncomment next line to use class GFX of library GFX_Root instead of Adafruit_GFX
+//#include <GFX.h>
+
+#ifndef ENABLE_GxEPD2_GFX
+// default is off
+#define ENABLE_GxEPD2_GFX 0
+#endif
+
+#if ENABLE_GxEPD2_GFX
+#include "GxEPD2_GFX.h"
+#define GxEPD2_GFX_BASE_CLASS GxEPD2_GFX
+#elif defined(_GFX_H_)
+#define GxEPD2_GFX_BASE_CLASS GFX
+#else
 #include <Adafruit_GFX.h>
+#define GxEPD2_GFX_BASE_CLASS Adafruit_GFX
+#endif
+
 #include "GxEPD2_EPD.h"
 #include "epd/GxEPD2_154.h"
 #include "epd/GxEPD2_154_D67.h"
+#include "epd/GxEPD2_154_T8.h"
+#include "epd/GxEPD2_154_M09.h"
+#include "epd/GxEPD2_154_M10.h"
 #include "epd/GxEPD2_213.h"
 #include "epd/GxEPD2_213_B72.h"
 #include "epd/GxEPD2_213_B73.h"
@@ -27,33 +47,21 @@
 #include "epd/GxEPD2_371.h"
 #include "epd/GxEPD2_420.h"
 #include "epd/GxEPD2_583.h"
+#include "epd/GxEPD2_583_T8.h"
 #include "epd/GxEPD2_750.h"
 #include "epd/GxEPD2_750_T7.h"
 #include "epd/GxEPD2_1248.h"
 #include "it8951/GxEPD2_it60.h"
 
-#ifndef ENABLE_GxEPD2_GFX
-// default is off
-#define ENABLE_GxEPD2_GFX 0
-#endif
-
-#if ENABLE_GxEPD2_GFX
-#include "GxEPD2_GFX.h"
-#endif
-
 template<typename GxEPD2_Type, const uint16_t page_height>
-#if ENABLE_GxEPD2_GFX
-class GxEPD2_BW : public GxEPD2_GFX
-#else
-class GxEPD2_BW : public Adafruit_GFX
-#endif
+class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
 {
   public:
     GxEPD2_Type epd2;
 #if ENABLE_GxEPD2_GFX
-    GxEPD2_BW(GxEPD2_Type epd2_instance) : GxEPD2_GFX(epd2, GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
+    GxEPD2_BW(GxEPD2_Type epd2_instance) : GxEPD2_GFX_BASE_CLASS(epd2, GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
 #else
-    GxEPD2_BW(GxEPD2_Type epd2_instance) : Adafruit_GFX(GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
+    GxEPD2_BW(GxEPD2_Type epd2_instance) : GxEPD2_GFX_BASE_CLASS(GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
 #endif
     {
       _page_height = page_height;

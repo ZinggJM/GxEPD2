@@ -11,8 +11,24 @@
 
 #ifndef _GxEPD2_3C_H_
 #define _GxEPD2_3C_H_
+// uncomment next line to use class GFX of library GFX_Root instead of Adafruit_GFX
+//#include <GFX.h>
 
+#ifndef ENABLE_GxEPD2_GFX
+// default is off
+#define ENABLE_GxEPD2_GFX 0
+#endif
+
+#if ENABLE_GxEPD2_GFX
+#include "GxEPD2_GFX.h"
+#define GxEPD2_GFX_BASE_CLASS GxEPD2_GFX
+#elif defined(_GFX_H_)
+#define GxEPD2_GFX_BASE_CLASS GFX
+#else
 #include <Adafruit_GFX.h>
+#define GxEPD2_GFX_BASE_CLASS Adafruit_GFX
+#endif
+
 #include "GxEPD2_EPD.h"
 #include "epd3c/GxEPD2_154c.h"
 #include "epd3c/GxEPD2_213c.h"
@@ -23,28 +39,15 @@
 #include "epd3c/GxEPD2_750c.h"
 #include "epd3c/GxEPD2_750c_Z08.h"
 
-#ifndef ENABLE_GxEPD2_GFX
-// default is off
-#define ENABLE_GxEPD2_GFX 0
-#endif
-
-#if ENABLE_GxEPD2_GFX
-#include "GxEPD2_GFX.h"
-#endif
-
 template<typename GxEPD2_Type, const uint16_t page_height>
-#if ENABLE_GxEPD2_GFX
-class GxEPD2_3C : public GxEPD2_GFX
-#else
-class GxEPD2_3C : public Adafruit_GFX
-#endif
+class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
 {
   public:
     GxEPD2_Type epd2;
 #if ENABLE_GxEPD2_GFX
-    GxEPD2_3C(GxEPD2_Type epd2_instance) : GxEPD2_GFX(epd2, GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
+    GxEPD2_3C(GxEPD2_Type epd2_instance) : GxEPD2_GFX_BASE_CLASS(epd2, GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
 #else
-    GxEPD2_3C(GxEPD2_Type epd2_instance) : Adafruit_GFX(GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
+    GxEPD2_3C(GxEPD2_Type epd2_instance) : GxEPD2_GFX_BASE_CLASS(GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
 #endif
     {
       _page_height = page_height;

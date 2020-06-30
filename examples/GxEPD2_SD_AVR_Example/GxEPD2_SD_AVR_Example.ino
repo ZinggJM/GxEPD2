@@ -40,6 +40,9 @@
 //#define SD_CS SS  // e.g. for RobotDyn Wemos D1 mini SD board
 //#define EPD_CS D1 // alternative I use with RobotDyn Wemos D1 mini SD board
 
+// uncomment next line to use class GFX of library GFX_Root instead of Adafruit_GFX
+//#include <GFX.h>
+
 #include <GxEPD2_BW.h>
 #include <GxEPD2_3C.h>
 #include <Fonts/FreeMonoBold9pt7b.h>
@@ -67,11 +70,24 @@ SdFat SD;
 // select one and adapt to your mapping
 //GxEPD2_154 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7); // GDEP015OC1 no longer available
 //GxEPD2_154_D67 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7); // GDEH0154D67
+//GxEPD2_154_D67 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7); // GDEH0154D67
+//GxEPD2_154_T8 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7); // GDEW0154T8 152x152
+//GxEPD2_154_M09 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7); // GDEW0154M09 200x200
+//GxEPD2_154_M10 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7); // GDEW0154M10 152x152
 //GxEPD2_213 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
+//GxEPD2_213_B72 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7); // GDEH0213B72
+//GxEPD2_213_B73 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7); // GDEH0213B73
+//GxEPD2_213_flex display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7); // GDEW0213I5F
 //GxEPD2_290 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
+//GxEPD2_290_T5 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7); // GDEW029T5
+//GxEPD2_260 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
 //GxEPD2_270 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
+//GxEPD2_371 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
 //GxEPD2_420 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
+//GxEPD2_583 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
+//GxEPD2_583_T8 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
 //GxEPD2_750 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
+//GxEPD2_750_T7 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7); // GDEW075T7 800x480
 // 3-color e-papers
 // !!! can't be used for this //GxEPD2_154c display(GxEPD2_154c(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
 //GxEPD2_213c display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
@@ -79,6 +95,7 @@ SdFat SD;
 //GxEPD2_270c display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
 //GxEPD2_420c display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
 //GxEPD2_750c display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
+//GxEPD2_750c_Z08 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7); // GDEW075Z08 800x480
 #endif
 
 // non-AVR board can also be used with GxEPD2 base display classes, e.g. for SD bitmap drawing
