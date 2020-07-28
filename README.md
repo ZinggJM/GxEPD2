@@ -75,6 +75,7 @@
 - GDEW075T7      7.5" b/w 800x480
 - GDEW075Z09     7.5" b/w/r
 - GDEW075Z08     7.5" b/w/r 800x480
+- GDEH075Z90     7.5" b/w/r 880x528
 - GDEW1248T3    12.48 b/w 1304x984
 #### Supported SPI e-paper panels & boards from Waveshare: compare with Good Display, same panel
 #### other supported panels
@@ -84,7 +85,14 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.2.9
+### Version 1.2.10
+- added support for GDEH075Z90 7.5" b/w/r 880x528
+- the controller of GDEH075Z90 supports partial update, but refesh is full screen
+- the controller of GDEH075Z90 doesn't support differential update (not possible on 3-color anyway)
+- note: the connector of  the GDEH075Z90 is mirrored; connects downward on DESPI-C02
+- added optional init parameter "reset_duration" in ms, same default 20ms as before
+- reset_duration = 2 may help with "clever" reset circuit of newer boards from Waveshare
+#### Version 1.2.9
 - added support for GDEW0154T8 1.54" b/w 152x152
 - added support for GDEW0154M09 1.54" b/w 200x200
 - added support for GDEW0154M10 1.54" b/w 152x152 DES

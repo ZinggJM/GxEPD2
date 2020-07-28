@@ -38,6 +38,7 @@
 #include "epd3c/GxEPD2_583c.h"
 #include "epd3c/GxEPD2_750c.h"
 #include "epd3c/GxEPD2_750c_Z08.h"
+#include "epd3c/GxEPD2_750c_Z90.h"
 
 template<typename GxEPD2_Type, const uint16_t page_height>
 class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
@@ -121,10 +122,11 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
     // init method with additional parameters:
     // initial false for re-init after processor deep sleep wake up, if display power supply was kept
     // only relevant for b/w displays with fast partial update
+    // reset_duration = 20 is default; a value of 2 may help with "clever" reset circuit of newer boards from Waveshare 
     // pulldown_rst_mode true for alternate RST handling to avoid feeding 5V through RST pin
-    void init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode = false)
+    void init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration = 20, bool pulldown_rst_mode = false)
     {
-      epd2.init(serial_diag_bitrate, initial, pulldown_rst_mode);
+      epd2.init(serial_diag_bitrate, initial, reset_duration, pulldown_rst_mode);
       _using_partial_mode = false;
       _current_page = 0;
       setFullWindow();

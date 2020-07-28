@@ -37,7 +37,7 @@ class GxEPD2_GFX : public GxEPD2_GFX_ROOT_CLASS
     // this can be used to avoid the repeated initial full refresh on displays with fast partial update
     // NOTE: garbage will result on fast partial update displays, if initial full update is omitted after power loss
     // pulldown_rst_mode true for alternate RST handling to avoid feeding 5V through RST pin
-    virtual void init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode = false) = 0;
+    virtual void init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration = 20, bool pulldown_rst_mode = false) = 0;
     virtual void fillScreen(uint16_t color) = 0; // 0x0 black, >0x0 white, to buffer
     // display buffer content to screen, useful for full screen buffer
     virtual void display(bool partial_update_mode = false) = 0;

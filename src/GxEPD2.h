@@ -58,7 +58,8 @@ class GxEPD2
       GDEW042Z15,  Waveshare_4_2_bwr = GDEW042Z15,
       GDEW0583Z21, Waveshare_5_83_bwr = GDEW0583Z21,
       GDEW075Z09,  Waveshare_7_5_bwr = GDEW075Z09,
-      GDEW075Z08,  Waveshare_7_5_bwr_Z08 = GDEW075Z08
+      GDEW075Z08,  Waveshare_7_5_bwr_Z08 = GDEW075Z08,
+      GDEH075Z90,  Waveshare_7_5_bwr_Z90 = GDEH075Z90
     };
 };
 

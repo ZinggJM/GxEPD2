@@ -28,14 +28,15 @@ GxEPD2_EPD::GxEPD2_EPD(int8_t cs, int8_t dc, int8_t rst, int8_t busy, int8_t bus
   _power_is_on = false;
   _using_partial_mode = false;
   _hibernating = false;
+  _reset_duration = 20;
 }
 
 void GxEPD2_EPD::init(uint32_t serial_diag_bitrate)
 {
-  init(serial_diag_bitrate, true, false);
+  init(serial_diag_bitrate, true, 20, false);
 }
 
-void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode)
+void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration, bool pulldown_rst_mode)
 {
   _initial_write = initial;
   _initial_refresh = initial;
@@ -43,6 +44,7 @@ void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_
   _power_is_on = false;
   _using_partial_mode = false;
   _hibernating = false;
+  _reset_duration = reset_duration;
   if (serial_diag_bitrate > 0)
   {
     Serial.begin(serial_diag_bitrate);
@@ -74,7 +76,7 @@ void GxEPD2_EPD::_reset()
     {
       digitalWrite(_rst, LOW);
       pinMode(_rst, OUTPUT);
-      delay(20);
+      delay(_reset_duration);
       pinMode(_rst, INPUT_PULLUP);
       delay(200);
     }
@@ -84,7 +86,7 @@ void GxEPD2_EPD::_reset()
       pinMode(_rst, OUTPUT);
       delay(20);
       digitalWrite(_rst, LOW);
-      delay(20);
+      delay(_reset_duration);
       digitalWrite(_rst, HIGH);
       delay(200);
     }
