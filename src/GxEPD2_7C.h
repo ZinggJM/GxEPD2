@@ -9,8 +9,8 @@
 //
 // Library: https://github.com/ZinggJM/GxEPD2
 
-#ifndef _GxEPD2_3C_H_
-#define _GxEPD2_3C_H_
+#ifndef _GxEPD2_7C_H_
+#define _GxEPD2_7C_H_
 // uncomment next line to use class GFX of library GFX_Root instead of Adafruit_GFX
 //#include <GFX.h>
 
@@ -30,26 +30,17 @@
 #endif
 
 #include "GxEPD2_EPD.h"
-#include "epd3c/GxEPD2_154c.h"
-#include "epd3c/GxEPD2_213c.h"
-#include "epd3c/GxEPD2_290c.h"
-#include "epd3c/GxEPD2_270c.h"
-#include "epd3c/GxEPD2_420c.h"
-#include "epd3c/GxEPD2_583c.h"
 #include "epd3c/GxEPD2_565c.h"
-#include "epd3c/GxEPD2_750c.h"
-#include "epd3c/GxEPD2_750c_Z08.h"
-#include "epd3c/GxEPD2_750c_Z90.h"
 
 template<typename GxEPD2_Type, const uint16_t page_height>
-class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
+class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
 {
   public:
     GxEPD2_Type epd2;
 #if ENABLE_GxEPD2_GFX
-    GxEPD2_3C(GxEPD2_Type epd2_instance) : GxEPD2_GFX_BASE_CLASS(epd2, GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
+    GxEPD2_7C(GxEPD2_Type epd2_instance) : GxEPD2_GFX_BASE_CLASS(epd2, GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
 #else
-    GxEPD2_3C(GxEPD2_Type epd2_instance) : GxEPD2_GFX_BASE_CLASS(GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
+    GxEPD2_7C(GxEPD2_Type epd2_instance) : GxEPD2_GFX_BASE_CLASS(GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
 #endif
     {
       _page_height = page_height;
@@ -104,12 +95,10 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
       y -= _current_page * _page_height;
       // check if in current page
       if ((y < 0) || (y >= _page_height)) return;
-      uint16_t i = x / 8 + y * (_pw_w / 8);
-      _black_buffer[i] = (_black_buffer[i] | (1 << (7 - x % 8))); // white
-      _color_buffer[i] = (_color_buffer[i] | (1 << (7 - x % 8)));
-      if (color == GxEPD_WHITE) return;
-      else if (color == GxEPD_BLACK) _black_buffer[i] = (_black_buffer[i] & (0xFF ^ (1 << (7 - x % 8))));
-      else if ((color == GxEPD_RED) || (color == GxEPD_YELLOW)) _color_buffer[i] = (_color_buffer[i] & (0xFF ^ (1 << (7 - x % 8))));
+      uint32_t i = x / 2 + uint32_t(y) * (_pw_w / 2);
+      uint8_t pv = color7(color);
+      if (x & 1) _pixel_buffer[i] = (_pixel_buffer[i] & 0xF0) | pv;
+      else _pixel_buffer[i] = (_pixel_buffer[i] & 0x0F) | (pv << 4);
     }
 
     void init(uint32_t serial_diag_bitrate = 0) // = 0 : disabled
@@ -123,7 +112,7 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
     // init method with additional parameters:
     // initial false for re-init after processor deep sleep wake up, if display power supply was kept
     // only relevant for b/w displays with fast partial update
-    // reset_duration = 20 is default; a value of 2 may help with "clever" reset circuit of newer boards from Waveshare 
+    // reset_duration = 20 is default; a value of 2 may help with "clever" reset circuit of newer boards from Waveshare
     // pulldown_rst_mode true for alternate RST handling to avoid feeding 5V through RST pin
     void init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration = 20, bool pulldown_rst_mode = false)
     {
@@ -133,24 +122,20 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
       setFullWindow();
     }
 
-    void fillScreen(uint16_t color) // 0x0 black, >0x0 white, to buffer
+    void fillScreen(uint16_t color)
     {
-      uint8_t black = 0xFF;
-      uint8_t red = 0xFF;
-      if (color == GxEPD_WHITE);
-      else if (color == GxEPD_BLACK) black = 0x00;
-      else if ((color == GxEPD_RED) || (color == GxEPD_YELLOW)) red = 0x00;
-      for (uint16_t x = 0; x < sizeof(_black_buffer); x++)
+      uint8_t pv = color7(color);
+      uint8_t pv2 = pv | pv << 4;
+      for (uint32_t x = 0; x < sizeof(_pixel_buffer); x++)
       {
-        _black_buffer[x] = black;
-        _color_buffer[x] = red;
+        _pixel_buffer[x] = pv2;
       }
     }
 
     // display buffer content to screen, useful for full screen buffer
     void display(bool partial_update_mode = false)
     {
-      epd2.writeImage(_black_buffer, _color_buffer, 0, 0, WIDTH, _page_height);
+      epd2.writeNative(_pixel_buffer, 0, 0, 0, WIDTH, _page_height);
       epd2.refresh(partial_update_mode);
       if (!partial_update_mode) epd2.powerOff();
     }
@@ -168,7 +153,7 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
       w = gx_uint16_min(w, width() - x);
       h = gx_uint16_min(h, height() - y);
       _rotate(x, y, w, h);
-      epd2.writeImagePart(_black_buffer, _color_buffer, x, y, WIDTH, _page_height, x, y, w, h);
+      epd2.writeNativePart(_pixel_buffer, 0, x, y, WIDTH, _page_height, x, y, w, h);
       epd2.refresh(x, y, w, h);
     }
 
@@ -195,10 +180,10 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
       _pw_h = gx_uint16_min(h, height() - _pw_y);
       _rotate(_pw_x, _pw_y, _pw_w, _pw_h);
       _using_partial_mode = true;
-      // make _pw_x, _pw_w multiple of 8
-      _pw_w += _pw_x % 8;
-      if (_pw_w % 8 > 0) _pw_w += 8 - _pw_w % 8;
-      _pw_x -= _pw_x % 8;
+      // make _pw_x, _pw_w multiple of 2
+      _pw_w += _pw_x % 2;
+      if (_pw_w % 2 > 0) _pw_w += 2 - _pw_w % 2;
+      _pw_x -= _pw_x % 2;
     }
 
     void firstPage()
@@ -206,7 +191,7 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
       fillScreen(GxEPD_WHITE);
       _current_page = 0;
       _second_phase = false;
-      epd2.setPaged(); // for GxEPD2_154c paged workaround
+      epd2.setPaged(); // for GxEPD2_565c paged workaround
     }
 
     bool nextPage()
@@ -223,7 +208,7 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
         {
           //Serial.print("writeImage("); Serial.print(_pw_x); Serial.print(", "); Serial.print(dest_ys); Serial.print(", ");
           //Serial.print(_pw_w); Serial.print(", "); Serial.print(dest_ye - dest_ys); Serial.println(")");
-          epd2.writeImage(_black_buffer, _color_buffer, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
+          epd2.writeNative(_pixel_buffer, 0, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
         }
         else
         {
@@ -251,7 +236,7 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
       }
       else // full update
       {
-        epd2.writeImage(_black_buffer, _color_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
+        epd2.writeNative(_pixel_buffer, 0, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
         _current_page++;
         if (_current_page == _pages)
         {
@@ -290,7 +275,7 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
           {
             fillScreen(GxEPD_WHITE);
             drawCallback(pv);
-            epd2.writeImage(_black_buffer, _color_buffer, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
+            epd2.writeNative(_pixel_buffer, 0, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
           }
         }
         epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
@@ -303,17 +288,7 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
           uint16_t page_ys = _current_page * _page_height;
           fillScreen(GxEPD_WHITE);
           drawCallback(pv);
-          epd2.writeImage(_black_buffer, _color_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
-        }
-        if (epd2.panel == GxEPD2::GDEW0154Z04)
-        { // GxEPD2_154c paged workaround: write color part
-          for (_current_page = 0; _current_page < _pages; _current_page++)
-          {
-            uint16_t page_ys = _current_page * _page_height;
-            fillScreen(GxEPD_WHITE);
-            drawCallback(pv);
-            epd2.writeImage(_black_buffer, _color_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
-          }
+          epd2.writeNative(_pixel_buffer, 0, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
         }
         epd2.refresh(false); // full update
         epd2.powerOff();
@@ -395,7 +370,7 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
       epd2.drawImage(bitmap, x, y, w, h, invert, mirror_y, pgm);
     }
     void drawImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                        int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false)
+                       int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false)
     {
       epd2.drawImagePart(bitmap, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
     }
@@ -408,12 +383,12 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
       epd2.drawImage(black, color, x, y, w, h, false, false, false);
     }
     void drawImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                        int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+                       int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
     {
       epd2.drawImagePart(black, color, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
     }
     void drawImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                        int16_t x, int16_t y, int16_t w, int16_t h)
+                       int16_t x, int16_t y, int16_t w, int16_t h)
     {
       epd2.drawImagePart(black, color, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, false, false, false);
     }
@@ -477,9 +452,45 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
           break;
       }
     }
+    uint8_t color7(uint16_t color)
+    {
+      static uint16_t _prev_color = GxEPD_BLACK;
+      static uint8_t _prev_color7 = 0x00; // black
+      if (color == _prev_color) return _prev_color7;
+      uint8_t cv7 = 0x00;
+      switch (color)
+      {
+        case GxEPD_BLACK: cv7 = 0x00; break;
+        case GxEPD_WHITE: cv7 = 0x01; break;
+        case GxEPD_GREEN: cv7 = 0x02; break;
+        case GxEPD_BLUE:  cv7 = 0x03; break;
+        case GxEPD_RED:   cv7 = 0x04; break;
+        case GxEPD_YELLOW: cv7 = 0x05; break;
+        case GxEPD_ORANGE: cv7 = 0x06; break;
+        default:
+          {
+            uint16_t red = color & 0xF800;
+            uint16_t green = (color & 0x03C0) << 5;
+            uint16_t blue = (color & 0x001F) << 11;
+            if ((red < 0x8000) && (green < 0x8000) && (blue < 0x8000)) cv7 = 0x00; // black
+            else if ((red >= 0x8000) && (green >= 0x8000) && (blue >= 0x8000)) cv7 = 0x01; // white
+            else if ((green >= 0x8000) && (blue >= 0x8000)) cv7 = green > blue ? 0x02 : 0x03; // green, blue
+            else if ((red >= 0x8000) && (green >= 0x8000))
+            {
+              static const uint16_t y2o_lim = ((GxEPD_YELLOW - GxEPD_ORANGE) / 2 + (GxEPD_ORANGE & 0x03C0)) << 5;
+              cv7 = green > y2o_lim ? 0x05 : 0x06; // yellow, orange
+            }
+            else if (red >= 0x8000) cv7 = 0x04; // red
+            else if (green >= 0x8000) cv7 = 0x02; // green
+            else cv7 = 0x03; // blue
+          }
+      }
+      _prev_color = color;
+      _prev_color7 = cv7;
+      return cv7;
+    }
   private:
-    uint8_t _black_buffer[(GxEPD2_Type::WIDTH / 8) * page_height];
-    uint8_t _color_buffer[(GxEPD2_Type::WIDTH / 8) * page_height];
+    uint8_t _pixel_buffer[(GxEPD2_Type::WIDTH / 2) * page_height];
     bool _using_partial_mode, _second_phase, _mirror;
     uint16_t _width_bytes, _pixel_bytes;
     int16_t _current_page;

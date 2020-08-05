@@ -59,6 +59,7 @@
 
 #include <GxEPD2_BW.h>
 #include <GxEPD2_3C.h>
+#include <GxEPD2_7C.h>
 #include <Fonts/FreeMonoBold9pt7b.h>
 
 #if defined (ESP8266)
@@ -95,6 +96,9 @@
 //GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT / 4> display(GxEPD2_750c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
 //GxEPD2_3C < GxEPD2_750c_Z08, GxEPD2_750c_Z08::HEIGHT / 4 > display(GxEPD2_750c_Z08(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEW075Z08 800x480
 //GxEPD2_3C < GxEPD2_750c_Z90, GxEPD2_750c_Z90::HEIGHT / 4 > display(GxEPD2_750c_Z90(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEH075Z90 880x528
+// 7-color e-paper
+//GxEPD2_3C < GxEPD2_565c, GxEPD2_565c::HEIGHT / 4 > display(GxEPD2_565c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // Waveshare 5.65" 7-color (3C graphics)
+//GxEPD2_7C < GxEPD2_565c, GxEPD2_565c::HEIGHT / 4 > display(GxEPD2_565c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // Waveshare 5.65" 7-color
 // grey levels parallel IF e-papers on Waveshare e-Paper IT8951 Driver HAT
 // HRDY -> 4, RST -> 2, CS -> SS(15), SCK -> SCK(14), MOSI -> MOSI(D7(13)), MISO -> MISO(D6(12)), GND -> GND, 5V -> 5V
 // note: 5V supply needs to be exact and strong; 5V pin of USB powered Wemos D1 mini doesn't work!
@@ -134,6 +138,8 @@
 //GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT / 4> display(GxEPD2_750c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
 //GxEPD2_3C<GxEPD2_750c_Z08, GxEPD2_750c_Z08::HEIGHT / 4> display(GxEPD2_750c_Z08(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16)); // GDEW075Z08 800x480
 //GxEPD2_3C<GxEPD2_750c_Z90, GxEPD2_750c_Z90::HEIGHT / 4> display(GxEPD2_750c_Z90(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16)); // GDEH075Z90 880x528
+// 7-color e-paper
+//GxEPD2_7C < GxEPD2_565c, GxEPD2_565c::HEIGHT / 4 > display(GxEPD2_565c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16)); // Waveshare 5.65" 7-color
 #endif
 
 #if defined(ESP32)
@@ -167,6 +173,9 @@
 //GxEPD2_3C<GxEPD2_750c, GxEPD2_750c::HEIGHT> display(GxEPD2_750c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
 //GxEPD2_3C<GxEPD2_750c_Z08, GxEPD2_750c_Z08::HEIGHT> display(GxEPD2_750c_Z08(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEW075Z08 800x480
 //GxEPD2_3C<GxEPD2_750c_Z90, GxEPD2_750c_Z90::HEIGHT / 2> display(GxEPD2_750c_Z90(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEH075Z90 880x528
+// 7-color e-paper
+//GxEPD2_3C < GxEPD2_565c, GxEPD2_565c::HEIGHT / 2 > display(GxEPD2_565c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // Waveshare 5.65" 7-color (3C graphics)
+//GxEPD2_7C < GxEPD2_565c, GxEPD2_565c::HEIGHT / 2 > display(GxEPD2_565c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // Waveshare 5.65" 7-color
 
 // grey levels parallel IF e-papers on Waveshare e-Paper IT8951 Driver HAT
 // HRDY -> 4, RST -> 16, CS -> SS(5), SCK -> SCK(18), MOSI -> MOSI(23), MISO -> MISO(19), GND -> GND, 5V -> 5V
@@ -215,6 +224,9 @@
 //GxEPD2_3C<GxEPD2_750c, MAX_HEIGHT_3C(GxEPD2_750c)> display(GxEPD2_750c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1));
 //GxEPD2_3C<GxEPD2_750c_Z08, MAX_HEIGHT_3C(GxEPD2_750c_Z08)> display(GxEPD2_750c_Z08(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1)); // GDEW075Z08 800x480
 //GxEPD2_3C<GxEPD2_750c_Z90, MAX_HEIGHT_3C(GxEPD2_750c_Z90)> display(GxEPD2_750c_Z90(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1)); // GDEH075Z90 880x528
+// 7-color e-paper
+#define MAX_HEIGHT_7C(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2)) // 2 pixel per byte
+//GxEPD2_7C<GxEPD2_565c, MAX_HEIGHT_7C(GxEPD2_565c)> display(GxEPD2_565c(/*CS=4*/ SS, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1)); // Waveshare 5.65" 7-color
 #endif
 
 #if defined(__AVR)
@@ -255,6 +267,9 @@
 //GxEPD2_3C<GxEPD2_750c, MAX_HEIGHT_3C(GxEPD2_750c)> display(GxEPD2_750c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
 //GxEPD2_3C<GxEPD2_750c_Z08, MAX_HEIGHT_3C(GxEPD2_750c_Z08)> display(GxEPD2_750c_Z08(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // GDEW075Z08 800x480
 //GxEPD2_3C<GxEPD2_750c_Z90, MAX_HEIGHT_3C(GxEPD2_750c_Z90)> display(GxEPD2_750c_Z90(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // GDEH075Z90 880x528
+// 7-color e-paper
+#define MAX_HEIGHT_7C(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2)) // 2 pixel per byte
+//GxEPD2_7C<GxEPD2_565c, MAX_HEIGHT_7C(GxEPD2_565c)> display(GxEPD2_565c(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // Waveshare 5.65" 7-color
 
 // ***** for mapping of Waveshare Universal e-Paper Raw Panel Driver Shield for Arduino / NUCLEO *****
 // the RST line is not connected through level converter, but has a pull up resistor and a pull down diode to the Arduino pin; this is safe for 5V Arduino
@@ -292,6 +307,8 @@
 //GxEPD2_3C<GxEPD2_750c, MAX_HEIGHT_3C(GxEPD2_750c)> display(GxEPD2_750c(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7));
 //GxEPD2_3C<GxEPD2_750c_Z08, MAX_HEIGHT_3C(GxEPD2_750c_Z08)> display(GxEPD2_750c_Z08(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEW075Z08 800x480
 //GxEPD2_3C<GxEPD2_750c_Z90, MAX_HEIGHT_3C(GxEPD2_750c_Z90)> display(GxEPD2_750c_Z90(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); //GDEH075Z90 880x528
+// 7-color e-paper
+//GxEPD2_7C<GxEPD2_565c, MAX_HEIGHT_7C(GxEPD2_565c)> display(GxEPD2_565c(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // Waveshare 5.65" 7-color
 
 // Waveshare 12.48 b/w SPI display board and frame or Good Display 12.48 b/w panel GDEW1248T3
 // general constructor for use with standard SPI pins, default SCK, MISO and MOSI, for UNO on UNO connectors
@@ -331,6 +348,7 @@
 #include "bitmaps/Bitmaps3c800x480.h" // 7.5"  b/w/r
 #include "bitmaps/Bitmaps3c880x528.h" // 7.5"  b/w/r
 #include "bitmaps/WS_Bitmaps800x600.h" // 6.0"  grey
+#include "bitmaps/WS_Bitmaps7c192x143.h" // 5.65" 7-color
 #endif
 #if defined(ESP32)
 #include "bitmaps/Bitmaps1304x984.h" // 12.48" b/w
@@ -378,6 +396,15 @@ void setup()
   showFont("FreeMonoBold9pt7b", &FreeMonoBold9pt7b);
   delay(1000);
   drawBitmaps();
+#if !defined(__AVR) // takes too long!
+  if (display.epd2.panel == GxEPD2::ACeP565)
+  {
+    //draw7colorlines();
+    //delay(2000);
+    draw7colors();
+    delay(4000);
+  }
+#endif
   if (display.epd2.hasPartialUpdate)
   {
     showPartialUpdate();
@@ -925,6 +952,9 @@ void drawBitmaps()
 #ifdef _GxBitmaps3c880x528_H_
   drawBitmaps3c880x528();
 #endif
+#if defined(_WS_Bitmaps7c192x143_H_)
+  drawBitmaps7c192x143();
+#endif
   if ((display.epd2.WIDTH >= 200) && (display.epd2.HEIGHT >= 200))
   {
     // show these after the specific bitmaps
@@ -1038,8 +1068,8 @@ void drawBitmaps200x200()
         display.epd2.writeImageAgain(bitmaps[i], x, y, 200, 200, false, mirror_y, true);
       }
       delay(2000);
-      x += 40;
-      y += 40;
+      x += display.epd2.WIDTH / 4;
+      y += display.epd2.HEIGHT / 4;
       if ((x >= int16_t(display.epd2.WIDTH)) || (y >= int16_t(display.epd2.HEIGHT))) break;
     }
     if (!display.epd2.hasFastPartialUpdate) break; // comment out for full show
@@ -1476,8 +1506,8 @@ void drawBitmaps3c200x200()
         display.writeImage(bitmap_pairs[i].black, bitmap_pairs[i].red, x, y, 200, 200, false, false, true);
         display.refresh();
         delay(1000);
-        x += 40;
-        y += 40;
+        x += display.epd2.WIDTH / 4;
+        y += display.epd2.HEIGHT / 4;
         if ((x >= int16_t(display.epd2.WIDTH)) || (y >= int16_t(display.epd2.HEIGHT))) break;
       }
     }
@@ -1685,3 +1715,66 @@ void drawBitmaps3c880x528()
   }
 }
 #endif
+
+#if defined(_WS_Bitmaps7c192x143_H_)
+void drawBitmaps7c192x143()
+{
+  if (display.epd2.panel == GxEPD2::ACeP565)
+  {
+    display.drawNative(WS_Bitmap7c192x143, 0, (display.epd2.WIDTH - 192) / 2, (display.epd2.HEIGHT - 143) / 2, 192, 143, false, false, true);
+    delay(5000);
+  }
+}
+#endif
+
+void draw7colors()
+{
+  display.setRotation(0);
+  uint16_t h = display.height() / 7;
+  display.firstPage();
+  do
+  {
+    display.fillRect(0, 0, display.width(), h, GxEPD_BLACK);
+    display.fillRect(0, h, display.width(), h, GxEPD_WHITE);
+    display.fillRect(0, 2 * h, display.width(), h, GxEPD_GREEN);
+    display.fillRect(0, 3 * h, display.width(), h, GxEPD_BLUE);
+    display.fillRect(0, 4 * h, display.width(), h, GxEPD_RED);
+    display.fillRect(0, 5 * h, display.width(), h, GxEPD_YELLOW);
+    display.fillRect(0, 6 * h, display.width(), h, GxEPD_ORANGE);
+  }
+  while (display.nextPage());
+}
+
+void draw7colorlines()
+{
+  display.setRotation(0);
+  uint16_t h = 2;
+  display.firstPage();
+  do
+  {
+    uint16_t y = 0;
+    do
+    {
+      display.fillRect(0, y, display.width(), h, GxEPD_BLACK); y += h;
+      display.fillRect(0, y, display.width(), h, GxEPD_WHITE); y += h;
+      display.fillRect(0, y, display.width(), h, GxEPD_GREEN); y += h;
+      display.fillRect(0, y, display.width(), h, GxEPD_WHITE); y += h;
+      display.fillRect(0, y, display.width(), h, GxEPD_BLUE); y += h;
+      display.fillRect(0, y, display.width(), h, GxEPD_WHITE); y += h;
+      display.fillRect(0, y, display.width(), h, GxEPD_RED); y += h;
+      display.fillRect(0, y, display.width(), h, GxEPD_WHITE); y += h;
+      display.fillRect(0, y, display.width(), h, GxEPD_YELLOW); y += h;
+      display.fillRect(0, y, display.width(), h, GxEPD_WHITE); y += h;
+      display.fillRect(0, y, display.width(), h, GxEPD_ORANGE); y += h;
+      display.fillRect(0, y, display.width(), h, GxEPD_WHITE); y += h;
+    }
+    while ((y + 12 * h) < display.height());
+    //display.drawPixel(0, y, GxEPD_BLACK); display.drawPixel(10, y, GxEPD_GREEN);
+    //display.drawPixel(20, y, GxEPD_BLUE); display.drawPixel(30, y, GxEPD_RED);
+    //display.drawPixel(40, y, GxEPD_YELLOW); display.drawPixel(50, y, GxEPD_ORANGE);
+    display.fillRect(0, y, 2, 2, GxEPD_BLACK); display.fillRect(10, y, 2, 2, GxEPD_GREEN);
+    display.fillRect(20, y, 2, 2, GxEPD_BLUE); display.fillRect(30, y, 2, 2, GxEPD_RED);
+    display.fillRect(40, y, 2, 2, GxEPD_YELLOW); display.fillRect(50, y, 2, 2, GxEPD_ORANGE);
+  }
+  while (display.nextPage());
+}

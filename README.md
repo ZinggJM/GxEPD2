@@ -69,6 +69,7 @@
 - GDEW0371W7     3.7" b/w
 - GDEW042T2      4.2" b/w
 - GDEW042Z15     4.2" b/w/r
+- ACeP565        5.65" Waveshare 5.65" 7-color e-paper display 600x448
 - GDEW0583T7     5.83" b/w
 - GDEW0583T8     5.83" b/w 648x460
 - GDEW075T8      7.5" b/w
@@ -85,7 +86,14 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.2.10
+### Version 1.2.11
+- added support for Waveshare 5.65" 7-color e-paper display 600x448
+- the unknown controller of this display doesn't support partial update, as far as known
+- 7-color graphics support is available with class GxEPD2_7C
+- 7-color graphics support requires paging even on ESP32
+- 7-color graphics support causes heavy paging on Arduino UNO, gets very slow
+- refresh is quite fast for a color e-paper display: 12 seconds
+#### Version 1.2.10
 - added support for GDEH075Z90 7.5" b/w/r 880x528
 - the controller of GDEH075Z90 supports partial update, but refesh is full screen
 - the controller of GDEH075Z90 doesn't support differential update (not possible on 3-color anyway)
