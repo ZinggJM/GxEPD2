@@ -54,6 +54,7 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
     {
       _page_height = page_height;
       _pages = (HEIGHT / _page_height) + ((HEIGHT % _page_height) > 0);
+      _mirror = false;
       _using_partial_mode = false;
       _current_page = 0;
       setFullWindow();

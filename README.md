@@ -86,7 +86,12 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.2.11
+### Version 1.2.12
+- fixed GxEPD2_MinimumExample.ino to draw black on white (white on white was invisible)
+- added example GxEPD2_HelloWorld.ino
+- updated wiring info and constructor parameters for the actual Waveshare e-Paper ESP8266 Driver Board
+- added some missing explicit initializers (nobody noticed as compilers usually initialize simple members)
+#### Version 1.2.11
 - added support for Waveshare 5.65" 7-color e-paper display 600x448
 - the unknown controller of this display doesn't support partial update, as far as known
 - 7-color graphics support is available with class GxEPD2_7C

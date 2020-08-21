@@ -16,6 +16,8 @@ GxEPD2_BW<GxEPD2_154_D67, MAX_HEIGHT(GxEPD2_154_D67)> display(GxEPD2_154_D67(/*C
 void setup()
 {
   display.init();
+  // comment out next line to have no or minimal Adafruit_GFX code
+  display.setTextColor(GxEPD_BLACK);
   display.firstPage();
   do
   {
