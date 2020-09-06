@@ -106,7 +106,10 @@ void GxEPD2_EPD::_waitWhileBusy(const char* comment, uint16_t busy_time)
       delay(1);
       if (micros() - start > _busy_timeout)
       {
-        Serial.println("Busy Timeout!");
+        if (_diag_enabled)
+        {
+          Serial.println("Busy Timeout!");
+        }
         break;
       }
     }
