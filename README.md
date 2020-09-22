@@ -1,8 +1,10 @@
 # GxEPD2
+
+For tips about connecting the hardware, see [Connecting Hardware](ConnectingHardware.md).
+
 ## Arduino Display Library for SPI E-Paper Displays
 
 - With full Graphics and Text support using Adafruit_GFX
-
 - For SPI e-paper displays from Dalian Good Display 
 - and SPI e-paper boards from Waveshare
 
@@ -57,24 +59,24 @@
 - GDEW0154Z04    1.54" b/w/r 200x200
 - GDE0213B1      2.13" b/w
 - GDEH0213B72    2.13" b/w, replacement for GDE0213B1
-- GDEH0213B73    2.13" b/w, new replacement for GDE0213B1, GDEH0213B72
+- GDEH0213B73    2.13" b/w 250×122, new replacement for GDE0213B1, GDEH0213B72
 - GDEW0213I5F    2.13" b/w flexible
-- GDEW0213Z16    2.13" b/w/r
+- GDEW0213Z16    2.13" b/w/r 212×104
 - GDEH029A1      2.9" b/w
 - GDEW029T5      2.9" b/w
-- GDEW029Z10     2.9" b/w/r
+- GDEW029Z10     2.9" b/w/r 296×128
 - GDEW026T0      2.6" b/w
-- GDEW027C44     2.7" b/w/r
+- GDEW027C44     2.7" b/w/r 264×176
 - GDEW027W3      2.7" b/w
 - GDEW0371W7     3.7" b/w
 - GDEW042T2      4.2" b/w
-- GDEW042Z15     4.2" b/w/r
+- GDEW042Z15     4.2" b/w/r 400×300
 - ACeP565        5.65" Waveshare 5.65" 7-color e-paper display 600x448
 - GDEW0583T7     5.83" b/w
 - GDEW0583T8     5.83" b/w 648x460
 - GDEW075T8      7.5" b/w
 - GDEW075T7      7.5" b/w 800x480
-- GDEW075Z09     7.5" b/w/r
+- GDEW075Z09     7.5" b/w/r 640×386
 - GDEW075Z08     7.5" b/w/r 800x480
 - GDEH075Z90     7.5" b/w/r 880x528
 - GDEW1248T3    12.48 b/w 1304x984

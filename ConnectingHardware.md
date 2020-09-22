@@ -2,7 +2,6 @@
 ## Arduino Display Library for SPI E-Paper Displays
 
 - With full Graphics and Text support using Adafruit_GFX
-
 - For SPI e-paper displays from Dalian Good Display 
 - and SPI e-paper boards from Waveshare
 
@@ -12,6 +11,40 @@
 - series resistor only is not enough for reliable operation (back-feed effect through protection diodes)
 - 4k7/10k resistor divider may not work with flat cable extensions or Waveshare 4.2 board, use level converter then
 - do not forget to connect GND
+
+## Wiring an E-Paper Display
+
+To connect an e-paper display, two steps are required:
+
+1. Connect the display to the connector board
+1. Connect the connector board to the microcontroller
+1. Configure the connector board, if required (RESE switch on [DESPI-C02](despi-c02))
+
+FPC connectors usually have some kind of locking mechanism like a part that has
+to be pushed in to lock the connector. The [DESPI-C02][despi-c02] board has a
+connector which has to be rotated by pushing it down to the PCB, as shown in
+the pictures below.
+
+| FPC connector open                | FPC connector closed                |
+| ----                              | ----                                |
+| ![](media/open-fpc-connector.jpg) | ![](media/closed-fpc-connector.jpg) |
+
+The following pins can be found on connector boards:
+
+* BUSY
+* RES or RST: Reset
+* D/C or DC
+* CS: Chip Select or Slave Select; the board only reads data when this is high
+* SCK: Serial clock
+* SDI: Serial data in, or MOSI (Master Out Slave In), i.e. data sent from the
+  Arduino master to the board slave
+* GND: Ground
+* 3v3: 3.3 V
+
+BUSY, RES, DC, and CS can be chosen freely. SCK and SDI are the standard SPI
+communication pins on the Arduino. Their pin number can be obtained from the
+respective data sheet.
+
 
 ## mapping suggestions
 
@@ -64,3 +97,5 @@
          |  nc   |o o| BS      GND
          |-------------------------------------------------
 ```
+
+[despi-c02]: http://www.e-paper-display.com/DESPI%20V2.0%20Specification8130.pdf
