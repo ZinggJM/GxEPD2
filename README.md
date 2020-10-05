@@ -13,7 +13,7 @@
 - 4k7/10k resistor divider may not work with flat cable extensions or Waveshare 4.2 board, use level converter then
 - do not forget to connect GND
 - the actual Waveshare display boards now have level converters and series regulator, safe for 5V
-- use 4k7 pull-down on SS for ESP8266 for boards with level converters
+- use 3k3 pull-down on SS for ESP8266 for boards with level converters
 - note that 7.5" e-paper displays don't work reliable if fed from 3.3V Arduino pin
 
 ### Paged Drawing, Picture Loop
@@ -55,6 +55,7 @@
 - GDEW0154M09    1.54" b/w 200x200
 - GDEW0154M10    1.54" b/w 152x152 DES
 - GDEW0154Z04    1.54" b/w/r 200x200
+- GDEH0154Z90    1.54" b/w/r, replacement for GDEW0154Z04
 - GDE0213B1      2.13" b/w
 - GDEH0213B72    2.13" b/w, replacement for GDE0213B1
 - GDEH0213B73    2.13" b/w, new replacement for GDE0213B1, GDEH0213B72
@@ -86,7 +87,12 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.2.12
+### Version 1.2.13
+- added support for GDEH0154Z90 1.54" 200x200 b/w/r, replacement for GDEW0154Z04
+- GDEH0154Z90 has partial window addressing, but no partial window refresh
+- added some missing constructor examples, e.g. for IT8951 Driver HAT on Due
+- cleaned-up wiring information in the examples
+#### Version 1.2.12
 - fixed GxEPD2_MinimumExample.ino to draw black on white (white on white was invisible)
 - added example GxEPD2_HelloWorld.ino
 - updated wiring info and constructor parameters for the actual Waveshare e-Paper ESP8266 Driver Board

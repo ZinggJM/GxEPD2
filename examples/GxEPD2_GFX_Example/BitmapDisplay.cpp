@@ -31,7 +31,7 @@
 #include "bitmaps/Bitmaps240x416.h" // 3.71"  b/w
 #include "bitmaps/Bitmaps400x300.h" // 4.2"  b/w
 #include "bitmaps/Bitmaps640x384.h" // 7.5"  b/w
-#include "bitmaps/Bitmaps800x480.h" // 7.5"  b/w
+//#include "bitmaps/Bitmaps800x480.h" // 7.5"  b/w
 // 3-color
 #include "bitmaps/Bitmaps3c200x200.h" // 1.54" b/w/r
 #include "bitmaps/Bitmaps3c104x212.h" // 2.13" b/w/r

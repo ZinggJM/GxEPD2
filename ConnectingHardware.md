@@ -7,11 +7,13 @@
 - and SPI e-paper boards from Waveshare
 
 ### important note :
-- these displays are for 3.3V supply and 3.3V data lines
+- the display panels are for 3.3V supply and 3.3V data lines
 - never connect data lines directly to 5V Arduino data pins, use e.g. 4k7/10k resistor divider
 - series resistor only is not enough for reliable operation (back-feed effect through protection diodes)
 - 4k7/10k resistor divider may not work with flat cable extensions or Waveshare 4.2 board, use level converter then
 - do not forget to connect GND
+- the actual Waveshare display boards now have level converters and series regulator, safe for 5V
+- use 3k3 pull-down on SS for ESP8266 for boards with level converters
 
 ## mapping suggestions
 

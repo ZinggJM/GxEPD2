@@ -31,6 +31,7 @@
 
 #include "GxEPD2_EPD.h"
 #include "epd3c/GxEPD2_154c.h"
+#include "epd3c/GxEPD2_154_Z90c.h"
 #include "epd3c/GxEPD2_213c.h"
 #include "epd3c/GxEPD2_290c.h"
 #include "epd3c/GxEPD2_270c.h"

@@ -58,6 +58,7 @@ class GxEPD2
       ED060SCT, // on Waveshare IT8951 Driver HAT
       // 3-color
       GDEW0154Z04, Waveshare_1_54_bwr = GDEW0154Z04,
+      GDEH0154Z90, Waveshare_1_54_bwr_Z90 = GDEH0154Z90,
       GDEW0213Z16, Waveshare_2_13_bwr = GDEW0213Z16,
       GDEW029Z10,  Waveshare_2_9_bwr = GDEW029Z10,
       GDEW027C44,  Waveshare_2_7_bwr = GDEW027C44,

@@ -64,12 +64,12 @@ GxEPD2_it60::GxEPD2_it60(int8_t cs, int8_t dc, int8_t rst, int8_t busy) :
 
 void GxEPD2_it60::init(uint32_t serial_diag_bitrate)
 {
-  init(serial_diag_bitrate, true, false);
+  init(serial_diag_bitrate, true, 20, false);
 }
 
-void GxEPD2_it60::init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode)
+void GxEPD2_it60::init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration, bool pulldown_rst_mode)
 {
-  GxEPD2_EPD::init(serial_diag_bitrate, initial, pulldown_rst_mode);
+  GxEPD2_EPD::init(serial_diag_bitrate, initial, reset_duration, pulldown_rst_mode);
 
   // we need a long reset pulse
   if (_rst >= 0)
