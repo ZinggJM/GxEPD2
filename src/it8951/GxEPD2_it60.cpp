@@ -90,7 +90,7 @@ void GxEPD2_it60::init(uint32_t serial_diag_bitrate, bool initial, uint16_t rese
     printf("Panel(W,H) = (%d,%d)\r\n",
            IT8951DevInfo.usPanelW, IT8951DevInfo.usPanelH );
     printf("Image Buffer Address = %X\r\n",
-           IT8951DevInfo.usImgBufAddrL | (IT8951DevInfo.usImgBufAddrH << 16));
+           uint32_t(IT8951DevInfo.usImgBufAddrL) | (uint32_t(IT8951DevInfo.usImgBufAddrH) << 16));
     //Show Firmware and LUT Version
     printf("FW Version = %s\r\n", (uint8_t*)IT8951DevInfo.usFWVersion);
     printf("LUT Version = %s\r\n", (uint8_t*)IT8951DevInfo.usLUTVersion);
