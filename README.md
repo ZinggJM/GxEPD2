@@ -62,6 +62,7 @@
 - GDEW0213I5F    2.13" b/w flexible
 - GDEW0213Z16    2.13" b/w/r
 - GDEH029A1      2.9" b/w
+- GDEM029E97      2.9" b/w
 - GDEW029T5      2.9" b/w
 - GDEW029Z10     2.9" b/w/r
 - GDEW026T0      2.6" b/w
