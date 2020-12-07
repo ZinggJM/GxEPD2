@@ -15,7 +15,7 @@
 #include <Arduino.h>
 #include <SPI.h>
 
-// color definitions for GxEPD and GxEPD2, values correspond to RGB565 values for TFTs
+// color definitions for GxEPD, GxEPD2 and GxEPD_HD, values correspond to RGB565 values for TFTs
 #define GxEPD_BLACK     0x0000
 #define GxEPD_WHITE     0xFFFF
 // some controllers for b/w EPDs support grey levels
@@ -56,6 +56,7 @@ class GxEPD2
       GDEW075T7,  Waveshare_7_5_bw_T7 = GDEW075T7,
       GDEW1248T3, Waveshare_12_24_bw = GDEW1248T3,
       ED060SCT, // on Waveshare IT8951 Driver HAT
+      ED060KC1, // on Waveshare IT8951 Driver HAT 1448x1072
       // 3-color
       GDEW0154Z04, Waveshare_1_54_bwr = GDEW0154Z04,
       GDEH0154Z90, Waveshare_1_54_bwr_Z90 = GDEH0154Z90,

@@ -82,12 +82,21 @@
 #### Supported SPI e-paper panels & boards from Waveshare: compare with Good Display, same panel
 #### other supported panels
 - ED060SCT        6" grey levels, on Waveshare e-Paper IT8951 Driver HAT
+- ED060KC1        6" grey levels, 1448x1072, on Waveshare e-Paper IT8951 Driver HAT
 
 ### I can and will only support e-paper panels I have!
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.2.13
+### Version 1.2.14
+- added support for 6" 1448x1072 ED060KC1 on Waveshare e-Paper IT8951 Driver HAT
+- fixed GxEPD2_WiFi_Example.ino: new GitHub fingerprint for ESP8266, certificate for ESP32
+- fixed color discriminator for 7-color display in GxEPD2_7C.h
+- added multicolor support for 7-color display in GxEPD2_WiFi_Example, GxEPD2_Spiffs_Example,
+- and GxEPD2_SD_Example, GxEPD2_SerialFlash_Example
+- fixed paged write to 7-color display controller (transaction and CS handling issue)
+- some more fixes
+#### Version 1.2.13
 - added support for GDEH0154Z90 1.54" 200x200 b/w/r, replacement for GDEW0154Z04
 - GDEH0154Z90 has partial window addressing, but no partial window refresh
 - added some missing constructor examples, e.g. for IT8951 Driver HAT on Due

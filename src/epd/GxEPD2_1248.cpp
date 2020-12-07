@@ -64,10 +64,10 @@ GxEPD2_1248::GxEPD2_1248(int8_t cs_m1, int8_t cs_s1, int8_t cs_m2, int8_t cs_s2,
 
 void GxEPD2_1248::init(uint32_t serial_diag_bitrate)
 {
-  init(serial_diag_bitrate, true, false);
+  init(serial_diag_bitrate, true, 20, false);
 }
 
-void GxEPD2_1248::init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode)
+void GxEPD2_1248::init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration, bool pulldown_rst_mode)
 {
   _initial_write = initial;
   _initial_refresh = initial;

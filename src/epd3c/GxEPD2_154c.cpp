@@ -34,9 +34,9 @@ void GxEPD2_154c::init(uint32_t serial_diag_bitrate)
   _second_phase = false;
 }
 
-void GxEPD2_154c::init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode)
+void GxEPD2_154c::init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration, bool pulldown_rst_mode)
 {
-  GxEPD2_EPD::init(serial_diag_bitrate, initial, pulldown_rst_mode);
+  GxEPD2_EPD::init(serial_diag_bitrate, initial, reset_duration, pulldown_rst_mode);
   _paged = false;
   _second_phase = false;
 }

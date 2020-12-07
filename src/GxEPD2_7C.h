@@ -471,14 +471,15 @@ class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
         default:
           {
             uint16_t red = color & 0xF800;
-            uint16_t green = (color & 0x03C0) << 5;
+            uint16_t green = (color & 0x07E0) << 5;
             uint16_t blue = (color & 0x001F) << 11;
             if ((red < 0x8000) && (green < 0x8000) && (blue < 0x8000)) cv7 = 0x00; // black
             else if ((red >= 0x8000) && (green >= 0x8000) && (blue >= 0x8000)) cv7 = 0x01; // white
+            else if ((red >= 0x8000) && (blue >= 0x8000)) cv7 = red > blue ? 0x04 : 0x03; // red, blue
             else if ((green >= 0x8000) && (blue >= 0x8000)) cv7 = green > blue ? 0x02 : 0x03; // green, blue
             else if ((red >= 0x8000) && (green >= 0x8000))
             {
-              static const uint16_t y2o_lim = ((GxEPD_YELLOW - GxEPD_ORANGE) / 2 + (GxEPD_ORANGE & 0x03C0)) << 5;
+              static const uint16_t y2o_lim = ((GxEPD_YELLOW - GxEPD_ORANGE) / 2 + (GxEPD_ORANGE & 0x07E0)) << 5;
               cv7 = green > y2o_lim ? 0x05 : 0x06; // yellow, orange
             }
             else if (red >= 0x8000) cv7 = 0x04; // red

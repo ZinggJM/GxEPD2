@@ -134,6 +134,7 @@ SdFat SD;
 // HRDY -> 4, RST -> 2, CS -> SS(15), SCK -> SCK(14), MOSI -> MOSI(D7(13)), MISO -> MISO(D6(12)), GND -> GND, 5V -> 5V
 // note: 5V supply needs to be exact and strong; 5V pin of USB powered Wemos D1 mini doesn't work!
 //GxEPD2_BW<GxEPD2_it60, GxEPD2_it60::HEIGHT / 8> display(GxEPD2_it60(/*CS=5*/ EPD_CS, /*DC=*/ 0, /*RST=*/ 2, /*BUSY=*/ 4));
+//GxEPD2_BW < GxEPD2_it60_1448x1072, GxEPD2_it60_1448x1072::HEIGHT / 8 > display(GxEPD2_it60_1448x1072(/*CS=5*/ EPD_CS, /*DC=*/ 0, /*RST=*/ 2, /*BUSY=*/ 4));
 
 // ***** for mapping of Waveshare e-Paper ESP8266 Driver Board *****
 // select one , can use full buffer size (full HEIGHT)
@@ -215,6 +216,7 @@ SdFat SD;
 // HRDY -> 4, RST -> 16, CS -> SS(5), SCK -> SCK(18), MOSI -> MOSI(23), MISO -> MISO(19), GND -> GND, 5V -> 5V
 // note: 5V supply needs to be exact and strong; 5V over diode from USB (e.g. Wemos D1 mini) doesn't work!
 //GxEPD2_BW<GxEPD2_it60, GxEPD2_it60::HEIGHT> display(GxEPD2_it60(/*CS=5*/ EPD_CS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
+GxEPD2_BW < GxEPD2_it60_1448x1072, GxEPD2_it60_1448x1072::HEIGHT / 4 > display(GxEPD2_it60_1448x1072(/*CS=5*/ EPD_CS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
 
 // Waveshare 12.48 b/w SPI display board and frame or Good Display 12.48 b/w panel GDEW1248T3
 // general constructor for use with all parameters, e.g. for Waveshare ESP32 driver board mounted on connection board
@@ -300,7 +302,7 @@ void setup()
   }
   Serial.println("SD OK!");
 
-  if ((display.epd2.panel == GxEPD2::GDEW0154Z04) || false)
+  if ((display.epd2.panel == GxEPD2::GDEW0154Z04) || (display.epd2.panel == GxEPD2::ACeP565) || false)
   {
     drawBitmapsBuffered_200x200();
     drawBitmapsBuffered_other();
@@ -473,9 +475,10 @@ void drawBitmapsBuffered_test()
   delay(2000);
 }
 
-static const uint16_t input_buffer_pixels = 20; // may affect performance
+//static const uint16_t input_buffer_pixels = 20; // may affect performance
+static const uint16_t input_buffer_pixels = 800; // may affect performance
 
-static const uint16_t max_row_width = 800; // for up to 7.5" display 800x480
+static const uint16_t max_row_width = 1448; // for up to 6" display 1448x1072
 static const uint16_t max_palette_pixels = 256; // for depth <= 8
 
 uint8_t input_buffer[3 * input_buffer_pixels]; // up to depth 24
@@ -483,6 +486,7 @@ uint8_t output_row_mono_buffer[max_row_width / 8]; // buffer for at least one ro
 uint8_t output_row_color_buffer[max_row_width / 8]; // buffer for at least one row of color bits
 uint8_t mono_palette_buffer[max_palette_pixels / 8]; // palette buffer for depth <= 8 b/w
 uint8_t color_palette_buffer[max_palette_pixels / 8]; // palette buffer for depth <= 8 c/w
+uint16_t rgb_palette_buffer[max_palette_pixels]; // palette buffer for depth <= 8 for buffered graphics, needed for 7-color display
 
 void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_color)
 {
@@ -679,6 +683,7 @@ void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool 
   SdFile file;
   bool valid = false; // valid format to be handled
   bool flip = true; // bitmap is stored bottom-to-top
+  bool has_multicolors = display.epd2.panel == GxEPD2::ACeP565;
   uint32_t startTime = millis();
   if ((x >= display.width()) || (y >= display.height())) return;
   Serial.println();
@@ -758,6 +763,7 @@ void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool 
             mono_palette_buffer[pn / 8] |= whitish << pn % 8;
             if (0 == pn % 8) color_palette_buffer[pn / 8] = 0;
             color_palette_buffer[pn / 8] |= colored << pn % 8;
+            rgb_palette_buffer[pn] = ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | ((blue & 0xF8) >> 3);
           }
         }
         if (partial_update) display.setPartialWindow(x, y, w, h);
@@ -765,7 +771,7 @@ void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool 
         display.firstPage();
         do
         {
-          if (!overwrite) display.fillScreen(GxEPD_WHITE);
+          //if (!overwrite) display.fillScreen(GxEPD_WHITE);
           uint32_t rowPosition = flip ? imageOffset + (height - h) * rowSize : imageOffset;
           for (uint16_t row = 0; row < h; row++, rowPosition += rowSize) // for each line
           {
@@ -793,6 +799,7 @@ void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool 
                   red = input_buffer[in_idx++];
                   whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
                   colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
+                  color = ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | ((blue & 0xF8) >> 3);
                   break;
                 case 16:
                   {
@@ -803,12 +810,14 @@ void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool 
                       blue  = (lsb & 0x1F) << 3;
                       green = ((msb & 0x03) << 6) | ((lsb & 0xE0) >> 2);
                       red   = (msb & 0x7C) << 1;
+                      color = ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | ((blue & 0xF8) >> 3);
                     }
                     else // 565
                     {
                       blue  = (lsb & 0x1F) << 3;
                       green = ((msb & 0x07) << 5) | ((lsb & 0xE0) >> 3);
                       red   = (msb & 0xF8);
+                      color = (msb << 8) | lsb;
                     }
                     whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
                     colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
@@ -828,10 +837,15 @@ void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool 
                     colored = color_palette_buffer[pn / 8] & (0x1 << pn % 8);
                     in_byte <<= depth;
                     in_bits -= depth;
+                    color = rgb_palette_buffer[pn];
                   }
                   break;
               }
-              if (whitish)
+              if (with_color && has_multicolors)
+              {
+                // keep color
+              }
+              else if (whitish)
               {
                 color = GxEPD_WHITE;
               }
@@ -847,6 +861,7 @@ void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool 
               display.drawPixel(x + col, yrow, color);
             } // end pixel
           } // end line
+          Serial.print("page loaded in "); Serial.print(millis() - startTime); Serial.println(" ms");
         }
         while (display.nextPage());
         Serial.print("loaded in "); Serial.print(millis() - startTime); Serial.println(" ms");

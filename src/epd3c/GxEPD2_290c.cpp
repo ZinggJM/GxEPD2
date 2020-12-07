@@ -344,6 +344,8 @@ void GxEPD2_290c::_PowerOn()
 
 void GxEPD2_290c::_PowerOff()
 {
+  _writeCommand(0x50);
+  _writeData(0xf7); // border floating
   _writeCommand(0x02); // power off
   _waitWhileBusy("_PowerOff", power_off_time);
   _power_is_on = false;
@@ -358,9 +360,10 @@ void GxEPD2_290c::_InitDisplay()
   _writeData (0x17);
   //_writeCommand(0x04);
   //_waitWhileBusy("_wakeUp Power On");
-  _writeCommand(0X00);
-  _writeData(0x8f);
-  _writeCommand(0X50);
+  _writeCommand(0x00);     //panel setting
+  _writeData(0x0f);    //LUT from OTP£¬128x296
+  _writeData(0x0d);     //VCOM to 0V fast
+  _writeCommand(0x50);
   _writeData(0x77);
   _writeCommand(0x61);
   _writeData (0x80);

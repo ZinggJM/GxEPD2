@@ -33,16 +33,40 @@ const char* ssid     = "........";
 const char* password = "........";
 const int httpPort  = 80;
 const int httpsPort = 443;
-const char* fp_api_github_com = "35 85 74 EF 67 35 A7 CE 40 69 50 F3 C0 F6 80 CF 80 3B 2E 19";
-const char* fp_github_com     = "ca 06 f5 6b 25 8b 7a 0d 4f 2b 05 47 09 39 47 86 51 15 19 84";
-#if USE_BearSSL
-const char fp_rawcontent[20]  = {0xcc, 0xaa, 0x48, 0x48, 0x66, 0x46, 0x0e, 0x91, 0x53, 0x2c, 0x9c, 0x7c, 0x23, 0x2a, 0xb1, 0x74, 0x4d, 0x29, 0x9d, 0x33};
-#else
-const char* fp_rawcontent     = "cc aa 48 48 66 46 0e 91 53 2c 9c 7c 23 2a b1 74 4d 29 9d 33";
-#endif
+const char* fp_api_github_com = "df b2 29 c6 a6 38 1a 59 9d c9 ad 92 2d 26 f5 3c 83 8f a5 87"; // as of 25.11.2020
+const char* fp_github_com     = "5f 3f 7a c2 56 9f 50 a4 66 76 47 c6 a1 8c a0 07 aa ed bb 8e"; // as of 25.11.2020
+const char* fp_rawcontent     = "70 94 de dd e6 c4 69 48 3a 92 70 a1 48 56 78 2d 18 64 e0 b7"; // as of 25.11.2020
+
+// how to find the certificate was not easy. finally I found it using Mozilla Firefox.
+// opened one of the bitmaps, e.g. https://raw.githubusercontent.com/ZinggJM/GxEPD2/master/extras/bitmaps/logo200x200.bmp
+// clicked the lock symbol, Connection secure clicked >, show connection details, clicked More Information, clicked View Certificate, clicked Download PEM (chain),
+// selected Open with Notepad. Copied the middle certificate and editted to the following format:
+// the number of characters per line is of no importance, but the 3 \n are needed
+const char* certificate_rawcontent =
+  "-----BEGIN CERTIFICATE-----\n"
+  "MIIEsTCCA5mgAwIBAgIQBOHnpNxc8vNtwCtCuF0VnzANBgkqhkiG9w0BAQsFADBsMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGln"
+  "aUNlcnQgSW5jMRkwFwYDVQQLExB3d3cuZGlnaWNlcnQuY29tMSswKQYDVQQDEyJEaWdpQ2VydCBIaWdoIEFzc3VyYW5jZSBFViBS"
+  "b290IENBMB4XDTEzMTAyMjEyMDAwMFoXDTI4MTAyMjEyMDAwMFowcDELMAkGA1UEBhMCVVMxFTATBgNVBAoTDERpZ2lDZXJ0IElu"
+  "YzEZMBcGA1UECxMQd3d3LmRpZ2ljZXJ0LmNvbTEvMC0GA1UEAxMmRGlnaUNlcnQgU0hBMiBIaWdoIEFzc3VyYW5jZSBTZXJ2ZXIg"
+  "Q0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC24C/CJAbIbQRf1+8KZAayfSImZRauQkCbztyfn3YHPsMwVYcZuU+U"
+  "DlqUH1VWtMICKq/QmO4LQNfE0DtyyBSe75CxEamu0si4QzrZCwvV1ZX1QK/IHe1NnF9Xt4ZQaJn1itrSxwUfqJfJ3KSxgoQtxq2l"
+  "nMcZgqaFD15EWCo3j/018QsIJzJa9buLnqS9UdAn4t07QjOjBSjEuyjMmqwrIw14xnvmXnG3Sj4I+4G3FhahnSMSTeXXkgisdaSc"
+  "us0Xsh5ENWV/UyU50RwKmmMbGZJ0aAo3wsJSSMs5WqK24V3B3aAguCGikyZvFEohQcftbZvySC/zA/WiaJJTL17jAgMBAAGjggFJ"
+  "MIIBRTASBgNVHRMBAf8ECDAGAQH/AgEAMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwNAYI"
+  "KwYBBQUHAQEEKDAmMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wSwYDVR0fBEQwQjBAoD6gPIY6aHR0cDov"
+  "L2NybDQuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0SGlnaEFzc3VyYW5jZUVWUm9vdENBLmNybDA9BgNVHSAENjA0MDIGBFUdIAAwKjAo"
+  "BggrBgEFBQcCARYcaHR0cHM6Ly93d3cuZGlnaWNlcnQuY29tL0NQUzAdBgNVHQ4EFgQUUWj/kK8CB3U8zNllZGKiErhZcjswHwYD"
+  "VR0jBBgwFoAUsT7DaQP4v0cB1JgmGggC72NkK8MwDQYJKoZIhvcNAQELBQADggEBABiKlYkD5m3fXPwdaOpKj4PWUS+Na0QWnqxj"
+  "9dJubISZi6qBcYRb7TROsLd5kinMLYBq8I4g4Xmk/gNHE+r1hspZcX30BJZr01lYPf7TMSVcGDiEo+afgv2MW5gxTs14nhr9hctJ"
+  "qvIni5ly/D6q1UEL2tU2ob8cbkdJf17ZSHwD2f2LSaCYJkJA69aSEaRkCldUxPUd1gJea6zuxICaEnL6VpPX/78whQYwvwt/Tv9X"
+  "BZ0k7YXDK/umdaisLRbvfXknsuvCnQsH6qqF0wGjIChBWUMo0oHjqvbsezt3tkBigAVBRQHvFwY+3sAzm2fTYS5yh+Rp/BIAV0AecPUeybQ=\n"
+  "-----END CERTIFICATE-----\n";
+
 const char* host_rawcontent   = "raw.githubusercontent.com";
 const char* path_rawcontent   = "/ZinggJM/GxEPD2/master/extras/bitmaps/";
 const char* path_prenticedavid   = "/prenticedavid/MCUFRIEND_kbv/master/extras/bitmaps/";
+const char* path_waveshare_c  = "/waveshare/e-Paper/master/RaspberryPi%26JetsonNano/c/pic/";
+const char* path_waveshare_py = "/waveshare/e-Paper/master/RaspberryPi%26JetsonNano/python/pic/";
 
 void setup()
 {
@@ -106,6 +130,8 @@ void setup()
 void loop()
 {
 }
+
+void downloadFile_HTTPS(const char* host, const char* path, const char* filename, const char* fingerprint, const char* target, const char* certificate = certificate_rawcontent);
 
 void downloadBitmaps_200x200()
 {
@@ -241,7 +267,7 @@ void downloadFile_HTTP(const char* host, const char* path, const char* filename,
   Serial.print("done, "); Serial.print(total); Serial.println(" bytes transferred");
 }
 
-void downloadFile_HTTPS(const char* host, const char* path, const char* filename, const char* fingerprint, const char* target)
+void downloadFile_HTTPS(const char* host, const char* path, const char* filename, const char* fingerprint, const char* target, const char* certificate)
 {
   // Use WiFiClientSecure class to create TLS connection
 #if USE_BearSSL
@@ -251,28 +277,16 @@ void downloadFile_HTTPS(const char* host, const char* path, const char* filename
 #endif
   Serial.println(); Serial.print("downloading file \""); Serial.print(filename);  Serial.println("\"");
   Serial.print("connecting to "); Serial.println(host);
-#if USE_BearSSL
-  if (fingerprint) client.setFingerprint((uint8_t*)fingerprint);
+#if defined (ESP8266)
+  if (fingerprint) client.setFingerprint(fingerprint);
+#elif defined (ESP32)
+  if (certificate) client.setCACert(certificate);
 #endif
   if (!client.connect(host, httpsPort))
   {
     Serial.println("connection failed");
     return;
   }
-#if defined (ESP8266) && !USE_BearSSL
-  if (fingerprint)
-  {
-    if (client.verify(fingerprint, host))
-    {
-      Serial.println("certificate matches");
-    }
-    else
-    {
-      Serial.println("certificate doesn't match");
-      return;
-    }
-  }
-#endif
   Serial.print("requesting URL: ");
   Serial.println(String("https://") + host + path + filename);
   client.print(String("GET ") + path + filename + " HTTP/1.1\r\n" +

@@ -44,7 +44,8 @@ void GxEPD2_565c::writeScreenBuffer(uint8_t black_value, uint8_t color_value)
   _startTransfer();
   for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 2; i++)
   {
-    _transfer(0x11);
+    //_transfer(0x11);
+    _transfer(0xFF == black_value ? 0x11 : black_value);
   }
   _endTransfer();
 }
@@ -57,6 +58,7 @@ void GxEPD2_565c::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16
   if (_paged && (x == 0) && (w == WIDTH) && (h < HEIGHT))
   {
     //Serial.println("paged");
+    _startTransfer();
     for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(h) / 8; i++)
     {
       uint8_t data = bitmap[i];
@@ -67,9 +69,9 @@ void GxEPD2_565c::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16
         _transfer(data2);
       }
     }
+    _endTransfer();
     if (y + h == HEIGHT) // last page
     {
-      _endTransfer();
       //Serial.println("paged ended");
       _paged = false;
     }
@@ -129,6 +131,7 @@ void GxEPD2_565c::writeImage(const uint8_t* black, const uint8_t* color, int16_t
   if (_paged && (x == 0) && (w == WIDTH) && (h < HEIGHT))
   {
     //Serial.println("paged");
+    _startTransfer();
     for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(h) / 8; i++)
     {
       uint8_t black_data = black[i];
@@ -147,9 +150,9 @@ void GxEPD2_565c::writeImage(const uint8_t* black, const uint8_t* color, int16_t
         _transfer(out_data);
       }
     }
+    _endTransfer();
     if (y + h == HEIGHT) // last page
     {
-      _endTransfer();
       //Serial.println("paged ended");
       _paged = false;
     }
@@ -363,14 +366,15 @@ void GxEPD2_565c::writeNative(const uint8_t* data1, const uint8_t* data2, int16_
     if (_paged && (x == 0) && (w == WIDTH) && (h < HEIGHT))
     {
       //Serial.println("paged");
+      _startTransfer();
       for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(h) / 2; i++)
       {
         uint8_t data = data1[i];
         _transfer(data);
       }
+      _endTransfer();
       if (y + h == HEIGHT) // last page
       {
-        _endTransfer();
         //Serial.println("paged ended");
         _paged = false;
       }
@@ -543,7 +547,6 @@ void GxEPD2_565c::setPaged()
   _paged = true;
   _Init_Full();
   _writeCommand(0x10);
-  _startTransfer();
 }
 
 void GxEPD2_565c::_PowerOn()

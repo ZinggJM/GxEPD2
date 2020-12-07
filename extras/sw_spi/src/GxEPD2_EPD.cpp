@@ -15,7 +15,7 @@
 // To use SW SPI with GxEPD2:
 // - copy the files GxEPD2_EPD.h and GxEPD2_EPD.cpp from the subdirectoy .src to the .src directory of the library.
 // - add the special call to the added init method BEFORE the normal init method:
-//   display.epd2.init(SW_SCK, SW_MOSI, 115200, true, false); // define or replace SW_SCK, SW_MOSI
+//   display.epd2.init(SW_SCK, SW_MOSI, 115200, true, 20, false); // define or replace SW_SCK, SW_MOSI
 //   display.init(115200); // needed to init upper level
 
 #include "GxEPD2_EPD.h"
@@ -38,14 +38,15 @@ GxEPD2_EPD::GxEPD2_EPD(int8_t cs, int8_t dc, int8_t rst, int8_t busy, int8_t bus
   _power_is_on = false;
   _using_partial_mode = false;
   _hibernating = false;
+  _reset_duration = 20;
 }
 
 void GxEPD2_EPD::init(uint32_t serial_diag_bitrate)
 {
-  init(serial_diag_bitrate, true, false);
+  init(serial_diag_bitrate, true, 20, false);
 }
 
-void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode)
+void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration, bool pulldown_rst_mode)
 {
   _initial_write = initial;
   _initial_refresh = initial;
@@ -53,6 +54,7 @@ void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_
   _power_is_on = false;
   _using_partial_mode = false;
   _hibernating = false;
+  _reset_duration = reset_duration;
   if (serial_diag_bitrate > 0)
   {
     Serial.begin(serial_diag_bitrate);
@@ -76,7 +78,7 @@ void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, bool pulldown_
   if (_sck < 0) SPI.begin();
 }
 
-void GxEPD2_EPD::init(int8_t sck, int8_t mosi, uint32_t serial_diag_bitrate, bool initial, bool pulldown_rst_mode)
+void GxEPD2_EPD::init(int8_t sck, int8_t mosi, uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration, bool pulldown_rst_mode)
 {
   if ((sck >= 0) && (mosi >= 0))
   {
@@ -87,7 +89,7 @@ void GxEPD2_EPD::init(int8_t sck, int8_t mosi, uint32_t serial_diag_bitrate, boo
     pinMode(_sck, OUTPUT);
     pinMode(_mosi, OUTPUT);
   } else _sck = -1;
-  init(serial_diag_bitrate, initial, pulldown_rst_mode);
+  init(serial_diag_bitrate, initial, reset_duration, pulldown_rst_mode);
 }
 
 void GxEPD2_EPD::_reset()
@@ -98,7 +100,7 @@ void GxEPD2_EPD::_reset()
     {
       digitalWrite(_rst, LOW);
       pinMode(_rst, OUTPUT);
-      delay(20);
+      delay(_reset_duration);
       pinMode(_rst, INPUT_PULLUP);
       delay(200);
     }
@@ -108,7 +110,7 @@ void GxEPD2_EPD::_reset()
       pinMode(_rst, OUTPUT);
       delay(20);
       digitalWrite(_rst, LOW);
-      delay(20);
+      delay(_reset_duration);
       digitalWrite(_rst, HIGH);
       delay(200);
     }
@@ -247,6 +249,23 @@ void GxEPD2_EPD::_writeCommandDataPGM(const uint8_t* pCommandData, uint8_t datal
   _endTransaction();
 }
 
+void GxEPD2_EPD::_startTransfer()
+{
+  _beginTransaction(_spi_settings);
+  if (_cs >= 0) digitalWrite(_cs, LOW);
+}
+
+void GxEPD2_EPD::_transfer(uint8_t value)
+{
+  _spi_write(value);
+}
+
+void GxEPD2_EPD::_endTransfer()
+{
+  if (_cs >= 0) digitalWrite(_cs, HIGH);
+  _endTransaction();
+}
+
 void GxEPD2_EPD::_beginTransaction(const SPISettings& settings)
 {
   if (_sck < 0) SPI.beginTransaction(settings);
@@ -257,6 +276,9 @@ void GxEPD2_EPD::_spi_write(uint8_t data)
   if (_sck < 0) SPI.transfer(data);
   else
   {
+#if defined (ESP8266)
+    yield();
+#endif
     for (int i = 0; i < 8; i++)
     {
       digitalWrite(_mosi, (data & 0x80) ? HIGH : LOW);
