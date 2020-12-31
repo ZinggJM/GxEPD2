@@ -69,8 +69,8 @@ const char* certificate_rawcontent =
 const char* host_rawcontent   = "raw.githubusercontent.com";
 const char* path_rawcontent   = "/ZinggJM/GxEPD2/master/extras/bitmaps/";
 const char* path_prenticedavid   = "/prenticedavid/MCUFRIEND_kbv/master/extras/bitmaps/";
-const char* path_waveshare_c  = "/waveshare/e-Paper/master/RaspberryPi%26JetsonNano/c/pic/";
-const char* path_waveshare_py = "/waveshare/e-Paper/master/RaspberryPi%26JetsonNano/python/pic/";
+const char* path_waveshare_c  = "/waveshare/e-Paper/master/RaspberryPi_JetsonNano/c/pic/";
+const char* path_waveshare_py = "/waveshare/e-Paper/master/RaspberryPi_JetsonNano/python/pic/";
 
 void setup()
 {

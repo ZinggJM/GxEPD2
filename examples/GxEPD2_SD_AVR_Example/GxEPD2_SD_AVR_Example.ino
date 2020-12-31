@@ -93,12 +93,15 @@ SdFat SD;
 //GxEPD2_213_B72 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7); // GDEH0213B72
 //GxEPD2_213_B73 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7); // GDEH0213B73
 //GxEPD2_213_flex display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7); // GDEW0213I5F
+//GxEPD2_213_M21 display(/*CS=10*/ EPD_CS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7); // GDEW0213M21
 //GxEPD2_290 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
 //GxEPD2_290_T5 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7); // GDEW029T5
+//GxEPD2_290_M06 display(/*CS=10*/ EPD_CS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7); // GDEW029M06
 //GxEPD2_260 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
 //GxEPD2_270 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
 //GxEPD2_371 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
 //GxEPD2_420 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
+//GxEPD2_420_M01 display(/*CS=10*/ EPD_CS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7); // GDEW042M01
 //GxEPD2_583 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
 //GxEPD2_583_T8 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
 //GxEPD2_750 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);

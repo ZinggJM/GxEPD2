@@ -81,12 +81,15 @@ GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display2(GxEPD2_213(/*CS=*/ CS_2, /*DC
 //GxEPD2_BW<GxEPD2_213_B72, GxEPD2_213_B72::HEIGHT> display(GxEPD2_213_B72(/*CS=*/ CS_1, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x)); // GDEH0213B72
 //GxEPD2_BW<GxEPD2_213_B73, GxEPD2_213_B73::HEIGHT> display(GxEPD2_213_B73(/*CS=*/ CS_1, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x)); // GDEH0213B73
 //GxEPD2_BW<GxEPD2_213_flex, GxEPD2_213_flex::HEIGHT> display(GxEPD2_213_flex(/*CS=*/ CS_1, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x)); // GDEW0213I5F
+//GxEPD2_BW<GxEPD2_213_M21, GxEPD2_213_M21::HEIGHT> display(GxEPD2_213_M21(/*CS=*/ CS_1, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x)); // GDEW0213M21
 GxEPD2_BW<GxEPD2_290, GxEPD2_290::HEIGHT> display3(GxEPD2_290(/*CS=*/ CS_3, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x));
 //GxEPD2_BW<GxEPD2_290_T5, GxEPD2_290_T5::HEIGHT> display(GxEPD2_290_T5(/*CS=*/ CS_1, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x)); // GDEW029T5
+//GxEPD2_BW<GxEPD2_290_M06, GxEPD2_290_M06::HEIGHT> display(GxEPD2_290_M06(/*CS=*/ CS_1, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x)); // GDEW029M06
 //GxEPD2_BW<GxEPD2_260, GxEPD2_260::HEIGHT> display(GxEPD2_260(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
 //GxEPD2_BW<GxEPD2_270, GxEPD2_270::HEIGHT> display(GxEPD2_270(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
 //GxEPD2_BW<GxEPD2_371, GxEPD2_371::HEIGHT> display(GxEPD2_371(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
 //GxEPD2_BW<GxEPD2_420, GxEPD2_420::HEIGHT> display(GxEPD2_420(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
+//GxEPD2_BW<GxEPD2_420_M01, GxEPD2_420_M01::HEIGHT> display(GxEPD2_420_M01(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x)); // GDEW042M01
 // can use only half buffer size
 //GxEPD2_BW < GxEPD2_583, GxEPD2_583::HEIGHT / 2 > display(GxEPD2_583(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
 //GxEPD2_BW < GxEPD2_583_T8, GxEPD2_583_T8::HEIGHT / 2 > display(GxEPD2_583_T8(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
@@ -123,12 +126,18 @@ GxEPD2_BW<GxEPD2_154_D67, GxEPD2_154_D67::HEIGHT> display1(GxEPD2_154_D67(/*CS=*
 //GxEPD2_BW<GxEPD2_154_M09, GxEPD2_154_M09::HEIGHT> display(GxEPD2_154_M09(/*CS=*/ CS_1, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x)); // GDEW0154M09 200x200
 //GxEPD2_BW<GxEPD2_154_M10, GxEPD2_154_M10::HEIGHT> display(GxEPD2_154_M10(/*CS=*/ CS_1, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x)); // GDEW0154M10 152x152
 GxEPD2_BW<GxEPD2_213, GxEPD2_213::HEIGHT> display2(GxEPD2_213(/*CS=*/ CS_2, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x));
+//GxEPD2_BW<GxEPD2_213_B72, GxEPD2_213_B72::HEIGHT> display(GxEPD2_213_B72(/*CS=*/ CS_2, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x)); // GDEH0213B72
+//GxEPD2_BW<GxEPD2_213_B73, GxEPD2_213_B73::HEIGHT> display(GxEPD2_213_B73(/*CS=*/ CS_2, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x)); // GDEH0213B73
+//GxEPD2_BW<GxEPD2_213_flex, GxEPD2_213_flex::HEIGHT> display(GxEPD2_213_flex(/*CS=*/ CS_2, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x)); // GDEW0213I5F
+//GxEPD2_BW<GxEPD2_213_M21, GxEPD2_213_M21::HEIGHT> display(GxEPD2_213_M21(/*CS=*/ CS_2, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x)); // GDEW0213M21
 GxEPD2_BW<GxEPD2_290, GxEPD2_290::HEIGHT> display3(GxEPD2_290(/*CS=*/ CS_3, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x));
 //GxEPD2_BW<GxEPD2_290_T5, GxEPD2_290_T5::HEIGHT> display(GxEPD2_290_T5(/*CS=*/ CS_1, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x)); // GDEW029T5
+//GxEPD2_BW<GxEPD2_290_M06, GxEPD2_290_M06::HEIGHT> display(GxEPD2_290_M06(/*CS=*/ CS_2, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_H_x)); // GDEW029M06
 //GxEPD2_BW<GxEPD2_260, GxEPD2_260::HEIGHT> display(GxEPD2_260(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
 //GxEPD2_BW<GxEPD2_270, GxEPD2_270::HEIGHT> display(GxEPD2_270(/*CS=*/ CS_x, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
 //GxEPD2_BW<GxEPD2_371, GxEPD2_371::HEIGHT> display(GxEPD2_371(/*CS=*/ CS_x, /*DC=D3*/ 0, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
 //GxEPD2_BW<GxEPD2_420, GxEPD2_420::HEIGHT> display4(GxEPD2_420(/*CS=*/ CS_4, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
+//GxEPD2_BW<GxEPD2_420_M01, GxEPD2_420_M01::HEIGHT> display(GxEPD2_420_M01(/*CS=*/ CS_4, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x)); // GDEW042M01
 //GxEPD2_BW<GxEPD2_583, GxEPD2_583::HEIGHT> display(GxEPD2_583(/*CS=*/ CS_x, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));
 //GxEPD2_BW<GxEPD2_583_T8, GxEPD2_583_T8::HEIGHT> display(GxEPD2_583_T8(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
 //GxEPD2_BW<GxEPD2_750, GxEPD2_750::HEIGHT> display(GxEPD2_750(/*CS=*/ CS_x, /*DC=*/ 17, /*RST=*/ -1, /*BUSY=*/ BUSY_L_x));

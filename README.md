@@ -15,6 +15,8 @@
 - the actual Waveshare display boards now have level converters and series regulator, safe for 5V
 - use 3k3 pull-down on SS for ESP8266 for boards with level converters
 - note that 7.5" e-paper displays don't work reliable if fed from 3.3V Arduino pin
+- note that Waveshare bords with "clever" reset circuit may need shortened reset pulse
+- use `init(115200, true, 2 false)` for Waveshare boards with "clever" reset circuit
 
 ### Paged Drawing, Picture Loop
  - This library uses paged drawing to limit RAM use and cope with missing single pixel update support
@@ -60,15 +62,18 @@
 - GDEH0213B72    2.13" b/w, replacement for GDE0213B1
 - GDEH0213B73    2.13" b/w, new replacement for GDE0213B1, GDEH0213B72
 - GDEW0213I5F    2.13" b/w flexible
+- GDEW0213M21    2.13" b/w DES
 - GDEW0213Z16    2.13" b/w/r
 - GDEH029A1      2.9" b/w
 - GDEW029T5      2.9" b/w
+- GDEW029M06     2.9" b/w DES
 - GDEW029Z10     2.9" b/w/r
 - GDEW026T0      2.6" b/w
 - GDEW027C44     2.7" b/w/r
 - GDEW027W3      2.7" b/w
 - GDEW0371W7     3.7" b/w
 - GDEW042T2      4.2" b/w
+- GDEW042M01     4.2" b/w DES
 - GDEW042Z15     4.2" b/w/r
 - ACeP565        5.65" Waveshare 5.65" 7-color e-paper display 600x448
 - GDEW0583T7     5.83" b/w
@@ -88,7 +93,15 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.2.14
+### Version 1.2.15
+- added support for GDEW0213M21 2.13" 104x212 b/w new DES e-paper panel
+- added support for GDEW029M06 2.9" 128x296 b/w new DES e-paper panel
+- added support for GDEW042M01 4.2" 400x300 b/w new DES e-paper panel
+- these new DES b/w e-paper panels have higher contrast and wide temperature range
+- differential refresh (fast partial update) is supported for normal temperature range
+- disable differential refresh for extended temperatures by setting hasFastPartialUpdate = false;
+- the GDEW042M01 I have is a preliminary version, differential waveform may need update
+#### Version 1.2.14
 - added support for 6" 1448x1072 ED060KC1 on Waveshare e-Paper IT8951 Driver HAT
 - fixed GxEPD2_WiFi_Example.ino: new GitHub fingerprint for ESP8266, certificate for ESP32
 - fixed color discriminator for 7-color display in GxEPD2_7C.h
