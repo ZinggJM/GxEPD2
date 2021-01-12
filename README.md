@@ -93,7 +93,9 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.2.15
+### Version 1.2.16
+- fix for GDEH0154D67, to work independent of OTP version (ping-pong issue)
+#### Version 1.2.15
 - added support for GDEW0213M21 2.13" 104x212 b/w new DES e-paper panel
 - added support for GDEW029M06 2.9" 128x296 b/w new DES e-paper panel
 - added support for GDEW042M01 4.2" 400x300 b/w new DES e-paper panel
