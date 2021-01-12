@@ -165,7 +165,8 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
     // display buffer content to screen, useful for full screen buffer
     void display(bool partial_update_mode = false)
     {
-      epd2.writeImage(_buffer, 0, 0, WIDTH, _page_height, false, false, false, !partial_update_mode);
+      if (partial_update_mode) epd2.writeImage(_buffer, 0, 0, WIDTH, _page_height);
+      else epd2.writeImageForFullRefresh(_buffer, 0, 0, WIDTH, _page_height);
       epd2.refresh(partial_update_mode);
       if (epd2.hasFastPartialUpdate)
       {
@@ -248,7 +249,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
         }
         else // full update
         {
-          epd2.writeImage(_buffer, 0, 0, WIDTH, HEIGHT, false, false, false, true);
+          epd2.writeImageForFullRefresh(_buffer, 0, 0, WIDTH, HEIGHT);
           epd2.refresh(false);
           if (epd2.hasFastPartialUpdate)
           {
@@ -302,7 +303,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
       }
       else // full update
       {
-        if (!_second_phase) epd2.writeImage(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys), false, false, false, true);
+        if (!_second_phase) epd2.writeImageForFullRefresh(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
         else epd2.writeImageAgain(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
         _current_page++;
         if (_current_page == _pages)
@@ -347,7 +348,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
         }
         else // full update
         {
-          epd2.writeImage(_buffer, 0, 0, WIDTH, HEIGHT, false, false, false, true);
+          epd2.writeImageForFullRefresh(_buffer, 0, 0, WIDTH, HEIGHT);
           epd2.refresh(false);
           if (epd2.hasFastPartialUpdate)
           {
@@ -389,7 +390,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
           uint16_t page_ys = _current_page * _page_height;
           fillScreen(GxEPD_WHITE);
           drawCallback(pv);
-          epd2.writeImage(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys), false, false, false, true);
+          epd2.writeImageForFullRefresh(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
         }
         epd2.refresh(false); // full update after first phase
         if (epd2.hasFastPartialUpdate)

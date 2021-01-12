@@ -53,12 +53,9 @@ void GxEPD2_154_D67::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, in
   _writeImage(0x24, bitmap, x, y, w, h, invert, mirror_y, pgm);
 }
 
-void GxEPD2_154_D67::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm, bool for_full_refresh)
+void GxEPD2_154_D67::writeImageForFullRefresh(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  if (for_full_refresh)
-  {
-    _writeImage(0x26, bitmap, x, y, w, h, invert, mirror_y, pgm);
-  }
+  _writeImage(0x26, bitmap, x, y, w, h, invert, mirror_y, pgm);
   _writeImage(0x24, bitmap, x, y, w, h, invert, mirror_y, pgm);
 }
 
