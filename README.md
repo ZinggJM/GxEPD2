@@ -66,9 +66,11 @@
 - GDEW0213Z16    2.13" b/w/r
 - GDEH029A1      2.9" b/w
 - GDEW029T5      2.9" b/w
+- GDEM029T94     2.9" b/w
 - GDEW029M06     2.9" b/w DES
 - GDEW029Z10     2.9" b/w/r
 - GDEW026T0      2.6" b/w
+- GDEW026M01     2.6" b/w DES
 - GDEW027C44     2.7" b/w/r
 - GDEW027W3      2.7" b/w
 - GDEW0371W7     3.7" b/w
@@ -93,7 +95,19 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.2.16
+### Version 1.3.0
+- added support for GDEM029T94 128x296 b/w e-paper panel
+- added support for GDEW026M01 152x296 b/w new DES e-paper panel
+- the new GDEW026M01 DES b/w e-paper panel has higher contrast and wide temperature range
+- differential refresh (fast partial update) is supported for normal temperature range
+- disable differential refresh for extended temperatures by setting hasFastPartialUpdate = false;
+- the differential waveform table for GDEW026M01 is experimental and may need improvement
+- major update of display selection in the examples to make additions easier:
+- old style selection is now in separate include files GxEPD2_display_selection.h 
+- and GxEPD2_display_selection_added.h
+- added new style display selection in include file GxEPD2_display_selection_new_style.h
+- either selection style can be used. old style is intended for easy copying of constructor lines.
+#### Version 1.2.16
 - fix for GDEH0154D67, to work independent of OTP version (ping-pong issue)
 #### Version 1.2.15
 - added support for GDEW0213M21 2.13" 104x212 b/w new DES e-paper panel
