@@ -59,7 +59,7 @@
 #include "it8951/GxEPD2_it60.h"
 #include "it8951/GxEPD2_it60_1448x1072.h"
 
-template<typename GxEPD2_Type, const uint16_t page_height>
+template<typename GxEPD2_Type, const uint16_t page_height = GxEPD2_Type::HEIGHT>
 class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
 {
   public:
