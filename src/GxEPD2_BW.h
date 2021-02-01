@@ -53,11 +53,30 @@
 #include "epd/GxEPD2_1248.h"
 #include "it8951/GxEPD2_it60.h"
 
-template<typename GxEPD2_Type, const uint16_t page_height>
+template<typename GxEPD2_Type, const uint16_t page_height = GxEPD2_Type::HEIGHT>
 class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
 {
   public:
     GxEPD2_Type epd2;
+    
+    //GxEPD2_BW constructor
+    //   the arguments to be passed  are the exact ones of GxEPD2_Type constructor
+    template<typename... Args>
+#if ENABLE_GxEPD2_GFX
+    GxEPD2_BW(Args... args) : GxEPD2_GFX_BASE_CLASS(epd2, GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(std::forward<Args>(args)...) 
+#else
+    GxEPD2_BW(Args... args) : GxEPD2_GFX_BASE_CLASS(GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(std::forward<Args>(args)...) 
+#endif
+    {
+      _page_height = page_height;
+      _pages = (HEIGHT / _page_height) + ((HEIGHT % _page_height) > 0);
+      _reverse = (epd2.panel == GxEPD2::GDE0213B1);
+      _mirror = false;
+      _using_partial_mode = false;
+      _current_page = 0;
+      setFullWindow();
+    }
+    
 #if ENABLE_GxEPD2_GFX
     GxEPD2_BW(GxEPD2_Type epd2_instance) : GxEPD2_GFX_BASE_CLASS(epd2, GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
 #else
