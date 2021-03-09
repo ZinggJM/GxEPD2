@@ -62,6 +62,10 @@ void loop()
 {
 }
 
+const char HelloWorld[] = "Hello World!";
+const char HelloArduino[] = "Hello Arduino!";
+const char HelloEpaper[] = "Hello E-Paper!";
+
 void helloWorld()
 {
   //Serial.println("helloWorld");
@@ -72,14 +76,22 @@ void helloWorld()
   u8g2Fonts.setForegroundColor(fg);         // apply Adafruit GFX color
   u8g2Fonts.setBackgroundColor(bg);         // apply Adafruit GFX color
   u8g2Fonts.setFont(u8g2_font_helvR14_tf);  // select u8g2 font from here: https://github.com/olikraus/u8g2/wiki/fntlistall
-  uint16_t x = (display.width() - 160) / 2;
-  uint16_t y = display.height() / 2;
+  int16_t tw = u8g2Fonts.getUTF8Width(HelloWorld); // text box width
+  int16_t ta = u8g2Fonts.getFontAscent(); // positive
+  int16_t td = u8g2Fonts.getFontDescent(); // negative; in mathematicians view
+  int16_t th = ta - td; // text box height
+  //Serial.print("ascent, descent ("); Serial.print(u8g2Fonts.getFontAscent()); Serial.print(", "); Serial.print(u8g2Fonts.getFontDescent()); Serial.println(")");
+  // center bounding box by transposition of origin:
+  // y is base line for u8g2Fonts, like for Adafruit_GFX True Type fonts
+  uint16_t x = (display.width() - tw) / 2;
+  uint16_t y = (display.height() - th) / 2 + ta;
+  //Serial.print("bounding box    ("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", "); Serial.print(tw); Serial.print(", "); Serial.print(th); Serial.println(")");
   display.firstPage();
   do
   {
     display.fillScreen(bg);
     u8g2Fonts.setCursor(x, y); // start writing at this position
-    u8g2Fonts.print("Hello World!");
+    u8g2Fonts.print(HelloWorld);
   }
   while (display.nextPage());
   //Serial.println("helloWorld done");
@@ -95,15 +107,19 @@ void helloArduino()
   u8g2Fonts.setForegroundColor(fg);         // apply Adafruit GFX color
   u8g2Fonts.setBackgroundColor(bg);         // apply Adafruit GFX color
   u8g2Fonts.setFont(u8g2_font_helvR14_tf);  // select u8g2 font from here: https://github.com/olikraus/u8g2/wiki/fntlistall
-  uint16_t x = (display.width() - 160) / 2;
-  uint16_t y = display.height() / 4;
+  int16_t tw = u8g2Fonts.getUTF8Width(HelloArduino); // text box width
+  int16_t ta = u8g2Fonts.getFontAscent(); // positive
+  int16_t td = u8g2Fonts.getFontDescent(); // negative; in mathematicians view
+  int16_t th = ta - td; // text box height
+  uint16_t x = (display.width() - tw) / 2;
+  uint16_t y = display.height() / 4 - th / 2 + ta;
   display.setPartialWindow(0, y - 14, display.width(), 20);
   display.firstPage();
   do
   {
     display.fillScreen(bg);
     u8g2Fonts.setCursor(x, y);
-    u8g2Fonts.println("Hello Arduino!");
+    u8g2Fonts.print(HelloArduino);
   }
   while (display.nextPage());
   //Serial.println("helloArduino done");
@@ -119,15 +135,19 @@ void helloEpaper()
   u8g2Fonts.setForegroundColor(fg);         // apply Adafruit GFX color
   u8g2Fonts.setBackgroundColor(bg);         // apply Adafruit GFX color
   u8g2Fonts.setFont(u8g2_font_helvR14_tf);  // select u8g2 font from here: https://github.com/olikraus/u8g2/wiki/fntlistall
-  uint16_t x = (display.width() - 160) / 2;
-  uint16_t y = display.height() * 3 / 4;
+  int16_t tw = u8g2Fonts.getUTF8Width(HelloArduino); // text box width
+  int16_t ta = u8g2Fonts.getFontAscent(); // positive
+  int16_t td = u8g2Fonts.getFontDescent(); // negative; in mathematicians view
+  int16_t th = ta - td; // text box height
+  uint16_t x = (display.width() - tw) / 2;
+  uint16_t y = display.height() * 3 / 4 - th / 2 + ta;
   display.setPartialWindow(0, y - 14, display.width(), 20);
   display.firstPage();
   do
   {
     display.fillScreen(bg);
     u8g2Fonts.setCursor(x, y);
-    u8g2Fonts.println("Hello E-Paper!");
+    u8g2Fonts.print(HelloEpaper);
   }
   while (display.nextPage());
   //Serial.println("helloEpaper done");

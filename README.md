@@ -69,6 +69,7 @@
 - GDEM029T94     2.9" b/w
 - GDEW029M06     2.9" b/w DES
 - GDEW029Z10     2.9" b/w/r
+- GDEM029C90     2.9" b/w/y
 - GDEW026T0      2.6" b/w
 - GDEW026M01     2.6" b/w DES
 - GDEW027C44     2.7" b/w/r
@@ -95,7 +96,12 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.3.0
+### Version 1.3.1
+- added support for GDEM029C90 128x296 b/w/y e-paper panel
+- GDEM029C90 has a very long refresh time of about 27 seconds
+- GDEM029C90 has partial update (window addressing) of controller memory
+- GDEM029C90 supports only full refresh of screen
+#### Version 1.3.0
 - added support for GDEM029T94 128x296 b/w e-paper panel
 - added support for GDEW026M01 152x296 b/w new DES e-paper panel
 - the new GDEW026M01 DES b/w e-paper panel has higher contrast and wide temperature range

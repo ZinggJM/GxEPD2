@@ -1294,7 +1294,7 @@ void drawBitmaps3c128x296()
     {WS_Bitmap3c128x296_black, WS_Bitmap3c128x296_red}
   };
 #endif
-  if (display.epd2.panel == GxEPD2::GDEW029Z10)
+  if ((display.epd2.WIDTH == 128) && (display.epd2.HEIGHT == 296) && display.epd2.hasColor)
   {
     for (uint16_t i = 0; i < sizeof(bitmap_pairs) / sizeof(bitmap_pair); i++)
     {
@@ -1302,12 +1302,12 @@ void drawBitmaps3c128x296()
       do
       {
         display.fillScreen(GxEPD_WHITE);
-        display.drawInvertedBitmap(0, 0, bitmap_pairs[i].black, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
+        display.drawInvertedBitmap(0, 0, bitmap_pairs[i].black, 128, 296, GxEPD_BLACK);
         if (bitmap_pairs[i].red == WS_Bitmap3c128x296_red)
         {
-          display.drawInvertedBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
+          display.drawInvertedBitmap(0, 0, bitmap_pairs[i].red, 128, 296, GxEPD_RED);
         }
-        else display.drawBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
+        else display.drawBitmap(0, 0, bitmap_pairs[i].red, 128, 296, GxEPD_RED);
       }
       while (display.nextPage());
       delay(2000);
