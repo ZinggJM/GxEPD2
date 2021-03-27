@@ -583,7 +583,7 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
                 //Serial.print("got "); Serial.print(got); Serial.print(" < "); Serial.print(get); Serial.print(" @ "); Serial.println(bytes_read);
                 uint32_t gotmore = read8n(client, input_buffer + got, get - got);
                 got += gotmore;
-                connection_ok = gotmore > 0;
+                connection_ok = gotmore >= 0;
               }
               in_bytes = got;
               in_remain -= got;
@@ -812,7 +812,7 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
                 //Serial.print("got "); Serial.print(got); Serial.print(" < "); Serial.print(get); Serial.print(" @ "); Serial.println(bytes_read);
                 uint32_t gotmore = read8n(client, input_buffer + got, get - got);
                 got += gotmore;
-                connection_ok = gotmore > 0;
+                connection_ok = gotmore >= 0;
               }
               in_bytes = got;
               in_remain -= got;
@@ -1062,7 +1062,7 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
                 //if ((get - got) > client.available()) delay(200); // does improve? yes, if >= 200
                 uint32_t gotmore = read8n(client, input_buffer + got, get - got);
                 got += gotmore;
-                connection_ok = gotmore > 0;
+                connection_ok = gotmore >= 0;
               }
               in_bytes = got;
               in_remain -= got;
@@ -1300,7 +1300,7 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
                 //Serial.print("got "); Serial.print(got); Serial.print(" < "); Serial.print(get); Serial.print(" @ "); Serial.println(bytes_read);
                 uint32_t gotmore = read8n(client, input_buffer + got, get - got);
                 got += gotmore;
-                connection_ok = gotmore > 0;
+                connection_ok = gotmore >= 0;
               }
               in_bytes = got;
               in_remain -= got;
