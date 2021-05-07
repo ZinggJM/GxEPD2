@@ -62,13 +62,17 @@
 - GDEH0213B72    2.13" b/w, replacement for GDE0213B1
 - GDEH0213B73    2.13" b/w, new replacement for GDE0213B1, GDEH0213B72
 - GDEW0213I5F    2.13" b/w flexible
+- GDEW0213T5D    2.13" b/w
 - GDEW0213M21    2.13" b/w DES
 - GDEW0213Z16    2.13" b/w/r
+- GDEW0213Z19    2.13" b/w/r
 - GDEH029A1      2.9" b/w
 - GDEW029T5      2.9" b/w
+- GDEW029T5D     2.9" b/w
 - GDEM029T94     2.9" b/w
 - GDEW029M06     2.9" b/w DES
 - GDEW029Z10     2.9" b/w/r
+- GDEW029Z13     2.9" b/w/r
 - GDEM029C90     2.9" b/w/y
 - GDEW026T0      2.6" b/w
 - GDEW026M01     2.6" b/w DES
@@ -96,7 +100,13 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.3.1
+### Version 1.3.2
+- added support for GDEW0213T5D 104x212 b/w e-paper panel
+- added support for GDEW029T5D  128x296 b/w e-paper panel
+- added support for GDEW0213Z19 104x212 b/w/r e-paper panel
+- added support for GDEW029Z13  128x296 b/w/r e-paper panel
+- both GDEW0213Z19 and GDEW029Z13 support only full screen refresh (controller issue)
+#### Version 1.3.1
 - added support for GDEM029C90 128x296 b/w/y e-paper panel
 - GDEM029C90 has a very long refresh time of about 27 seconds
 - GDEM029C90 has partial update (window addressing) of controller memory

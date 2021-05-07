@@ -104,6 +104,7 @@ void setup()
   // effective if display panel hasFastPartialUpdate
   helloFullScreenPartialMode();
   delay(1000);
+  //stripeTest(); return; // GDEH029Z13 issue
   helloArduino();
   delay(1000);
   helloEpaper();
@@ -330,6 +331,40 @@ void helloEpaper()
   }
   while (display.nextPage());
   //Serial.println("helloEpaper done");
+}
+
+// test partial window issue on GDEW0213Z19 and GDEH029Z13
+void stripeTest()
+{
+  helloStripe(104);
+  delay(2000);
+  helloStripe(96);
+}
+
+const char HelloStripe[] = "Hello Stripe!";
+
+void helloStripe(uint16_t pw_xe) // end of partial window in physcal x direction
+{
+  //Serial.print("HelloStripe("); Serial.print(pw_xe); Serial.println(")");
+  display.setRotation(3);
+  display.setFont(&FreeMonoBold9pt7b);
+  display.setTextColor(display.epd2.hasColor ? GxEPD_RED : GxEPD_BLACK);
+  int16_t tbx, tby; uint16_t tbw, tbh;
+  display.getTextBounds(HelloStripe, 0, 0, &tbx, &tby, &tbw, &tbh);
+  uint16_t wh = FreeMonoBold9pt7b.yAdvance;
+  uint16_t wy = pw_xe - wh;
+  uint16_t x = ((display.width() - tbw) / 2) - tbx;
+  uint16_t y = wy - tby;
+  display.setPartialWindow(0, wy, display.width(), wh);
+  display.firstPage();
+  do
+  {
+    display.fillScreen(GxEPD_WHITE);
+    display.setCursor(x, y);
+    display.print(HelloStripe);
+  }
+  while (display.nextPage());
+  //Serial.println("HelloStripe done");
 }
 
 #if defined(ESP8266) || defined(ESP32)
