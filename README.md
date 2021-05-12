@@ -101,6 +101,13 @@
 - donation panels from users are welcome, to add support to GxEPD2
 
 ### Version 1.3.2
+- added b/w differential refresh method to GDEW0213Z19
+- added b/w differential refresh method to GDEW029Z13
+- up to 100 b/w fast refreshes have been possible (resulting in slightly reddish background)
+- added experimental example GxEPD2x_MixedTest for proof of concept
+- GxEPD2x_MixedTest needs enough RAM for 2 GFXCanvas1 objects
+- general 3-color mixed refresh in GxEPD2 is in evaluation, for capable panels
+#### Version 1.3.2
 - added support for GDEW0213T5D 104x212 b/w e-paper panel
 - added support for GDEW029T5D  128x296 b/w e-paper panel
 - added support for GDEW0213Z19 104x212 b/w/r e-paper panel

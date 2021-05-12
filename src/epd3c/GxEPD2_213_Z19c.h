@@ -60,6 +60,7 @@ class GxEPD2_213_Z19c : public GxEPD2_EPD
     void refresh(int16_t x, int16_t y, int16_t w, int16_t h); // screen refresh from controller memory, partial screen
     void powerOff(); // turns off generation of panel driving voltages, avoids screen fading over time
     void hibernate(); // turns powerOff() and sets controller to deep sleep for minimum power use, ONLY if wakeable by RST (rst >= 0)
+    void refresh_special_bw(int16_t x, int16_t y, int16_t w, int16_t h); // screen refresh from controller memory, partial screen
   private:
     void _writeScreenBuffer(uint8_t value);
     void _setPartialRamArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
@@ -70,6 +71,12 @@ class GxEPD2_213_Z19c : public GxEPD2_EPD
     void _Init_Part();
     void _Update_Full();
     void _Update_Part();
+  private:
+    static const unsigned char lut_20_vcomDC_partial[];
+    static const unsigned char lut_21_ww_partial[];
+    static const unsigned char lut_22_bw_partial[];
+    static const unsigned char lut_23_wb_partial[];
+    static const unsigned char lut_24_bb_partial[];
 };
 
 #endif

@@ -388,3 +388,61 @@ void GxEPD2_290_Z13c::_Update_Part()
   _writeCommand(0x12); //display refresh
   _waitWhileBusy("_Update_Part", partial_refresh_time);
 }
+
+const unsigned char GxEPD2_290_Z13c::lut_20_vcomDC_partial[] =
+{
+  0x00, 0x1F, 0x01, 0x00, 0x00, 0x01,
+};
+
+const unsigned char GxEPD2_290_Z13c::lut_21_ww_partial[] =
+{
+  0x00, 0x1F, 0x01, 0x00, 0x00, 0x01,
+};
+
+const unsigned char GxEPD2_290_Z13c::lut_22_bw_partial[] PROGMEM =
+{
+  0x80, 0x1F, 0x01, 0x00, 0x00, 0x01,
+};
+
+const unsigned char GxEPD2_290_Z13c::lut_23_wb_partial[] PROGMEM =
+{
+  0x40, 0x1F, 0x01, 0x00, 0x00, 0x01,
+};
+
+const unsigned char GxEPD2_290_Z13c::lut_24_bb_partial[] PROGMEM =
+{
+  0x00, 0x1F, 0x01, 0x00, 0x00, 0x01,
+};
+
+void GxEPD2_290_Z13c::refresh_special_bw(int16_t x, int16_t y, int16_t w, int16_t h)
+{
+  x -= x % 8; // byte boundary
+  w -= w % 8; // byte boundary
+  int16_t x1 = x < 0 ? 0 : x; // limit
+  int16_t y1 = y < 0 ? 0 : y; // limit
+  int16_t w1 = x + w < int16_t(WIDTH) ? w : int16_t(WIDTH) - x; // limit
+  int16_t h1 = y + h < int16_t(HEIGHT) ? h : int16_t(HEIGHT) - y; // limit
+  w1 -= x1 - x;
+  h1 -= y1 - y;
+  _Init_Part();
+  _writeCommand(0x20);
+  _writeDataPGM(lut_20_vcomDC_partial, sizeof(lut_20_vcomDC_partial), 44 - sizeof(lut_20_vcomDC_partial));
+  _writeCommand(0x21);
+  _writeDataPGM(lut_21_ww_partial, sizeof(lut_21_ww_partial), 42 - sizeof(lut_21_ww_partial));
+  _writeCommand(0x22);
+  _writeDataPGM(lut_22_bw_partial, sizeof(lut_22_bw_partial), 42 - sizeof(lut_22_bw_partial));
+  _writeCommand(0x23);
+  _writeDataPGM(lut_23_wb_partial, sizeof(lut_23_wb_partial), 42 - sizeof(lut_23_wb_partial));
+  _writeCommand(0x24);
+  _writeDataPGM(lut_24_bb_partial, sizeof(lut_24_bb_partial), 42 - sizeof(lut_24_bb_partial));
+  _writeCommand(0x00); // panel setting
+  _writeData(0xbf);    // LUT from registers, b/w
+  _writeCommand(0x50); // VCOM AND DATA INTERVAL SETTING
+  _writeData(0xf7);    // WBmode:VBDF 17|D7 VBDW 97 VBDB 57   WBRmode:VBDF F7 VBDW 77 VBDB 37  VBDR B7
+  _writeCommand(0x91); // partial in
+  _setPartialRamArea(x1, y1, w1, h1);
+  _Update_Part();
+  _writeCommand(0x92); // partial out
+  _writeCommand(0x00); // panel setting
+  _writeData(0x8f);    // LUT from OTP
+}
