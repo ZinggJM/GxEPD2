@@ -100,7 +100,7 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.3.2
+### Version 1.3.3
 - added b/w differential refresh method to GDEW0213Z19
 - added b/w differential refresh method to GDEW029Z13
 - up to 100 b/w fast refreshes have been possible (resulting in slightly reddish background)
