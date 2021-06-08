@@ -9,9 +9,7 @@
 //
 // Library: https://github.com/ZinggJM/GxEPD2
 
-// experimental example GxEPD2x_MixedTest.ino: proof of concept for differential refresh on capable 3-color panels
-
-// see also GxEPD2x_FastBlackWhiteOnColor.ino: differential refresh on capable 3-color panels
+// experimental example GxEPD2x_FastBlackWhiteOnColor.ino: differential refresh on capable 3-color panels
 
 // see GxEPD2_wiring_examples.h for wiring suggestions and examples
 // if you use a different wiring, you need to adapt the constructor parameters!
@@ -39,67 +37,59 @@ const uint16_t window_y = 10;
 const uint16_t window_width = 80;
 const uint16_t window_height = 24;
 
-// we need a canvas with correct explicit assignment operator
-class MyCanvas1 : public GFXcanvas1
-{
-  private:
-    uint32_t bytes;
-  public:
-    MyCanvas1(uint16_t w, uint16_t h) : GFXcanvas1(w, h), bytes(((w + 7) / 8) * h) {};
-    MyCanvas1& operator=(const MyCanvas1& from)
-    {
-      if (bytes == from.bytes)
-      {
-        memcpy(getBuffer(), from.getBuffer(), bytes);
-      } // else would need realloc, but buffer is private
-      return *this;
-    };
-};
-
-//GFXcanvas1 current_bw_window(window_width, window_height);
-//GFXcanvas1 previous_bw_window(window_width, window_height);
-MyCanvas1 current_bw_window(window_width, window_height);
-MyCanvas1 previous_bw_window(window_width, window_height);
-
 void setup()
 {
   Serial.begin(115200);
   Serial.println();
   display.init(115200);
   helloWorld();
-  if (current_bw_window.getBuffer() && previous_bw_window.getBuffer())
+  // make sure window is only b/w, before using fast b/w refreshes
+  //clearWindow(); // commented out, partial window was cleared by helloWorld()
+  for (uint16_t i = 0; i < 100; i++)
   {
-    current_bw_window.fillScreen(GxEPD_WHITE);
-    previous_bw_window.fillScreen(GxEPD_WHITE);
-    // only needed if window is not yet white
-    //display.drawImage(current_bw_window.getBuffer(), previous_bw_window.getBuffer(), window_x, window_y, window_width, window_height);
-    for (uint16_t i = 0; i < 100; i++)
-    {
-      showValue(i);
-    }
-  }
-  else
-  {
-    Serial.println("GxEPD2x_MixedTest: canvas buffer allocation failed!");
-    Serial.print("current_bw_window  0x"); Serial.println(uint32_t(current_bw_window.getBuffer()), HEX);
-    Serial.print("previous_bw_window 0x"); Serial.println(uint32_t(previous_bw_window.getBuffer()), HEX);
+    showValue(i);
   }
   display.hibernate();
 }
 
+// make sure window is only b/w, before using fast b/w refreshes
+void clearWindow()
+{
+  display.setPartialWindow(window_x, window_y, window_width, window_height);
+  display.firstPage();
+  do
+  {
+    display.fillScreen(GxEPD_WHITE);
+  }
+  while (display.nextPage());
+}
+
 void showValue(uint16_t value)
 {
-  current_bw_window.setFont(&FreeMonoBold9pt7b);
-  current_bw_window.setTextColor(GxEPD_BLACK);
-  current_bw_window.fillScreen(GxEPD_WHITE);
-  current_bw_window.setCursor(20, FreeMonoBold9pt7b.yAdvance);
-  current_bw_window.print(value);
-  display.writeImage(previous_bw_window.getBuffer(), current_bw_window.getBuffer(), window_x, window_y, window_width, window_height);
-  display.epd2.refresh_bw(window_x, window_y, window_width, window_height);
-  // this needs a canvas with correct explicit assignment operator
-  previous_bw_window = current_bw_window;
-  //Serial.print("current_bw_window  0x"); Serial.println(uint32_t(current_bw_window.getBuffer()), HEX);
-  //Serial.print("previous_bw_window 0x"); Serial.println(uint32_t(previous_bw_window.getBuffer()), HEX);
+  display.setRotation(0);
+  display.setFont(&FreeMonoBold9pt7b);
+  display.setTextColor(GxEPD_BLACK);
+  if ((1 == display.pages()) && true) // test non-paged
+  {
+    display.setFullWindow();
+    display.fillRect(window_x, window_y, window_width, window_height, GxEPD_WHITE);
+    display.setCursor(window_x + 20, window_y + FreeMonoBold9pt7b.yAdvance);
+    display.print(value);
+    // non-paged fast bw partial update
+    display.displayWindowBW(window_x, window_y, window_width, window_height);
+  }
+  else // test paged
+  {
+    display.setPartialWindow(window_x, window_y, window_width, window_height);
+    display.firstPage();
+    do
+    {
+      display.fillScreen(GxEPD_WHITE);
+      display.setCursor(window_x + 20, window_y + FreeMonoBold9pt7b.yAdvance);
+      display.print(value);
+    }
+    while (display.nextPageBW()); //paged fast bw partial update
+  }
   delay(1000);
 }
 

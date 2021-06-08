@@ -57,6 +57,7 @@
 #include "epd/GxEPD2_583_T8.h"
 #include "epd/GxEPD2_750.h"
 #include "epd/GxEPD2_750_T7.h"
+#include "epd/GxEPD2_1160_T91.h"
 #include "epd/GxEPD2_1248.h"
 #include "it8951/GxEPD2_it60.h"
 #include "it8951/GxEPD2_it60_1448x1072.h"

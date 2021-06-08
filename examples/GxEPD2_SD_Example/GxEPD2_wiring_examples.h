@@ -69,3 +69,6 @@
 // mapping suggestion for Arduino MKR1000 or MKRZERO
 // note: can't use SS on MKR1000: is defined as 24, should be 4
 // BUSY -> 5, RST -> 6, DC -> 7, CS-> 4, CLK -> 9, DIN -> 8
+
+// mapping suggestion for Arduino Nano RP2040 Connect
+// BUSY -> 7, RST -> 9, DC -> 8, CS-> 10, CLK -> 13, DIN -> 11

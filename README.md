@@ -90,6 +90,7 @@
 - GDEW075Z09     7.5" b/w/r
 - GDEW075Z08     7.5" b/w/r 800x480
 - GDEH075Z90     7.5" b/w/r 880x528
+- GDEH116T91    11.6" b/w 960x640
 - GDEW1248T3    12.48 b/w 1304x984
 #### Supported SPI e-paper panels & boards from Waveshare: compare with Good Display, same panel
 #### other supported panels
@@ -100,7 +101,14 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.3.3
+### Version 1.3.4
+- added support for GDEH116T91 960x640 b/w e-paper panel
+- GDEH116T91 has only full screen refresh, no wavetable for differential refresh yet
+- added support for processor Arduino Nano RP2040 Connect to the examples
+- added general fast b/w refresh for capable 3-color displays GDEW0213Z19, GDEW029Z13
+- added example GxEPD2x_FastBlackWhiteOnColor.ino for GDEW0213Z19, GDEW029Z13
+- evaluation of other fast b/w capable 3-color panels may follow
+#### Version 1.3.3
 - added b/w differential refresh method to GDEW0213Z19
 - added b/w differential refresh method to GDEW029Z13
 - up to 100 b/w fast refreshes have been possible (resulting in slightly reddish background)

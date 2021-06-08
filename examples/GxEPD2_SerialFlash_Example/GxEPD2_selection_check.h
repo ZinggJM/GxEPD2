@@ -39,6 +39,7 @@
 #define GxEPD2_583_T8_IS_BW true
 #define GxEPD2_750_IS_BW true
 #define GxEPD2_750_T7_IS_BW true
+#define GxEPD2_1160_T91_IS_BW true
 // 3-color e-papers
 #define GxEPD2_154c_IS_3C true
 #define GxEPD2_154_Z90c_IS_3C true
