@@ -31,19 +31,20 @@ class GxEPD2_1248 : public GxEPD2_EPD
     static const uint16_t full_refresh_time = 4600; // ms, e.g. 4579001us
     static const uint16_t partial_refresh_time = 1600; // ms, e.g. 1525001us
     // constructors
-#if defined(ESP32)
+#ifndef SCK
     // general constructor for use with all parameters on ESP32, e.g. for Waveshare ESP32 driver board mounted on connection board
     GxEPD2_1248(int8_t sck, int8_t miso, int8_t mosi,
                 int8_t cs_m1, int8_t cs_s1, int8_t cs_m2, int8_t cs_s2,
                 int8_t dc1, int8_t dc2, int8_t rst1, int8_t rst2,
                 int8_t busy_m1, int8_t busy_s1, int8_t busy_m2, int8_t busy_s2);
-#endif
+#else
     // general constructor for use with standard SPI pins, default SCK, MISO and MOSI
     GxEPD2_1248(int8_t cs_m1, int8_t cs_s1, int8_t cs_m2, int8_t cs_s2,
                 int8_t dc1, int8_t dc2, int8_t rst1, int8_t rst2,
                 int8_t busy_m1, int8_t busy_s1, int8_t busy_m2, int8_t busy_s2);
     // constructor with minimal parameter set, standard SPI, dc1 and dc2, rst1 and rst2 to one pin, one busy used (can be -1)
     GxEPD2_1248(int8_t cs_m1, int8_t cs_s1, int8_t cs_m2, int8_t cs_s2, int8_t dc, int8_t rst, int8_t busy);
+#endif
     // methods (virtual)
     void init(uint32_t serial_diag_bitrate = 0); // serial_diag_bitrate = 0 : disabled
     void init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration = 20, bool pulldown_rst_mode = false);

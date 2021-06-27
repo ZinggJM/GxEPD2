@@ -13,7 +13,7 @@
 
 #include "GxEPD2_1248.h"
 
-#if defined(ESP32)
+#ifndef SCK
 // general constructor for use with all parameters on ESP32, e.g. for Waveshare ESP32 driver board mounted on connection board
 GxEPD2_1248::GxEPD2_1248(int8_t sck, int8_t miso, int8_t mosi,
                          int8_t cs_m1, int8_t cs_s1, int8_t cs_m2, int8_t cs_s2,
@@ -30,8 +30,7 @@ GxEPD2_1248::GxEPD2_1248(int8_t sck, int8_t miso, int8_t mosi,
   S2(648, 492, true, cs_s2, dc2)
 {
 }
-#endif
-
+#else
 // general constructor for use with standard SPI pins, default SCK, MISO and MOSI
 GxEPD2_1248::GxEPD2_1248(int8_t cs_m1, int8_t cs_s1, int8_t cs_m2, int8_t cs_s2,
                          int8_t dc1, int8_t dc2, int8_t rst1, int8_t rst2,
@@ -61,6 +60,7 @@ GxEPD2_1248::GxEPD2_1248(int8_t cs_m1, int8_t cs_s1, int8_t cs_m2, int8_t cs_s2,
   S2(648, 492, true, cs_s2, dc)
 {
 }
+#endif
 
 void GxEPD2_1248::init(uint32_t serial_diag_bitrate)
 {
