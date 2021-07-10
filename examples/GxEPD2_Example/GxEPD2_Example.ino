@@ -1151,7 +1151,7 @@ void drawBitmaps800x480()
 void drawBitmaps800x600()
 {
 #if defined(ESP8266) || defined(ESP32)
-  if (display.epd2.panel == GxEPD2::ED060SCT)
+  if ((display.epd2.panel == GxEPD2::ED060SCT) || (display.epd2.panel == GxEPD2::ED060KC1) || (display.epd2.panel == GxEPD2::ED078KC2))
   {
     //    Serial.print("sizeof(WS_zoo_800x600) is "); Serial.println(sizeof(WS_zoo_800x600));
     display.drawNative(WS_zoo_800x600, 0, 0, 0, 800, 600, false, false, true);

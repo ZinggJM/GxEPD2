@@ -21,6 +21,7 @@
 #define GxEPD2_213_IS_BW true
 #define GxEPD2_213_B72_IS_BW true
 #define GxEPD2_213_B73_IS_BW true
+#define GxEPD2_213_B74_IS_BW true
 #define GxEPD2_213_flex_IS_BW true
 #define GxEPD2_213_M21_IS_BW true
 #define GxEPD2_213_T5D_IS_BW true

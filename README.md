@@ -61,6 +61,7 @@
 - GDE0213B1      2.13" b/w
 - GDEH0213B72    2.13" b/w, replacement for GDE0213B1
 - GDEH0213B73    2.13" b/w, new replacement for GDE0213B1, GDEH0213B72
+- GDEM0213B74    2.13" b/w
 - GDEW0213I5F    2.13" b/w flexible
 - GDEW0213T5D    2.13" b/w
 - GDEW0213M21    2.13" b/w DES
@@ -96,12 +97,16 @@
 #### other supported panels
 - ED060SCT        6" grey levels, on Waveshare e-Paper IT8951 Driver HAT
 - ED060KC1        6" grey levels, 1448x1072, on Waveshare e-Paper IT8951 Driver HAT
+- ED078KC2        7.8" grey levels, 1872x1404, on Waveshare e-Paper IT8951 Driver HAT
 
 ### I can and will only support e-paper panels I have!
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.3.4
+### Version 1.3.5
+- added support for GDEM0213B74 122x250 b/w e-paper panel
+- added support for ED078KC2, 7.8" grey levels, 1872x1404, on Waveshare e-Paper IT8951 Driver HAT
+#### Version 1.3.4
 - added support for GDEH116T91 960x640 b/w e-paper panel
 - GDEH116T91 has only full screen refresh, no wavetable for differential refresh yet
 - added support for processor Arduino Nano RP2040 Connect to the examples
