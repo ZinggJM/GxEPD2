@@ -39,6 +39,7 @@
 #include "epd3c/GxEPD2_290_C90c.h"
 #include "epd3c/GxEPD2_270c.h"
 #include "epd3c/GxEPD2_420c.h"
+#include "epd3c/GxEPD2_420c_V2.h"
 #include "epd3c/GxEPD2_583c.h"
 #include "epd3c/GxEPD2_565c.h"
 #include "epd3c/GxEPD2_750c.h"
