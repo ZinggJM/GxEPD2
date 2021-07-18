@@ -50,6 +50,7 @@
 #include "epd/GxEPD2_290_T5D.h"
 #include "epd/GxEPD2_290_M06.h"
 #include "epd/GxEPD2_290_T94.h"
+#include "epd/GxEPD2_290_T94_V2.h"
 #include "epd/GxEPD2_270.h"
 #include "epd/GxEPD2_371.h"
 #include "epd/GxEPD2_420.h"

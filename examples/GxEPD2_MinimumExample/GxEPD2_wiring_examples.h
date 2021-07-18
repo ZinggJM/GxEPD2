@@ -17,11 +17,13 @@
 // BUSY -> D2, RST -> D4, DC -> D3, CS -> D8, CLK -> D5, DIN -> D7, GND -> GND, 3.3V -> 3.3V
 // NOTE: connect 3.3k pull-down from D8 to GND if your board or shield has level converters
 // NOTE for ESP8266: using SS (GPIO15) for CS may cause boot mode problems, use different pin in case, or 4k7 pull-down
+// NOTE: connect 1k pull-up from D4 (RST) to 3.3V if your board or shield has the "clever" reset circuit, or use a different pin
 
 // mapping suggestion from Waveshare SPI e-Paper to generic ESP8266
 // BUSY -> GPIO4, RST -> GPIO2, DC -> GPIO0, CS -> GPIO15, CLK -> GPIO14, DIN -> GPIO13, GND -> GND, 3.3V -> 3.3V
 // NOTE: connect 3.3k pull-down from GPIO15 to GND if your board or shield has level converters
 // NOTE for ESP8266: using SS (GPIO15) for CS may cause boot mode problems, use different pin in case, or 3.3k pull-down
+// NOTE: connect 1k pull-up from GPIO2 (RST) to 3.3V if your board or shield has the "clever" reset circuit, or use a different pin
 
 // mapping of Waveshare e-Paper ESP8266 Driver Board, new version
 // BUSY -> GPIO5, RST -> GPIO2, DC -> GPIO4, CS -> GPIO15, CLK -> GPIO14, DIN -> GPIO13, GND -> GND, 3.3V -> 3.3V

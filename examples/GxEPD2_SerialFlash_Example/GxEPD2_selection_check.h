@@ -29,6 +29,7 @@
 #define GxEPD2_290_T5_IS_BW true
 #define GxEPD2_290_T5D_IS_BW true
 #define GxEPD2_290_T94_IS_BW true
+#define GxEPD2_290_T94_V2_IS_BW true
 #define GxEPD2_290_M06_IS_BW true
 #define GxEPD2_260_IS_BW true
 #define GxEPD2_260_M01_IS_BW true

@@ -17,6 +17,7 @@
 - note that 7.5" e-paper displays don't work reliable if fed from 3.3V Arduino pin
 - note that Waveshare bords with "clever" reset circuit may need shortened reset pulse
 - use `init(115200, true, 2, false)` for Waveshare boards with "clever" reset circuit
+- note that Waveshare bords with "clever" reset circuit need 1k pull-up on RST on ESP8266, or different pin
 
 ### Paged Drawing, Picture Loop
  - This library uses paged drawing to limit RAM use and cope with missing single pixel update support
@@ -103,7 +104,12 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.3.5
+### Version 1.3.6
+- added support for Waveshare 2.9" b/w V2, driver class GxEPD2_290_T94_V2
+- Waveshare 2.9" b/w V2 uses a GDEM029T94 variant without partial update wft in OTP
+- driver class GxEPD2_290_T94_V2 uses partial update wft written to registers
+- added NOTE for RST pull-up on ESP8266 with "clever" reset circuit, or alternate pin
+#### Version 1.3.5
 - added support for GDEM0213B74 122x250 b/w e-paper panel
 - added support for ED078KC2, 7.8" grey levels, 1872x1404, on Waveshare e-Paper IT8951 Driver HAT
 #### Version 1.3.4
