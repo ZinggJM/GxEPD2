@@ -65,7 +65,7 @@ void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset
   {
     pinMode(_busy, INPUT);
   }
-  SPI.begin();
+  SPI.begin(CLK_PIN, -1, MOSI_PIN, CS_PIN);
 }
 
 void GxEPD2_EPD::_reset()
