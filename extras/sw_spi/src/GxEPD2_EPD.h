@@ -50,6 +50,11 @@ class GxEPD2_EPD
     virtual void writeScreenBuffer(uint8_t value) = 0; // init controller memory (default white)
     // write to controller memory, without screen refresh; x and w should be multiple of 8
     virtual void writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
+    virtual void writeImageForFullRefresh(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false)
+    {
+      // writeImage is independent from refresh mode for most controllers, exception e.g. SSD1681
+      writeImage(bitmap, x, y, w, h, invert, mirror_y, pgm);
+    }
     virtual void writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
                                 int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
     //    virtual void writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;

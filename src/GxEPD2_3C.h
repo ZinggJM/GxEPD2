@@ -177,6 +177,18 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
       epd2.refresh(x, y, w, h);
     }
 
+    void displayWindowBW(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
+    {
+      x = gx_uint16_min(x, width());
+      y = gx_uint16_min(y, height());
+      w = gx_uint16_min(w, width() - x);
+      h = gx_uint16_min(h, height() - y);
+      _rotate(x, y, w, h);
+      epd2.writeImagePartNew(_black_buffer, x, y, WIDTH, _page_height, x, y, w, h);
+      epd2.refresh_bw(x, y, w, h);
+      epd2.writeImagePartPrevious(_black_buffer, x, y, WIDTH, _page_height, x, y, w, h);
+    }
+
     void setFullWindow()
     {
       _using_partial_mode = false;
@@ -272,6 +284,85 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
             }
             else epd2.refresh(true); // partial update after second phase
           } else epd2.refresh(false); // full update after only phase
+          epd2.powerOff();
+          return false;
+        }
+        fillScreen(GxEPD_WHITE);
+        return true;
+      }
+    }
+
+    bool nextPageBW()
+    {
+      if (1 == _pages)
+      {
+        if (_using_partial_mode)
+        {
+          epd2.writeImageNew(_black_buffer, _pw_x, _pw_y, _pw_w, _pw_h);
+          epd2.refresh_bw(_pw_x, _pw_y, _pw_w, _pw_h);
+          epd2.writeImagePrevious(_black_buffer, _pw_x, _pw_y, _pw_w, _pw_h);
+        }
+        else // full update
+        {
+          epd2.writeImage(_black_buffer, 0, 0, WIDTH, HEIGHT);
+          epd2.refresh(false);
+          epd2.writeImagePrevious(_black_buffer, 0, 0, WIDTH, HEIGHT);
+          epd2.powerOff();
+        }
+        return false;
+      }
+      uint16_t page_ys = _current_page * _page_height;
+      if (_using_partial_mode)
+      {
+        //Serial.print("  nextPage("); Serial.print(_pw_x); Serial.print(", "); Serial.print(_pw_y); Serial.print(", ");
+        //Serial.print(_pw_w); Serial.print(", "); Serial.print(_pw_h); Serial.print(") P"); Serial.println(_current_page);
+        uint16_t page_ye = _current_page < (_pages - 1) ? page_ys + _page_height : HEIGHT;
+        uint16_t dest_ys = _pw_y + page_ys; // transposed
+        uint16_t dest_ye = gx_uint16_min(_pw_y + _pw_h, _pw_y + page_ye);
+        if (dest_ye > dest_ys)
+        {
+          //Serial.print("writeImage("); Serial.print(_pw_x); Serial.print(", "); Serial.print(dest_ys); Serial.print(", ");
+          //Serial.print(_pw_w); Serial.print(", "); Serial.print(dest_ye - dest_ys); Serial.println(")");
+          if (!_second_phase) epd2.writeImageNew(_black_buffer, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
+          else epd2.writeImagePrevious(_black_buffer, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
+        }
+        else
+        {
+          //Serial.print("writeImage("); Serial.print(_pw_x); Serial.print(", "); Serial.print(dest_ys); Serial.print(", ");
+          //Serial.print(_pw_w); Serial.print(", "); Serial.print(dest_ye - dest_ys); Serial.print(") skipped ");
+          //Serial.print(dest_ys); Serial.print(".."); Serial.println(dest_ye);
+        }
+        _current_page++;
+        if (_current_page == _pages)
+        {
+          _current_page = 0;
+          if (!_second_phase)
+          {
+            epd2.refresh_bw(_pw_x, _pw_y, _pw_w, _pw_h);
+            _second_phase = true;
+            fillScreen(GxEPD_WHITE);
+            return true;
+          }
+          return false;
+        }
+        fillScreen(GxEPD_WHITE);
+        return true;
+      }
+      else // full update
+      {
+        if (!_second_phase) epd2.writeImage(_black_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
+        else epd2.writeImagePrevious(_black_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
+        _current_page++;
+        if (_current_page == _pages)
+        {
+          _current_page = 0;
+          if (!_second_phase)
+          {
+            epd2.refresh(false); // full update after first phase
+            _second_phase = true;
+            fillScreen(GxEPD_WHITE);
+            return true;
+          }
           epd2.powerOff();
           return false;
         }

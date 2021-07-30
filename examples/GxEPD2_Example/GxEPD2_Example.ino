@@ -61,7 +61,7 @@
 #include "bitmaps/Bitmaps3c128x296.h" // 2.9"  b/w/r
 #include "bitmaps/Bitmaps3c176x264.h" // 2.7"  b/w/r
 #include "bitmaps/Bitmaps3c400x300.h" // 4.2"  b/w/r
-#if defined(ESP8266) || defined(ESP32)
+#if defined(ESP8266) || defined(ESP32) || defined(ARDUINO_ARCH_RP2040)
 #include "bitmaps/Bitmaps3c800x480.h" // 7.5"  b/w/r
 #include "bitmaps/Bitmaps3c880x528.h" // 7.5"  b/w/r
 #include "bitmaps/WS_Bitmaps800x600.h" // 6.0"  grey
@@ -1151,7 +1151,7 @@ void drawBitmaps800x480()
 void drawBitmaps800x600()
 {
 #if defined(ESP8266) || defined(ESP32)
-  if (display.epd2.panel == GxEPD2::ED060SCT)
+  if ((display.epd2.panel == GxEPD2::ED060SCT) || (display.epd2.panel == GxEPD2::ED060KC1) || (display.epd2.panel == GxEPD2::ED078KC2))
   {
     //    Serial.print("sizeof(WS_zoo_800x600) is "); Serial.println(sizeof(WS_zoo_800x600));
     display.drawNative(WS_zoo_800x600, 0, 0, 0, 800, 600, false, false, true);
