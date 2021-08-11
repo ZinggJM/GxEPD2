@@ -43,6 +43,7 @@
 //                  therefore bitmaps may get optimized out by the linker
 
 // comment out unused bitmaps to reduce code space used
+#include "bitmaps/Bitmaps80x128.h"  // 1.02" b/w
 #include "bitmaps/Bitmaps152x152.h" // 1.54" b/w
 #include "bitmaps/Bitmaps200x200.h" // 1.54" b/w
 #include "bitmaps/Bitmaps104x212.h" // 2.13" b/w flexible GDEW0213I5F
@@ -74,6 +75,7 @@
 #else
 
 // select only one to fit in code space
+//#include "bitmaps/Bitmaps80x128.h"  // 1.02" b/w
 #include "bitmaps/Bitmaps200x200.h" // 1.54" b/w
 //#include "bitmaps/Bitmaps104x212.h" // 2.13" b/w flexible GDEW0213I5F
 //#include "bitmaps/Bitmaps128x250.h" // 2.13" b/w
@@ -113,6 +115,11 @@ void setup()
   //delay(1000);
   showFont("FreeMonoBold9pt7b", &FreeMonoBold9pt7b);
   delay(1000);
+  if (display.epd2.WIDTH < 104)
+  {
+    showFont("glcdfont", 0);
+    delay(1000);
+  }
   drawBitmaps();
 #if !defined(__AVR) // takes too long!
   if (display.epd2.panel == GxEPD2::ACeP565)
@@ -158,6 +165,7 @@ void helloWorld()
   //Serial.println("helloWorld");
   display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
+  if (display.epd2.WIDTH < 104) display.setFont(0);
   display.setTextColor(GxEPD_BLACK);
   int16_t tbx, tby; uint16_t tbw, tbh;
   display.getTextBounds(HelloWorld, 0, 0, &tbx, &tby, &tbw, &tbh);
@@ -232,6 +240,7 @@ void helloFullScreenPartialMode()
   display.setPartialWindow(0, 0, display.width(), display.height());
   display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
+  if (display.epd2.WIDTH < 104) display.setFont(0);
   display.setTextColor(GxEPD_BLACK);
   const char* updatemode;
   if (display.epd2.hasFastPartialUpdate)
@@ -280,6 +289,7 @@ void helloArduino()
   //Serial.println("helloArduino");
   display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
+  if (display.epd2.WIDTH < 104) display.setFont(0);
   display.setTextColor(display.epd2.hasColor ? GxEPD_RED : GxEPD_BLACK);
   int16_t tbx, tby; uint16_t tbw, tbh;
   // align with centered HelloWorld
@@ -310,6 +320,7 @@ void helloEpaper()
   //Serial.println("helloEpaper");
   display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
+  if (display.epd2.WIDTH < 104) display.setFont(0);
   display.setTextColor(display.epd2.hasColor ? GxEPD_RED : GxEPD_BLACK);
   int16_t tbx, tby; uint16_t tbw, tbh;
   // align with centered HelloWorld
@@ -317,7 +328,7 @@ void helloEpaper()
   uint16_t x = ((display.width() - tbw) / 2) - tbx;
   // height might be different
   display.getTextBounds(HelloEpaper, 0, 0, &tbx, &tby, &tbw, &tbh);
-  uint16_t y = (display.height() * 3 / 4) + tbh / 2; // y is base line!
+  uint16_t y = ((display.height() * 3 / 4) - tbh / 2) - tby; // y is base line!
   // make the window big enough to cover (overwrite) descenders of previous text
   uint16_t wh = FreeMonoBold9pt7b.yAdvance;
   uint16_t wy = (display.height() * 3 / 4) - wh / 2;
@@ -392,10 +403,10 @@ void helloValue(double v, int digits)
   int16_t tbx, tby; uint16_t tbw, tbh;
   display.getTextBounds(valueString, 0, 0, &tbx, &tby, &tbw, &tbh);
   uint16_t x = ((display.width() - tbw) / 2) - tbx;
-  uint16_t y = (display.height() * 3 / 4) + tbh / 2; // y is base line!
+  uint16_t y = ((display.height() * 3 / 4) - tbh / 2) - tby; // y is base line!
   // show what happens, if we use the bounding box for partial window
   uint16_t wx = (display.width() - tbw) / 2;
-  uint16_t wy = (display.height() * 3 / 4) - tbh / 2;
+  uint16_t wy = ((display.height() * 3 / 4) - tbh / 2) - tby; // y is base line!
   display.setPartialWindow(wx, wy, tbw, tbh);
   display.firstPage();
   do
@@ -438,6 +449,7 @@ void deepSleepTest()
   const char again[] = "again";
   display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
+  if (display.epd2.WIDTH < 104) display.setFont(0);
   display.setTextColor(GxEPD_BLACK);
   int16_t tbx, tby; uint16_t tbw, tbh;
   // center text
@@ -457,10 +469,10 @@ void deepSleepTest()
   delay(5000);
   display.getTextBounds(wokeup, 0, 0, &tbx, &tby, &tbw, &tbh);
   uint16_t wx = (display.width() - tbw) / 2;
-  uint16_t wy = (display.height() / 3) + tbh / 2; // y is base line!
+  uint16_t wy = ((display.height() / 3) - tbh / 2) - tby; // y is base line!
   display.getTextBounds(from, 0, 0, &tbx, &tby, &tbw, &tbh);
   uint16_t fx = (display.width() - tbw) / 2;
-  uint16_t fy = (display.height() * 2 / 3) + tbh / 2; // y is base line!
+  uint16_t fy = ((display.height() * 2 / 3) - tbh / 2) - tby; // y is base line!
   display.firstPage();
   do
   {
@@ -474,10 +486,10 @@ void deepSleepTest()
   delay(5000);
   display.getTextBounds(hibernating, 0, 0, &tbx, &tby, &tbw, &tbh);
   uint16_t hx = (display.width() - tbw) / 2;
-  uint16_t hy = (display.height() / 3) + tbh / 2; // y is base line!
+  uint16_t hy = ((display.height() / 3) - tbh / 2) - tby; // y is base line!
   display.getTextBounds(again, 0, 0, &tbx, &tby, &tbw, &tbh);
   uint16_t ax = (display.width() - tbw) / 2;
-  uint16_t ay = (display.height() * 2 / 3) + tbh / 2; // y is base line!
+  uint16_t ay = ((display.height() * 2 / 3) - tbh / 2) - tby; // y is base line!
   display.firstPage();
   do
   {
@@ -588,9 +600,11 @@ void showPartialUpdate()
   uint16_t box_w = 70;
   uint16_t box_h = 20;
   uint16_t cursor_y = box_y + box_h - 6;
+  if (display.epd2.WIDTH < 104) cursor_y = box_y + 6;
   float value = 13.95;
   uint16_t incr = display.epd2.hasFastPartialUpdate ? 1 : 3;
   display.setFont(&FreeMonoBold9pt7b);
+  if (display.epd2.WIDTH < 104) display.setFont(0);
   display.setTextColor(GxEPD_BLACK);
   // show where the update box is
   for (uint16_t r = 0; r < 4; r++)
@@ -646,6 +660,9 @@ void showPartialUpdate()
 void drawBitmaps()
 {
   display.setFullWindow();
+#ifdef _GxBitmaps80x128_H_
+  drawBitmaps80x128();
+#endif
 #ifdef _GxBitmaps152x152_H_
   drawBitmaps152x152();
 #endif
@@ -719,6 +736,45 @@ void drawBitmaps()
 #endif
   }
 }
+
+#ifdef _GxBitmaps80x128_H_
+void drawBitmaps80x128()
+{
+#if !defined(__AVR)
+  const unsigned char* bitmaps[] =
+  {
+    Bitmap80x128_1, Bitmap80x128_2, Bitmap80x128_3, Bitmap80x128_4, Bitmap80x128_5
+  };
+#else
+  const unsigned char* bitmaps[] =
+  {
+    Bitmap80x128_1, Bitmap80x128_2, Bitmap80x128_3, Bitmap80x128_4, Bitmap80x128_5
+  };
+#endif
+  if ((display.epd2.WIDTH == 80) && (display.epd2.HEIGHT == 128))
+  {
+    for (uint16_t i = 0; i < sizeof(bitmaps) / sizeof(char*); i++)
+    {
+      display.firstPage();
+      do
+      {
+        display.fillScreen(GxEPD_WHITE);
+        display.drawInvertedBitmap(0, 0, bitmaps[i], 80, 128, GxEPD_BLACK);
+      }
+      while (display.nextPage());
+      delay(2000);
+    }
+    display.firstPage();
+    do
+    {
+      display.fillScreen(GxEPD_WHITE);
+      display.drawBitmap(0, 0, WS_Bitmap80x128, 80, 128, GxEPD_BLACK);
+    }
+    while (display.nextPage());
+    delay(2000);
+  }
+}
+#endif
 
 #ifdef _GxBitmaps152x152_H_
 void drawBitmaps152x152()

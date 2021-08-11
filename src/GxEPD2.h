@@ -35,6 +35,7 @@ class GxEPD2
   public:
     enum Panel
     {
+      GDEW0102T4, Waveshare_1_02_bw = GDEW0102T4,
       GDEP015OC1, Waveshare_1_54_bw = GDEP015OC1,
       GDEH0154D67, Waveshare_1_54_bw_D67 = GDEH0154D67,
       GDEW0154T8,

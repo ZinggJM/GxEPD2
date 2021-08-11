@@ -13,6 +13,7 @@
 // Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
 // Good Display ePaper for Arduino: https://forum.arduino.cc/index.php?topic=436411.0
 
+#define GxEPD2_102_IS_BW true
 #define GxEPD2_154_IS_BW true
 #define GxEPD2_154_D67_IS_BW true
 #define GxEPD2_154_T8_IS_BW true
