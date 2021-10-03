@@ -49,6 +49,7 @@
 #include "epd/GxEPD2_290.h"
 #include "epd/GxEPD2_290_T5.h"
 #include "epd/GxEPD2_290_T5D.h"
+#include "epd/GxEPD2_290_I6FD.h"
 #include "epd/GxEPD2_290_M06.h"
 #include "epd/GxEPD2_290_T94.h"
 #include "epd/GxEPD2_290_T94_V2.h"

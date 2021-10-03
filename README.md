@@ -72,6 +72,7 @@
 - GDEH029A1      2.9" b/w
 - GDEW029T5      2.9" b/w
 - GDEW029T5D     2.9" b/w
+- GDEW029I6FD    2.9" b/w flexible
 - GDEM029T94     2.9" b/w
 - GDEW029M06     2.9" b/w DES
 - GDEW029Z10     2.9" b/w/r
@@ -85,6 +86,7 @@
 - GDEW042T2      4.2" b/w
 - GDEW042M01     4.2" b/w DES
 - GDEW042Z15     4.2" b/w/r
+- GDEQ042Z21     4.2" b/w/r (Waveshare V2)
 - ACeP565        5.65" Waveshare 5.65" 7-color e-paper display 600x448
 - GDEW0583T7     5.83" b/w
 - GDEW0583T8     5.83" b/w 648x460
@@ -105,7 +107,12 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.3.7
+### Version 1.3.8
+- added support for GDEQ042Z21 4.2" b/w/r 400x300 panel or Waveshare 4.2" V2 b/w/r board
+- the Waveshare 4.2" V2 b/w/r board requires the shortened reset pulse
+- added support for GDEW029I6FD 2.9" b/w 128x296 flexible board
+- some fixes and improvement for the new style panel selection
+#### Version 1.3.7
 - added support for GDEW0102T4 1.02" b/w 80x128 panel or Waveshare 1.02" b/w board
 - the GDEW0102T4 panel has a different connector than the other SPI panels
 - the GDEW0102T4 panel can be used with the DESPI-C102 connection module

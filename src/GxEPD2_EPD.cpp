@@ -66,6 +66,10 @@ void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset
     pinMode(_busy, INPUT);
   }
   SPI.begin();
+  if (_busy == MISO) // may be overridden, to be verified
+  {
+    pinMode(_busy, INPUT);
+  }
 }
 
 void GxEPD2_EPD::_reset()
