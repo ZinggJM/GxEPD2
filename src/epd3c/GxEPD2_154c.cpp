@@ -20,7 +20,7 @@ const uint8_t GxEPD2_154c::bw2grey[] =
   0b11110000, 0b11110011, 0b11111100, 0b11111111,
 };
 
-GxEPD2_154c::GxEPD2_154c(int8_t cs, int8_t dc, int8_t rst, int8_t busy) :
+GxEPD2_154c::GxEPD2_154c(int16_t cs, int16_t dc, int16_t rst, int16_t busy) :
   GxEPD2_EPD(cs, dc, rst, busy, LOW, 20000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate)
 {
   _paged = false;

@@ -37,7 +37,7 @@
 // or select the display class and display driver class in the following file (new style):
 #include "GxEPD2_display_selection_new_style.h"
 
-#if !defined(__AVR) && !defined(_BOARD_GENERIC_STM32F103C_H_)
+#if !defined(__AVR) && !defined(_BOARD_GENERIC_STM32F103C_H_) && !defined(ARDUINO_BLUEPILL_F103C8)
 
 // note 16.11.2019: the compiler may exclude code based on constant if statements (display.epd2.panel == constant),
 //                  therefore bitmaps may get optimized out by the linker

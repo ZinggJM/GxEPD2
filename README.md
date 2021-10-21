@@ -107,7 +107,10 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.3.8
+### Version 1.3.9
+- fix for STM32 official package pin number range (int16_t)
+- fix for refresh(int16_t x, int16_t y, int16_t w, int16_t h) methods screen intersection
+#### Version 1.3.8
 - added support for GDEQ042Z21 4.2" b/w/r 400x300 panel or Waveshare 4.2" V2 b/w/r board
 - the Waveshare 4.2" V2 b/w/r board requires the shortened reset pulse
 - added support for GDEW029I6FD 2.9" b/w 128x296 flexible board

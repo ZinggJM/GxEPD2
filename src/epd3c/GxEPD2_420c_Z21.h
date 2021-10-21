@@ -32,7 +32,7 @@ class GxEPD2_420c_Z21 : public GxEPD2_EPD
     static const uint16_t full_refresh_time = 16000; // ms, e.g. 15171828us
     static const uint16_t partial_refresh_time = 16000; // ms, e.g. 15171828us
     // constructor
-    GxEPD2_420c_Z21(int8_t cs, int8_t dc, int8_t rst, int8_t busy);
+    GxEPD2_420c_Z21(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
     // methods (virtual)
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     void clearScreen(uint8_t value = 0xFF); // init controller memory and screen (default white)

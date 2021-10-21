@@ -33,17 +33,17 @@ class GxEPD2_1248 : public GxEPD2_EPD
     // constructors
 #if defined(ESP32)
     // general constructor for use with all parameters on ESP32, e.g. for Waveshare ESP32 driver board mounted on connection board
-    GxEPD2_1248(int8_t sck, int8_t miso, int8_t mosi,
-                int8_t cs_m1, int8_t cs_s1, int8_t cs_m2, int8_t cs_s2,
-                int8_t dc1, int8_t dc2, int8_t rst1, int8_t rst2,
-                int8_t busy_m1, int8_t busy_s1, int8_t busy_m2, int8_t busy_s2);
+    GxEPD2_1248(int16_t sck, int16_t miso, int16_t mosi,
+                int16_t cs_m1, int16_t cs_s1, int16_t cs_m2, int16_t cs_s2,
+                int16_t dc1, int16_t dc2, int16_t rst1, int16_t rst2,
+                int16_t busy_m1, int16_t busy_s1, int16_t busy_m2, int16_t busy_s2);
 #endif
     // general constructor for use with standard SPI pins, default SCK, MISO and MOSI
-    GxEPD2_1248(int8_t cs_m1, int8_t cs_s1, int8_t cs_m2, int8_t cs_s2,
-                int8_t dc1, int8_t dc2, int8_t rst1, int8_t rst2,
-                int8_t busy_m1, int8_t busy_s1, int8_t busy_m2, int8_t busy_s2);
+    GxEPD2_1248(int16_t cs_m1, int16_t cs_s1, int16_t cs_m2, int16_t cs_s2,
+                int16_t dc1, int16_t dc2, int16_t rst1, int16_t rst2,
+                int16_t busy_m1, int16_t busy_s1, int16_t busy_m2, int16_t busy_s2);
     // constructor with minimal parameter set, standard SPI, dc1 and dc2, rst1 and rst2 to one pin, one busy used (can be -1)
-    GxEPD2_1248(int8_t cs_m1, int8_t cs_s1, int8_t cs_m2, int8_t cs_s2, int8_t dc, int8_t rst, int8_t busy);
+    GxEPD2_1248(int16_t cs_m1, int16_t cs_s1, int16_t cs_m2, int16_t cs_s2, int16_t dc, int16_t rst, int16_t busy);
     // methods (virtual)
     void init(uint32_t serial_diag_bitrate = 0); // serial_diag_bitrate = 0 : disabled
     void init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration = 20, bool pulldown_rst_mode = false);
@@ -99,9 +99,9 @@ class GxEPD2_1248 : public GxEPD2_EPD
     friend class GDEW1248T3_OTP;
     void _readController(uint8_t cmd, uint8_t* data, uint16_t n, int8_t cs = -1, int8_t dc = -1);
   private:
-    int8_t _sck, _miso, _mosi, _dc1, _dc2, _rst1, _rst2;
-    int8_t _cs_m1, _cs_s1, _cs_m2, _cs_s2;
-    int8_t _busy_m1, _busy_s1, _busy_m2, _busy_s2;
+    int16_t _sck, _miso, _mosi, _dc1, _dc2, _rst1, _rst2;
+    int16_t _cs_m1, _cs_s1, _cs_m2, _cs_s2;
+    int16_t _busy_m1, _busy_s1, _busy_m2, _busy_s2;
     int8_t _temperature;
     static const unsigned char lut_20_LUTC_partial[];
     static const unsigned char lut_21_LUTWW_partial[];
@@ -113,7 +113,7 @@ class GxEPD2_1248 : public GxEPD2_EPD
     class ScreenPart
     {
       public:
-        ScreenPart(uint16_t width, uint16_t height, bool rev_scan, int8_t cs, int8_t dc);
+        ScreenPart(uint16_t width, uint16_t height, bool rev_scan, int16_t cs, int16_t dc);
         void writeScreenBuffer(uint8_t command, uint8_t value = 0xFF); // init controller memory current (default white)
         void writeImagePart(uint8_t command, const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
                             int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false);
@@ -128,7 +128,7 @@ class GxEPD2_1248 : public GxEPD2_EPD
         const uint16_t WIDTH, HEIGHT;
       private:
         bool _rev_scan;
-        int8_t _cs, _dc;
+        int16_t _cs, _dc;
         const SPISettings _spi_settings;
     };
     ScreenPart M1, S1, M2, S2;

@@ -15,10 +15,10 @@
 
 #if defined(ESP32)
 // general constructor for use with all parameters on ESP32, e.g. for Waveshare ESP32 driver board mounted on connection board
-GxEPD2_1248::GxEPD2_1248(int8_t sck, int8_t miso, int8_t mosi,
-                         int8_t cs_m1, int8_t cs_s1, int8_t cs_m2, int8_t cs_s2,
-                         int8_t dc1, int8_t dc2, int8_t rst1, int8_t rst2,
-                         int8_t busy_m1, int8_t busy_s1, int8_t busy_m2, int8_t busy_s2) :
+GxEPD2_1248::GxEPD2_1248(int16_t sck, int16_t miso, int16_t mosi,
+                         int16_t cs_m1, int16_t cs_s1, int16_t cs_m2, int16_t cs_s2,
+                         int16_t dc1, int16_t dc2, int16_t rst1, int16_t rst2,
+                         int16_t busy_m1, int16_t busy_s1, int16_t busy_m2, int16_t busy_s2) :
   GxEPD2_EPD(cs_m1, dc1, rst1, busy_m1, LOW, 10000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate),
   _sck(sck), _miso(miso), _mosi(mosi), _dc1(dc1), _dc2(dc2), _rst1(rst1), _rst2(rst2),
   _cs_m1(cs_m1), _cs_s1(cs_s1), _cs_m2(cs_m2), _cs_s2(cs_s2),
@@ -33,9 +33,9 @@ GxEPD2_1248::GxEPD2_1248(int8_t sck, int8_t miso, int8_t mosi,
 #endif
 
 // general constructor for use with standard SPI pins, default SCK, MISO and MOSI
-GxEPD2_1248::GxEPD2_1248(int8_t cs_m1, int8_t cs_s1, int8_t cs_m2, int8_t cs_s2,
-                         int8_t dc1, int8_t dc2, int8_t rst1, int8_t rst2,
-                         int8_t busy_m1, int8_t busy_s1, int8_t busy_m2, int8_t busy_s2) :
+GxEPD2_1248::GxEPD2_1248(int16_t cs_m1, int16_t cs_s1, int16_t cs_m2, int16_t cs_s2,
+                         int16_t dc1, int16_t dc2, int16_t rst1, int16_t rst2,
+                         int16_t busy_m1, int16_t busy_s1, int16_t busy_m2, int16_t busy_s2) :
   GxEPD2_EPD(cs_m1, dc1, rst1, busy_m1, LOW, 10000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate),
   _sck(SCK), _miso(MISO), _mosi(MOSI), _dc1(dc1), _dc2(dc2), _rst1(rst1), _rst2(rst2),
   _cs_m1(cs_m1), _cs_s1(cs_s1), _cs_m2(cs_m2), _cs_s2(cs_s2),
@@ -49,7 +49,7 @@ GxEPD2_1248::GxEPD2_1248(int8_t cs_m1, int8_t cs_s1, int8_t cs_m2, int8_t cs_s2,
 }
 
 // constructor with minimal parameter set, standard SPI, dc1 and dc2, rst1 and rst2 to one pin, one busy used (can be -1)
-GxEPD2_1248::GxEPD2_1248(int8_t cs_m1, int8_t cs_s1, int8_t cs_m2, int8_t cs_s2, int8_t dc, int8_t rst, int8_t busy) :
+GxEPD2_1248::GxEPD2_1248(int16_t cs_m1, int16_t cs_s1, int16_t cs_m2, int16_t cs_s2, int16_t dc, int16_t rst, int16_t busy) :
   GxEPD2_EPD(23, 25, 33, 32, LOW, 10000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate),
   _sck(SCK), _miso(MISO), _mosi(MOSI), _dc1(dc), _dc2(dc), _rst1(rst), _rst2(rst),
   _cs_m1(cs_m1), _cs_s1(cs_s1), _cs_m2(cs_m2), _cs_s2(cs_s2),
@@ -702,7 +702,7 @@ void GxEPD2_1248::_readController(uint8_t cmd, uint8_t* data, uint16_t n, int8_t
   _initSPI();
 }
 
-GxEPD2_1248::ScreenPart::ScreenPart(uint16_t width, uint16_t height, bool rev_scan, int8_t cs, int8_t dc) :
+GxEPD2_1248::ScreenPart::ScreenPart(uint16_t width, uint16_t height, bool rev_scan, int16_t cs, int16_t dc) :
   WIDTH(width), HEIGHT(height), _rev_scan(rev_scan),
   _cs(cs), _dc(dc), _spi_settings(4000000, MSBFIRST, SPI_MODE0)
 {

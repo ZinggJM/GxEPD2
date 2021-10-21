@@ -55,7 +55,7 @@
 #define MCSR_BASE_ADDR 0x0200
 #define LISAR (MCSR_BASE_ADDR + 0x0008)
 
-GxEPD2_it60::GxEPD2_it60(int8_t cs, int8_t dc, int8_t rst, int8_t busy) :
+GxEPD2_it60::GxEPD2_it60(int16_t cs, int16_t dc, int16_t rst, int16_t busy) :
   GxEPD2_EPD(cs, dc, rst, busy, LOW, 10000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate),
   _spi_settings(24000000, MSBFIRST, SPI_MODE0),
   _spi_settings_for_read(1000000, MSBFIRST, SPI_MODE0)

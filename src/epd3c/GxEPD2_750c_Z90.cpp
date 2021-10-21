@@ -13,7 +13,7 @@
 
 #include "GxEPD2_750c_Z90.h"
 
-GxEPD2_750c_Z90::GxEPD2_750c_Z90(int8_t cs, int8_t dc, int8_t rst, int8_t busy) :
+GxEPD2_750c_Z90::GxEPD2_750c_Z90(int16_t cs, int16_t dc, int16_t rst, int16_t busy) :
   GxEPD2_EPD(cs, dc, rst, busy, HIGH, 25000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate)
 {
 }

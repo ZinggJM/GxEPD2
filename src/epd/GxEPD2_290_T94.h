@@ -31,7 +31,7 @@ class GxEPD2_290_T94 : public GxEPD2_EPD
     static const uint16_t full_refresh_time = 3200; // ms, e.g. 3154996us
     static const uint16_t partial_refresh_time = 500; // ms, e.g. 458231us
     // constructor
-    GxEPD2_290_T94(int8_t cs, int8_t dc, int8_t rst, int8_t busy);
+    GxEPD2_290_T94(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
     // methods (virtual)
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     void clearScreen(uint8_t value = 0xFF); // init controller memory and screen (default white)

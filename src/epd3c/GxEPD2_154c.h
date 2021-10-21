@@ -30,7 +30,7 @@ class GxEPD2_154c : public GxEPD2_EPD
     static const uint16_t full_refresh_time = 7500; // ms, e.g. 7135635us
     static const uint16_t partial_refresh_time = 7500; // ms, e.g. 7135635us
     // constructor
-    GxEPD2_154c(int8_t cs, int8_t dc, int8_t rst, int8_t busy);
+    GxEPD2_154c(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
     // methods (virtual)
     void init(uint32_t serial_diag_bitrate = 0); // = 0 : disabled
     void init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration = 20, bool pulldown_rst_mode = false);

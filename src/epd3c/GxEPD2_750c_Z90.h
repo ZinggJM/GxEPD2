@@ -33,7 +33,7 @@ class GxEPD2_750c_Z90 : public GxEPD2_EPD
     static const uint16_t partial_refresh_time = 25000; // ms, e.g. 22780001us
     static const uint8_t entry_mode = 0x03; // 0x03:normal, 0x00:rotated 180, 0x01,0x02:flipped
     // constructor
-    GxEPD2_750c_Z90(int8_t cs, int8_t dc, int8_t rst, int8_t busy);
+    GxEPD2_750c_Z90(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
     // methods (virtual)
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     void clearScreen(uint8_t value = 0xFF); // init controller memory and screen (default white)

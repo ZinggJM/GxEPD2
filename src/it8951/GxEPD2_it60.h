@@ -40,7 +40,7 @@ class GxEPD2_it60 : public GxEPD2_EPD
     static const uint16_t diag_min_time = 3; // ms, e.g. > refresh_par_time
     static const uint16_t set_vcom_time = 40; // ms, e.g. 37833us
     // constructor
-    GxEPD2_it60(int8_t cs, int8_t dc, int8_t rst, int8_t busy);
+    GxEPD2_it60(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
     // methods (virtual)
     void init(uint32_t serial_diag_bitrate = 0); // serial_diag_bitrate = 0 : disabled
     void init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration = 20, bool pulldown_rst_mode = false);
