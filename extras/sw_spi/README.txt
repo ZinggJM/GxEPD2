@@ -7,16 +7,16 @@ This is a workaround and not very elegant, therefore it is provided as a replace
 To use SW SPI with GxEPD2:
 - copy the files GxEPD2_EPD.h and GxEPD2_EPD.cpp from the subdirectoy .src to the .src directory of the library.
 - add the special call to the added init method BEFORE the normal init method:
-  display.epd2.init(SW_SCK, SW_MOSI, 115200, true, false); // define or replace SW_SCK, SW_MOSI
+  display.epd2.init(SW_SCK, SW_MOSI, 115200, true, 20, false); // define or replace SW_SCK, SW_MOSI
   display.init(115200); // needed to init upper level
   
 To use the modified library with HW SPI
   - comment out the special init call:
-  //display.epd2.init(SW_SCK, SW_MOSI, 115200, true, false); // define or replace SW_SCK, SW_MOSI
+  //display.epd2.init(SW_SCK, SW_MOSI, 115200, true, 20, false); // define or replace SW_SCK, SW_MOSI
   display.init(115200);
 
 To switch back to using HW SPI during run time
-  display.epd2.init(-1, -1, 115200, true, false); // revert to HW SPI
+  display.epd2.init(-1, -1, 115200, true, 20, false); // revert to HW SPI
   display.init(115200); // needed to init upper level
 
 The SW SPI allows also to read through MOSI pin from DIN of e-paper controller
