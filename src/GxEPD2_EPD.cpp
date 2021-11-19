@@ -29,14 +29,16 @@ GxEPD2_EPD::GxEPD2_EPD(int16_t cs, int16_t dc, int16_t rst, int16_t busy, int16_
   _using_partial_mode = false;
   _hibernating = false;
   _reset_duration = 20;
+  _reset_delay = 200;
+  _busy_light_sleep = false;
 }
 
 void GxEPD2_EPD::init(uint32_t serial_diag_bitrate)
 {
-  init(serial_diag_bitrate, true, 20, false);
+  init(serial_diag_bitrate, true, 20, false, 200, false);
 }
 
-void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration, bool pulldown_rst_mode)
+void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration, bool pulldown_rst_mode, uint16_t reset_delay, bool light_sleep)
 {
   _initial_write = initial;
   _initial_refresh = initial;
@@ -45,6 +47,8 @@ void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset
   _using_partial_mode = false;
   _hibernating = false;
   _reset_duration = reset_duration;
+  _reset_delay = reset_delay;
+  _busy_light_sleep = light_sleep;
   if (serial_diag_bitrate > 0)
   {
     Serial.begin(serial_diag_bitrate);
@@ -82,7 +86,6 @@ void GxEPD2_EPD::_reset()
       pinMode(_rst, OUTPUT);
       delay(_reset_duration);
       pinMode(_rst, INPUT_PULLUP);
-      delay(200);
     }
     else
     {
@@ -92,8 +95,8 @@ void GxEPD2_EPD::_reset()
       digitalWrite(_rst, LOW);
       delay(_reset_duration);
       digitalWrite(_rst, HIGH);
-      delay(200);
     }
+    delay(_reset_delay);
     _hibernating = false;
   }
 }
@@ -102,9 +105,12 @@ void GxEPD2_EPD::_waitWhileBusy(const char* comment, uint16_t busy_time)
 {
   if (_busy >= 0)
   {
-    delay(1); // add some margin to become active
     unsigned long start = micros();
-    while (1)
+    if (_busy_light_sleep) {
+      gpio_wakeup_enable((gpio_num_t)_busy, _busy_level != HIGH ? GPIO_INTR_HIGH_LEVEL : GPIO_INTR_LOW_LEVEL);
+      esp_sleep_enable_gpio_wakeup();
+      esp_light_sleep_start();
+    } else while (1)
     {
       if (digitalRead(_busy) != _busy_level) break;
       delay(1);

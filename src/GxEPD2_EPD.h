@@ -33,7 +33,7 @@ class GxEPD2_EPD
     GxEPD2_EPD(int16_t cs, int16_t dc, int16_t rst, int16_t busy, int16_t busy_level, uint32_t busy_timeout,
                uint16_t w, uint16_t h, GxEPD2::Panel p, bool c, bool pu, bool fpu);
     virtual void init(uint32_t serial_diag_bitrate = 0); // serial_diag_bitrate = 0 : disabled
-    virtual void init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration = 20, bool pulldown_rst_mode = false);
+    virtual void init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration = 20, bool pulldown_rst_mode = false, uint16_t reset_delay = 200, bool light_sleep = false);
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     virtual void clearScreen(uint8_t value) = 0; // init controller memory and screen (default white)
     virtual void writeScreenBuffer(uint8_t value) = 0; // init controller memory (default white)
@@ -106,11 +106,11 @@ class GxEPD2_EPD
   protected:
     int16_t _cs, _dc, _rst, _busy, _busy_level;
     uint32_t _busy_timeout;
-    bool _diag_enabled, _pulldown_rst_mode;
+    bool _diag_enabled, _pulldown_rst_mode, _busy_light_sleep;
     SPISettings _spi_settings;
     bool _initial_write, _initial_refresh;
     bool _power_is_on, _using_partial_mode, _hibernating;
-    uint16_t _reset_duration;
+    uint16_t _reset_duration, _reset_delay;
 };
 
 #endif
