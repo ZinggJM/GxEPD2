@@ -246,6 +246,13 @@ void GxEPD2_EPD::_transfer(uint8_t value)
   SPI.transfer(value);
 }
 
+void GxEPD2_EPD::_transferCommand(uint8_t value)
+{
+  if (_dc >= 0) digitalWrite(_dc, LOW);
+  SPI.transfer(value);
+  if (_dc >= 0) digitalWrite(_dc, HIGH);
+}
+
 void GxEPD2_EPD::_endTransfer()
 {
   if (_cs >= 0) digitalWrite(_cs, HIGH);
