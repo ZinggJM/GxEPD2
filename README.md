@@ -111,8 +111,8 @@
 - changed the default reset duration to 10ms instead of 20ms
 - changed the delay after reset to 10ms or reset duration, whichever is higher, instead of 200ms
 - added a busyCallback feature, to allow to service periodic actions during wait for BUSY termination
-  ` // register a callback function to be called during _waitWhileBusy continuously. `
-  ` void setBusyCallback(void (*busyCallback)(const void*), const void* busy_callback_parameter = 0); `
+- ` // register a callback function to be called during _waitWhileBusy continuously. `
+- ` void setBusyCallback(void (*busyCallback)(const void*), const void* busy_callback_parameter = 0); `
 - added example GxEPD2_RotaryUsingBusyCallback.ino
 #### Version 1.3.9
 - fix for STM32 official package pin number range (int16_t)
