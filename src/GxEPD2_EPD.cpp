@@ -28,12 +28,14 @@ GxEPD2_EPD::GxEPD2_EPD(int16_t cs, int16_t dc, int16_t rst, int16_t busy, int16_
   _power_is_on = false;
   _using_partial_mode = false;
   _hibernating = false;
-  _reset_duration = 20;
+  _reset_duration = 10;
+  _busy_callback = 0;
+  _busy_callback_parameter = 0;
 }
 
 void GxEPD2_EPD::init(uint32_t serial_diag_bitrate)
 {
-  init(serial_diag_bitrate, true, 20, false);
+  init(serial_diag_bitrate, true, 10, false);
 }
 
 void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration, bool pulldown_rst_mode)
@@ -72,6 +74,12 @@ void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset
   }
 }
 
+void GxEPD2_EPD::setBusyCallback(void (*busyCallback)(const void*), const void* busy_callback_parameter)
+{
+  _busy_callback = busyCallback;
+  _busy_callback_parameter = busy_callback_parameter;
+}
+
 void GxEPD2_EPD::_reset()
 {
   if (_rst >= 0)
@@ -82,17 +90,16 @@ void GxEPD2_EPD::_reset()
       pinMode(_rst, OUTPUT);
       delay(_reset_duration);
       pinMode(_rst, INPUT_PULLUP);
-      delay(200);
+      delay(_reset_duration > 10 ? _reset_duration : 10);
     }
     else
     {
       digitalWrite(_rst, HIGH);
       pinMode(_rst, OUTPUT);
-      delay(20);
       digitalWrite(_rst, LOW);
       delay(_reset_duration);
       digitalWrite(_rst, HIGH);
-      delay(200);
+      delay(_reset_duration > 10 ? _reset_duration : 10);
     }
     _hibernating = false;
   }
@@ -107,12 +114,17 @@ void GxEPD2_EPD::_waitWhileBusy(const char* comment, uint16_t busy_time)
     while (1)
     {
       if (digitalRead(_busy) != _busy_level) break;
-      delay(1);
+      if (_busy_callback) _busy_callback(_busy_callback_parameter);
+      else delay(1);
+      if (digitalRead(_busy) != _busy_level) break;
       if (micros() - start > _busy_timeout)
       {
         Serial.println("Busy Timeout!");
         break;
       }
+#if defined(ESP8266) || defined(ESP32)
+      yield(); // avoid wdt
+#endif
     }
     if (comment)
     {

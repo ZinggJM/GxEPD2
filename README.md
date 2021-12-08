@@ -107,7 +107,14 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.3.9
+### Version 1.4.0
+- changed the default reset duration to 10ms instead of 20ms
+- changed the delay after reset to 10ms or reset duration, whichever is higher, instead of 200ms
+- added a busyCallback feature, to allow to service periodic actions during wait for BUSY termination
+  ` // register a callback function to be called during _waitWhileBusy continuously. `
+  ` void setBusyCallback(void (*busyCallback)(const void*), const void* busy_callback_parameter = 0); `
+- added example GxEPD2_RotaryUsingBusyCallback.ino
+#### Version 1.3.9
 - fix for STM32 official package pin number range (int16_t)
 - fix for refresh(int16_t x, int16_t y, int16_t w, int16_t h) methods screen intersection
 #### Version 1.3.8

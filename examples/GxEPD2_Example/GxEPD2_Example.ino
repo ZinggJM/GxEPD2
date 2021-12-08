@@ -98,7 +98,7 @@ void setup()
   Serial.println();
   Serial.println("setup");
   delay(100);
-  display.init(115200); // default 20ms reset pulse, e.g. for bare panels with DESPI-C02
+  display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
   //display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
   // first update should be full refresh
   helloWorld();
@@ -407,7 +407,7 @@ void helloValue(double v, int digits)
   uint16_t y = ((display.height() * 3 / 4) - tbh / 2) - tby; // y is base line!
   // show what happens, if we use the bounding box for partial window
   uint16_t wx = (display.width() - tbw) / 2;
-  uint16_t wy = ((display.height() * 3 / 4) - tbh / 2) - tby; // y is base line!
+  uint16_t wy = ((display.height() * 3 / 4) - tbh / 2);
   display.setPartialWindow(wx, wy, tbw, tbh);
   display.firstPage();
   do
