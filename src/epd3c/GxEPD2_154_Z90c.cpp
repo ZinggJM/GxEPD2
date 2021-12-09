@@ -70,7 +70,9 @@ void GxEPD2_154_Z90c::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, i
 void GxEPD2_154_Z90c::writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   if (_initial_write) writeScreenBuffer(); // initial full screen buffer clean
-  delay(1); // yield() to avoid WDT on ESP8266 and ESP32
+#if defined(ESP8266) || defined(ESP32)
+  yield(); // avoid wdt
+#endif
   int16_t wb = (w + 7) / 8; // width bytes, bitmaps are padded
   x -= x % 8; // byte boundary
   w = wb * 8; // byte boundary
@@ -85,7 +87,8 @@ void GxEPD2_154_Z90c::writeImage(const uint8_t* black, const uint8_t* color, int
   if ((w1 <= 0) || (h1 <= 0)) return;
   _Init_Part();
   _setPartialRamArea(x1, y1, w1, h1);
-  _writeCommand(0x24);
+  _startTransfer();
+  _transferCommand(0x24);
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -109,10 +112,10 @@ void GxEPD2_154_Z90c::writeImage(const uint8_t* black, const uint8_t* color, int
         }
         if (invert) data = ~data;
       }
-      _writeData(data);
+      _transfer(data);
     }
   }
-  _writeCommand(0x26);
+  _transferCommand(0x26);
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -136,10 +139,13 @@ void GxEPD2_154_Z90c::writeImage(const uint8_t* black, const uint8_t* color, int
         }
         if (invert) data = ~data;
       }
-      _writeData(~data);
+      _transfer(~data);
     }
   }
-  delay(1); // yield() to avoid WDT on ESP8266 and ESP32
+  _endTransfer();
+#if defined(ESP8266) || defined(ESP32)
+  yield(); // avoid wdt
+#endif
 }
 
 void GxEPD2_154_Z90c::writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
@@ -152,7 +158,9 @@ void GxEPD2_154_Z90c::writeImagePart(const uint8_t* black, const uint8_t* color,
                                      int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   if (_initial_write) writeScreenBuffer(); // initial full screen buffer clean
-  delay(1); // yield() to avoid WDT on ESP8266 and ESP32
+#if defined(ESP8266) || defined(ESP32)
+  yield(); // avoid wdt
+#endif
   if ((w_bitmap < 0) || (h_bitmap < 0) || (w < 0) || (h < 0)) return;
   if ((x_part < 0) || (x_part >= w_bitmap)) return;
   if ((y_part < 0) || (y_part >= h_bitmap)) return;
@@ -173,7 +181,8 @@ void GxEPD2_154_Z90c::writeImagePart(const uint8_t* black, const uint8_t* color,
   if ((w1 <= 0) || (h1 <= 0)) return;
   if (!_using_partial_mode) _Init_Part();
   _setPartialRamArea(x1, y1, w1, h1);
-  _writeCommand(0x24);
+  _startTransfer();
+  _transferCommand(0x24);
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -194,10 +203,10 @@ void GxEPD2_154_Z90c::writeImagePart(const uint8_t* black, const uint8_t* color,
         data = black[idx];
       }
       if (invert) data = ~data;
-      _writeData(data);
+      _transfer(data);
     }
   }
-  _writeCommand(0x26);
+  _transferCommand(0x26);
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -221,10 +230,13 @@ void GxEPD2_154_Z90c::writeImagePart(const uint8_t* black, const uint8_t* color,
         }
         if (invert) data = ~data;
       }
-      _writeData(~data);
+      _transfer(~data);
     }
   }
-  delay(1); // yield() to avoid WDT on ESP8266 and ESP32
+  _endTransfer();
+#if defined(ESP8266) || defined(ESP32)
+  yield(); // avoid wdt
+#endif
 }
 
 void GxEPD2_154_Z90c::writeNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
@@ -299,7 +311,7 @@ void GxEPD2_154_Z90c::powerOff()
 
 void GxEPD2_154_Z90c::hibernate()
 {
-  _PowerOff();
+  //_PowerOff(); // Not needed
   if (_rst >= 0)
   {
     _writeCommand(0x10); // deep sleep
@@ -312,28 +324,32 @@ void GxEPD2_154_Z90c::_setPartialRamArea(uint16_t x, uint16_t y, uint16_t w, uin
 {
   uint16_t xe = (x + w - 1);
   uint16_t ye = y + h - 1;
-  _writeCommand(0x44);
-  _writeData(x / 8);
-  _writeData(xe / 8);
-  _writeCommand(0x45);
-  _writeData(y % 256);
-  _writeData(y / 256);
-  _writeData(ye % 256);
-  _writeData(ye / 256);
-  _writeCommand(0x4E);
-  _writeData(x / 8);
-  _writeCommand(0x4F);
-  _writeData(y % 256);
-  _writeData(y / 256);
+  _startTransfer();
+  _transferCommand(0x44);
+  _transfer(x / 8);
+  _transfer(xe / 8);
+  _transferCommand(0x45);
+  _transfer(y % 256);
+  _transfer(y / 256);
+  _transfer(ye % 256);
+  _transfer(ye / 256);
+  _transferCommand(0x4E);
+  _transfer(x / 8);
+  _transferCommand(0x4F);
+  _transfer(y % 256);
+  _transfer(y / 256);
+  _endTransfer();
 }
 
 void GxEPD2_154_Z90c::_PowerOn()
 {
   if (!_power_is_on)
   {
-    _writeCommand(0x22);
-    _writeData(0xc0);
-    _writeCommand(0x20);
+    _startTransfer();
+    _transferCommand(0x22);
+    _transfer(0xc0);
+    _transferCommand(0x20);
+    _endTransfer();
     _waitWhileBusy("_PowerOn", power_on_time);
   }
   _power_is_on = true;
@@ -341,9 +357,11 @@ void GxEPD2_154_Z90c::_PowerOn()
 
 void GxEPD2_154_Z90c::_PowerOff()
 {
-  _writeCommand(0x22);
-  _writeData(0xc3);
-  _writeCommand(0x20);
+  _startTransfer();
+  _transferCommand(0x22);
+  _transfer(0xc3);
+  _transferCommand(0x20);
+  _endTransfer();
   _waitWhileBusy("_PowerOff", power_off_time);
   _power_is_on = false;
 }
@@ -352,17 +370,20 @@ void GxEPD2_154_Z90c::_InitDisplay()
 {
   if (_hibernating) _reset();
   _writeCommand(0x12);  //SWRESET
-  _waitWhileBusy(0, power_on_time);
-  _writeCommand(0x01); //Driver output control
-  _writeData(0xC7);
-  _writeData(0x00);
-  _writeData(0x00);
-  _writeCommand(0x11); //data entry mode
-  _writeData(0x03);
-  _writeCommand(0x3C); //BorderWavefrom
-  _writeData(0x05);
-  _writeCommand(0x18); //Read built-in temperature sensor
-  _writeData(0x80);
+  _waitWhileBusy("_SoftReset", power_on_time);
+
+  _startTransfer();
+  _transferCommand(0x01); //Driver output control
+  _transfer(0xC7);
+  _transfer(0x00);
+  _transfer(0x00);
+  _transferCommand(0x11); //data entry mode
+  _transfer(0x03);
+  _transferCommand(0x3C); //BorderWavefrom
+  _transfer(0x05);
+  _transferCommand(0x18); //Read built-in temperature sensor
+  _transfer(0x80);
+  _endTransfer();
   _setPartialRamArea(0, 0, WIDTH, HEIGHT);
 }
 
@@ -380,16 +401,20 @@ void GxEPD2_154_Z90c::_Init_Part()
 
 void GxEPD2_154_Z90c::_Update_Full()
 {
-  _writeCommand(0x22); //Display Update Control
-  _writeData(0xF7);
-  _writeCommand(0x20);  //Activate Display Update Sequence
+  _startTransfer();
+  _transferCommand(0x22); //Display Update Control
+  _transfer(0xF7);
+  _transferCommand(0x20);  //Activate Display Update Sequence
+  _endTransfer();
   _waitWhileBusy("_Update_Full", full_refresh_time);
 }
 
 void GxEPD2_154_Z90c::_Update_Part()
 {
-  _writeCommand(0x22); //Display Update Control
-  _writeData(0xF7);
-  _writeCommand(0x20);  //Activate Display Update Sequence
+  _startTransfer();
+  _transferCommand(0x22); //Display Update Control
+  _transfer(0xF7);
+  _transferCommand(0x20);  //Activate Display Update Sequence
+  _endTransfer();
   _waitWhileBusy("_Update_Part", partial_refresh_time);
 }
