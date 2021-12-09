@@ -44,6 +44,8 @@
 // define the pins to be used by the BasicEncoder
 const int8_t pinA = 5;  // D1 on my Wemos D1 mini
 const int8_t pinB = 16; // D0 on my Wemos D1 mini
+//const int8_t pinA = 2; // on UNO
+//const int8_t pinB = 3; // on UNO
 
 BasicEncoder encoder(pinA, pinB);
 
@@ -59,7 +61,8 @@ void setup()
   Serial.println();
   Serial.println("setup");
   delay(100);
-  display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
+  display.init(); // disable diagnostics to avoid delay and catch most rotary pulses
+  //display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
   //display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
   display.epd2.setBusyCallback(busyCallback); // register callback to be called during BUSY active time
   // first update should be full refresh
@@ -112,6 +115,7 @@ const char EncoderValue[] = "Encoder = ";
 class PrintString : public Print, public String
 {
   public:
+  PrintString(const char s[]) : String(s){};
     size_t write(uint8_t data) override
     {
       return concat(char(data));
