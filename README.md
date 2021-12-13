@@ -107,7 +107,9 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.4.0
+### Version 1.4.1
+- fix for Waveshare "clever" reset circuit: power controller before reset pulse
+#### Version 1.4.0
 - changed the default reset duration to 10ms instead of 20ms
 - changed the delay after reset to 10ms or reset duration, whichever is higher, instead of 200ms
 - added a busyCallback feature, to allow to service periodic actions during wait for BUSY termination
