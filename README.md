@@ -112,6 +112,7 @@
 - added support for Waveshare 3.7" b/w board and panel ED037TC1
 - waveform tables for ED037TC1 are taken unmodified from Waveshare demo code
 - refresh behavior with ED037TC1 with GxEPD2 is not perfect, could not be resolved
+- ISSUE RESOLVED: RESE needs to be 3 ohms on DESPI-C02 for this panel, Waveshare schematics is wrong
 - added differential refresh for GDEH116T91, waveform table taken from ED037TC1
 - differential refresh for GDEH116T91 looks ok; can be disabled with hasFastPartialUpdate = false
 - increased sustain phase for differential refresh on GDEW042T2
