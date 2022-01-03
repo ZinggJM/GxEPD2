@@ -398,7 +398,7 @@ const unsigned char GxEPD2_420::lut_24_bb_full[] PROGMEM =
 // new waveform created by Jean-Marc Zingg for the actual panel
 #define T1 25 // color change charge balance pre-phase
 #define T2  1 // color change or sustain charge balance pre-phase
-#define T3  2 // color change or sustain phase
+#define T3  4 // color change or sustain phase, was 2 before
 #define T4 25 // color change phase
 
 // for new waveform without sustain phase: uncomment next 2 lines, not good for fat fonts

@@ -55,6 +55,7 @@
 #include "epd/GxEPD2_290_T94_V2.h"
 #include "epd/GxEPD2_270.h"
 #include "epd/GxEPD2_371.h"
+#include "epd/GxEPD2_370_TC1.h"
 #include "epd/GxEPD2_420.h"
 #include "epd/GxEPD2_420_M01.h"
 #include "epd/GxEPD2_583.h"

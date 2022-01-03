@@ -2,8 +2,7 @@
 // Requires HW SPI and Adafruit_GFX. Caution: these e-papers require 3.3V supply AND data lines!
 //
 // based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
-// Controller: UC8151 (IL0373) : https://www.good-display.com/public/html/pdfjs/viewer/viewernew.html?file=https://v4.cecdn.yun300.cn/100001_1909185148/UC8151D.pdf
-// Controller: IL0373 (UC8151) : http://www.e-paper-display.com/download_detail/downloadsId=535.html
+// Controller: UC8151D : https://www.good-display.com/public/html/pdfjs/viewer/viewernew.html?file=https://v4.cecdn.yun300.cn/100001_1909185148/UC8151D.pdf
 //
 // Author: Jean-Marc Zingg
 //

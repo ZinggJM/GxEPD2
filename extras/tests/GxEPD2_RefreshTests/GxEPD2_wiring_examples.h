@@ -17,11 +17,13 @@
 // BUSY -> D2, RST -> D4, DC -> D3, CS -> D8, CLK -> D5, DIN -> D7, GND -> GND, 3.3V -> 3.3V
 // NOTE: connect 3.3k pull-down from D8 to GND if your board or shield has level converters
 // NOTE for ESP8266: using SS (GPIO15) for CS may cause boot mode problems, use different pin in case, or 4k7 pull-down
+// NOTE: connect 1k pull-up from D4 (RST) to 3.3V if your board or shield has the "clever" reset circuit, or use a different pin
 
 // mapping suggestion from Waveshare SPI e-Paper to generic ESP8266
 // BUSY -> GPIO4, RST -> GPIO2, DC -> GPIO0, CS -> GPIO15, CLK -> GPIO14, DIN -> GPIO13, GND -> GND, 3.3V -> 3.3V
 // NOTE: connect 3.3k pull-down from GPIO15 to GND if your board or shield has level converters
 // NOTE for ESP8266: using SS (GPIO15) for CS may cause boot mode problems, use different pin in case, or 3.3k pull-down
+// NOTE: connect 1k pull-up from GPIO2 (RST) to 3.3V if your board or shield has the "clever" reset circuit, or use a different pin
 
 // mapping of Waveshare e-Paper ESP8266 Driver Board, new version
 // BUSY -> GPIO5, RST -> GPIO2, DC -> GPIO4, CS -> GPIO15, CLK -> GPIO14, DIN -> GPIO13, GND -> GND, 3.3V -> 3.3V
@@ -62,10 +64,16 @@
 // mapping suggestion for Arduino MEGA
 // BUSY -> 7, RST -> 9, DC -> 8, CS-> 53, CLK -> 52, DIN -> 51
 
-// mapping suggestion for Arduino DUE
-// BUSY -> 7, RST -> 9, DC -> 8, CS-> 77, CLK -> 76, DIN -> 75
-// SPI pins are on 6 pin 2x3 SPI header
+// mapping suggestion for Arduino DUE, note: pin 77 is on board pin 10, SS is 10
+// BUSY -> 7, RST -> 9, DC -> 8, CS-> 10, CLK -> 76, DIN -> 75
+// SPI pins are on 6 pin 2x3 SPI header, no SS on SPI header!
 
 // mapping suggestion for Arduino MKR1000 or MKRZERO
 // note: can't use SS on MKR1000: is defined as 24, should be 4
 // BUSY -> 5, RST -> 6, DC -> 7, CS-> 4, CLK -> 9, DIN -> 8
+
+// mapping suggestion for Arduino Nano RP2040 Connect
+// BUSY -> 7, RST -> 9, DC -> 8, CS-> 10, CLK -> 13, DIN -> 11
+
+// mapping suggestion for Raspberry Pi Pico RP2040
+// BUSY -> 7, RST -> 9, DC -> 8, CS-> 5, CLK -> 2, DIN -> 3

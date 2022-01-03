@@ -37,6 +37,7 @@
 #define GxEPD2_260_M01_IS_BW true
 #define GxEPD2_270_IS_BW true
 #define GxEPD2_371_IS_BW true
+#define GxEPD2_370_TC1_IS_BW true
 #define GxEPD2_420_IS_BW true
 #define GxEPD2_420_M01_IS_BW true
 #define GxEPD2_583_IS_BW true
@@ -45,6 +46,9 @@
 #define GxEPD2_750_T7_IS_BW true
 #define GxEPD2_1160_T91_IS_BW true
 #define GxEPD2_1248_IS_BW true
+#define GxEPD2_it60_IS_BW true
+#define GxEPD2_it60_1448x1072_IS_BW true
+#define GxEPD2_it78_1872x1404_IS_BW true
 // 3-color e-papers
 #define GxEPD2_154c_IS_3C true
 #define GxEPD2_154_Z90c_IS_3C true
@@ -74,7 +78,7 @@
 #if IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS) && IS_GxEPD2_DRIVER_BW(GxEPD2_DRIVER_CLASS)
 #error "GxEPD2_3C used with b/w driver class"
 #endif
-#if !IS_GxEPD2_DRIVER_BW(GxEPD2_DRIVER_CLASS) && !IS_GxEPD2_DRIVER_3C(GxEPD2_DRIVER_CLASS) && !IS_GxEPD2_DRIVER_3C(GxEPD2_DRIVER_CLASS)
+#if !IS_GxEPD2_DRIVER_BW(GxEPD2_DRIVER_CLASS) && !IS_GxEPD2_DRIVER_3C(GxEPD2_DRIVER_CLASS) && !IS_GxEPD2_DRIVER_7C(GxEPD2_DRIVER_CLASS)
 #error "neither BW nor 3C nor 7C kind defined for driver class (error in GxEPD2_selection_check.h)"
 #endif
 

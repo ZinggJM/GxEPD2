@@ -83,6 +83,7 @@
 - GDEW027C44     2.7" b/w/r
 - GDEW027W3      2.7" b/w
 - GDEW0371W7     3.7" b/w
+- ED037TC1       3.7" b/w 280x480 Waveshare 3.7"
 - GDEW042T2      4.2" b/w
 - GDEW042M01     4.2" b/w DES
 - GDEW042Z15     4.2" b/w/r
@@ -107,7 +108,14 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.4.1
+### Version 1.4.2
+- added support for Waveshare 3.7" b/w board and panel ED037TC1
+- waveform tables for ED037TC1 are taken unmodified from Waveshare demo code
+- refresh behavior with ED037TC1 with GxEPD2 is not perfect, could not be resolved
+- added differential refresh for GDEH116T91, waveform table taken from ED037TC1
+- differential refresh for GDEH116T91 looks ok; can be disabled with hasFastPartialUpdate = false
+- increased sustain phase for differential refresh on GDEW042T2
+#### Version 1.4.1
 - fix for Waveshare "clever" reset circuit: power controller before reset pulse
 #### Version 1.4.0
 - changed the default reset duration to 10ms instead of 20ms

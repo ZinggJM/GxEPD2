@@ -2,8 +2,9 @@
 // Requires HW SPI and Adafruit_GFX. Caution: the e-paper panels require 3.3V supply AND data lines!
 //
 // based on Demo Example from Good Display, available here: https://www.good-display.com/comp/xcompanyFile/downloadNew.do?appId=24&fid=553&id=374
-// Panel: GDEH116T91 : https://www.good-display.com/product/246.html
-// Controller : SSD1677 : https://v4.cecdn.yun300.cn/100001_1909185148/SSD1677.pdf
+// Panel: ED037TC1 : https://www.waveshare.com/product/displays/e-paper/3.7inch-e-paper.htm
+// Controller : SSD1677 : https://www.waveshare.com/w/upload/2/2a/SSD1677_1.0.pdf
+// code extracted for LUT and settings from https://github.com/waveshare/e-Paper
 //
 // Author: Jean-Marc Zingg
 //
@@ -11,27 +12,27 @@
 //
 // Library: https://github.com/ZinggJM/GxEPD2
 
-#ifndef _GxEPD2_1160_T91_H_
-#define _GxEPD2_1160_T91_H_
+#ifndef _GxEPD2_370_TC1_H_
+#define _GxEPD2_370_TC1_H_
 
 #include "../GxEPD2_EPD.h"
 
-class GxEPD2_1160_T91 : public GxEPD2_EPD
+class GxEPD2_370_TC1 : public GxEPD2_EPD
 {
   public:
     // attributes
-    static const uint16_t WIDTH = 960;
-    static const uint16_t HEIGHT = 640;
-    static const GxEPD2::Panel panel = GxEPD2::GDEH116T91;
+    static const uint16_t WIDTH = 280;
+    static const uint16_t HEIGHT = 480;
+    static const GxEPD2::Panel panel = GxEPD2::ED037TC1;
     static const bool hasColor = false;
     static const bool hasPartialUpdate = true;
-    static const bool hasFastPartialUpdate = true; // set false to disable differential refresh
-    static const uint16_t power_on_time = 100; // ms, e.g. 86001us
-    static const uint16_t power_off_time = 150; // ms, e.g. 140001us
-    static const uint16_t full_refresh_time = 6200; // ms, e.g. 6180001us
-    static const uint16_t partial_refresh_time = 700; // ms, e.g. 643732us, for hasFastPartialUpdate = true
+    static const bool hasFastPartialUpdate = true;
+    static const uint16_t power_on_time = 100; // ms, e.g. 81840us
+    static const uint16_t power_off_time = 150; // ms, e.g. 139415us
+    static const uint16_t full_refresh_time = 1000; // ms, e.g. 980416us
+    static const uint16_t partial_refresh_time = 800; // ms, e.g. 781379us
     // constructor
-    GxEPD2_1160_T91(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
+    GxEPD2_370_TC1(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
     // methods (virtual)
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     void clearScreen(uint8_t value = 0xFF); // init controller memory and screen (default white)
@@ -78,6 +79,7 @@ class GxEPD2_1160_T91 : public GxEPD2_EPD
     void _Update_Full();
     void _Update_Part();
   private:
+    static const uint8_t lut_full[];
     static const uint8_t lut_partial[];
 };
 
