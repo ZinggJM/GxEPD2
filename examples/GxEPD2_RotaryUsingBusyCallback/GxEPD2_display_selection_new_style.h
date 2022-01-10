@@ -207,8 +207,17 @@ GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> displ
 #elif IS_GxEPD2_7C(GxEPD2_DISPLAY_CLASS)
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2))
 #endif
+#if defined(ARDUINO_NANO_RP2040_CONNECT)
 // adapt the constructor parameters to your wiring
 GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
+#endif
+#if defined(ARDUINO_RASPBERRY_PI_PICO)
+// adapt the constructor parameters to your wiring
+//GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // my proto board
+// mapping of GoodDisplay DESPI-PICO. NOTE: uses alternate HW SPI pins!
+GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ 3, /*DC=*/ 2, /*RST=*/ 1, /*BUSY=*/ 0)); // DESPI-PICO
+//GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ 3, /*DC=*/ 2, /*RST=*/ 11, /*BUSY=*/ 10)); // DESPI-PICO modified
+#endif
 #endif
 
 #endif

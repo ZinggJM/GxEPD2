@@ -101,6 +101,7 @@ class GxEPD2_EPD
     {
       return (a > b ? a : b);
     };
+    void selectSPI(SPIClass& spi, SPISettings spi_settings){};
   protected:
     void _reset();
     void _writeDataPGM(const uint8_t* data, uint16_t n, int16_t fill_with_zeroes = 0);

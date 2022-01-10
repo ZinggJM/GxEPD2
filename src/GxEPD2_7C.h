@@ -123,6 +123,18 @@ class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
       setFullWindow();
     }
 
+    // init method with additional parameters:
+    // SPIClass& spi: either SPI or alternate HW SPI channel
+    // SPISettings spi_settings: e.g. for higher SPI speed selection
+    void init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration, bool pulldown_rst_mode, SPIClass& spi, SPISettings spi_settings)
+    {
+      epd2.selectSPI(spi, spi_settings);
+      epd2.init(serial_diag_bitrate, initial, reset_duration, pulldown_rst_mode);
+      _using_partial_mode = false;
+      _current_page = 0;
+      setFullWindow();
+    }
+
     void fillScreen(uint16_t color)
     {
       uint8_t pv = color7(color);

@@ -108,7 +108,15 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.4.2
+### Version 1.4.3
+- added option to select an alternate HW SPI channel and/or SPI settings
+- by method selectSPI(SPIClass& spi, SPISettings spi_settings) of driver base class GxEPD2_EPD
+- by calling selectSPI before calling init() of display class
+- or by calling extended init() method that has these parameters added
+- tested with RPi Pico RP2040 using Good Display DESPI-PICO connection shield
+- updated GxEPD2_Example to show use with DESPI-PICO
+- DESPI-PICO: see https://www.good-display.com/product/393.html
+#### Version 1.4.2
 - added support for Waveshare 3.7" b/w board and panel ED037TC1
 - waveform tables for ED037TC1 are taken unmodified from Waveshare demo code
 - refresh behavior with ED037TC1 with GxEPD2 is not perfect, could not be resolved

@@ -92,14 +92,28 @@
 
 #endif
 
+#if defined(ARDUINO_ARCH_RP2040) && defined(ARDUINO_RASPBERRY_PI_PICO)
+// SPI pins used by GoodDisplay DESPI-PICO. note: steals standard I2C pins PIN_WIRE_SDA (6), PIN_WIRE_SCL (7)
+// uncomment next line for use with GoodDisplay DESPI-PICO.
+arduino::MbedSPI SPI0(4, 7, 6); // need be valid pins for same SPI channel, else fails blinking 4 long 4 short
+#endif
+
 void setup()
 {
   Serial.begin(115200);
   Serial.println();
   Serial.println("setup");
   delay(100);
+#if defined(ARDUINO_ARCH_RP2040) && defined(ARDUINO_RASPBERRY_PI_PICO)
+  // uncomment next line for use with GoodDisplay DESPI-PICO, or use the extended init method
+  //display.epd2.selectSPI(SPI0, SPISettings(4000000, MSBFIRST, SPI_MODE0));
+  // uncomment next 2 lines to allow recovery from configuration failures
+  pinMode(15, INPUT_PULLUP); // safety pin
+  while (!digitalRead(15)) delay(100); // check safety pin for fail recovery
+#endif
   display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
   //display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
+  //display.init(115200, true, 10, false, SPI0, SPISettings(4000000, MSBFIRST, SPI_MODE0)); // extended init method with SPI channel and/or settings selection
   // first update should be full refresh
   helloWorld();
   delay(1000);
