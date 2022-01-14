@@ -1591,7 +1591,7 @@ void draw7colorlines()
       display.fillRect(0, y, display.width(), h, GxEPD_ORANGE); y += h;
       display.fillRect(0, y, display.width(), h, GxEPD_WHITE); y += h;
     }
-    while ((y + 12 * h) < display.height());
+    while ((y + 12 * h) < uint16_t(display.height()));
     //display.drawPixel(0, y, GxEPD_BLACK); display.drawPixel(10, y, GxEPD_GREEN);
     //display.drawPixel(20, y, GxEPD_BLUE); display.drawPixel(30, y, GxEPD_RED);
     //display.drawPixel(40, y, GxEPD_YELLOW); display.drawPixel(50, y, GxEPD_ORANGE);

@@ -94,7 +94,7 @@ void GxEPD2_154c::writeImage(const uint8_t* black, const uint8_t* color, int16_t
   //Serial.print("writeImage("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", ");
   //Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
-  if (_paged && (x == 0) && (w == WIDTH) && (h < HEIGHT))
+  if (_paged && (x == 0) && (w == int16_t(WIDTH)) && (h < int16_t(HEIGHT)))
   {
     //Serial.println("paged");
     if (!_second_phase)
@@ -128,22 +128,22 @@ void GxEPD2_154c::writeImage(const uint8_t* black, const uint8_t* color, int16_t
   else
   {
     _paged = false;
-    int16_t wb = (w + 7) / 8; // width bytes, bitmaps are padded
+    uint16_t wb = (w + 7) / 8; // width bytes, bitmaps are padded
     x -= x % 8; // byte boundary
     w = wb * 8; // byte boundary
     if ((w <= 0) || (h <= 0)) return;
     _Init_Full();
     _writeCommand(0x10);
-    for (int16_t i = 0; i < HEIGHT; i++)
+    for (int16_t i = 0; i < int16_t(HEIGHT); i++)
     {
-      for (int16_t j = 0; j < WIDTH; j += 8)
+      for (int16_t j = 0; j < int16_t(WIDTH); j += 8)
       {
         uint8_t data = 0xFF;
         if (black)
         {
           if ((j >= x) && (j <= x + w) && (i >= y) && (i < y + h))
           {
-            int16_t idx = mirror_y ? (j - x) / 8 + ((h - 1 - (i - y))) * wb : (j - x) / 8 + (i - y) * wb;
+            uint16_t idx = mirror_y ? (j - x) / 8 + ((h - 1 - (i - y))) * wb : (j - x) / 8 + (i - y) * wb;
             if (pgm)
             {
 #if defined(__AVR) || defined(ESP8266) || defined(ESP32)
@@ -165,16 +165,16 @@ void GxEPD2_154c::writeImage(const uint8_t* black, const uint8_t* color, int16_t
       }
     }
     _writeCommand(0x13);
-    for (int16_t i = 0; i < HEIGHT; i++)
+    for (int16_t i = 0; i < int16_t(HEIGHT); i++)
     {
-      for (int16_t j = 0; j < WIDTH; j += 8)
+      for (int16_t j = 0; j < int16_t(WIDTH); j += 8)
       {
         uint8_t data = 0xFF;
         if (color)
         {
           if ((j >= x) && (j <= x + w) && (i >= y) && (i < y + h))
           {
-            int16_t idx = mirror_y ? (j - x) / 8 + ((h - 1 - (i - y))) * wb : (j - x) / 8 + (i - y) * wb;
+            uint16_t idx = mirror_y ? (j - x) / 8 + ((h - 1 - (i - y))) * wb : (j - x) / 8 + (i - y) * wb;
             if (pgm)
             {
 #if defined(__AVR) || defined(ESP8266) || defined(ESP32)
@@ -227,9 +227,9 @@ void GxEPD2_154c::writeImagePart(const uint8_t* black, const uint8_t* color, int
   if ((w1 <= 0) || (h1 <= 0)) return;
   _Init_Full();
   _writeCommand(0x10);
-  for (int16_t i = 0; i < HEIGHT; i++)
+  for (int16_t i = 0; i < int16_t(HEIGHT); i++)
   {
-    for (int16_t j = 0; j < WIDTH; j += 8)
+    for (int16_t j = 0; j < int16_t(WIDTH); j += 8)
     {
       uint8_t data = 0xFF;
       if (black)
@@ -238,7 +238,7 @@ void GxEPD2_154c::writeImagePart(const uint8_t* black, const uint8_t* color, int
         {
           // use wb_bitmap, h_bitmap of bitmap for index!
           //int16_t idx = mirror_y ? x_part / 8 + j + dx / 8 + ((h_bitmap - 1 - (y_part + i + dy))) * wb_bitmap : x_part / 8 + j + dx / 8 + (y_part + i + dy) * wb_bitmap;
-          int16_t idx = mirror_y ? (x_part + j - x1) / 8 + ((h_bitmap - 1 - (y_part + i - y1))) * wb_bitmap : (x_part + j - x1) / 8 + (y_part + i - y1) * wb_bitmap;
+          uint16_t idx = mirror_y ? (x_part + j - x1) / 8 + ((h_bitmap - 1 - (y_part + i - y1))) * wb_bitmap : (x_part + j - x1) / 8 + (y_part + i - y1) * wb_bitmap;
           if (pgm)
           {
 #if defined(__AVR) || defined(ESP8266) || defined(ESP32)
@@ -260,9 +260,9 @@ void GxEPD2_154c::writeImagePart(const uint8_t* black, const uint8_t* color, int
     }
   }
   _writeCommand(0x13);
-  for (int16_t i = 0; i < HEIGHT; i++)
+  for (int16_t i = 0; i < int16_t(HEIGHT); i++)
   {
-    for (int16_t j = 0; j < WIDTH; j += 8)
+    for (int16_t j = 0; j < int16_t(WIDTH); j += 8)
     {
       uint8_t data = 0xFF;
       if (color)
@@ -270,7 +270,7 @@ void GxEPD2_154c::writeImagePart(const uint8_t* black, const uint8_t* color, int
         if ((j >= x1) && (j <= x1 + w) && (i >= y1) && (i < y1 + h))
         {
           // use wb_bitmap, h_bitmap of bitmap for index!
-          int16_t idx = mirror_y ? (x_part + j - x1) / 8 + ((h_bitmap - 1 - (y_part + i - y1))) * wb_bitmap : (x_part + j - x1) / 8 + (y_part + i - y1) * wb_bitmap;
+          uint16_t idx = mirror_y ? (x_part + j - x1) / 8 + ((h_bitmap - 1 - (y_part + i - y1))) * wb_bitmap : (x_part + j - x1) / 8 + (y_part + i - y1) * wb_bitmap;
           if (pgm)
           {
 #if defined(__AVR) || defined(ESP8266) || defined(ESP32)

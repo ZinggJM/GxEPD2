@@ -78,6 +78,10 @@
 //GxEPD2_BW<GxEPD2_it60, MAX_HEIGHT(GxEPD2_it60)> display(GxEPD2_it60(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
 //GxEPD2_BW<GxEPD2_it60_1448x1072, MAX_HEIGHT(GxEPD2_it60_1448x1072)> display(GxEPD2_it60_1448x1072(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
 //GxEPD2_BW<GxEPD2_it78_1872x1404, MAX_HEIGHT(GxEPD2_it78_1872x1404)> display(GxEPD2_it78_1872x1404(/*CS=10*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
+#undef MAX_DISPLAY_BUFFER_SIZE
+#undef MAX_HEIGHT
+#undef MAX_HEIGHT_3C
+#undef MAX_HEIGHT_7C
 #endif
 
 // Arduino MKR1000 or MKRZERO
@@ -146,6 +150,10 @@
 //GxEPD2_BW<GxEPD2_it60, MAX_HEIGHT(GxEPD2_it60)> display(GxEPD2_it60(/*CS=*/ 4, /*DC=*/ 7, /*RST=*/ 6, /*BUSY=*/ 5));
 //GxEPD2_BW<GxEPD2_it60_1448x1072, MAX_HEIGHT(GxEPD2_it60_1448x1072)> display(GxEPD2_it60_1448x1072(/*CS=*/ 4, /*DC=*/ 7, /*RST=*/ 6, /*BUSY=*/ 5));
 //GxEPD2_BW<GxEPD2_it78_1872x1404, MAX_HEIGHT(GxEPD2_it78_1872x1404)> display(GxEPD2_it78_1872x1404(/*CS=*/ 4, /*DC=*/ 7, /*RST=*/ 6, /*BUSY=*/ 5));
+#undef MAX_DISPLAY_BUFFER_SIZE
+#undef MAX_HEIGHT
+#undef MAX_HEIGHT_3C
+#undef MAX_HEIGHT_7C
 #endif
 
 // mapping suggestion for ESP32, e.g. LOLIN32 D32 PRO
@@ -386,6 +394,10 @@
 // 7-color e-paper
 #define MAX_HEIGHT_7C(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2)) // 2 pixel per byte
 //GxEPD2_7C<GxEPD2_565c, MAX_HEIGHT_7C(GxEPD2_565c)> display(GxEPD2_565c(/*CS=*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // Waveshare 5.65" 7-color
+#undef MAX_DISPLAY_BUFFER_SIZE
+#undef MAX_HEIGHT
+#undef MAX_HEIGHT_3C
+#undef MAX_HEIGHT_7C
 #endif
 
 #endif

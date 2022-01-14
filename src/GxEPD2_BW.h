@@ -128,12 +128,12 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
       x -= _pw_x;
       y -= _pw_y;
       // clip to (partial) window
-      if ((x < 0) || (x >= _pw_w) || (y < 0) || (y >= _pw_h)) return;
+      if ((x < 0) || (x >= int16_t(_pw_w)) || (y < 0) || (y >= int16_t(_pw_h))) return;
       // adjust for current page
       y -= _current_page * _page_height;
       if (_reverse) y = _page_height - y - 1;
       // check if in current page
-      if ((y < 0) || (y >= _page_height)) return;
+      if ((y < 0) || (y >= int16_t(_page_height))) return;
       uint16_t i = x / 8 + y * (_pw_w / 8);
       if (color)
         _buffer[i] = (_buffer[i] | (1 << (7 - x % 8)));
@@ -287,7 +287,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
       {
         //Serial.print("  nextPage("); Serial.print(_pw_x); Serial.print(", "); Serial.print(_pw_y); Serial.print(", ");
         //Serial.print(_pw_w); Serial.print(", "); Serial.print(_pw_h); Serial.print(") P"); Serial.println(_current_page);
-        uint16_t page_ye = _current_page < (_pages - 1) ? page_ys + _page_height : HEIGHT;
+        uint16_t page_ye = _current_page < int16_t(_pages - 1) ? page_ys + _page_height : HEIGHT;
         uint16_t dest_ys = _pw_y + page_ys; // transposed
         uint16_t dest_ye = gx_uint16_min(_pw_y + _pw_h, _pw_y + page_ye);
         if (dest_ye > dest_ys)
@@ -305,7 +305,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
           //Serial.print(dest_ys); Serial.print(".."); Serial.println(dest_ye);
         }
         _current_page++;
-        if (_current_page == _pages)
+        if (_current_page == int16_t(_pages))
         {
           _current_page = 0;
           if (!_second_phase)
@@ -328,7 +328,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
         if (!_second_phase) epd2.writeImageForFullRefresh(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
         else epd2.writeImageAgain(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
         _current_page++;
-        if (_current_page == _pages)
+        if (_current_page == int16_t(_pages))
         {
           _current_page = 0;
           if (epd2.hasFastPartialUpdate)

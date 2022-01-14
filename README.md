@@ -108,7 +108,9 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.4.3
+### Version 1.4.4
+- interim update to solve compiler warnings (ALL for GCC for AVR)
+#### Version 1.4.3
 - added option to select an alternate HW SPI channel and/or SPI settings
 - by method selectSPI(SPIClass& spi, SPISettings spi_settings) of driver base class GxEPD2_EPD
 - by calling selectSPI before calling init() of display class

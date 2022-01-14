@@ -89,7 +89,7 @@ void GxEPD2_it60_1448x1072::init(uint32_t serial_diag_bitrate, bool initial, uin
     //Show Device information of IT8951
     printf("Panel(W,H) = (%d,%d)\r\n",
            IT8951DevInfo.usPanelW, IT8951DevInfo.usPanelH );
-    printf("Image Buffer Address = %X\r\n",
+    printf("Image Buffer Address = %lX\r\n",
            uint32_t(IT8951DevInfo.usImgBufAddrL) | (uint32_t(IT8951DevInfo.usImgBufAddrH) << 16));
     //Show Firmware and LUT Version
     printf("FW Version = %s\r\n", (uint8_t*)IT8951DevInfo.usFWVersion);
@@ -100,9 +100,9 @@ void GxEPD2_it60_1448x1072::init(uint32_t serial_diag_bitrate, bool initial, uin
   if (VCOM != _IT8951GetVCOM())
   {
     _IT8951SetVCOM(VCOM);
-    printf("VCOM = -%.02fV\n", (float)_IT8951GetVCOM() / 1000);
+    printf("VCOM = -%.02fV\n", (double)_IT8951GetVCOM() / 1000);
   }
-  printf("VCOM = -%.02fV\n", (float)_IT8951GetVCOM() / 1000);
+  printf("VCOM = -%.02fV\n", (double)_IT8951GetVCOM() / 1000);
 }
 
 void GxEPD2_it60_1448x1072::clearScreen(uint8_t value)

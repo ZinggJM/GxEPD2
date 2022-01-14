@@ -253,6 +253,10 @@
 // 7-color e-paper
 #define MAX_HEIGHT_7C(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2)) // 2 pixel per byte
 //GxEPD2_7C<GxEPD2_565c, MAX_HEIGHT_7C(GxEPD2_565c)> display(GxEPD2_565c(/*CS=PA4*/ SS, /*DC=*/ PA3, /*RST=*/ PA2, /*BUSY=*/ PA1)); // Waveshare 5.65" 7-color
+#undef MAX_DISPLAY_BUFFER_SIZE
+#undef MAX_HEIGHT
+#undef MAX_HEIGHT_3C
+#undef MAX_HEIGHT_7C
 #endif
 
 #if defined(__AVR)
@@ -353,7 +357,6 @@
 //GxEPD2_BW<GxEPD2_750_T7, MAX_HEIGHT(GxEPD2_750_T7)> display(GxEPD2_750_T7(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEW075T7 800x480
 //GxEPD2_BW < GxEPD2_1160_T91, MAX_HEIGHT(GxEPD2_1160_T91)> display(GxEPD2_1160_T91(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEH116T91 960x640
 // 3-color e-papers
-#define MAX_HEIGHT_3C(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8))
 //GxEPD2_3C<GxEPD2_154c, MAX_HEIGHT_3C(GxEPD2_154c)> display(GxEPD2_154c(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEW0154Z04 no longer available
 //GxEPD2_3C<GxEPD2_154_Z90c, MAX_HEIGHT_3C(GxEPD2_154_Z90c)> display(GxEPD2_154_Z90c(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEH0154Z90
 //GxEPD2_3C<GxEPD2_213c, MAX_HEIGHT_3C(GxEPD2_213c)> display(GxEPD2_213c(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEW0213Z16
@@ -376,4 +379,8 @@
 //GxEPD2_BW < GxEPD2_1248, MAX_HEIGHT(GxEPD2_1248)>
 //display(GxEPD2_1248(/*cs_m1=*/ 2, /*cs_s1=*/ 3, /*cs_m2=*/ A4, /*cs_s2=*/ A0, /*dc1=*/ 6, /*dc2=*/ A3, /*rst1=*/ 5, /*rst2=*/ A2,
 //                               /*busy_m1=*/ 4, /*busy_s1=*/ 7, /*busy_m2=*/ A1, /*busy_s2=*/ A5));
+#undef MAX_DISPLAY_BUFFER_SIZE
+#undef MAX_HEIGHT
+#undef MAX_HEIGHT_3C
+#undef MAX_HEIGHT_7C
 #endif

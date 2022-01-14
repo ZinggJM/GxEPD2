@@ -18,6 +18,7 @@
 #include <GxEPD2.h>
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+//#pragma GCC diagnostic ignored "-Wsign-compare"
 
 class GxEPD2_EPD
 {
