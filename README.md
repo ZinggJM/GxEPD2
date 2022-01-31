@@ -69,6 +69,7 @@
 - GDEW0213M21    2.13" b/w DES
 - GDEW0213Z16    2.13" b/w/r
 - GDEW0213Z19    2.13" b/w/r
+- GDEY0213Z98    2.13" b/w/r 122x250
 - GDEH029A1      2.9" b/w
 - GDEW029T5      2.9" b/w
 - GDEW029T5D     2.9" b/w
@@ -108,7 +109,11 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.4.4
+### Version 1.4.5
+- added support for GDEY0213Z98 2.13" b/w/r 122x250
+- tested with LOLIN 2.13" Tri-Color eInk / ePaper 250x122 Display Shield
+- https://www.aliexpress.com/item/1005003020667903.html
+#### Version 1.4.4
 - interim update to solve compiler warnings (ALL for GCC for AVR)
 #### Version 1.4.3
 - added option to select an alternate HW SPI channel and/or SPI settings

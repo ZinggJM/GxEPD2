@@ -20,6 +20,7 @@ class GxEPD2_583c : public GxEPD2_EPD
   public:
     // attributes
     static const uint16_t WIDTH = 600;
+    static const uint16_t WIDTH_VISIBLE = WIDTH;
     static const uint16_t HEIGHT = 448;
     static const GxEPD2::Panel panel = GxEPD2::GDEW0583Z21;
     static const bool hasColor = true;

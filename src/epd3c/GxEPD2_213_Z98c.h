@@ -2,7 +2,8 @@
 // Requires HW SPI and Adafruit_GFX. Caution: these e-papers require 3.3V supply AND data lines!
 //
 // based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
-// Controller: IL0373 : http://www.e-paper-display.com/download_detail/downloadsId=535.html
+// Panel: GDEY0213Z98 : https://www.good-display.com/product/392.html
+// Controller: SSD1680 : https://v4.cecdn.yun300.cn/100001_1909185148/SSD1680.pdf
 //
 // Author: Jean-Marc Zingg
 //
@@ -10,29 +11,28 @@
 //
 // Library: https://github.com/ZinggJM/GxEPD2
 
-#ifndef _GxEPD2_290c_H_
-#define _GxEPD2_290c_H_
+#ifndef _GxEPD2_213_Z98c_H_
+#define _GxEPD2_213_Z98c_H_
 
 #include "../GxEPD2_EPD.h"
 
-class GxEPD2_290c : public GxEPD2_EPD
+class GxEPD2_213_Z98c : public GxEPD2_EPD
 {
   public:
     // attributes
     static const uint16_t WIDTH = 128;
-    static const uint16_t WIDTH_VISIBLE = WIDTH;
-    static const uint16_t HEIGHT = 296;
-    static const GxEPD2::Panel panel = GxEPD2::GDEW029Z10;
+    static const uint16_t WIDTH_VISIBLE = 122;
+    static const uint16_t HEIGHT = 250;
+    static const GxEPD2::Panel panel = GxEPD2::GDEY0213Z98;
     static const bool hasColor = true;
-    static const bool hasPartialUpdate = true;
-    static const bool usePartialUpdateWindow = true; // set false for better image
+    static const bool hasPartialUpdate = true; // but refresh is full screen
     static const bool hasFastPartialUpdate = false;
-    static const uint16_t power_on_time = 40; // ms, e.g. 36557us
-    static const uint16_t power_off_time = 30; // ms, e.g. 20291us
-    static const uint16_t full_refresh_time = 15000; // ms, e.g. 14845408us
-    static const uint16_t partial_refresh_time = 15000; // ms, e.g. 14845408us
+    static const uint16_t power_on_time = 100; // ms, e.g. 94682us
+    static const uint16_t power_off_time = 150; // ms, e.g. 139617us
+    static const uint16_t full_refresh_time = 15000; // ms, e.g. 14589155us
+    static const uint16_t partial_refresh_time = 15000; // ms, e.g. 14589155us
     // constructor
-    GxEPD2_290c(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
+    GxEPD2_213_Z98c(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
     // methods (virtual)
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     void clearScreen(uint8_t value = 0xFF); // init controller memory and screen (default white)

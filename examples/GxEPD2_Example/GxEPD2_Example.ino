@@ -59,6 +59,7 @@
 // 3-color
 #include "bitmaps/Bitmaps3c200x200.h" // 1.54" b/w/r
 #include "bitmaps/Bitmaps3c104x212.h" // 2.13" b/w/r
+#include "bitmaps/Bitmaps3c128x250.h" // 2.13" b/w/r
 #include "bitmaps/Bitmaps3c128x296.h" // 2.9"  b/w/r
 #include "bitmaps/Bitmaps3c176x264.h" // 2.7"  b/w/r
 #include "bitmaps/Bitmaps3c400x300.h" // 4.2"  b/w/r
@@ -86,6 +87,7 @@
 // 3-color
 //#include "bitmaps/Bitmaps3c200x200.h" // 1.54" b/w/r
 //#include "bitmaps/Bitmaps3c104x212.h" // 2.13" b/w/r
+#include "bitmaps/Bitmaps3c128x250.h" // 2.13" b/w/r
 //#include "bitmaps/Bitmaps3c128x296.h" // 2.9"  b/w/r
 //#include "bitmaps/Bitmaps3c176x264.h" // 2.7"  b/w/r
 ////#include "bitmaps/Bitmaps3c400x300.h" // 4.2"  b/w/r // not enough code space
@@ -714,6 +716,9 @@ void drawBitmaps()
   // 3-color
 #ifdef _GxBitmaps3c104x212_H_
   drawBitmaps3c104x212();
+#endif
+#ifdef _GxBitmaps3c128x250_H_
+  drawBitmaps3c128x250();
 #endif
 #ifdef _GxBitmaps3c128x296_H_
   drawBitmaps3c128x296();
@@ -1379,6 +1384,37 @@ void drawBitmaps3c104x212()
       while (display.nextPage());
       delay(2000);
     }
+  }
+}
+#endif
+
+#ifdef _GxBitmaps3c128x250_H_
+void drawBitmaps3c128x250()
+{
+  if ((display.epd2.WIDTH == 128) && (display.epd2.HEIGHT == 250) && display.epd2.hasColor)
+  {
+    bool mirrored = display.mirror(true);
+    display.firstPage();
+    do
+    {
+      display.fillScreen(GxEPD_WHITE);
+      display.drawInvertedBitmap(0, 0, Bitmap3c128x250_1_black, 128, 250, GxEPD_BLACK);
+      display.drawInvertedBitmap(0, 0, Bitmap3c128x250_1_red, 128, 250, GxEPD_RED);
+    }
+    while (display.nextPage());
+    delay(2000);
+#if !defined(__AVR)
+    display.firstPage();
+    do
+    {
+      display.fillScreen(GxEPD_WHITE);
+      display.drawInvertedBitmap(0, 0, Bitmap3c128x250_2_black, 128, 250, GxEPD_BLACK);
+      display.drawBitmap(0, 0, Bitmap3c128x250_2_red, 128, 250, GxEPD_RED);
+    }
+    while (display.nextPage());
+    delay(2000);
+#endif
+    display.mirror(mirrored);
   }
 }
 #endif
