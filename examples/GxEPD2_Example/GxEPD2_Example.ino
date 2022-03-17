@@ -30,8 +30,8 @@
 #include <Fonts/FreeMonoBold9pt7b.h>
 
 // select the display constructor line in one of the following files (old style):
-#include "GxEPD2_display_selection.h"
-#include "GxEPD2_display_selection_added.h"
+//#include "GxEPD2_display_selection.h"
+//#include "GxEPD2_display_selection_added.h"
 //#include "GxEPD2_display_selection_more.h" // private
 
 // or select the display class and display driver class in the following file (new style):
@@ -97,7 +97,22 @@
 #if defined(ARDUINO_ARCH_RP2040) && defined(ARDUINO_RASPBERRY_PI_PICO)
 // SPI pins used by GoodDisplay DESPI-PICO. note: steals standard I2C pins PIN_WIRE_SDA (6), PIN_WIRE_SCL (7)
 // uncomment next line for use with GoodDisplay DESPI-PICO.
-arduino::MbedSPI SPI0(4, 7, 6); // need be valid pins for same SPI channel, else fails blinking 4 long 4 short
+//arduino::MbedSPI SPI0(4, 7, 6); // need be valid pins for same SPI channel, else fails blinking 4 long 4 short
+
+// The Waveshare Pi Pico 'hat' (SKU: 20123, Part Number: Pico-ePaper-3.7) has the display on SPI1
+// Pin definition for Pi Pico
+//arduino::MbedSPI SPI0(4, 7, 6); // need be valid pins for same SPI channel, else fails blinking 4 long 4 short
+
+// Define the SPI1 pins for the Pi Pico hat
+#define SPI_MISO1 4
+#define SPI_MOSI1 11
+#define SPI_SCK1 10
+
+
+//'NC' for MISO, as the hat does not have MISO wired up, and uses the available MISO pins for SPI1 are used
+// for other functions.
+arduino::MbedSPI SPI1(NC, SPI_MOSI1, SPI_SCK1);
+
 #endif
 
 void setup()
@@ -109,9 +124,11 @@ void setup()
 #if defined(ARDUINO_ARCH_RP2040) && defined(ARDUINO_RASPBERRY_PI_PICO)
   // uncomment next line for use with GoodDisplay DESPI-PICO, or use the extended init method
   //display.epd2.selectSPI(SPI0, SPISettings(4000000, MSBFIRST, SPI_MODE0));
+  // uncomment next line for use with Waveshare Pico 3.7" hat
+  display.epd2.selectSPI(SPI1, SPISettings(2000000, MSBFIRST, SPI_MODE0));
   // uncomment next 2 lines to allow recovery from configuration failures
-  pinMode(15, INPUT_PULLUP); // safety pin
-  while (!digitalRead(15)) delay(100); // check safety pin for fail recovery
+  //pinMode(15, INPUT_PULLUP); // safety pin
+  //while (!digitalRead(15)) delay(100); // check safety pin for fail recovery
 #endif
   display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
   //display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
