@@ -54,13 +54,16 @@
 #define GxEPD2_154_Z90c_IS_3C true
 #define GxEPD2_213c_IS_3C true
 #define GxEPD2_213_Z19c_IS_3C true
+#define GxEPD2_213_Z98c_IS_3C true
 #define GxEPD2_290c_IS_3C true
 #define GxEPD2_290_Z13c_IS_3C true
 #define GxEPD2_290_C90c_IS_3C true
+#define GxEPD2_266c_IS_3C true
 #define GxEPD2_270c_IS_3C true
 #define GxEPD2_420c_IS_3C true
 #define GxEPD2_420c_Z21_IS_3C true
 #define GxEPD2_583c_IS_3C true
+#define GxEPD2_583c_Z83_IS_3C true
 #define GxEPD2_750c_IS_3C true
 #define GxEPD2_750c_Z08_IS_3C true
 #define GxEPD2_750c_Z90_IS_3C true

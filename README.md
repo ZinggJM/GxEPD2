@@ -81,6 +81,7 @@
 - GDEM029C90     2.9" b/w/y
 - GDEW026T0      2.6" b/w
 - GDEW026M01     2.6" b/w DES
+- GDEY0266Z90    2.66" b/w/r 152x296
 - GDEW027C44     2.7" b/w/r
 - GDEW027W3      2.7" b/w
 - GDEW0371W7     3.7" b/w
@@ -92,6 +93,7 @@
 - ACeP565        5.65" Waveshare 5.65" 7-color e-paper display 600x448
 - GDEW0583T7     5.83" b/w
 - GDEW0583T8     5.83" b/w 648x460
+- GDEW0583Z83    5.83" b/w/r 648x460
 - GDEW075T8      7.5" b/w
 - GDEW075T7      7.5" b/w 800x480
 - GDEW075Z09     7.5" b/w/r
@@ -109,6 +111,9 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
+### Version 1.4.6
+- added support for GDEY0266Z90 2.66" b/w/r 152x296
+- added support for GDEW0583Z83 5.83" b/w/r 648x460
 ### Version 1.4.5
 - added support for GDEY0213Z98 2.13" b/w/r 122x250
 - tested with LOLIN 2.13" Tri-Color eInk / ePaper 250x122 Display Shield

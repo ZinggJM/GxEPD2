@@ -23,7 +23,7 @@
 
 void setup()
 {
-  display.init();
+  display.init(115200);
   helloWorld();
   display.hibernate();
 }

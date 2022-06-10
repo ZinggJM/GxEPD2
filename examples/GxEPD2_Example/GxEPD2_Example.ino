@@ -61,9 +61,11 @@
 #include "bitmaps/Bitmaps3c104x212.h" // 2.13" b/w/r
 #include "bitmaps/Bitmaps3c128x250.h" // 2.13" b/w/r
 #include "bitmaps/Bitmaps3c128x296.h" // 2.9"  b/w/r
+#include "bitmaps/Bitmaps3c152x296.h" // 2.66" b/w/r
 #include "bitmaps/Bitmaps3c176x264.h" // 2.7"  b/w/r
 #include "bitmaps/Bitmaps3c400x300.h" // 4.2"  b/w/r
 #if defined(ESP8266) || defined(ESP32) || defined(ARDUINO_ARCH_RP2040)
+#include "bitmaps/Bitmaps3c648x480.h" // 5.83" b/w/r
 #include "bitmaps/Bitmaps3c800x480.h" // 7.5"  b/w/r
 #include "bitmaps/Bitmaps3c880x528.h" // 7.5"  b/w/r
 #include "bitmaps/WS_Bitmaps800x600.h" // 6.0"  grey
@@ -692,8 +694,14 @@ void drawBitmaps()
 #ifdef _GxBitmaps128x296_H_
   drawBitmaps128x296();
 #endif
+#ifdef _GxBitmaps152x296_H_
+  drawBitmaps152x296();
+#endif
 #ifdef _GxBitmaps176x264_H_
   drawBitmaps176x264();
+#endif
+#ifdef _GxBitmaps240x416_H_
+  drawBitmaps240x416();
 #endif
 #ifdef _GxBitmaps400x300_H_
   drawBitmaps400x300();
@@ -723,17 +731,17 @@ void drawBitmaps()
 #ifdef _GxBitmaps3c128x296_H_
   drawBitmaps3c128x296();
 #endif
-#ifdef _GxBitmaps152x296_H_
-  drawBitmaps152x296();
+#ifdef _GxBitmaps3c152x296_H_
+  drawBitmaps3c152x296();
 #endif
 #ifdef _GxBitmaps3c176x264_H_
   drawBitmaps3c176x264();
 #endif
-#ifdef _GxBitmaps240x416_H_
-  drawBitmaps240x416();
-#endif
 #ifdef _GxBitmaps3c400x300_H_
   drawBitmaps3c400x300();
+#endif
+#ifdef _GxBitmaps3c648x480_H_
+  drawBitmaps3c648x480();
 #endif
 #ifdef _GxBitmaps3c800x480_H_
   drawBitmaps3c800x480();
@@ -1459,6 +1467,33 @@ void drawBitmaps3c128x296()
 }
 #endif
 
+#ifdef _GxBitmaps3c152x296_H_
+void drawBitmaps3c152x296()
+{
+  bitmap_pair bitmap_pairs[] =
+  {
+    {Bitmap3c152x296_black, Bitmap3c152x296_red}
+  };
+  if (display.epd2.panel == GxEPD2::GDEY0266Z90)
+  {
+    bool mirrored = display.mirror(true);
+    for (uint16_t i = 0; i < sizeof(bitmap_pairs) / sizeof(bitmap_pair); i++)
+    {
+      display.firstPage();
+      do
+      {
+        display.fillScreen(GxEPD_WHITE);
+        display.drawBitmap(0, 0, bitmap_pairs[i].black, 152, 296, GxEPD_BLACK);
+        display.drawInvertedBitmap(0, 0, bitmap_pairs[i].red, 152, 296, GxEPD_RED);
+      }
+      while (display.nextPage());
+      delay(2000);
+    }
+    display.mirror(mirrored);
+  }
+}
+#endif
+
 #ifdef _GxBitmaps3c176x264_H_
 void drawBitmaps3c176x264()
 {
@@ -1507,6 +1542,35 @@ void drawBitmaps3c400x300()
         display.fillScreen(GxEPD_WHITE);
         display.drawInvertedBitmap(0, 0, bitmap_pairs[i].black, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
         display.drawInvertedBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
+      }
+      while (display.nextPage());
+      delay(2000);
+    }
+  }
+}
+#endif
+
+#ifdef _GxBitmaps3c648x480_H_
+void drawBitmaps3c648x480()
+{
+#if !defined(__AVR)
+  bitmap_pair bitmap_pairs[] =
+  {
+    {Bitmap3c648x480_black, Bitmap3c648x480_red}
+  };
+#else
+  bitmap_pair bitmap_pairs[] = {}; // not enough code space
+#endif
+  if (display.epd2.panel == GxEPD2::GDEW0583Z83)
+  {
+    for (uint16_t i = 0; i < sizeof(bitmap_pairs) / sizeof(bitmap_pair); i++)
+    {
+      display.firstPage();
+      do
+      {
+        display.fillScreen(GxEPD_WHITE);
+        display.drawBitmap(0, 0, bitmap_pairs[i].black, 648, 480, GxEPD_BLACK);
+        display.drawBitmap(0, 0, bitmap_pairs[i].red, 648, 480, GxEPD_RED);
       }
       while (display.nextPage());
       delay(2000);
