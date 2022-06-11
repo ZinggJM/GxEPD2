@@ -1,7 +1,7 @@
 // Display Library for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 // Requires HW SPI and Adafruit_GFX. Caution: the e-paper panels require 3.3V supply AND data lines!
 //
-// based on Demo Example from GxEPD2
+// based on Driver for GDEM029T94
 // Panel: GDEPG0213BN : used on LyliGO T5 2.3.1 https://github.com/Xinyuan-LilyGO/LilyGo-T5-Epaper-Series
 // Controller : SSD1680 : https://www.good-display.com/companyfile/101.html
 // Display: 2.13" b/w 
