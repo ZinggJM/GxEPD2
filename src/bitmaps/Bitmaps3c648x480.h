@@ -2441,7 +2441,7 @@ const unsigned char Bitmap3c648x480_black[] PROGMEM =
   0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00,
 };
 
-const unsigned char Bitmap3c648x480_red[] =
+const unsigned char Bitmap3c648x480_red[] PROGMEM =
 {
   0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00,
   0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00,
