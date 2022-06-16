@@ -7,6 +7,8 @@
 - and SPI e-paper boards from Waveshare
 
 ### important note :
+** THIS IS A SIMPLE BRANCH TO ADD SUPPORT FOR DEPG0213BN
+
 - the display panels are for 3.3V supply and 3.3V data lines
 - never connect data lines directly to 5V Arduino data pins, use e.g. 4k7/10k resistor divider
 - series resistor only is not enough for reliable operation (back-feed effect through protection diodes)
