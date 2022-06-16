@@ -19,70 +19,88 @@
 // enable or disable GxEPD2_GFX base class
 #define ENABLE_GxEPD2_GFX 0
 
+// uncomment next line to use class GFX of library GFX_Root instead of Adafruit_GFX
+//#include <GFX.h>
+// Note: if you use this with ENABLE_GxEPD2_GFX 1:
+//       uncomment it in GxEPD2_GFX.h too, or add #include <GFX.h> before any #include <GxEPD2_GFX.h>
 
 #include <GxEPD2_BW.h>
-
-
+#include <GxEPD2_3C.h>
+#include <GxEPD2_7C.h>
 #include <Fonts/FreeMonoBold9pt7b.h>
-#include "esp_wifi.h"
-#include <esp_now.h>
-#include <WiFi.h>
-// ----------------------------------------------------------------------------
-// Definition of sleep mode properties
-// ----------------------------------------------------------------------------
-//                           seconds
-//                              v
-const uint32_t SLEEP_DURATION = 10 * 1000000; // µs
+
+// select the display constructor line in one of the following files (old style):
+//#include "GxEPD2_display_selection.h"
+//#include "GxEPD2_display_selection_added.h"
+//#include "GxEPD2_display_selection_more.h" // private
 
 // or select the display class and display driver class in the following file (new style):
 #include "GxEPD2_display_selection_new_style.h"
 
+#if !defined(__AVR) && !defined(_BOARD_GENERIC_STM32F103C_H_) && !defined(ARDUINO_BLUEPILL_F103C8)
 
+// note 16.11.2019: the compiler may exclude code based on constant if statements (display.epd2.panel == constant),
+//                  therefore bitmaps may get optimized out by the linker
+
+// comment out unused bitmaps to reduce code space used
+//#include "bitmaps/Bitmaps80x128.h"  // 1.02" b/w
+//#include "bitmaps/Bitmaps152x152.h" // 1.54" b/w
+//#include "bitmaps/Bitmaps200x200.h" // 1.54" b/w
+//#include "bitmaps/Bitmaps104x212.h" // 2.13" b/w flexible GDEW0213I5F
 #include "bitmaps/Bitmaps128x250.h" // 2.13" b/w
-void setModemSleep() {
-  WiFi.setSleep(true);
-  if (!setCpuFrequencyMhz(40)){
-    Serial2.println("Not valid frequency!");
-  }
-  // Use this if 40Mhz is not supported
-  // setCpuFrequencyMhz(80);
-}
+//#include "bitmaps/Bitmaps128x296.h" // 2.9"  b/w
+//#include "bitmaps/Bitmaps152x296.h" // 2.6"  b/w
+//#include "bitmaps/Bitmaps176x264.h" // 2.7"  b/w
+//#include "bitmaps/Bitmaps240x416.h" // 3.71"  b/w
+//#include "bitmaps/Bitmaps400x300.h" // 4.2"  b/w
+//#include "bitmaps/Bitmaps648x480.h" // 5.38"  b/w
+//#include "bitmaps/Bitmaps640x384.h" // 7.5"  b/w
+//#include "bitmaps/Bitmaps800x480.h" // 7.5"  b/w
+// 3-color
+//#include "bitmaps/Bitmaps3c200x200.h" // 1.54" b/w/r
+//#include "bitmaps/Bitmaps3c104x212.h" // 2.13" b/w/r
+//#include "bitmaps/Bitmaps3c128x250.h" // 2.13" b/w/r
+//#include "bitmaps/Bitmaps3c128x296.h" // 2.9"  b/w/r
+//#include "bitmaps/Bitmaps3c152x296.h" // 2.66" b/w/r
+//#include "bitmaps/Bitmaps3c176x264.h" // 2.7"  b/w/r
+//#include "bitmaps/Bitmaps3c400x300.h" // 4.2"  b/w/r
+//#if defined(ESP8266) || defined(ESP32) || defined(ARDUINO_ARCH_RP2040)
+//#include "bitmaps/Bitmaps3c648x480.h" // 5.83" b/w/r
+//#include "bitmaps/Bitmaps3c800x480.h" // 7.5"  b/w/r
+//#include "bitmaps/Bitmaps3c880x528.h" // 7.5"  b/w/r
+//#include "bitmaps/WS_Bitmaps800x600.h" // 6.0"  grey
+//#include "bitmaps/WS_Bitmaps7c192x143.h" // 5.65" 7-color
+//#endif
+#//if defined(ESP32)
+//#include "bitmaps/Bitmaps1304x984.h" // 12.48" b/w
+//#endif
 
-// ----------------------------------------------------------------------------
-// Microcontroller sleep modes
-// ----------------------------------------------------------------------------
+#else
 
-void lightSleep() {
+// select only one to fit in code space
+//#include "bitmaps/Bitmaps80x128.h"  // 1.02" b/w
+//#include "bitmaps/Bitmaps200x200.h" // 1.54" b/w
+//#include "bitmaps/Bitmaps104x212.h" // 2.13" b/w flexible GDEW0213I5F
+#include "bitmaps/Bitmaps128x250.h" // 2.13" b/w
+//#include "bitmaps/Bitmaps128x296.h" // 2.9"  b/w
+//#include "bitmaps/Bitmaps176x264.h" // 2.7"  b/w
+////#include "bitmaps/Bitmaps400x300.h" // 4.2"  b/w // not enough code space
+////#include "bitmaps/Bitmaps640x384.h" // 7.5"  b/w // not enough code space
+// 3-color
+//#include "bitmaps/Bitmaps3c200x200.h" // 1.54" b/w/r
+//#include "bitmaps/Bitmaps3c104x212.h" // 2.13" b/w/r
+//#include "bitmaps/Bitmaps3c128x250.h" // 2.13" b/w/r
+//#include "bitmaps/Bitmaps3c128x296.h" // 2.9"  b/w/r
+//#include "bitmaps/Bitmaps3c176x264.h" // 2.7"  b/w/r
+////#include "bitmaps/Bitmaps3c400x300.h" // 4.2"  b/w/r // not enough code space
 
-  esp_wifi_stop();
-  
-    esp_sleep_enable_timer_wakeup(SLEEP_DURATION);
-    //myTime=millis();
-    esp_light_sleep_start();
-    esp_wifi_start();
+#endif
 
-}
-
-void displayInit(void)
-{
-    static bool isInit = false;
-    if (isInit)
-    {
-        return;
-    }
-    isInit = true;
-    display.init(115200);
-    display.setRotation(1);
-    display.clearScreen();
-    display.setTextColor(GxEPD_BLACK);
-    display.setFont(&FreeMonoBold9pt7b);
-    display.refresh(true);
-    //display.setTextSize(0);
-
-
-}
-
-uint8_t barraio[60];
+#if defined(ARDUINO_ARCH_RP2040) && defined(ARDUINO_RASPBERRY_PI_PICO)
+// SPI pins used by GoodDisplay DESPI-PICO. note: steals standard I2C pins PIN_WIRE_SDA (6), PIN_WIRE_SCL (7)
+// uncomment next line for use with GoodDisplay DESPI-PICO.
+arduino::MbedSPI SPI0(4, 7, 6); // need be valid pins for same SPI channel, else fails blinking 4 long 4 short
+#endif
 
 void setup()
 {
@@ -90,28 +108,66 @@ void setup()
   Serial.println();
   Serial.println("setup");
   delay(100);
-
-  //display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
- displayInit();  //my display init
- delay(5000);
- Serial.print("Screen height = ");
- Serial.println(display.height());
- Serial.print("Screen width = ");
- Serial.println(display.width());
-
-
+#if defined(ARDUINO_ARCH_RP2040) && defined(ARDUINO_RASPBERRY_PI_PICO)
+  // uncomment next line for use with GoodDisplay DESPI-PICO, or use the extended init method
+  //display.epd2.selectSPI(SPI0, SPISettings(4000000, MSBFIRST, SPI_MODE0));
+  // uncomment next 2 lines to allow recovery from configuration failures
+  pinMode(15, INPUT_PULLUP); // safety pin
+  while (!digitalRead(15)) delay(100); // check safety pin for fail recovery
+#endif
+  display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
+  //display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
+  //display.init(115200, true, 10, false, SPI0, SPISettings(4000000, MSBFIRST, SPI_MODE0)); // extended init method with SPI channel and/or settings selection
+  // first update should be full refresh
+  helloWorld();
+  delay(1000);
+  // partial refresh mode can be used to full screen,
+  // effective if display panel hasFastPartialUpdate
+  helloFullScreenPartialMode();
+  delay(1000);
+  //stripeTest(); return; // GDEH029Z13 issue
+  helloArduino();
+  delay(1000);
+  helloEpaper();
+  delay(1000);
+  //helloValue(123.9, 1);
+  //delay(1000);
+  showFont("FreeMonoBold9pt7b", &FreeMonoBold9pt7b);
+  delay(1000);
+  if (display.epd2.WIDTH < 104)
+  {
+    showFont("glcdfont", 0);
+    delay(1000);
+  }
+  drawBitmaps();
+#if !defined(__AVR) // takes too long!
+  if (display.epd2.panel == GxEPD2::ACeP565)
+  {
+    //draw7colorlines();
+    //delay(2000);
+    draw7colors();
+    delay(4000);
+  }
+#endif
+  if (display.epd2.hasPartialUpdate)
+  {
+    showPartialUpdate();
+    delay(1000);
+  } // else // on GDEW0154Z04 only full update available, doesn't look nice
+  //drawCornerTest();
+  //showBox(16, 16, 48, 32, false);
+  //showBox(16, 56, 48, 32, true);
+  display.powerOff();
+  deepSleepTest();
+#if defined(ESP32) && defined(_GxBitmaps1304x984_H_)
+  drawBitmaps1304x984();
+  display.powerOff();
+#endif
   Serial.println("setup done");
 }
 
 void loop()
 {
-  lightSleep();
-  for (int i=0;i<60;i++) barraio[i]=random(40);
- barchart(0, 127, 120,40,barraio, 60);
-  for (int i=0;i<60;i++) barraio[i]=random(40);
- barchart(120, 87, 120,40,barraio, 60);
-display.powerOff();
-
 }
 
 // note for partial update window and setPartialWindow() method:
@@ -119,43 +175,9 @@ display.powerOff();
 // the size is increased in setPartialWindow() if x or w are not multiple of 8 for even rotation, y or h for odd rotation
 // see also comment in GxEPD2_BW.h, GxEPD2_3C.h or GxEPD2_GFX.h for method setPartialWindow()
 
-const char HelloWorld[] = "............";
+const char HelloWorld[] = "Hello World!";
 const char HelloArduino[] = "Hello Arduino!";
 const char HelloEpaper[] = "Hello E-Paper!";
-
-void barchart(uint8_t xin, uint8_t yin, uint8_t wb,uint8_t hb,uint8_t * barray, int barlen)
-{
-  uint8_t q = 0,r=0;
-  if (((xin+wb)> display.width()) || ((yin)>display.height()) || (wb<0)||(xin<0)||(yin<0)||(hb<0)||(yin<hb))
-    {
-      Serial.println("Error: barchart dimensions out of range");
-      return;
-    }
-  uint8_t deltax,deltay,maxbar=0;
-  for ( r = 0; r < barlen; r++)
-  {
-    if (barray[r]>maxbar) maxbar=barray[r];
-    }
-    deltay=1+maxbar/hb;
-  deltax=wb/barlen;
-  Serial.print("deltay=");
-  Serial.println(deltay);
-   //display.setRotation(0);
-   display.setPartialWindow(xin, yin-hb, wb, hb);
-    display.firstPage();
-    do
-    {
-      //display.fillScreen(GxEPD_WHITE);
-      display.fillRect(xin,yin-hb , wb, hb, GxEPD_WHITE);
-          for ( q = 0; q < barlen; q++)
-            {
-              if (barray[q]/deltay == 0) barray[q]=deltay;
-            display.fillRect(xin+q*deltax,yin-barray[q]/deltay , deltax, barray[q]/deltay, GxEPD_BLACK);
-            }
-
-    }
-    while (display.nextPage());
-}
 
 void helloWorld()
 {
@@ -462,8 +484,7 @@ void deepSleepTest()
     display.print(hibernating);
   }
   while (display.nextPage());
-  display.refresh();
-  display.powerOff();
+  display.hibernate();
   delay(5000);
   display.getTextBounds(wokeup, 0, 0, &tbx, &tby, &tbw, &tbh);
   uint16_t wx = (display.width() - tbw) / 2;
@@ -498,8 +519,7 @@ void deepSleepTest()
     display.print(again);
   }
   while (display.nextPage());
-    display.refresh();
-  display.powerOff();
+  display.hibernate();
   //Serial.println("deepSleepTest done");
 }
 
@@ -551,8 +571,7 @@ void drawCornerTest()
 
 void showFont(const char name[], const GFXfont* f)
 {
-  //display.setFullWindow();
-  display.setPartialWindow(0, 0, display.width(), display.height());
+  display.setFullWindow();
   display.setRotation(0);
   display.setTextColor(GxEPD_BLACK);
   display.firstPage();
@@ -660,7 +679,6 @@ void showPartialUpdate()
 void drawBitmaps()
 {
   display.setFullWindow();
-  //display.setPartialWindow(0, 0, display.width(), display.height());
 #ifdef _GxBitmaps80x128_H_
   drawBitmaps80x128();
 #endif
@@ -676,8 +694,14 @@ void drawBitmaps()
 #ifdef _GxBitmaps128x296_H_
   drawBitmaps128x296();
 #endif
+#ifdef _GxBitmaps152x296_H_
+  drawBitmaps152x296();
+#endif
 #ifdef _GxBitmaps176x264_H_
   drawBitmaps176x264();
+#endif
+#ifdef _GxBitmaps240x416_H_
+  drawBitmaps240x416();
 #endif
 #ifdef _GxBitmaps400x300_H_
   drawBitmaps400x300();
@@ -707,17 +731,17 @@ void drawBitmaps()
 #ifdef _GxBitmaps3c128x296_H_
   drawBitmaps3c128x296();
 #endif
-#ifdef _GxBitmaps152x296_H_
-  drawBitmaps152x296();
+#ifdef _GxBitmaps3c152x296_H_
+  drawBitmaps3c152x296();
 #endif
 #ifdef _GxBitmaps3c176x264_H_
   drawBitmaps3c176x264();
 #endif
-#ifdef _GxBitmaps240x416_H_
-  drawBitmaps240x416();
-#endif
 #ifdef _GxBitmaps3c400x300_H_
   drawBitmaps3c400x300();
+#endif
+#ifdef _GxBitmaps3c648x480_H_
+  drawBitmaps3c648x480();
 #endif
 #ifdef _GxBitmaps3c800x480_H_
   drawBitmaps3c800x480();
@@ -728,7 +752,6 @@ void drawBitmaps()
 #if defined(_WS_Bitmaps7c192x143_H_)
   drawBitmaps7c192x143();
 #endif
-
   if ((display.epd2.WIDTH >= 200) && (display.epd2.HEIGHT >= 200))
   {
     // show these after the specific bitmaps
@@ -740,7 +763,6 @@ void drawBitmaps()
     drawBitmaps3c200x200();
 #endif
   }
-  
 }
 
 #ifdef _GxBitmaps80x128_H_
@@ -959,12 +981,10 @@ void drawBitmaps128x250()
         display.drawInvertedBitmap(0, 0, bitmaps[i], 128, 250, GxEPD_BLACK);
       }
       while (display.nextPage());
-      display.refresh(true);
       delay(2000);
     }
     display.mirror(m);
   }
-  display.refresh(true);
 }
 #endif
 
@@ -1447,6 +1467,33 @@ void drawBitmaps3c128x296()
 }
 #endif
 
+#ifdef _GxBitmaps3c152x296_H_
+void drawBitmaps3c152x296()
+{
+  bitmap_pair bitmap_pairs[] =
+  {
+    {Bitmap3c152x296_black, Bitmap3c152x296_red}
+  };
+  if (display.epd2.panel == GxEPD2::GDEY0266Z90)
+  {
+    bool mirrored = display.mirror(true);
+    for (uint16_t i = 0; i < sizeof(bitmap_pairs) / sizeof(bitmap_pair); i++)
+    {
+      display.firstPage();
+      do
+      {
+        display.fillScreen(GxEPD_WHITE);
+        display.drawBitmap(0, 0, bitmap_pairs[i].black, 152, 296, GxEPD_BLACK);
+        display.drawInvertedBitmap(0, 0, bitmap_pairs[i].red, 152, 296, GxEPD_RED);
+      }
+      while (display.nextPage());
+      delay(2000);
+    }
+    display.mirror(mirrored);
+  }
+}
+#endif
+
 #ifdef _GxBitmaps3c176x264_H_
 void drawBitmaps3c176x264()
 {
@@ -1495,6 +1542,35 @@ void drawBitmaps3c400x300()
         display.fillScreen(GxEPD_WHITE);
         display.drawInvertedBitmap(0, 0, bitmap_pairs[i].black, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_BLACK);
         display.drawInvertedBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
+      }
+      while (display.nextPage());
+      delay(2000);
+    }
+  }
+}
+#endif
+
+#ifdef _GxBitmaps3c648x480_H_
+void drawBitmaps3c648x480()
+{
+#if !defined(__AVR)
+  bitmap_pair bitmap_pairs[] =
+  {
+    {Bitmap3c648x480_black, Bitmap3c648x480_red}
+  };
+#else
+  bitmap_pair bitmap_pairs[] = {}; // not enough code space
+#endif
+  if (display.epd2.panel == GxEPD2::GDEW0583Z83)
+  {
+    for (uint16_t i = 0; i < sizeof(bitmap_pairs) / sizeof(bitmap_pair); i++)
+    {
+      display.firstPage();
+      do
+      {
+        display.fillScreen(GxEPD_WHITE);
+        display.drawBitmap(0, 0, bitmap_pairs[i].black, 648, 480, GxEPD_BLACK);
+        display.drawBitmap(0, 0, bitmap_pairs[i].red, 648, 480, GxEPD_RED);
       }
       while (display.nextPage());
       delay(2000);
