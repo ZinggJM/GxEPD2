@@ -37,6 +37,7 @@ class GxEPD2
     {
       GDEW0102T4, Waveshare_1_02_bw = GDEW0102T4,
       GDEP015OC1, Waveshare_1_54_bw = GDEP015OC1,
+      GDEP0150BN,
       GDEH0154D67, Waveshare_1_54_bw_D67 = GDEH0154D67,
       GDEW0154T8,
       GDEW0154M09,
@@ -48,14 +49,17 @@ class GxEPD2
       GDEW0213I5F, Waveshare_2_13_flex = GDEW0213I5F,
       GDEW0213M21,
       GDEW0213T5D,
+      DEPG0213BN,
       GDEW026T0,  Waveshare_2_6_bw = GDEW026T0,
       GDEW026M01,
+      DEPG0266BN,
       GDEH029A1,  Waveshare_2_9_bw = GDEH029A1,
       GDEW029T5,  Waveshare_2_9_bw_T5 = GDEW029T5,
       GDEW029T5D,
       GDEW029I6FD,
       GDEW029M06,
       GDEM029T94,
+      DEPG0290BS,
       GDEW027W3,  Waveshare_2_7_bw = GDEW027W3,
       ED037TC1,
       GDEW0371W7, Waveshare_3_7_bw = GDEW0371W7,
@@ -70,6 +74,7 @@ class GxEPD2
       ED060SCT, // on Waveshare IT8951 Driver HAT
       ED060KC1, // on Waveshare IT8951 Driver HAT 1448x1072
       ED078KC2, // on Waveshare IT8951 Driver HAT 1872x1404
+      ES103TC1, // on Waveshare IT8951 Driver HAT 1872x1404
       // 3-color
       GDEW0154Z04, Waveshare_1_54_bwr = GDEW0154Z04,
       GDEH0154Z90, Waveshare_1_54_bwr_Z90 = GDEH0154Z90,

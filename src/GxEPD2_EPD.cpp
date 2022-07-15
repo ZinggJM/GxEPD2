@@ -72,6 +72,10 @@ void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset
   {
     pinMode(_busy, INPUT);
   }
+  if (_dc == MISO) // may be overridden, TTGO T5 V2.66
+  {
+    pinMode(_dc, OUTPUT);
+  }
 }
 
 void GxEPD2_EPD::setBusyCallback(void (*busyCallback)(const void*), const void* busy_callback_parameter)

@@ -53,6 +53,7 @@
 
 ### Supported SPI e-paper panels from Good Display:
 - GDEW0102T4     1.02" b/w
+- GDEP0150BN     1.50" b/w 200x200, e.g. LILYGO® TTGO T5 V2.4.1 1.50 inch
 - GDEP015OC1     1.54" b/w
 - GDEH0154D67    1.54" b/w, replacement for GDEP015OC1
 - GDEW0154T8     1.54" b/w 152x152
@@ -70,6 +71,7 @@
 - GDEW0213Z16    2.13" b/w/r
 - GDEW0213Z19    2.13" b/w/r
 - GDEY0213Z98    2.13" b/w/r 122x250
+- DEPG0213BN     2.13" b/w 128x250, e.g. LILYGO® TTGO T5 V2.3.1 2.13 inch
 - GDEH029A1      2.9" b/w
 - GDEW029T5      2.9" b/w
 - GDEW029T5D     2.9" b/w
@@ -79,8 +81,10 @@
 - GDEW029Z10     2.9" b/w/r
 - GDEW029Z13     2.9" b/w/r
 - GDEM029C90     2.9" b/w/y
+- DEPG0290BS     2.9" b/w 128x296, e.g. LILYGO® TTGO T5 V2.4.1 2.9"
 - GDEW026T0      2.6" b/w
 - GDEW026M01     2.6" b/w DES
+- DEPG0266BN     2.66" b/w 152x296, e.g. LILYGO® TTGO T5 2.66 inch
 - GDEY0266Z90    2.66" b/w/r 152x296
 - GDEW027C44     2.7" b/w/r
 - GDEW027W3      2.7" b/w
@@ -106,15 +110,22 @@
 - ED060SCT        6" grey levels, on Waveshare e-Paper IT8951 Driver HAT
 - ED060KC1        6" grey levels, 1448x1072, on Waveshare e-Paper IT8951 Driver HAT
 - ED078KC2        7.8" grey levels, 1872x1404, on Waveshare e-Paper IT8951 Driver HAT
+- ES103TC1       10.3" grey levels, 1872x1404, on Waveshare e-Paper IT8951 Driver HAT
 
 ### I can and will only support e-paper panels I have!
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.4.6
+### Version 1.4.7
+- added support for GDEP0150BN 1.50" b/w 200x200, e.g. LILYGO® TTGO T5 V2.4.1 1.50 inch
+- added support for DEPG0213BN 2.13" b/w 128x250, e.g. LILYGO® TTGO T5 V2.3.1 2.13 inch
+- added support for DEPG0266BN 2.66" b/w 152x296, e.g. LILYGO® TTGO T5 2.66 inch
+- added support for DEPG0290BS 2.9"  b/w 128x296, e.g. LILYGO® TTGO T5 V2.4.1 2.9"
+- added support for ES103TC1 10.3" grey levels, 1872x1404, on Waveshare e-Paper IT8951 Driver HAT
+#### Version 1.4.6
 - added support for GDEY0266Z90 2.66" b/w/r 152x296
 - added support for GDEW0583Z83 5.83" b/w/r 648x460
-### Version 1.4.5
+#### Version 1.4.5
 - added support for GDEY0213Z98 2.13" b/w/r 122x250
 - tested with LOLIN 2.13" Tri-Color eInk / ePaper 250x122 Display Shield
 - https://www.aliexpress.com/item/1005003020667903.html

@@ -14,6 +14,7 @@
 // Good Display ePaper for Arduino: https://forum.arduino.cc/index.php?topic=436411.0
 
 #define GxEPD2_102_IS_BW true
+#define GxEPD2_150_BN_IS_BW true
 #define GxEPD2_154_IS_BW true
 #define GxEPD2_154_D67_IS_BW true
 #define GxEPD2_154_T8_IS_BW true
@@ -26,15 +27,18 @@
 #define GxEPD2_213_flex_IS_BW true
 #define GxEPD2_213_M21_IS_BW true
 #define GxEPD2_213_T5D_IS_BW true
+#define GxEPD2_213_BN_IS_BW true
 #define GxEPD2_290_IS_BW true
 #define GxEPD2_290_T5_IS_BW true
 #define GxEPD2_290_T5D_IS_BW true
 #define GxEPD2_290_I6FD_IS_BW true
 #define GxEPD2_290_T94_IS_BW true
 #define GxEPD2_290_T94_V2_IS_BW true
+#define GxEPD2_290_BS_IS_BW true
 #define GxEPD2_290_M06_IS_BW true
 #define GxEPD2_260_IS_BW true
 #define GxEPD2_260_M01_IS_BW true
+#define GxEPD2_266_BN_IS_BW true
 #define GxEPD2_270_IS_BW true
 #define GxEPD2_371_IS_BW true
 #define GxEPD2_370_TC1_IS_BW true
@@ -49,6 +53,7 @@
 #define GxEPD2_it60_IS_BW true
 #define GxEPD2_it60_1448x1072_IS_BW true
 #define GxEPD2_it78_1872x1404_IS_BW true
+#define GxEPD2_it103_1872x1404_IS_BW true
 // 3-color e-papers
 #define GxEPD2_154c_IS_3C true
 #define GxEPD2_154_Z90c_IS_3C true
