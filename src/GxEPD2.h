@@ -37,7 +37,7 @@ class GxEPD2
     {
       GDEW0102T4, Waveshare_1_02_bw = GDEW0102T4,
       GDEP015OC1, Waveshare_1_54_bw = GDEP015OC1,
-      GDEP0150BN,
+      DEPG0150BN,
       GDEH0154D67, Waveshare_1_54_bw_D67 = GDEH0154D67,
       GDEW0154T8,
       GDEW0154M09,
@@ -61,6 +61,7 @@ class GxEPD2
       GDEM029T94,
       DEPG0290BS,
       GDEW027W3,  Waveshare_2_7_bw = GDEW027W3,
+      GDEY027T91,
       ED037TC1,
       GDEW0371W7, Waveshare_3_7_bw = GDEW0371W7,
       GDEW042T2,  Waveshare_4_2_bw = GDEW042T2,
@@ -93,7 +94,8 @@ class GxEPD2
       ACeP565,     Waveshare_5_65_7c = ACeP565,
       GDEW075Z09,  Waveshare_7_5_bwr = GDEW075Z09,
       GDEW075Z08,  Waveshare_7_5_bwr_Z08 = GDEW075Z08,
-      GDEH075Z90,  Waveshare_7_5_bwr_Z90 = GDEH075Z90
+      GDEH075Z90,  Waveshare_7_5_bwr_Z90 = GDEH075Z90,
+      GDEY1248Z51
     };
 };
 

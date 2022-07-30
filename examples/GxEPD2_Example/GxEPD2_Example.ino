@@ -73,6 +73,7 @@
 #endif
 #if defined(ESP32)
 #include "bitmaps/Bitmaps1304x984.h" // 12.48" b/w
+#include "bitmaps/Bitmaps3c1304x984.h" // 12.48" b/w/r
 #endif
 
 #else
@@ -140,6 +141,7 @@ void setup()
     delay(1000);
   }
   drawBitmaps();
+  //return;
 #if !defined(__AVR) // takes too long!
   if (display.epd2.panel == GxEPD2::ACeP565)
   {
@@ -763,6 +765,9 @@ void drawBitmaps()
     drawBitmaps3c200x200();
 #endif
   }
+#if defined(ESP32) && defined(_GxBitmaps3c1304x984_H_)
+  drawBitmaps3c1304x984();
+#endif
 }
 
 #ifdef _GxBitmaps80x128_H_
@@ -860,6 +865,7 @@ void drawBitmaps200x200()
     //logo200x200, first200x200, second200x200, fourth200x200, third200x200, fifth200x200, sixth200x200, senventh200x200, eighth200x200 // ED037TC1 test
   };
 #endif
+  if (display.epd2.hasColor) return; // to avoid many long refreshes
   if ((display.epd2.WIDTH == 200) && (display.epd2.HEIGHT == 200) && !display.epd2.hasColor)
   {
     bool m = display.mirror(true);
@@ -1635,6 +1641,18 @@ void drawBitmaps3c880x528()
       delay(2000);
     }
     display.mirror(m);
+  }
+}
+#endif
+
+#if defined(ESP32) && defined(_GxBitmaps3c1304x984_H_)
+void drawBitmaps3c1304x984()
+{
+  if (display.epd2.panel == GxEPD2::GDEY1248Z51)
+  {
+    //display.drawImage(Bitmap3c1304x984_black, Bitmap3c1304x984_red, 0, 0, 1304, 984, false, false, true);
+    display.writeImage(0, Bitmap3c1304x984_red, 0, 0, 1304, 984, true, false, true); // red bitmap is inverted
+    display.drawImage(Bitmap3c1304x984_black, 0, 0, 0, 1304, 984, true, false, true); // black bitmap is normal
   }
 }
 #endif

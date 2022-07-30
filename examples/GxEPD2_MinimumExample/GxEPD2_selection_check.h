@@ -40,6 +40,7 @@
 #define GxEPD2_260_M01_IS_BW true
 #define GxEPD2_266_BN_IS_BW true
 #define GxEPD2_270_IS_BW true
+#define GxEPD2_270_T91_IS_BW true
 #define GxEPD2_371_IS_BW true
 #define GxEPD2_370_TC1_IS_BW true
 #define GxEPD2_420_IS_BW true
@@ -72,6 +73,7 @@
 #define GxEPD2_750c_IS_3C true
 #define GxEPD2_750c_Z08_IS_3C true
 #define GxEPD2_750c_Z90_IS_3C true
+#define GxEPD2_1248c_IS_3C true
 // 7-color e-paper
 #define GxEPD2_565c_IS_7C true
 

@@ -53,7 +53,7 @@
 
 ### Supported SPI e-paper panels from Good Display:
 - GDEW0102T4     1.02" b/w
-- GDEP0150BN     1.50" b/w 200x200, e.g. LILYGO® TTGO T5 V2.4.1 1.50 inch
+- DEPG0150BN     1.50" b/w 200x200, e.g. LILYGO® TTGO T5 V2.4.1 1.50 inch
 - GDEP015OC1     1.54" b/w
 - GDEH0154D67    1.54" b/w, replacement for GDEP015OC1
 - GDEW0154T8     1.54" b/w 152x152
@@ -88,6 +88,7 @@
 - GDEY0266Z90    2.66" b/w/r 152x296
 - GDEW027C44     2.7" b/w/r
 - GDEW027W3      2.7" b/w
+- GDEY027T91     2.7" b/w
 - GDEW0371W7     3.7" b/w
 - ED037TC1       3.7" b/w 280x480 Waveshare 3.7"
 - GDEW042T2      4.2" b/w
@@ -104,7 +105,8 @@
 - GDEW075Z08     7.5" b/w/r 800x480
 - GDEH075Z90     7.5" b/w/r 880x528
 - GDEH116T91    11.6" b/w 960x640
-- GDEW1248T3    12.48 b/w 1304x984
+- GDEW1248T3    12.48" b/w 1304x984
+- GDEY1248Z51   12.48" b/w/r 1304x984
 #### Supported SPI e-paper panels & boards from Waveshare: compare with Good Display, same panel
 #### other supported panels
 - ED060SCT        6" grey levels, on Waveshare e-Paper IT8951 Driver HAT
@@ -116,8 +118,13 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.4.7
-- added support for GDEP0150BN 1.50" b/w 200x200, e.g. LILYGO® TTGO T5 V2.4.1 1.50 inch
+### Version 1.4.8
+- added support for GDEY027T91 2.7" b/w 176x264
+- added support for GDEY1248Z51 12.48" b/w/r 1304x984
+- fixed name of panel DEPG0150BN
+- updated certificate and fingerprint for GitHub download in GxEPD2_WiFi_Example
+#### Version 1.4.7
+- added support for DEPG0150BN 1.50" b/w 200x200, e.g. LILYGO® TTGO T5 V2.4.1 1.50 inch
 - added support for DEPG0213BN 2.13" b/w 128x250, e.g. LILYGO® TTGO T5 V2.3.1 2.13 inch
 - added support for DEPG0266BN 2.66" b/w 152x296, e.g. LILYGO® TTGO T5 2.66 inch
 - added support for DEPG0290BS 2.9"  b/w 128x296, e.g. LILYGO® TTGO T5 V2.4.1 2.9"

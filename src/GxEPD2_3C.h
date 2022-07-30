@@ -48,6 +48,7 @@
 #include "epd3c/GxEPD2_750c.h"
 #include "epd3c/GxEPD2_750c_Z08.h"
 #include "epd3c/GxEPD2_750c_Z90.h"
+#include "epd3c/GxEPD2_1248c.h"
 
 template<typename GxEPD2_Type, const uint16_t page_height>
 class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS

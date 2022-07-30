@@ -38,6 +38,7 @@
 //GxEPD2_BW<GxEPD2_260, GxEPD2_260::HEIGHT> display(GxEPD2_260(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEW026T0
 //GxEPD2_BW<GxEPD2_260_M01, GxEPD2_260_M01::HEIGHT> display(GxEPD2_260_M01(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEW026M01
 //GxEPD2_BW<GxEPD2_270, GxEPD2_270::HEIGHT> display(GxEPD2_270(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEW027W3
+//GxEPD2_BW<GxEPD2_270_T91, GxEPD2_270_T91::HEIGHT> display(GxEPD2_270_T91(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEY027T91
 //GxEPD2_BW<GxEPD2_371, GxEPD2_371::HEIGHT> display(GxEPD2_371(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEW0371W7
 //GxEPD2_BW<GxEPD2_370_TC1, GxEPD2_370_TC1::HEIGHT> display(GxEPD2_370_TC1(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // ED037TC1, Waveshare 3.7"
 //GxEPD2_BW<GxEPD2_420, GxEPD2_420::HEIGHT> display(GxEPD2_420(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEW042T2
@@ -102,6 +103,7 @@
 //GxEPD2_BW<GxEPD2_260, GxEPD2_260::HEIGHT> display(GxEPD2_260(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=2*/ 2, /*BUSY=5*/ 5)); // GDEW026T0
 //GxEPD2_BW<GxEPD2_260_M01, GxEPD2_260_M01::HEIGHT> display(GxEPD2_260_M01(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=2*/ 2, /*BUSY=5*/ 5)); // GDEW026M01
 //GxEPD2_BW<GxEPD2_270, GxEPD2_270::HEIGHT> display(GxEPD2_270(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=2*/ 2, /*BUSY=5*/ 5)); // GDEW027W3
+//GxEPD2_BW<GxEPD2_270_T91, GxEPD2_270_T91::HEIGHT> display(GxEPD2_270_T91(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=2*/ 2, /*BUSY=5*/ 5)); // GDEY027T91
 //GxEPD2_BW<GxEPD2_371, GxEPD2_371::HEIGHT> display(GxEPD2_371(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=2*/ 2, /*BUSY=5*/ 5)); // GDEW0371W7
 //GxEPD2_BW<GxEPD2_370_TC1, GxEPD2_370_TC1::HEIGHT> display(GxEPD2_370_TC1(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=2*/ 2, /*BUSY=5*/ 5)); // ED037TC1, Waveshare 3.7"
 //GxEPD2_BW<GxEPD2_420, GxEPD2_420::HEIGHT> display(GxEPD2_420(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=2*/ 2, /*BUSY=5*/ 5)); // GDEW042T2
@@ -165,6 +167,7 @@
 //GxEPD2_BW<GxEPD2_266_BN, GxEPD2_266_BN::HEIGHT> display(GxEPD2_266_BN(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // DEPG0266BN  152x296, SSD1680, TTGO T5 V2.4.1
 //GxEPD2_BW<GxEPD2_266_BN, GxEPD2_266_BN::HEIGHT> display(GxEPD2_266_BN(/*CS=5*/ SS, /*DC=*/ 19, /*RST=*/ 4, /*BUSY=*/ 34)); // DEPG0266BN  152x296, SSD1680, TTGO T5 V2.66 / T92_V1.0
 //GxEPD2_BW<GxEPD2_270, GxEPD2_270::HEIGHT> display(GxEPD2_270(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEW027W3
+//GxEPD2_BW<GxEPD2_270_T91, GxEPD2_270_T91::HEIGHT> display(GxEPD2_270_T91(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEY027T91
 //GxEPD2_BW<GxEPD2_371, GxEPD2_371::HEIGHT> display(GxEPD2_371(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEW0371W7
 //GxEPD2_BW<GxEPD2_370_TC1, GxEPD2_370_TC1::HEIGHT> display(GxEPD2_370_TC1(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // ED037TC1, Waveshare 3.7"
 //GxEPD2_BW<GxEPD2_420, GxEPD2_420::HEIGHT> display(GxEPD2_420(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEW042T2
@@ -209,6 +212,11 @@
 //GxEPD2_BW < GxEPD2_1248, GxEPD2_1248::HEIGHT / 4 >
 //display(GxEPD2_1248(/*sck=*/ 13, /*miso=*/ 12, /*mosi=*/ 14, /*cs_m1=*/ 23, /*cs_s1=*/ 22, /*cs_m2=*/ 16, /*cs_s2=*/ 19,
 //                             /*dc1=*/ 25, /*dc2=*/ 17, /*rst1=*/ 33, /*rst2=*/ 5, /*busy_m1=*/ 32, /*busy_s1=*/ 26, /*busy_m2=*/ 18, /*busy_s2=*/ 4));
+// Waveshare 12.48 b/w/r SPI display board and frame or Good Display 12.48 b/w/r panel GDEY1248Z51
+// general constructor for use with all parameters, e.g. for Waveshare ESP32 driver board mounted on connection board
+//GxEPD2_3C < GxEPD2_1248c, GxEPD2_1248c::HEIGHT / 4 >
+//display(GxEPD2_1248c(/*sck=*/ 13, /*miso=*/ 12, /*mosi=*/ 14, /*cs_m1=*/ 23, /*cs_s1=*/ 22, /*cs_m2=*/ 16, /*cs_s2=*/ 19,
+//                             /*dc1=*/ 25, /*dc2=*/ 17, /*rst1=*/ 33, /*rst2=*/ 5, /*busy_m1=*/ 32, /*busy_s1=*/ 26, /*busy_m2=*/ 18, /*busy_s2=*/ 4));
 #endif
 
 // can't use package "STMF1 Boards (STM32Duino.com)" (Roger Clark) anymore with Adafruit_GFX, use "STM32 Boards (selected from submenu)" (STMicroelectronics)
@@ -239,6 +247,7 @@
 //GxEPD2_BW<GxEPD2_260, MAX_HEIGHT(GxEPD2_260)> display(GxEPD2_260(/*CS=PA4*/ SS, /*DC=*/ PA3, /*RST=*/ PA2, /*BUSY=*/ PA1)); // GDEW026T0
 //GxEPD2_BW<GxEPD2_260_M01, MAX_HEIGHT(GxEPD2_260_M01)> display(GxEPD2_260_M01(/*CS=PA4*/ SS, /*DC=*/ PA3, /*RST=*/ PA2, /*BUSY=*/ PA1)); // GDEW026M01
 //GxEPD2_BW<GxEPD2_270, MAX_HEIGHT(GxEPD2_270)> display(GxEPD2_270(/*CS=PA4*/ SS, /*DC=*/ PA3, /*RST=*/ PA2, /*BUSY=*/ PA1)); // GDEW027W3
+//GxEPD2_BW<GxEPD2_270_T91, MAX_HEIGHT(GxEPD2_270_T91)> display(GxEPD2_270_T91(/*CS=PA4*/ SS, /*DC=*/ PA3, /*RST=*/ PA2, /*BUSY=*/ PA1)); // GDEY027T91
 //GxEPD2_BW<GxEPD2_371, MAX_HEIGHT(GxEPD2_371)> display(GxEPD2_371(/*CS=PA4*/ SS, /*DC=*/ PA3, /*RST=*/ PA2, /*BUSY=*/ PA1)); // GDEW0371W7
 //GxEPD2_BW<GxEPD2_370_TC1, MAX_HEIGHT(GxEPD2_370_TC1)> display(GxEPD2_370_TC1(/*CS=PA4*/ SS, /*DC=*/ PA3, /*RST=*/ PA2, /*BUSY=*/ PA1)); // ED037TC1, Waveshare 3.7"
 //GxEPD2_BW<GxEPD2_420, MAX_HEIGHT(GxEPD2_420)> display(GxEPD2_420(/*CS=PA4*/ SS, /*DC=*/ PA3, /*RST=*/ PA2, /*BUSY=*/ PA1)); // GDEW042T2
@@ -307,6 +316,7 @@
 //GxEPD2_BW<GxEPD2_260, MAX_HEIGHT(GxEPD2_260)> display(GxEPD2_260(/*CS=*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // GDEW026T0
 //GxEPD2_BW<GxEPD2_260_M01, MAX_HEIGHT(GxEPD2_260_M01)> display(GxEPD2_260_M01(/*CS=*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // GDEW026M01
 //GxEPD2_BW<GxEPD2_270, MAX_HEIGHT(GxEPD2_270)> display(GxEPD2_270(/*CS=*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // GDEW027W3
+//GxEPD2_BW<GxEPD2_270_T91, MAX_HEIGHT(GxEPD2_270_T91)> display(GxEPD2_270_T91(/*CS=*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // GDEY027T91
 //GxEPD2_BW<GxEPD2_371, MAX_HEIGHT(GxEPD2_371)> display(GxEPD2_371(/*CS=*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // GDEW0371W7
 //GxEPD2_BW<GxEPD2_370_TC1, MAX_HEIGHT(GxEPD2_370_TC1)> display(GxEPD2_370_TC1(/*CS=*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // ED037TC1, Waveshare 3.7"
 //GxEPD2_BW<GxEPD2_420, MAX_HEIGHT(GxEPD2_420)> display(GxEPD2_420(/*CS=*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // GDEW042T2
@@ -367,6 +377,7 @@
 //GxEPD2_BW<GxEPD2_260, MAX_HEIGHT(GxEPD2_260)> display(GxEPD2_260(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEW026T0
 //GxEPD2_BW<GxEPD2_260_M01, MAX_HEIGHT(GxEPD2_260_M01)> display(GxEPD2_260_M01(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEW026M01
 //GxEPD2_BW<GxEPD2_270, MAX_HEIGHT(GxEPD2_270)> display(GxEPD2_270(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEW027W3
+//GxEPD2_BW<GxEPD2_270_T91, MAX_HEIGHT(GxEPD2_270_T91)> display(GxEPD2_270_T91(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEY027T91
 //GxEPD2_BW<GxEPD2_371, MAX_HEIGHT(GxEPD2_371)> display(GxEPD2_371(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEW0371W7
 //GxEPD2_BW<GxEPD2_370_TC1, MAX_HEIGHT(GxEPD2_370_TC1)> display(GxEPD2_370_TC1(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // ED037TC1, Waveshare 3.7"
 //GxEPD2_BW<GxEPD2_420, MAX_HEIGHT(GxEPD2_420)> display(GxEPD2_420(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEW042T2

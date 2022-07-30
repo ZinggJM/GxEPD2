@@ -67,6 +67,7 @@
 //#define GxEPD2_DRIVER_CLASS GxEPD2_260_M01 // GDEW026M01  152x296, UC8151 (IL0373)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_266_BN // DEPG0266BN  152x296, SSD1680, TTGO T5 V2.66, TTGO T5 V2.4.1
 //#define GxEPD2_DRIVER_CLASS GxEPD2_270     // GDEW027W3   176x264, EK79652 (IL91874)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_270_T91 // GDEY027T91   176x264, SSD1680
 //#define GxEPD2_DRIVER_CLASS GxEPD2_371     // GDEW0371W7  240x416, UC8171 (IL0324)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_370_TC1 // ED037TC1  280x480, SSD1677, Waveshare 3.7"
 //#define GxEPD2_DRIVER_CLASS GxEPD2_420     // GDEW042T2   400x300, UC8176 (IL0398)
@@ -95,6 +96,7 @@
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750c     // GDEW075Z09  640x384, UC8179 (IL0371)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750c_Z08 // GDEW075Z08  800x480, GD7965
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750c_Z90 // GDEH075Z90  880x528, SSD1677
+//#define GxEPD2_DRIVER_CLASS GxEPD2_1248c    // GDEY1248Z51  1304x984, UC8179
 // 7-color e-paper
 //#define GxEPD2_DRIVER_CLASS GxEPD2_565c // Waveshare 5.65" 7-color (3C graphics)
 // grey levels parallel IF e-papers on Waveshare e-Paper IT8951 Driver HAT
@@ -113,11 +115,13 @@
 #define GxEPD2_3C_IS_GxEPD2_3C true
 #define GxEPD2_7C_IS_GxEPD2_7C true
 #define GxEPD2_1248_IS_GxEPD2_1248 true
+#define GxEPD2_1248c_IS_GxEPD2_1248c true
 #define IS_GxEPD(c, x) (c##x)
 #define IS_GxEPD2_BW(x) IS_GxEPD(GxEPD2_BW_IS_, x)
 #define IS_GxEPD2_3C(x) IS_GxEPD(GxEPD2_3C_IS_, x)
 #define IS_GxEPD2_7C(x) IS_GxEPD(GxEPD2_7C_IS_, x)
 #define IS_GxEPD2_1248(x) IS_GxEPD(GxEPD2_1248_IS_, x)
+#define IS_GxEPD2_1248c(x) IS_GxEPD(GxEPD2_1248c_IS_, x)
 
 #if defined (ESP8266)
 #define MAX_DISPLAY_BUFFER_SIZE (81920ul-34000ul-34000ul) // ~34000 base use, WiFiClientSecure seems to need about 34k more to work
@@ -146,7 +150,7 @@ GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> displ
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2))
 #endif
 // adapt the constructor parameters to your wiring
-#if !IS_GxEPD2_1248(GxEPD2_DRIVER_CLASS)
+#if !IS_GxEPD2_1248(GxEPD2_DRIVER_CLASS) && !IS_GxEPD2_1248c(GxEPD2_DRIVER_CLASS)
 #if defined(ARDUINO_LOLIN_D32_PRO)
 GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=5*/ EPD_CS, /*DC=*/ 0, /*RST=*/ 2, /*BUSY=*/ 15)); // my LOLIN_D32_PRO proto board
 #else
@@ -155,10 +159,10 @@ GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> displ
 //GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=5*/ EPD_CS, /*DC=*/ 19, /*RST=*/ 4, /*BUSY=*/ 34)); // LILYGO® TTGO T5 2.66
 //GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=5*/ EPD_CS, /*DC=*/ 2, /*RST=*/ 0, /*BUSY=*/ 4)); // e.g. TTGO T8 ESP32-WROVER
 #endif
-#else // GxEPD2_1248
-// Waveshare 12.48 b/w SPI display board and frame or Good Display 12.48 b/w panel GDEW1248T3
+#else // GxEPD2_1248 or GxEPD2_1248c
+// Waveshare 12.48 b/w or b/w/r SPI display board and frame or Good Display 12.48 b/w panel GDEW1248T3 or b/w/r panel GDEY1248Z51
 // general constructor for use with all parameters, e.g. for Waveshare ESP32 driver board mounted on connection board
-GxEPD2_BW < GxEPD2_1248, GxEPD2_1248::HEIGHT / 4 > display(GxEPD2_1248(/*sck=*/ 13, /*miso=*/ 12, /*mosi=*/ 14,
+GxEPD2_DISPLAY_CLASS < GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS) > display(GxEPD2_DRIVER_CLASS(/*sck=*/ 13, /*miso=*/ 12, /*mosi=*/ 14,
     /*cs_m1=*/ 23, /*cs_s1=*/ 22, /*cs_m2=*/ 16, /*cs_s2=*/ 19,
     /*dc1=*/ 25, /*dc2=*/ 17, /*rst1=*/ 33, /*rst2=*/ 5,
     /*busy_m1=*/ 32, /*busy_s1=*/ 26, /*busy_m2=*/ 18, /*busy_s2=*/ 4));
@@ -179,33 +183,47 @@ const int httpPort  = 80;
 const int httpsPort = 443;
 const char* fp_api_github_com = "df b2 29 c6 a6 38 1a 59 9d c9 ad 92 2d 26 f5 3c 83 8f a5 87"; // as of 25.11.2020
 const char* fp_github_com     = "5f 3f 7a c2 56 9f 50 a4 66 76 47 c6 a1 8c a0 07 aa ed bb 8e"; // as of 25.11.2020
-const char* fp_rawcontent     = "70 94 de dd e6 c4 69 48 3a 92 70 a1 48 56 78 2d 18 64 e0 b7"; // as of 25.11.2020
+//const char* fp_rawcontent     = "70 94 de dd e6 c4 69 48 3a 92 70 a1 48 56 78 2d 18 64 e0 b7"; // as of 25.11.2020
+const char* fp_rawcontent     = "8F 0E 79 24 71 C5 A7 D2 A7 46 76 30 C1 3C B7 2A 13 B0 01 B2"; // as of 29.7.2022
 
 // how to find the certificate was not easy. finally I found it using Mozilla Firefox.
 // opened one of the bitmaps, e.g. https://raw.githubusercontent.com/ZinggJM/GxEPD2/master/extras/bitmaps/logo200x200.bmp
 // clicked the lock symbol, Connection secure clicked >, show connection details, clicked More Information, clicked View Certificate, clicked Download PEM (chain),
-// selected Open with Notepad. Copied the middle certificate and editted to the following format:
+// selected Open with Notepad. Copied the middle certificate and edited to the following format:
 // the number of characters per line is of no importance, but the 3 \n are needed
+
+//  Validity
+// Not Before Fri, 18 Mar 2022 00:00:00 GMT
+// Not After Tue, 21 Mar 2023 23:59:59 GMT
 const char* certificate_rawcontent =
   "-----BEGIN CERTIFICATE-----\n"
-  "MIIEsTCCA5mgAwIBAgIQBOHnpNxc8vNtwCtCuF0VnzANBgkqhkiG9w0BAQsFADBsMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGln"
-  "aUNlcnQgSW5jMRkwFwYDVQQLExB3d3cuZGlnaWNlcnQuY29tMSswKQYDVQQDEyJEaWdpQ2VydCBIaWdoIEFzc3VyYW5jZSBFViBS"
-  "b290IENBMB4XDTEzMTAyMjEyMDAwMFoXDTI4MTAyMjEyMDAwMFowcDELMAkGA1UEBhMCVVMxFTATBgNVBAoTDERpZ2lDZXJ0IElu"
-  "YzEZMBcGA1UECxMQd3d3LmRpZ2ljZXJ0LmNvbTEvMC0GA1UEAxMmRGlnaUNlcnQgU0hBMiBIaWdoIEFzc3VyYW5jZSBTZXJ2ZXIg"
-  "Q0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC24C/CJAbIbQRf1+8KZAayfSImZRauQkCbztyfn3YHPsMwVYcZuU+U"
-  "DlqUH1VWtMICKq/QmO4LQNfE0DtyyBSe75CxEamu0si4QzrZCwvV1ZX1QK/IHe1NnF9Xt4ZQaJn1itrSxwUfqJfJ3KSxgoQtxq2l"
-  "nMcZgqaFD15EWCo3j/018QsIJzJa9buLnqS9UdAn4t07QjOjBSjEuyjMmqwrIw14xnvmXnG3Sj4I+4G3FhahnSMSTeXXkgisdaSc"
-  "us0Xsh5ENWV/UyU50RwKmmMbGZJ0aAo3wsJSSMs5WqK24V3B3aAguCGikyZvFEohQcftbZvySC/zA/WiaJJTL17jAgMBAAGjggFJ"
-  "MIIBRTASBgNVHRMBAf8ECDAGAQH/AgEAMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwNAYI"
-  "KwYBBQUHAQEEKDAmMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wSwYDVR0fBEQwQjBAoD6gPIY6aHR0cDov"
-  "L2NybDQuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0SGlnaEFzc3VyYW5jZUVWUm9vdENBLmNybDA9BgNVHSAENjA0MDIGBFUdIAAwKjAo"
-  "BggrBgEFBQcCARYcaHR0cHM6Ly93d3cuZGlnaWNlcnQuY29tL0NQUzAdBgNVHQ4EFgQUUWj/kK8CB3U8zNllZGKiErhZcjswHwYD"
-  "VR0jBBgwFoAUsT7DaQP4v0cB1JgmGggC72NkK8MwDQYJKoZIhvcNAQELBQADggEBABiKlYkD5m3fXPwdaOpKj4PWUS+Na0QWnqxj"
-  "9dJubISZi6qBcYRb7TROsLd5kinMLYBq8I4g4Xmk/gNHE+r1hspZcX30BJZr01lYPf7TMSVcGDiEo+afgv2MW5gxTs14nhr9hctJ"
-  "qvIni5ly/D6q1UEL2tU2ob8cbkdJf17ZSHwD2f2LSaCYJkJA69aSEaRkCldUxPUd1gJea6zuxICaEnL6VpPX/78whQYwvwt/Tv9X"
-  "BZ0k7YXDK/umdaisLRbvfXknsuvCnQsH6qqF0wGjIChBWUMo0oHjqvbsezt3tkBigAVBRQHvFwY+3sAzm2fTYS5yh+Rp/BIAV0AecPUeybQ=\n"
+  "MIIEvjCCA6agAwIBAgIQBtjZBNVYQ0b2ii+nVCJ+xDANBgkqhkiG9w0BAQsFADBh"
+  "MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3"
+  "d3cuZGlnaWNlcnQuY29tMSAwHgYDVQQDExdEaWdpQ2VydCBHbG9iYWwgUm9vdCBD"
+  "QTAeFw0yMTA0MTQwMDAwMDBaFw0zMTA0MTMyMzU5NTlaME8xCzAJBgNVBAYTAlVT"
+  "MRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxKTAnBgNVBAMTIERpZ2lDZXJ0IFRMUyBS"
+  "U0EgU0hBMjU2IDIwMjAgQ0ExMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC"
+  "AQEAwUuzZUdwvN1PWNvsnO3DZuUfMRNUrUpmRh8sCuxkB+Uu3Ny5CiDt3+PE0J6a"
+  "qXodgojlEVbbHp9YwlHnLDQNLtKS4VbL8Xlfs7uHyiUDe5pSQWYQYE9XE0nw6Ddn"
+  "g9/n00tnTCJRpt8OmRDtV1F0JuJ9x8piLhMbfyOIJVNvwTRYAIuE//i+p1hJInuW"
+  "raKImxW8oHzf6VGo1bDtN+I2tIJLYrVJmuzHZ9bjPvXj1hJeRPG/cUJ9WIQDgLGB"
+  "Afr5yjK7tI4nhyfFK3TUqNaX3sNk+crOU6JWvHgXjkkDKa77SU+kFbnO8lwZV21r"
+  "eacroicgE7XQPUDTITAHk+qZ9QIDAQABo4IBgjCCAX4wEgYDVR0TAQH/BAgwBgEB"
+  "/wIBADAdBgNVHQ4EFgQUt2ui6qiqhIx56rTaD5iyxZV2ufQwHwYDVR0jBBgwFoAU"
+  "A95QNVbRTLtm8KPiGxvDl7I90VUwDgYDVR0PAQH/BAQDAgGGMB0GA1UdJQQWMBQG"
+  "CCsGAQUFBwMBBggrBgEFBQcDAjB2BggrBgEFBQcBAQRqMGgwJAYIKwYBBQUHMAGG"
+  "GGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBABggrBgEFBQcwAoY0aHR0cDovL2Nh"
+  "Y2VydHMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0R2xvYmFsUm9vdENBLmNydDBCBgNV"
+  "HR8EOzA5MDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vRGlnaUNlcnRH"
+  "bG9iYWxSb290Q0EuY3JsMD0GA1UdIAQ2MDQwCwYJYIZIAYb9bAIBMAcGBWeBDAEB"
+  "MAgGBmeBDAECATAIBgZngQwBAgIwCAYGZ4EMAQIDMA0GCSqGSIb3DQEBCwUAA4IB"
+  "AQCAMs5eC91uWg0Kr+HWhMvAjvqFcO3aXbMM9yt1QP6FCvrzMXi3cEsaiVi6gL3z"
+  "ax3pfs8LulicWdSQ0/1s/dCYbbdxglvPbQtaCdB73sRD2Cqk3p5BJl+7j5nL3a7h"
+  "qG+fh/50tx8bIKuxT8b1Z11dmzzp/2n3YWzW2fP9NsarA4h20ksudYbj/NhVfSbC"
+  "EXffPgK2fPOre3qGNm+499iTcc+G33Mw+nur7SpZyEKEOxEXGlLzyQ4UfaJbcme6"
+  "ce1XR2bFuAJKZTRei9AqPCCcUZlM51Ke92sRKw2Sfh3oius2FkOH6ipjv3U/697E"
+  "A7sKPPcw7+uvTPyLNhBzPvOk\n"
   "-----END CERTIFICATE-----\n";
-
 
 const char* host_rawcontent   = "raw.githubusercontent.com";
 const char* path_rawcontent   = "/ZinggJM/GxEPD2/master/extras/bitmaps/";
@@ -463,7 +481,7 @@ void drawBitmapsBuffered_test()
 
 static const uint16_t input_buffer_pixels = 800; // may affect performance
 
-static const uint16_t max_row_width = 1448; // for up to 6" display 1448x1072
+static const uint16_t max_row_width = 1872; // for up to 7.8" display 1872x1404
 static const uint16_t max_palette_pixels = 256; // for depth <= 8
 
 uint8_t input_buffer[3 * input_buffer_pixels]; // up to depth 24
