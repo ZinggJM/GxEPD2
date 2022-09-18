@@ -42,7 +42,7 @@
 ### Supporting Arduino Forum Topics:
 
 - Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
-- Good Display ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
+- Good Display ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
 
 ### Note on documentation
 - GxEPD2 uses Adafruit_GFX for Graphics and Text support, which is well documented there
@@ -52,61 +52,61 @@
 - https://github.com/olikraus/u8glib/wiki/tpictureloop
 
 ### Supported SPI e-paper panels from Good Display:
-- GDEW0102T4     1.02" b/w
-- DEPG0150BN     1.50" b/w 200x200, e.g. LILYGO® TTGO T5 V2.4.1 1.50 inch
-- GDEP015OC1     1.54" b/w
-- GDEH0154D67    1.54" b/w, replacement for GDEP015OC1
-- GDEW0154T8     1.54" b/w 152x152
-- GDEW0154M09    1.54" b/w 200x200
-- GDEW0154M10    1.54" b/w 152x152 DES
-- GDEW0154Z04    1.54" b/w/r 200x200
-- GDEH0154Z90    1.54" b/w/r, replacement for GDEW0154Z04
-- GDE0213B1      2.13" b/w
-- GDEH0213B72    2.13" b/w, replacement for GDE0213B1
-- GDEH0213B73    2.13" b/w, new replacement for GDE0213B1, GDEH0213B72
-- GDEM0213B74    2.13" b/w
-- GDEW0213I5F    2.13" b/w flexible
-- GDEW0213T5D    2.13" b/w
-- GDEW0213M21    2.13" b/w DES
-- GDEW0213Z16    2.13" b/w/r
-- GDEW0213Z19    2.13" b/w/r
-- GDEY0213Z98    2.13" b/w/r 122x250
-- DEPG0213BN     2.13" b/w 128x250, e.g. LILYGO® TTGO T5 V2.3.1 2.13 inch
-- GDEH029A1      2.9" b/w
-- GDEW029T5      2.9" b/w
-- GDEW029T5D     2.9" b/w
-- GDEW029I6FD    2.9" b/w flexible
-- GDEM029T94     2.9" b/w
-- GDEW029M06     2.9" b/w DES
-- GDEW029Z10     2.9" b/w/r
-- GDEW029Z13     2.9" b/w/r
-- GDEM029C90     2.9" b/w/y
-- DEPG0290BS     2.9" b/w 128x296, e.g. LILYGO® TTGO T5 V2.4.1 2.9"
-- GDEW026T0      2.6" b/w
-- GDEW026M01     2.6" b/w DES
-- DEPG0266BN     2.66" b/w 152x296, e.g. LILYGO® TTGO T5 2.66 inch
-- GDEY0266Z90    2.66" b/w/r 152x296
-- GDEW027C44     2.7" b/w/r
-- GDEW027W3      2.7" b/w
-- GDEY027T91     2.7" b/w
-- GDEW0371W7     3.7" b/w
-- ED037TC1       3.7" b/w 280x480 Waveshare 3.7"
-- GDEW042T2      4.2" b/w
-- GDEW042M01     4.2" b/w DES
-- GDEW042Z15     4.2" b/w/r
-- GDEQ042Z21     4.2" b/w/r (Waveshare V2)
+- GDEW0102T4     1.02" b/w 80x128, UC8175
+- DEPG0150BN     1.50" b/w 200x200, SSD1681, e.g. LILYGO® TTGO T5 V2.4.1 1.50 inch
+- GDEP015OC1     1.54" b/w 200x200, IL3829, no longer available
+- GDEH0154D67    1.54" b/w 200x200, SSD1681, replacement for GDEP015OC1
+- GDEW0154T8     1.54" b/w 152x152, UC8151 (IL0373)
+- GDEW0154M09    1.54" b/w 200x200, JD79653A
+- GDEW0154M10    1.54" b/w 152x152, UC8151D, DES
+- GDEW0154Z04    1.54" b/w/r 200x200, IL0376F, no longer available
+- GDEH0154Z90    1.54" b/w/r 200x200, SSD1681, replacement for GDEW0154Z04
+- GDE0213B1      2.13" b/w 128x250, IL3895, phased out
+- GDEH0213B72    2.13" b/w 128x250, SSD1675A (IL3897), replacement for GDE0213B1
+- GDEH0213B73    2.13" b/w 128x250, SSD1675B, new replacement for GDE0213B1, GDEH0213B72
+- GDEM0213B74    2.13" b/w 128x250, SSD1680
+- GDEW0213I5F    2.13" b/w 104x212, UC8151 (IL0373), flexible
+- GDEW0213T5D    2.13" b/w 128x296, UC8151 (IL0373)
+- GDEW0213M21    2.13" b/w 104x212, UC8151 (IL0373), DES
+- GDEW0213Z16    2.13" b/w/r 104x212, UC8151 (IL0373)
+- GDEW0213Z19    2.13" b/w/r 104x212, UC8151D
+- GDEY0213Z98    2.13" b/w/r 122x250, SSD1680
+- DEPG0213BN     2.13" b/w 128x250, SSD1680, e.g. LILYGO® TTGO T5 V2.3.1 2.13 inch
+- GDEH029A1      2.9" b/w 128x296, SSD1608 (IL3820)
+- GDEW029T5      2.9" b/w 128x296, UC8151 (IL0373)
+- GDEW029T5D     2.9" b/w 128x296, UC8151D
+- GDEW029I6FD    2.9" b/w 128x296, UC8151D, flexible
+- GDEM029T94     2.9" b/w 128x296, SSD1680
+- GDEW029M06     2.9" b/w 128x296, UC8151D, DES
+- GDEW029Z10     2.9" b/w/r 128x296, UC8151 (IL0373)
+- GDEH029Z13     2.9" b/w/r 128x296, UC8151D
+- GDEM029C90     2.9" b/w/y 128x296, SSD1680
+- DEPG0290BS     2.9" b/w 128x296, SSD1680, e.g. LILYGO® TTGO T5 V2.4.1 2.9"
+- GDEW026T0      2.6" b/w 152x296, UC8151 (IL0373)
+- GDEW026M01     2.6" b/w 152x296, UC8151 (IL0373), DES
+- DEPG0266BN     2.66" b/w 152x296, SSD1680, e.g. LILYGO® TTGO T5 2.66 inch
+- GDEY0266Z90    2.66" b/w/r 152x296, SSD1680
+- GDEW027C44     2.7" b/w/r 176x264, IL91874
+- GDEW027W3      2.7" b/w 176x264, EK79652 (IL91874)
+- GDEY027T91     2.7" b/w 176x264, SSD1680
+- GDEW0371W7     3.7" b/w 240x416, UC8171 (IL0324)
+- ED037TC1       3.7" b/w 280x480, SSD1677, Waveshare 3.7"
+- GDEW042T2      4.2" b/w 400x300, UC8176 (IL0398)
+- GDEW042M01     4.2" b/w 400x300, UC8176 (IL0398), DES
+- GDEW042Z15     4.2" b/w/r 400x300, UC8176 (IL0398)
+- GDEQ042Z21     4.2" b/w/r 400x300, UC8276, (Waveshare V2)
 - ACeP565        5.65" Waveshare 5.65" 7-color e-paper display 600x448
-- GDEW0583T7     5.83" b/w
-- GDEW0583T8     5.83" b/w 648x460
-- GDEW0583Z83    5.83" b/w/r 648x460
-- GDEW075T8      7.5" b/w
-- GDEW075T7      7.5" b/w 800x480
-- GDEW075Z09     7.5" b/w/r
-- GDEW075Z08     7.5" b/w/r 800x480
-- GDEH075Z90     7.5" b/w/r 880x528
-- GDEH116T91    11.6" b/w 960x640
-- GDEW1248T3    12.48" b/w 1304x984
-- GDEY1248Z51   12.48" b/w/r 1304x984
+- GDEW0583T7     5.83" b/w 600x448, UC8179 (IL0371)
+- GDEW0583T8     5.83" b/w 648x480, GD7965
+- GDEW0583Z83    5.83" b/w/r 648x480, GD7965
+- GDEW075T8      7.5" b/w 640x384, UC8179 (IL0371)
+- GDEW075T7      7.5" b/w 800x480, GD7965
+- GDEW075Z09     7.5" b/w/r 640x384, UC8179 (IL0371)
+- GDEW075Z08     7.5" b/w/r 800x480, GD7965
+- GDEH075Z90     7.5" b/w/r 880x528, SSD1677
+- GDEH116T91    11.6" b/w 960x640, SSD1677
+- GDEW1248T3    12.48" b/w 1304x984, UC8179
+- GDEY1248Z51   12.48" b/w/r 1304x984, UC8179
 #### Supported SPI e-paper panels & boards from Waveshare: compare with Good Display, same panel
 #### other supported panels
 - ED060SCT        6" grey levels, on Waveshare e-Paper IT8951 Driver HAT
@@ -118,7 +118,11 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.4.8
+### Version 1.4.9
+- added missing constructor lines to GxEPD2_display_selection.h
+- added panel details to comments in GxEPD2_display_selection.h
+- added panel details to Supported SPI e-paper panels in README.md
+#### Version 1.4.8
 - added support for GDEY027T91 2.7" b/w 176x264
 - added support for GDEY1248Z51 12.48" b/w/r 1304x984
 - fixed name of panel DEPG0150BN
