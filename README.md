@@ -6,7 +6,7 @@
 - For SPI e-paper displays from Dalian Good Display 
 - and SPI e-paper boards from Waveshare
 
-### important note :
+### important note:
 - the display panels are for 3.3V supply and 3.3V data lines
 - never connect data lines directly to 5V Arduino data pins, use e.g. 4k7/10k resistor divider
 - series resistor only is not enough for reliable operation (back-feed effect through protection diodes)
@@ -15,9 +15,9 @@
 - the actual Waveshare display boards now have level converters and series regulator, safe for 5V
 - use 3k3 pull-down on SS for ESP8266 for boards with level converters
 - note that 7.5" e-paper displays don't work reliable if fed from 3.3V Arduino pin
-- note that Waveshare bords with "clever" reset circuit may need shortened reset pulse
+- note that Waveshare boards with "clever" reset circuit may need shortened reset pulse
 - use `init(115200, true, 2, false)` for Waveshare boards with "clever" reset circuit
-- note that Waveshare bords with "clever" reset circuit need 1k pull-up on RST on ESP8266, or different pin
+- note that Waveshare boards with "clever" reset circuit need 1k pull-up on RST on ESP8266, or different pin
 
 ### Paged Drawing, Picture Loop
  - This library uses paged drawing to limit RAM use and cope with missing single pixel update support
