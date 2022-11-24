@@ -76,6 +76,7 @@
 //#define GxEPD2_DRIVER_CLASS GxEPD2_583_T8  // GDEW0583T8  648x480, GD7965
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750     // GDEW075T8   640x384, UC8179 (IL0371)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750_T7  // GDEW075T7   800x480, GD7965
+//#define GxEPD2_DRIVER_CLASS GxEPD2_750_YT7  // GDEY075T7   800x480, GD7965
 //#define GxEPD2_DRIVER_CLASS GxEPD2_1160_T91 // GDEH116T91 960x640, SSD1677
 //#define GxEPD2_DRIVER_CLASS GxEPD2_1248     // GDEW1248T3  1304x984, UC8179
 // 3-color e-papers
@@ -124,7 +125,7 @@
 #define IS_GxEPD2_1248c(x) IS_GxEPD(GxEPD2_1248c_IS_, x)
 
 #if defined (ESP8266)
-#define MAX_DISPLAY_BUFFER_SIZE (81920ul-34000ul-34000ul) // ~34000 base use, WiFiClientSecure seems to need about 34k more to work
+#define MAX_DISPLAY_BUFFER_SIZE (81920ul-34000ul-36000ul) // ~34000 base use, WiFiClientSecure seems to need about 36k more to work (with certificates)
 #if IS_GxEPD2_BW(GxEPD2_DISPLAY_CLASS)
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8))
 #elif IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS)
@@ -171,7 +172,6 @@ GxEPD2_DISPLAY_CLASS < GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS) > di
 
 #if defined (ESP8266)
 #include <ESP8266WiFi.h>
-#define USE_BearSSL true
 #endif
 
 #include <WiFiClient.h>
@@ -181,55 +181,22 @@ const char* ssid     = "........";
 const char* password = "........";
 const int httpPort  = 80;
 const int httpsPort = 443;
-const char* fp_api_github_com = "df b2 29 c6 a6 38 1a 59 9d c9 ad 92 2d 26 f5 3c 83 8f a5 87"; // as of 25.11.2020
-const char* fp_github_com     = "5f 3f 7a c2 56 9f 50 a4 66 76 47 c6 a1 8c a0 07 aa ed bb 8e"; // as of 25.11.2020
-//const char* fp_rawcontent     = "70 94 de dd e6 c4 69 48 3a 92 70 a1 48 56 78 2d 18 64 e0 b7"; // as of 25.11.2020
-const char* fp_rawcontent     = "8F 0E 79 24 71 C5 A7 D2 A7 46 76 30 C1 3C B7 2A 13 B0 01 B2"; // as of 29.7.2022
 
-// how to find the certificate was not easy. finally I found it using Mozilla Firefox.
-// opened one of the bitmaps, e.g. https://raw.githubusercontent.com/ZinggJM/GxEPD2/master/extras/bitmaps/logo200x200.bmp
-// clicked the lock symbol, Connection secure clicked >, show connection details, clicked More Information, clicked View Certificate, clicked Download PEM (chain),
-// selected Open with Notepad. Copied the middle certificate and edited to the following format:
-// the number of characters per line is of no importance, but the 3 \n are needed
+// note: the certificates have been moved to a separate header file, as R"CERT( destroys IDE Auto Format capability
 
-//  Validity
-// Not Before Fri, 18 Mar 2022 00:00:00 GMT
-// Not After Tue, 21 Mar 2023 23:59:59 GMT
-const char* certificate_rawcontent =
-  "-----BEGIN CERTIFICATE-----\n"
-  "MIIEvjCCA6agAwIBAgIQBtjZBNVYQ0b2ii+nVCJ+xDANBgkqhkiG9w0BAQsFADBh"
-  "MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3"
-  "d3cuZGlnaWNlcnQuY29tMSAwHgYDVQQDExdEaWdpQ2VydCBHbG9iYWwgUm9vdCBD"
-  "QTAeFw0yMTA0MTQwMDAwMDBaFw0zMTA0MTMyMzU5NTlaME8xCzAJBgNVBAYTAlVT"
-  "MRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxKTAnBgNVBAMTIERpZ2lDZXJ0IFRMUyBS"
-  "U0EgU0hBMjU2IDIwMjAgQ0ExMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC"
-  "AQEAwUuzZUdwvN1PWNvsnO3DZuUfMRNUrUpmRh8sCuxkB+Uu3Ny5CiDt3+PE0J6a"
-  "qXodgojlEVbbHp9YwlHnLDQNLtKS4VbL8Xlfs7uHyiUDe5pSQWYQYE9XE0nw6Ddn"
-  "g9/n00tnTCJRpt8OmRDtV1F0JuJ9x8piLhMbfyOIJVNvwTRYAIuE//i+p1hJInuW"
-  "raKImxW8oHzf6VGo1bDtN+I2tIJLYrVJmuzHZ9bjPvXj1hJeRPG/cUJ9WIQDgLGB"
-  "Afr5yjK7tI4nhyfFK3TUqNaX3sNk+crOU6JWvHgXjkkDKa77SU+kFbnO8lwZV21r"
-  "eacroicgE7XQPUDTITAHk+qZ9QIDAQABo4IBgjCCAX4wEgYDVR0TAQH/BAgwBgEB"
-  "/wIBADAdBgNVHQ4EFgQUt2ui6qiqhIx56rTaD5iyxZV2ufQwHwYDVR0jBBgwFoAU"
-  "A95QNVbRTLtm8KPiGxvDl7I90VUwDgYDVR0PAQH/BAQDAgGGMB0GA1UdJQQWMBQG"
-  "CCsGAQUFBwMBBggrBgEFBQcDAjB2BggrBgEFBQcBAQRqMGgwJAYIKwYBBQUHMAGG"
-  "GGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBABggrBgEFBQcwAoY0aHR0cDovL2Nh"
-  "Y2VydHMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0R2xvYmFsUm9vdENBLmNydDBCBgNV"
-  "HR8EOzA5MDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vRGlnaUNlcnRH"
-  "bG9iYWxSb290Q0EuY3JsMD0GA1UdIAQ2MDQwCwYJYIZIAYb9bAIBMAcGBWeBDAEB"
-  "MAgGBmeBDAECATAIBgZngQwBAgIwCAYGZ4EMAQIDMA0GCSqGSIb3DQEBCwUAA4IB"
-  "AQCAMs5eC91uWg0Kr+HWhMvAjvqFcO3aXbMM9yt1QP6FCvrzMXi3cEsaiVi6gL3z"
-  "ax3pfs8LulicWdSQ0/1s/dCYbbdxglvPbQtaCdB73sRD2Cqk3p5BJl+7j5nL3a7h"
-  "qG+fh/50tx8bIKuxT8b1Z11dmzzp/2n3YWzW2fP9NsarA4h20ksudYbj/NhVfSbC"
-  "EXffPgK2fPOre3qGNm+499iTcc+G33Mw+nur7SpZyEKEOxEXGlLzyQ4UfaJbcme6"
-  "ce1XR2bFuAJKZTRei9AqPCCcUZlM51Ke92sRKw2Sfh3oius2FkOH6ipjv3U/697E"
-  "A7sKPPcw7+uvTPyLNhBzPvOk\n"
-  "-----END CERTIFICATE-----\n";
+#include "GxEPD2_github_raw_certs.h"
+
+const char* certificate_rawcontent = cert_DigiCert_TLS_RSA_SHA256_2020_CA1; // ok, should work until 2031-04-13 23:59:59
+//const char* certificate_rawcontent = github_io_chain_pem_first;  // ok, should work until Tue, 21 Mar 2023 23:59:59 GMT
+//const char* certificate_rawcontent = github_io_chain_pem_second;  // ok, should work until Tue, 21 Mar 2023 23:59:59 GMT
+//const char* certificate_rawcontent = github_io_chain_pem_third;  // ok, should work until Tue, 21 Mar 2023 23:59:59 GMT
 
 const char* host_rawcontent   = "raw.githubusercontent.com";
 const char* path_rawcontent   = "/ZinggJM/GxEPD2/master/extras/bitmaps/";
 const char* path_prenticedavid   = "/prenticedavid/MCUFRIEND_kbv/master/extras/bitmaps/";
 const char* path_waveshare_c  = "/waveshare/e-Paper/master/RaspberryPi_JetsonNano/c/pic/";
 const char* path_waveshare_py = "/waveshare/e-Paper/master/RaspberryPi_JetsonNano/python/pic/";
+const char* fp_rawcontent     = "8F 0E 79 24 71 C5 A7 D2 A7 46 76 30 C1 3C B7 2A 13 B0 01 B2"; // as of 29.7.2022
 
 // note that BMP bitmaps are drawn at physical position in physical orientation of the screen
 void showBitmapFrom_HTTP(const char* host, const char* path, const char* filename, int16_t x, int16_t y, bool with_color = true);
@@ -266,9 +233,9 @@ void setup()
   if (!WiFi.getAutoConnect() || ( WiFi.getMode() != WIFI_STA) || ((WiFi.SSID() != ssid) && String(ssid) != "........"))
   {
     Serial.println();
-    Serial.print("WiFi.getAutoConnect()=");
+    Serial.print("WiFi.getAutoConnect() = ");
     Serial.println(WiFi.getAutoConnect());
-    Serial.print("WiFi.SSID()=");
+    Serial.print("WiFi.SSID() = ");
     Serial.println(WiFi.SSID());
     WiFi.mode(WIFI_STA); // switch off AP
     Serial.print("Connecting to ");
@@ -293,6 +260,8 @@ void setup()
 
   // Print the IP address
   Serial.println(WiFi.localIP());
+
+  setClock();
 
   if ((display.epd2.panel == GxEPD2::GDEW0154Z04) || (display.epd2.panel == GxEPD2::ACeP565) || false)
   {
@@ -344,9 +313,9 @@ void drawBitmaps_other()
 {
   int16_t w2 = display.width() / 2;
   int16_t h2 = display.height() / 2;
-  showBitmapFrom_HTTP("www.packescape.com", "/img/assets/", "IniciMenusTV2.bmp", w2 - 200, h2 - 150, false);
+  showBitmapFrom_HTTP("www.packescape.com", " / img / assets / ", "IniciMenusTV2.bmp", w2 - 200, h2 - 150, false);
   delay(2000);
-  showBitmapFrom_HTTP("www.squix.org", "/blog/wunderground/", "chanceflurries.bmp", w2 - 50, h2 - 50, false);
+  showBitmapFrom_HTTP("www.squix.org", " / blog / wunderground / ", "chanceflurries.bmp", w2 - 50, h2 - 50, false);
   delay(2000);
   showBitmapFrom_HTTPS(host_rawcontent, path_prenticedavid, "betty_1.bmp", fp_rawcontent, w2 - 100, h2 - 160);
   delay(2000);
@@ -426,7 +395,7 @@ void drawBitmapsBuffered_other()
 {
   int16_t w2 = display.width() / 2;
   int16_t h2 = display.height() / 2;
-  showBitmapFrom_HTTP_Buffered("www.squix.org", "/blog/wunderground/", "chanceflurries.bmp", w2 - 50, h2 - 50, false);
+  showBitmapFrom_HTTP_Buffered("www.squix.org", " / blog / wunderground / ", "chanceflurries.bmp", w2 - 50, h2 - 50, false);
   delay(2000);
   //showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_prenticedavid, "betty_1.bmp", fp_rawcontent, w2 - 100, h2 - 160);
   delay(2000);
@@ -466,7 +435,7 @@ void drawBitmapsBuffered_7C()
     delay(2000);
     showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_py, "5in65f4.bmp", fp_rawcontent, 0, 0);
     delay(2000);
-    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_py, "N-Color1.bmp", fp_rawcontent, 0, 0);
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_py, "N - Color1.bmp", fp_rawcontent, 0, 0);
     delay(2000);
   }
 }
@@ -535,11 +504,11 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
   if (read16(client) == 0x4D42) // BMP signature
   {
     uint32_t fileSize = read32(client);
-    uint32_t creatorBytes = read32(client);
+    uint32_t creatorBytes = read32(client); (void)creatorBytes; //unused
     uint32_t imageOffset = read32(client); // Start of image data
     uint32_t headerSize = read32(client);
     uint32_t width  = read32(client);
-    uint32_t height = read32(client);
+    int32_t height = (int32_t) read32(client);
     uint16_t planes = read16(client);
     uint16_t depth = read16(client); // bits per pixel
     uint32_t format = read32(client);
@@ -572,7 +541,8 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
         uint8_t bitmask = 0xFF;
         uint8_t bitshift = 8 - depth;
         uint16_t red, green, blue;
-        bool whitish, colored;
+        bool whitish = false;
+        bool colored = false;
         if (depth == 1) with_color = false;
         if (depth <= 8)
         {
@@ -764,11 +734,11 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
   if (read16(client) == 0x4D42) // BMP signature
   {
     uint32_t fileSize = read32(client);
-    uint32_t creatorBytes = read32(client);
+    uint32_t creatorBytes = read32(client); (void)creatorBytes; //unused
     uint32_t imageOffset = read32(client); // Start of image data
     uint32_t headerSize = read32(client);
     uint32_t width  = read32(client);
-    uint32_t height = read32(client);
+    int32_t height = (int32_t) read32(client);
     uint16_t planes = read16(client);
     uint16_t depth = read16(client); // bits per pixel
     uint32_t format = read32(client);
@@ -801,7 +771,8 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
         uint8_t bitmask = 0xFF;
         uint8_t bitshift = 8 - depth;
         uint16_t red, green, blue;
-        bool whitish, colored;
+        bool whitish = false;
+        bool colored = false;
         if (depth == 1) with_color = false;
         if (depth <= 8)
         {
@@ -961,8 +932,9 @@ void showBitmapFrom_HTTP_Buffered(const char* host, const char* path, const char
 void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filename, const char* fingerprint, int16_t x, int16_t y, bool with_color, const char* certificate)
 {
   // Use WiFiClientSecure class to create TLS connection
-#if USE_BearSSL
+#if defined (ESP8266)
   BearSSL::WiFiClientSecure client;
+  BearSSL::X509List cert(certificate ? certificate : certificate_rawcontent);
 #else
   WiFiClientSecure client;
 #endif
@@ -974,8 +946,11 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
   Serial.println(); Serial.print("downloading file \""); Serial.print(filename);  Serial.println("\"");
   Serial.print("connecting to "); Serial.println(host);
 #if defined (ESP8266)
-  client.setBufferSizes(4096, 4096); // doesn't help
-  if (fingerprint) client.setFingerprint(fingerprint);
+  client.setBufferSizes(4096, 4096); // required
+  //client.setBufferSizes(8192, 4096); // may help for some sites
+  if (certificate) client.setTrustAnchors(&cert);
+  else if (fingerprint) client.setFingerprint(fingerprint);
+  else client.setInsecure();
 #elif defined (ESP32)
   if (certificate) client.setCACert(certificate);
 #endif
@@ -1010,14 +985,23 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
   }
   if (!connection_ok) return;
   // Parse BMP header
-  if (read16(client) == 0x4D42) // BMP signature
+  //if (read16(client) == 0x4D42) // BMP signature
+  uint16_t signature = 0;
+  for (int16_t i = 0; i < 50; i++)
+  {
+    if (!client.available()) delay(100);
+    else signature = read16(client);
+    //Serial.print("signature: 0x"); Serial.println(signature, HEX);
+    if (signature == 0x4D42) break;
+  }
+  if (signature == 0x4D42) // BMP signature
   {
     uint32_t fileSize = read32(client);
-    uint32_t creatorBytes = read32(client);
+    uint32_t creatorBytes = read32(client); (void)creatorBytes; //unused
     uint32_t imageOffset = read32(client); // Start of image data
     uint32_t headerSize = read32(client);
     uint32_t width  = read32(client);
-    uint32_t height = read32(client);
+    int32_t height = (int32_t) read32(client);
     uint16_t planes = read16(client);
     uint16_t depth = read16(client); // bits per pixel
     uint32_t format = read32(client);
@@ -1050,7 +1034,8 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
         uint8_t bitmask = 0xFF;
         uint8_t bitshift = 8 - depth;
         uint16_t red, green, blue;
-        bool whitish, colored;
+        bool whitish = false;
+        bool colored = false;
         if (depth == 1) with_color = false;
         if (depth <= 8)
         {
@@ -1199,8 +1184,9 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
 void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const char* filename, const char* fingerprint, int16_t x, int16_t y, bool with_color, const char* certificate)
 {
   // Use WiFiClientSecure class to create TLS connection
-#if USE_BearSSL
+#if defined (ESP8266)
   BearSSL::WiFiClientSecure client;
+  BearSSL::X509List cert(certificate ? certificate : certificate_rawcontent);
 #else
   WiFiClientSecure client;
 #endif
@@ -1213,8 +1199,11 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
   display.fillScreen(GxEPD_WHITE);
   Serial.print("connecting to "); Serial.println(host);
 #if defined (ESP8266)
-  client.setBufferSizes(4096, 4096); // doesn't help
-  if (fingerprint) client.setFingerprint(fingerprint);
+  client.setBufferSizes(4096, 4096); // required
+  //client.setBufferSizes(8192, 4096); // may help for some sites
+  if (certificate) client.setTrustAnchors(&cert);
+  else if (fingerprint) client.setFingerprint(fingerprint);
+  else client.setInsecure();
 #elif defined (ESP32)
   if (certificate) client.setCACert(certificate);
 #endif
@@ -1249,14 +1238,26 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
   }
   if (!connection_ok) return;
   // Parse BMP header
-  if (read16(client) == 0x4D42) // BMP signature
+  //if (read16(client) == 0x4D42) // BMP signature
+  uint16_t signature = 0;
+  for (int16_t i = 0; i < 50; i++)
+  {
+    if (!client.available()) delay(100);
+    else signature = read16(client);
+    if (signature == 0x4D42)
+    {
+      //Serial.print("signature wait loops: "); Serial.println(i);
+      break;
+    }
+  }
+  if (signature == 0x4D42) // BMP signature
   {
     uint32_t fileSize = read32(client);
-    uint32_t creatorBytes = read32(client);
+    uint32_t creatorBytes = read32(client); (void)creatorBytes; //unused
     uint32_t imageOffset = read32(client); // Start of image data
     uint32_t headerSize = read32(client);
     uint32_t width  = read32(client);
-    uint32_t height = read32(client);
+    int32_t height = (int32_t) read32(client);
     uint16_t planes = read16(client);
     uint16_t depth = read16(client); // bits per pixel
     uint32_t format = read32(client);
@@ -1289,7 +1290,8 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
         uint8_t bitmask = 0xFF;
         uint8_t bitshift = 8 - depth;
         uint16_t red, green, blue;
-        bool whitish, colored;
+        bool whitish = false;
+        bool colored = false;
         if (depth == 1) with_color = false;
         if (depth <= 8)
         {
@@ -1476,7 +1478,7 @@ uint32_t skip(BearSSL::WiFiClientSecure& client, int32_t bytes)
   {
     if (client.available())
     {
-      int16_t v = client.read();
+      client.read();
       remain--;
     }
     else delay(1);
@@ -1513,7 +1515,7 @@ uint32_t skip(WiFiClient& client, int32_t bytes)
   {
     if (client.available())
     {
-      int16_t v = client.read();
+      client.read();
       remain--;
     }
     else delay(1);
@@ -1538,4 +1540,24 @@ uint32_t read8n(WiFiClient& client, uint8_t* buffer, int32_t bytes)
     if (millis() - start > 2000) break; // don't hang forever
   }
   return bytes - remain;
+}
+
+// Set time via NTP, as required for x.509 validation
+void setClock()
+{
+  configTime(3 * 3600, 0, "pool.ntp.org", "time.nist.gov");
+
+  Serial.print("Waiting for NTP time sync: ");
+  time_t now = time(nullptr);
+  while (now < 8 * 3600 * 2)
+  {
+    delay(500);
+    Serial.print(".");
+    now = time(nullptr);
+  }
+  Serial.println("");
+  struct tm timeinfo;
+  gmtime_r(&now, &timeinfo);
+  Serial.print("Current time: ");
+  Serial.print(asctime(&timeinfo));
 }
