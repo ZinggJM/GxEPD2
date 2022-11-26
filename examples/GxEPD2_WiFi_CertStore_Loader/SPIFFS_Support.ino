@@ -35,7 +35,7 @@ void listDir(fs::FS &fs, const char * dirname, uint8_t levels) {
 
 void listFiles()
 {
-  listDir(LittleFS, "/", 0);
+  listDir(SPIFFS, "/", 0);
 }
 
 #elif defined(ESP8266)
