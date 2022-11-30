@@ -22,8 +22,24 @@
 // **** NOTE that the mapping suggestion may need modification depending on SD board used! ****
 // ********************************************************************************************
 //
-//#define SD_CS SS  // e.g. for RobotDyn Wemos D1 mini SD board
-//#define EPD_CS D1 // alternative I use with RobotDyn Wemos D1 mini SD board
+// NOTE for use with Waveshare ESP32 Driver Board:
+// **** also need to select the constructor with the parameters for this board in GxEPD2_display_selection_new_style.h ****
+//
+// The Wavehare ESP32 Driver Board uses uncommon SPI pins for the FPC connector. It uses HSPI pins, but SCK and MOSI are swapped.
+// To use HW SPI with the ESP32 Driver Board, HW SPI pins need be re-mapped in any case. Can be done using either HSPI or VSPI.
+// Other SPI clients can either be connected to the same SPI bus as the e-paper, or to the other HW SPI bus, or through SW SPI.
+// The logical configuration would be to use the e-paper connection on HSPI with re-mapped pins, and use VSPI for other SPI clients.
+// VSPI with standard VSPI pins is used by the global SPI instance of the Arduino IDE ESP32 package.
+//
+// Alternately VSPI with re-mapped pins can be used with the ESP32 Driver Board FPC connector. 
+// This was used with the original example GxEPD2_WS_ESP32_Driver.ino.
+// Then the standard HW SPI pins can be used for other clients through HSPI with re-mapped pins.
+// This is not the prefered configuration, but also works. Available in this example for test.
+
+// uncomment next line to use HSPI for EPD (and VSPI for SD), e.g. with Waveshare ESP32 Driver Board
+//#define USE_HSPI_FOR_EPD
+// alternately uncomment next line to use HSPI for SD (and VSPI for EPD), e.g. with Waveshare ESP32 Driver Board
+//#define USE_HSPI_FOR_SD
 
 // base class GxEPD2_GFX can be used to pass references or pointers to the display instance as parameter, uses ~1.2k more code
 // enable or disable GxEPD2_GFX base class
@@ -41,18 +57,14 @@
 
 #if defined(ESP32)
 
-// has support for FAT32 support with long filenames
 #include "FS.h"
 #include "SD.h"
 #include "SPI.h"
-#define SdFile File
-#define seekSet seek
 
 #else
 
-// include SdFat for FAT32 support with long filenames; available through Library Manager
-#include <SdFat.h>
-SdFat SD;
+#include <SPI.h>
+#include <SD.h>
 
 #endif
 
@@ -62,12 +74,14 @@ SdFat SD;
 #define EPD_CS D1 // alternative I use with RobotDyn Wemos D1 mini SD board
 #endif
 
-// select the display class and display driver class in the following file (new style):
-// don't forget to modify or override EPD_CS if needed
-#include "GxEPD2_display_selection_new_style.h"
-
 #if defined(ESP32)
+#if defined(USE_HSPI_FOR_EPD) || defined(USE_HSPI_FOR_SD)
+#define SD_CS SS
+#define EPD_CS 15
+SPIClass hspi(HSPI);
+#else
 #define SD_CS 2  // adapted to my wiring
+#endif
 #endif
 
 #if defined(__AVR)
@@ -77,6 +91,10 @@ SdFat SD;
 // !!! use GxEPD2_SD_AVR_Example.ino instead !!!
 //GxEPD2_154 display(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7);
 #endif
+
+// select the display class and display driver class in the following file (new style):
+// don't forget to modify or override EPD_CS if needed
+#include "GxEPD2_display_selection_new_style.h"
 
 // function declaration with default parameter
 // note that BMP bitmaps are drawn at physical position in physical orientation of the screen
@@ -94,14 +112,29 @@ void setup()
   Serial.println();
   Serial.println("GxEPD2_SD_Example");
 
+#if defined(ESP32) && defined(USE_HSPI_FOR_EPD)
+  hspi.begin(13, 12, 14, 15); // remap hspi for EPD (swap pins)
+  display.epd2.selectSPI(hspi, SPISettings(4000000, MSBFIRST, SPI_MODE0));
+#elif defined(ESP32) && defined(USE_HSPI_FOR_SD)
+  SPI.begin(13, 12, 14, 15); // remap SPI for EPD
+  hspi.begin(SCK, MISO, MOSI, SS); // remap hspi for SD
+#endif
   display.init(115200);
 
   Serial.print("Initializing SD card...");
+#if defined(ESP32) && defined(USE_HSPI_FOR_SD)
+  if (!SD.begin(SD_CS, hspi))
+  {
+    Serial.println("SD failed!");
+    return;
+  }
+#else
   if (!SD.begin(SD_CS))
   {
     Serial.println("SD failed!");
     return;
   }
+#endif
   Serial.println("SD OK!");
 
   if ((display.epd2.panel == GxEPD2::GDEW0154Z04) || (display.epd2.panel == GxEPD2::ACeP565) || false)
@@ -292,7 +325,7 @@ uint16_t rgb_palette_buffer[max_palette_pixels]; // palette buffer for depth <= 
 
 void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_color)
 {
-  SdFile file;
+  File file;
   bool valid = false; // valid format to be handled
   bool flip = true; // bitmap is stored bottom-to-top
   uint32_t startTime = millis();
@@ -309,7 +342,8 @@ void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_colo
     return;
   }
 #else
-  if (!file.open(filename, FILE_READ))
+  file = SD.open(filename);
+  if (!file)
   {
     Serial.print("File not found");
     return;
@@ -319,11 +353,11 @@ void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_colo
   if (read16(file) == 0x4D42) // BMP signature
   {
     uint32_t fileSize = read32(file);
-    uint32_t creatorBytes = read32(file);
+    uint32_t creatorBytes = read32(file); (void)creatorBytes; //unused
     uint32_t imageOffset = read32(file); // Start of image data
     uint32_t headerSize = read32(file);
     uint32_t width  = read32(file);
-    uint32_t height = read32(file);
+    int32_t height = (int32_t) read32(file);
     uint16_t planes = read16(file);
     uint16_t depth = read16(file); // bits per pixel
     uint32_t format = read32(file);
@@ -355,13 +389,14 @@ void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_colo
         uint8_t bitmask = 0xFF;
         uint8_t bitshift = 8 - depth;
         uint16_t red, green, blue;
-        bool whitish, colored;
+        bool whitish = false;
+        bool colored = false;
         if (depth == 1) with_color = false;
         if (depth <= 8)
         {
           if (depth < 8) bitmask >>= depth;
-          //file.seekSet(54); //palette is always @ 54
-          file.seekSet(imageOffset - (4 << depth)); // 54 for regular, diff for colorsimportant
+          //file.seek(54); //palette is always @ 54
+          file.seek(imageOffset - (4 << depth)); // 54 for regular, diff for colorsimportant
           for (uint16_t pn = 0; pn < (1 << depth); pn++)
           {
             blue  = file.read();
@@ -389,7 +424,7 @@ void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_colo
           uint8_t out_byte = 0xFF; // white (for w%8!=0 border)
           uint8_t out_color_byte = 0xFF; // white (for w%8!=0 border)
           uint32_t out_idx = 0;
-          file.seekSet(rowPosition);
+          file.seek(rowPosition);
           for (uint16_t col = 0; col < w; col++) // for each pixel
           {
             // Time to read more pixel data?
@@ -482,7 +517,7 @@ void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_colo
 
 void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool with_color, bool partial_update, bool overwrite)
 {
-  SdFile file;
+  File file;
   bool valid = false; // valid format to be handled
   bool flip = true; // bitmap is stored bottom-to-top
   bool has_multicolors = display.epd2.panel == GxEPD2::ACeP565;
@@ -500,7 +535,8 @@ void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool 
     return;
   }
 #else
-  if (!file.open(filename, FILE_READ))
+  file = SD.open(filename);
+  if (!file)
   {
     Serial.print("File not found");
     return;
@@ -510,11 +546,11 @@ void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool 
   if (read16(file) == 0x4D42) // BMP signature
   {
     uint32_t fileSize = read32(file);
-    uint32_t creatorBytes = read32(file);
+    uint32_t creatorBytes = read32(file); (void)creatorBytes; //unused
     uint32_t imageOffset = read32(file); // Start of image data
     uint32_t headerSize = read32(file);
     uint32_t width  = read32(file);
-    uint32_t height = read32(file);
+    int32_t height = (int32_t) read32(file);
     uint16_t planes = read16(file);
     uint16_t depth = read16(file); // bits per pixel
     uint32_t format = read32(file);
@@ -546,13 +582,14 @@ void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool 
         uint8_t bitmask = 0xFF;
         uint8_t bitshift = 8 - depth;
         uint16_t red, green, blue;
-        bool whitish, colored;
+        bool whitish = false;
+        bool colored = false;
         if (depth == 1) with_color = false;
         if (depth <= 8)
         {
           if (depth < 8) bitmask >>= depth;
-          //file.seekSet(54); //palette is always @ 54
-          file.seekSet(imageOffset - (4 << depth)); //54 for regular, diff for colorsimportant
+          //file.seek(54); //palette is always @ 54
+          file.seek(imageOffset - (4 << depth)); //54 for regular, diff for colorsimportant
           for (uint16_t pn = 0; pn < (1 << depth); pn++)
           {
             blue  = file.read();
@@ -583,7 +620,7 @@ void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool 
             uint8_t in_byte = 0; // for depth <= 8
             uint8_t in_bits = 0; // for depth <= 8
             uint16_t color = GxEPD_WHITE;
-            file.seekSet(rowPosition);
+            file.seek(rowPosition);
             for (uint16_t col = 0; col < w; col++) // for each pixel
             {
               // Time to read more pixel data?
@@ -677,7 +714,7 @@ void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool 
   }
 }
 
-uint16_t read16(SdFile& f)
+uint16_t read16(File& f)
 {
   // BMP data is stored little-endian, same as Arduino.
   uint16_t result;
@@ -686,7 +723,7 @@ uint16_t read16(SdFile& f)
   return result;
 }
 
-uint32_t read32(SdFile& f)
+uint32_t read32(File& f)
 {
   // BMP data is stored little-endian, same as Arduino.
   uint32_t result;
