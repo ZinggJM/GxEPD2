@@ -23,6 +23,18 @@
 
 // see GxEPD2_wiring_examples.h for wiring suggestions and examples
 
+// NOTE for use with Waveshare ESP32 Driver Board:
+// **** also need to select the constructor with the parameters for this board in GxEPD2_display_selection_new_style.h ****
+//
+// The Wavehare ESP32 Driver Board uses uncommon SPI pins for the FPC connector. It uses HSPI pins, but SCK and MOSI are swapped.
+// To use HW SPI with the ESP32 Driver Board, HW SPI pins need be re-mapped in any case. Can be done using either HSPI or VSPI.
+// Other SPI clients can either be connected to the same SPI bus as the e-paper, or to the other HW SPI bus, or through SW SPI.
+// The logical configuration would be to use the e-paper connection on HSPI with re-mapped pins, and use VSPI for other SPI clients.
+// VSPI with standard VSPI pins is used by the global SPI instance of the Arduino IDE ESP32 package.
+
+// uncomment next line to use HSPI for EPD (and VSPI for SD), e.g. with Waveshare ESP32 Driver Board
+//#define USE_HSPI_FOR_EPD
+
 // base class GxEPD2_GFX can be used to pass references or pointers to the display instance as parameter, uses ~1.2k more code
 // enable or disable GxEPD2_GFX base class
 #define ENABLE_GxEPD2_GFX 0
@@ -39,17 +51,23 @@
 
 #include <SerialFlash.h>
 
-// select the display class and display driver class in the following file (new style):
-#include "GxEPD2_display_selection_new_style.h"
-
 #if defined (ESP8266)
 const int FlashChipSelect = D1; // digital pin for flash chip CS pin
 #endif
 
 #if defined(ESP32)
-//const int FlashChipSelect = 17; // as used with my ESP32 breadboard
+#if defined(USE_HSPI_FOR_EPD)
+const int FlashChipSelect = SS;
+#define EPD_CS 15
+SPIClass hspi(HSPI);
+#else
 const int FlashChipSelect = 2; // as used with my ESP32 protoboard SD connector
 #endif
+#endif
+
+// select the display class and display driver class in the following file (new style):
+// don't forget to modify or override EPD_CS if needed
+#include "GxEPD2_display_selection_new_style.h"
 
 // function declaration with default parameter
 // note that BMP bitmaps are drawn at physical position in physical orientation of the screen
@@ -67,6 +85,10 @@ void setup()
   Serial.println();
   Serial.println("GxEPD2_SerialFlash_Example");
 
+#if defined(ESP32) && defined(USE_HSPI_FOR_EPD)
+  hspi.begin(13, 12, 14, 15); // remap hspi for EPD (swap pins)
+  display.epd2.selectSPI(hspi, SPISettings(4000000, MSBFIRST, SPI_MODE0));
+#endif
   display.init();
 
   if (!SerialFlash.begin(FlashChipSelect))
@@ -284,11 +306,11 @@ void drawBitmapFromSerialFlash(const char *filename, int16_t x, int16_t y, bool 
   if (read16(file) == 0x4D42) // BMP signature
   {
     uint32_t fileSize = read32(file);
-    uint32_t creatorBytes = read32(file);
+    uint32_t creatorBytes = read32(file); (void)creatorBytes; //unused
     uint32_t imageOffset = read32(file); // Start of image data
     uint32_t headerSize = read32(file);
     uint32_t width  = read32(file);
-    uint32_t height = read32(file);
+    int32_t height = (int32_t) read32(file);
     uint16_t planes = read16(file);
     uint16_t depth = read16(file); // bits per pixel
     uint32_t format = read32(file);
@@ -320,7 +342,8 @@ void drawBitmapFromSerialFlash(const char *filename, int16_t x, int16_t y, bool 
         uint8_t bitmask = 0xFF;
         uint8_t bitshift = 8 - depth;
         uint16_t red, green, blue;
-        bool whitish, colored;
+        bool whitish = false;
+        bool colored = false;
         if (depth == 1) with_color = false;
         if (depth <= 8)
         {
@@ -465,11 +488,11 @@ void drawBitmapFromSerialFlash_Buffered(const char *filename, int16_t x, int16_t
   if (read16(file) == 0x4D42) // BMP signature
   {
     uint32_t fileSize = read32(file);
-    uint32_t creatorBytes = read32(file);
+    uint32_t creatorBytes = read32(file); (void)creatorBytes; //unused
     uint32_t imageOffset = read32(file); // Start of image data
     uint32_t headerSize = read32(file);
     uint32_t width  = read32(file);
-    uint32_t height = read32(file);
+    int32_t height = (int32_t) read32(file);
     uint16_t planes = read16(file);
     uint16_t depth = read16(file); // bits per pixel
     uint32_t format = read32(file);
@@ -501,7 +524,8 @@ void drawBitmapFromSerialFlash_Buffered(const char *filename, int16_t x, int16_t
         uint8_t bitmask = 0xFF;
         uint8_t bitshift = 8 - depth;
         uint16_t red, green, blue;
-        bool whitish, colored;
+        bool whitish = false;
+        bool colored = false;
         if (depth == 1) with_color = false;
         if (depth <= 8)
         {
