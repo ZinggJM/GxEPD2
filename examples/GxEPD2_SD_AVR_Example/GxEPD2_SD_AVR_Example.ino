@@ -75,6 +75,7 @@ SdFat SD;
 //#define GxEPD2_DRIVER_CLASS GxEPD2_583_T8  // GDEW0583T8  648x480
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750     // GDEW075T8   640x384
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750_T7  // GDEW075T7   800x480
+//#define GxEPD2_DRIVER_CLASS GxEPD2_750_YT7 // GDEY075T7   800x480, GD7965
 // 3-color e-papers
 //#define GxEPD2_DRIVER_CLASS GxEPD2_154c     // GDEW0154Z04 200x200, no longer available
 //#define GxEPD2_DRIVER_CLASS GxEPD2_154_Z90c // GDEH0154Z90 200x200
@@ -238,11 +239,11 @@ void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_colo
   if (read16(file) == 0x4D42) // BMP signature
   {
     uint32_t fileSize = read32(file);
-    uint32_t creatorBytes = read32(file);
+    uint32_t creatorBytes = read32(file); (void)creatorBytes; //unused
     uint32_t imageOffset = read32(file); // Start of image data
     uint32_t headerSize = read32(file);
     uint32_t width  = read32(file);
-    uint32_t height = read32(file);
+    int32_t height = (int32_t) read32(file);
     uint16_t planes = read16(file);
     uint16_t depth = read16(file); // bits per pixel
     uint32_t format = read32(file);
@@ -273,14 +274,15 @@ void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_colo
         uint8_t bitmask = 0xFF;
         uint8_t bitshift = 8 - depth;
         uint16_t red, green, blue;
-        bool whitish, colored;
+        bool whitish = false;
+        bool colored = false;
         if (depth == 1) with_color = false;
         if (depth <= 8)
         {
           if (depth < 8) bitmask >>= depth;
           //file.seekSet(54); //palette is always @ 54
           file.seekSet(imageOffset - (4 << depth)); // 54 for regular, diff for colorsimportant
-          for (uint16_t pn = 0; pn < (1 << depth); pn++)
+          for (int16_t pn = 0; pn < (1 << depth); pn++)
           {
             blue  = file.read();
             green = file.read();
