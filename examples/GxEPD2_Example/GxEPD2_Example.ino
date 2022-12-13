@@ -15,6 +15,18 @@
 
 // see GxEPD2_wiring_examples.h for wiring suggestions and examples
 
+// NOTE for use with Waveshare ESP32 Driver Board:
+// **** also need to select the constructor with the parameters for this board in GxEPD2_display_selection_new_style.h ****
+//
+// The Wavehare ESP32 Driver Board uses uncommon SPI pins for the FPC connector. It uses HSPI pins, but SCK and MOSI are swapped.
+// To use HW SPI with the ESP32 Driver Board, HW SPI pins need be re-mapped in any case. Can be done using either HSPI or VSPI.
+// Other SPI clients can either be connected to the same SPI bus as the e-paper, or to the other HW SPI bus, or through SW SPI.
+// The logical configuration would be to use the e-paper connection on HSPI with re-mapped pins, and use VSPI for other SPI clients.
+// VSPI with standard VSPI pins is used by the global SPI instance of the Arduino IDE ESP32 package.
+
+// uncomment next line to use HSPI for EPD (and e.g VSPI for SD), e.g. with Waveshare ESP32 Driver Board
+//#define USE_HSPI_FOR_EPD
+
 // base class GxEPD2_GFX can be used to pass references or pointers to the display instance as parameter, uses ~1.2k more code
 // enable or disable GxEPD2_GFX base class
 #define ENABLE_GxEPD2_GFX 0
@@ -103,6 +115,10 @@
 arduino::MbedSPI SPI0(4, 7, 6); // need be valid pins for same SPI channel, else fails blinking 4 long 4 short
 #endif
 
+#if defined(ESP32) && defined(USE_HSPI_FOR_EPD)
+SPIClass hspi(HSPI);
+#endif
+
 void setup()
 {
   Serial.begin(115200);
@@ -116,8 +132,12 @@ void setup()
   pinMode(15, INPUT_PULLUP); // safety pin
   while (!digitalRead(15)) delay(100); // check safety pin for fail recovery
 #endif
-  display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
-  //display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
+#if defined(ESP32) && defined(USE_HSPI_FOR_EPD)
+  hspi.begin(13, 12, 14, 15); // remap hspi for EPD (swap pins)
+  display.epd2.selectSPI(hspi, SPISettings(4000000, MSBFIRST, SPI_MODE0));
+#endif
+  //display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
+  display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
   //display.init(115200, true, 10, false, SPI0, SPISettings(4000000, MSBFIRST, SPI_MODE0)); // extended init method with SPI channel and/or settings selection
   // first update should be full refresh
   helloWorld();
@@ -1228,7 +1248,7 @@ void drawBitmaps800x480()
       while (display.nextPage());
       delay(2000);
     }
-    if (display.epd2.panel == GxEPD2::GDEW075T7)
+    if ((display.epd2.panel == GxEPD2::GDEW075T7) || (display.epd2.panel == GxEPD2::GDEY075T7))
     {
       // avoid ghosting caused by OTP waveform
       display.clearScreen();

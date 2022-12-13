@@ -11,6 +11,9 @@
 
 // see GxEPD2_wiring_examples.h for wiring suggestions and examples
 
+// uncomment next line to use HSPI for EPD (and VSPI for SD), e.g. with Waveshare ESP32 Driver Board
+//#define USE_HSPI_FOR_EPD
+
 // uncomment next line to use class GFX of library GFX_Root instead of Adafruit_GFX
 #include <GFX.h>
 // Note: if you use this with ENABLE_GxEPD2_GFX 1:
@@ -44,12 +47,20 @@ uint32_t previous_full_update;
 uint32_t total_seconds = 0;
 uint32_t seconds, minutes, hours, days;
 
+#if defined(ESP32) && defined(USE_HSPI_FOR_EPD)
+SPIClass hspi(HSPI);
+#endif
+
 void setup()
 {
   Serial.begin(115200);
   Serial.println();
   Serial.println("setup");
   delay(100);
+#if defined(ESP32) && defined(USE_HSPI_FOR_EPD)
+  hspi.begin(13, 12, 14, 15); // remap hspi for EPD (swap pins)
+  display.epd2.selectSPI(hspi, SPISettings(4000000, MSBFIRST, SPI_MODE0));
+#endif
   display.init(115200);
   // cleanup
   for (int i = 0; i < 1; i++)

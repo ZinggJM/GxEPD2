@@ -88,22 +88,25 @@ void GxEPD2_it103_1872x1404::init(uint32_t serial_diag_bitrate, bool initial, ui
   if (_diag_enabled)
   {
     //Show Device information of IT8951
-    printf("Panel(W,H) = (%d,%d)\r\n",
-           IT8951DevInfo.usPanelW, IT8951DevInfo.usPanelH );
-    printf("Image Buffer Address = %lX\r\n",
+    Serial.print("Panel(W,H) = ("); Serial.print(IT8951DevInfo.usPanelW); Serial.print(", "); Serial.print(IT8951DevInfo.usPanelH); Serial.println(")");
+    printf("Image Buffer Address = %" PRIu32"\r\n",
            uint32_t(IT8951DevInfo.usImgBufAddrL) | (uint32_t(IT8951DevInfo.usImgBufAddrH) << 16));
+    Serial.print("Image Buffer Address = 0x"); Serial.println(uint32_t(IT8951DevInfo.usImgBufAddrL) | (uint32_t(IT8951DevInfo.usImgBufAddrH) << 16), HEX);
     //Show Firmware and LUT Version
-    printf("FW Version = %s\r\n", (uint8_t*)IT8951DevInfo.usFWVersion);
-    printf("LUT Version = %s\r\n", (uint8_t*)IT8951DevInfo.usLUTVersion);
+    Serial.print("FW Version = "); Serial.println((char*)IT8951DevInfo.usFWVersion);
+    Serial.print("LUT Version = "); Serial.println((char*)IT8951DevInfo.usLUTVersion);
   }
   //Set to Enable I80 Packed mode
   _IT8951WriteReg(I80CPCR, 0x0001);
   if (VCOM != _IT8951GetVCOM())
   {
     _IT8951SetVCOM(VCOM);
-    printf("VCOM = -%.02fV\n", (double)_IT8951GetVCOM() / 1000);
+    if (_diag_enabled)
+    {
+      Serial.print("set VCOM = -"); Serial.println((float)_IT8951GetVCOM() / 1000);
+    }
   }
-  printf("VCOM = -%.02fV\n", (double)_IT8951GetVCOM() / 1000);
+  //Serial.print("set VCOM = -"); Serial.println((float)_IT8951GetVCOM() / 1000);
 }
 
 void GxEPD2_it103_1872x1404::clearScreen(uint8_t value)
@@ -215,7 +218,7 @@ void GxEPD2_it103_1872x1404::writeImage(const uint8_t bitmap[], int16_t x, int16
 }
 
 void GxEPD2_it103_1872x1404::writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                                 int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+    int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   if (_initial_write) writeScreenBuffer(); // initial full screen buffer clean
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
@@ -282,7 +285,7 @@ void GxEPD2_it103_1872x1404::writeImage(const uint8_t* black, const uint8_t* col
 }
 
 void GxEPD2_it103_1872x1404::writeImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                                 int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+    int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   if (black)
   {
@@ -352,7 +355,7 @@ void GxEPD2_it103_1872x1404::drawImage(const uint8_t bitmap[], int16_t x, int16_
 }
 
 void GxEPD2_it103_1872x1404::drawImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                                int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+    int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   writeImagePart(bitmap, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
   _refresh(x, y, w, h, true);
@@ -365,7 +368,7 @@ void GxEPD2_it103_1872x1404::drawImage(const uint8_t* black, const uint8_t* colo
 }
 
 void GxEPD2_it103_1872x1404::drawImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                                int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+    int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   writeImagePart(black, color, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
   _refresh(x, y, w, h, true);
