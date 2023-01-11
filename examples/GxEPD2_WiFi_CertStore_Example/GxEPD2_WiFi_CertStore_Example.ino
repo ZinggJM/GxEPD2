@@ -1,4 +1,4 @@
-// GxEPD2_WiFi_Example : Display Library example for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
+// GxEPD2_WiFi_CertStore_Example : Display Library example for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 // Requires HW SPI and Adafruit_GFX. Caution: the e-paper panels require 3.3V supply AND data lines!
 //
 // Display Library based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
@@ -10,6 +10,11 @@
 // Version: see library.properties
 //
 // Library: https://github.com/ZinggJM/GxEPD2
+//
+// GxEPD2_WiFi_Example variant using a root certificates store on ESP8266, like a browser
+// use GxEPD2_WiFi_CertStore_Loader to download the cert.ar archive to the LittleFS of your ESP32
+// see also: https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi/examples/BearSSL_CertStore
+// see also: https://forum.arduino.cc/t/https-mystery-how-to-download-like-a-browser/1055480/16
 //
 // note that BMP bitmaps are drawn at physical position in physical orientation of the screen
 
@@ -125,7 +130,9 @@
 #define IS_GxEPD2_1248c(x) IS_GxEPD(GxEPD2_1248c_IS_, x)
 
 #if defined (ESP8266)
-#define MAX_DISPLAY_BUFFER_SIZE (81920ul-34000ul-36000ul) // ~34000 base use, WiFiClientSecure seems to need about 36k more to work (with certificates)
+#define MAX_DISPLAY_BUFFER_SIZE (81920ul-34000ul-35000ul) // ~34000 base use, WiFiClientSecure seems to need about 35k more to work (with CertStore)
+// for site people.math.sc.edu an increased RX buffer is required for timely decodes, client.setBufferSizes(8192, 4096); // may help. needs more space:
+//#define MAX_DISPLAY_BUFFER_SIZE (81920ul-34000ul-37000ul) // ~34000 base use, WiFiClientSecure seems to need about 37k more to work (with CertStore)
 #if IS_GxEPD2_BW(GxEPD2_DISPLAY_CLASS)
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8))
 #elif IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS)
@@ -172,31 +179,43 @@ GxEPD2_DISPLAY_CLASS < GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS) > di
 
 #if defined (ESP8266)
 #include <ESP8266WiFi.h>
+#include <CertStoreBearSSL.h>
+#include <time.h>
+#include <FS.h>
+#include <LittleFS.h>
 #endif
 
 #include <WiFiClient.h>
 #include <WiFiClientSecure.h>
+
+#if defined (ESP8266)
+// A single, global CertStore which can be used by all
+// connections.  Needs to stay live the entire time any of
+// the WiFiClientBearSSLs are present.
+BearSSL::CertStore certStore;
+const char* certificate_rawcontent = 0;
+#else
+#include "GxEPD2_github_raw_certs.h"
+const char* certificate_rawcontent = cert_DigiCert_TLS_RSA_SHA256_2020_CA1;
+#pragma GCC warning "no CertStore for this target"
+//#warning "no CertStore for this target"
+#endif
 
 const char* ssid     = "........";
 const char* password = "........";
 const int httpPort  = 80;
 const int httpsPort = 443;
 
-// note: the certificates have been moved to a separate header file, as R"CERT( destroys IDE Auto Format capability
-
-#include "GxEPD2_github_raw_certs.h"
-
-const char* certificate_rawcontent = cert_DigiCert_TLS_RSA_SHA256_2020_CA1; // ok, should work until 2031-04-13 23:59:59
-//const char* certificate_rawcontent = github_io_chain_pem_first;  // ok, should work until Tue, 21 Mar 2023 23:59:59 GMT
-//const char* certificate_rawcontent = github_io_chain_pem_second;  // ok, should work until Tue, 21 Mar 2023 23:59:59 GMT
-//const char* certificate_rawcontent = github_io_chain_pem_third;  // ok, should work until Tue, 21 Mar 2023 23:59:59 GMT
+const char* fp_rawcontent     = "8F 0E 79 24 71 C5 A7 D2 A7 46 76 30 C1 3C B7 2A 13 B0 01 B2"; // as of 29.7.2022
 
 const char* host_rawcontent   = "raw.githubusercontent.com";
 const char* path_rawcontent   = "/ZinggJM/GxEPD2/master/extras/bitmaps/";
 const char* path_prenticedavid   = "/prenticedavid/MCUFRIEND_kbv/master/extras/bitmaps/";
 const char* path_waveshare_c  = "/waveshare/e-Paper/master/RaspberryPi_JetsonNano/c/pic/";
 const char* path_waveshare_py = "/waveshare/e-Paper/master/RaspberryPi_JetsonNano/python/pic/";
-const char* fp_rawcontent     = "8F 0E 79 24 71 C5 A7 D2 A7 46 76 30 C1 3C B7 2A 13 B0 01 B2"; // as of 29.7.2022
+const char* path_Burkardt     = "https://people.math.sc.edu/Burkardt/data/bmp/";
+const char* fp_people_cas     = "99:6C:B7:72:CC:ED:96:82:49:2D:B2:78:71:00:14:BA:02:8E:FF:BF";
+const char* host_people_cas_sc_edu = "people.math.sc.edu";
 
 // note that BMP bitmaps are drawn at physical position in physical orientation of the screen
 void showBitmapFrom_HTTP(const char* host, const char* path, const char* filename, int16_t x, int16_t y, bool with_color = true);
@@ -233,9 +252,9 @@ void setup()
   if (!WiFi.getAutoConnect() || ( WiFi.getMode() != WIFI_STA) || ((WiFi.SSID() != ssid) && String(ssid) != "........"))
   {
     Serial.println();
-    Serial.print("WiFi.getAutoConnect() = ");
+    Serial.print("WiFi.getAutoConnect()=");
     Serial.println(WiFi.getAutoConnect());
-    Serial.print("WiFi.SSID() = ");
+    Serial.print("WiFi.SSID()=");
     Serial.println(WiFi.SSID());
     WiFi.mode(WIFI_STA); // switch off AP
     Serial.print("Connecting to ");
@@ -262,6 +281,20 @@ void setup()
   Serial.println(WiFi.localIP());
 
   setClock();
+
+#if defined (ESP8266)
+
+  LittleFS.begin();
+
+  int numCerts = certStore.initCertStore(LittleFS, PSTR("/certs.idx"), PSTR("/certs.ar"));
+  Serial.printf("Number of CA certs read: %d\n", numCerts);
+  if (numCerts == 0)
+  {
+    Serial.printf("No certs found. Did you run certs-from-mozilla.py and upload the LittleFS directory before running?\n");
+    return; // Can't connect to anything w/o certs!
+  }
+
+#endif
 
   if ((display.epd2.panel == GxEPD2::GDEW0154Z04) || (display.epd2.panel == GxEPD2::ACeP565) || false)
   {
@@ -313,9 +346,9 @@ void drawBitmaps_other()
 {
   int16_t w2 = display.width() / 2;
   int16_t h2 = display.height() / 2;
-  showBitmapFrom_HTTP("www.packescape.com", " / img / assets / ", "IniciMenusTV2.bmp", w2 - 200, h2 - 150, false);
+  showBitmapFrom_HTTP("www.packescape.com", "/img/assets/", "IniciMenusTV2.bmp", w2 - 200, h2 - 150, false);
   delay(2000);
-  showBitmapFrom_HTTP("www.squix.org", " / blog / wunderground / ", "chanceflurries.bmp", w2 - 50, h2 - 50, false);
+  showBitmapFrom_HTTP("www.squix.org", "/blog/wunderground/", "chanceflurries.bmp", w2 - 50, h2 - 50, false);
   delay(2000);
   showBitmapFrom_HTTPS(host_rawcontent, path_prenticedavid, "betty_1.bmp", fp_rawcontent, w2 - 100, h2 - 160);
   delay(2000);
@@ -343,6 +376,9 @@ void drawBitmaps_other()
 
 void drawBitmaps_test()
 {
+#if defined (ESP8266)
+  showBitmapFrom_HTTPS_Buffered(host_people_cas_sc_edu, path_Burkardt, "lena.bmp", 0, 0, 0, true, 0); // connection ok with CertStore
+#endif
   int16_t w2 = display.width() / 2;
   int16_t h2 = display.height() / 2;
   showBitmapFrom_HTTPS(host_rawcontent, path_prenticedavid, "betty_4.bmp", fp_rawcontent, w2 - 102, h2 - 126);
@@ -395,7 +431,7 @@ void drawBitmapsBuffered_other()
 {
   int16_t w2 = display.width() / 2;
   int16_t h2 = display.height() / 2;
-  showBitmapFrom_HTTP_Buffered("www.squix.org", " / blog / wunderground / ", "chanceflurries.bmp", w2 - 50, h2 - 50, false);
+  showBitmapFrom_HTTP_Buffered("www.squix.org", "/blog/wunderground/", "chanceflurries.bmp", w2 - 50, h2 - 50, false);
   delay(2000);
   //showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_prenticedavid, "betty_1.bmp", fp_rawcontent, w2 - 100, h2 - 160);
   delay(2000);
@@ -435,13 +471,16 @@ void drawBitmapsBuffered_7C()
     delay(2000);
     showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_py, "5in65f4.bmp", fp_rawcontent, 0, 0);
     delay(2000);
-    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_py, "N - Color1.bmp", fp_rawcontent, 0, 0);
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_py, "N-Color1.bmp", fp_rawcontent, 0, 0);
     delay(2000);
   }
 }
 
 void drawBitmapsBuffered_test()
 {
+#if defined (ESP8266)
+  showBitmapFrom_HTTPS_Buffered(host_people_cas_sc_edu, path_Burkardt, "lena.bmp", 0, 0, 0, true, 0); // connection ok with CertStore
+#endif
   int16_t w2 = display.width() / 2;
   int16_t h2 = display.height() / 2;
   showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_prenticedavid, "betty_4.bmp", fp_rawcontent, w2 - 102, h2 - 126);
@@ -934,7 +973,6 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
   // Use WiFiClientSecure class to create TLS connection
 #if defined (ESP8266)
   BearSSL::WiFiClientSecure client;
-  BearSSL::X509List cert(certificate ? certificate : certificate_rawcontent);
 #else
   WiFiClientSecure client;
 #endif
@@ -947,10 +985,7 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
   Serial.print("connecting to "); Serial.println(host);
 #if defined (ESP8266)
   client.setBufferSizes(4096, 4096); // required
-  //client.setBufferSizes(8192, 4096); // may help for some sites
-  if (certificate) client.setTrustAnchors(&cert);
-  else if (fingerprint) client.setFingerprint(fingerprint);
-  else client.setInsecure();
+  client.setCertStore(&certStore);
 #elif defined (ESP32)
   if (certificate) client.setCACert(certificate);
 #endif
@@ -991,7 +1026,6 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
   {
     if (!client.available()) delay(100);
     else signature = read16(client);
-    //Serial.print("signature: 0x"); Serial.println(signature, HEX);
     if (signature == 0x4D42) break;
   }
   if (signature == 0x4D42) // BMP signature
@@ -1006,6 +1040,8 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
     uint16_t depth = read16(client); // bits per pixel
     uint32_t format = read32(client);
     uint32_t bytes_read = 7 * 4 + 3 * 2; // read so far
+    //Serial.print("planes: "); Serial.println(planes);
+    //Serial.print("format: "); Serial.println(format);
     if ((planes == 1) && ((format == 0) || (format == 3))) // uncompressed is handled, 565 also
     {
       Serial.print("File size: "); Serial.println(fileSize);
@@ -1186,7 +1222,6 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
   // Use WiFiClientSecure class to create TLS connection
 #if defined (ESP8266)
   BearSSL::WiFiClientSecure client;
-  BearSSL::X509List cert(certificate ? certificate : certificate_rawcontent);
 #else
   WiFiClientSecure client;
 #endif
@@ -1199,11 +1234,9 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
   display.fillScreen(GxEPD_WHITE);
   Serial.print("connecting to "); Serial.println(host);
 #if defined (ESP8266)
-  client.setBufferSizes(4096, 4096); // required
-  //client.setBufferSizes(8192, 4096); // may help for some sites
-  if (certificate) client.setTrustAnchors(&cert);
-  else if (fingerprint) client.setFingerprint(fingerprint);
-  else client.setInsecure();
+  //client.setBufferSizes(4096, 4096); // required
+  client.setBufferSizes(8192, 4096); // may help
+  client.setCertStore(&certStore);
 #elif defined (ESP32)
   if (certificate) client.setCACert(certificate);
 #endif
@@ -1244,6 +1277,7 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
   {
     if (!client.available()) delay(100);
     else signature = read16(client);
+    //Serial.print("signature: 0x"); Serial.println(signature, HEX);
     if (signature == 0x4D42)
     {
       //Serial.print("signature wait loops: "); Serial.println(i);

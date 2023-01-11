@@ -87,22 +87,23 @@ void GxEPD2_it60::init(uint32_t serial_diag_bitrate, bool initial, uint16_t rese
   if (_diag_enabled)
   {
     //Show Device information of IT8951
-    printf("Panel(W,H) = (%d,%d)\r\n",
-           IT8951DevInfo.usPanelW, IT8951DevInfo.usPanelH );
-    printf("Image Buffer Address = %lX\r\n",
-           uint32_t(IT8951DevInfo.usImgBufAddrL) | (uint32_t(IT8951DevInfo.usImgBufAddrH) << 16));
+    Serial.print("Panel(W,H) = ("); Serial.print(IT8951DevInfo.usPanelW); Serial.print(", "); Serial.print(IT8951DevInfo.usPanelH); Serial.println(")");
+    Serial.print("Image Buffer Address = 0x"); Serial.println(uint32_t(IT8951DevInfo.usImgBufAddrL) | (uint32_t(IT8951DevInfo.usImgBufAddrH) << 16), HEX);
     //Show Firmware and LUT Version
-    printf("FW Version = %s\r\n", (uint8_t*)IT8951DevInfo.usFWVersion);
-    printf("LUT Version = %s\r\n", (uint8_t*)IT8951DevInfo.usLUTVersion);
+    Serial.print("FW Version = "); Serial.println((char*)IT8951DevInfo.usFWVersion);
+    Serial.print("LUT Version = "); Serial.println((char*)IT8951DevInfo.usLUTVersion);
   }
   //Set to Enable I80 Packed mode
   _IT8951WriteReg(I80CPCR, 0x0001);
   if (VCOM != _IT8951GetVCOM())
   {
     _IT8951SetVCOM(VCOM);
-    printf("VCOM = -%.02fV\n", (double)_IT8951GetVCOM() / 1000);
+    if (_diag_enabled)
+    {
+      Serial.print("set VCOM = -"); Serial.println((float)_IT8951GetVCOM() / 1000);
+    }
   }
-  printf("VCOM = -%.02fV\n", (double)_IT8951GetVCOM() / 1000);
+  //Serial.print("set VCOM = -"); Serial.println((float)_IT8951GetVCOM() / 1000);
 }
 
 void GxEPD2_it60::clearScreen(uint8_t value)

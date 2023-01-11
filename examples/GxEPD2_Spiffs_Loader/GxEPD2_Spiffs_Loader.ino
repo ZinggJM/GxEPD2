@@ -22,8 +22,8 @@ const bool formatOnFail = false;
 #include <FS.h>
 
 #if defined (ESP8266)
+#include <LittleFS.h>
 #include <ESP8266WiFi.h>
-#define USE_BearSSL true
 #endif
 
 #include <WiFiClient.h>
@@ -37,30 +37,11 @@ const char* fp_api_github_com = "df b2 29 c6 a6 38 1a 59 9d c9 ad 92 2d 26 f5 3c
 const char* fp_github_com     = "5f 3f 7a c2 56 9f 50 a4 66 76 47 c6 a1 8c a0 07 aa ed bb 8e"; // as of 25.11.2020
 const char* fp_rawcontent     = "70 94 de dd e6 c4 69 48 3a 92 70 a1 48 56 78 2d 18 64 e0 b7"; // as of 25.11.2020
 
-// how to find the certificate was not easy. finally I found it using Mozilla Firefox.
-// opened one of the bitmaps, e.g. https://raw.githubusercontent.com/ZinggJM/GxEPD2/master/extras/bitmaps/logo200x200.bmp
-// clicked the lock symbol, Connection secure clicked >, show connection details, clicked More Information, clicked View Certificate, clicked Download PEM (chain),
-// selected Open with Notepad. Copied the middle certificate and editted to the following format:
-// the number of characters per line is of no importance, but the 3 \n are needed
-const char* certificate_rawcontent =
-  "-----BEGIN CERTIFICATE-----\n"
-  "MIIEsTCCA5mgAwIBAgIQBOHnpNxc8vNtwCtCuF0VnzANBgkqhkiG9w0BAQsFADBsMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGln"
-  "aUNlcnQgSW5jMRkwFwYDVQQLExB3d3cuZGlnaWNlcnQuY29tMSswKQYDVQQDEyJEaWdpQ2VydCBIaWdoIEFzc3VyYW5jZSBFViBS"
-  "b290IENBMB4XDTEzMTAyMjEyMDAwMFoXDTI4MTAyMjEyMDAwMFowcDELMAkGA1UEBhMCVVMxFTATBgNVBAoTDERpZ2lDZXJ0IElu"
-  "YzEZMBcGA1UECxMQd3d3LmRpZ2ljZXJ0LmNvbTEvMC0GA1UEAxMmRGlnaUNlcnQgU0hBMiBIaWdoIEFzc3VyYW5jZSBTZXJ2ZXIg"
-  "Q0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC24C/CJAbIbQRf1+8KZAayfSImZRauQkCbztyfn3YHPsMwVYcZuU+U"
-  "DlqUH1VWtMICKq/QmO4LQNfE0DtyyBSe75CxEamu0si4QzrZCwvV1ZX1QK/IHe1NnF9Xt4ZQaJn1itrSxwUfqJfJ3KSxgoQtxq2l"
-  "nMcZgqaFD15EWCo3j/018QsIJzJa9buLnqS9UdAn4t07QjOjBSjEuyjMmqwrIw14xnvmXnG3Sj4I+4G3FhahnSMSTeXXkgisdaSc"
-  "us0Xsh5ENWV/UyU50RwKmmMbGZJ0aAo3wsJSSMs5WqK24V3B3aAguCGikyZvFEohQcftbZvySC/zA/WiaJJTL17jAgMBAAGjggFJ"
-  "MIIBRTASBgNVHRMBAf8ECDAGAQH/AgEAMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwNAYI"
-  "KwYBBQUHAQEEKDAmMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wSwYDVR0fBEQwQjBAoD6gPIY6aHR0cDov"
-  "L2NybDQuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0SGlnaEFzc3VyYW5jZUVWUm9vdENBLmNybDA9BgNVHSAENjA0MDIGBFUdIAAwKjAo"
-  "BggrBgEFBQcCARYcaHR0cHM6Ly93d3cuZGlnaWNlcnQuY29tL0NQUzAdBgNVHQ4EFgQUUWj/kK8CB3U8zNllZGKiErhZcjswHwYD"
-  "VR0jBBgwFoAUsT7DaQP4v0cB1JgmGggC72NkK8MwDQYJKoZIhvcNAQELBQADggEBABiKlYkD5m3fXPwdaOpKj4PWUS+Na0QWnqxj"
-  "9dJubISZi6qBcYRb7TROsLd5kinMLYBq8I4g4Xmk/gNHE+r1hspZcX30BJZr01lYPf7TMSVcGDiEo+afgv2MW5gxTs14nhr9hctJ"
-  "qvIni5ly/D6q1UEL2tU2ob8cbkdJf17ZSHwD2f2LSaCYJkJA69aSEaRkCldUxPUd1gJea6zuxICaEnL6VpPX/78whQYwvwt/Tv9X"
-  "BZ0k7YXDK/umdaisLRbvfXknsuvCnQsH6qqF0wGjIChBWUMo0oHjqvbsezt3tkBigAVBRQHvFwY+3sAzm2fTYS5yh+Rp/BIAV0AecPUeybQ=\n"
-  "-----END CERTIFICATE-----\n";
+// note: the certificates have been moved to a separate header file, as R"CERT( destroys IDE Auto Format capability
+
+#include "GxEPD2_github_raw_certs.h"
+
+const char* certificate_rawcontent = cert_DigiCert_TLS_RSA_SHA256_2020_CA1; // ok, should work until 2031-04-13 23:59:59
 
 const char* host_rawcontent   = "raw.githubusercontent.com";
 const char* path_rawcontent   = "/ZinggJM/GxEPD2/master/extras/bitmaps/";
@@ -113,12 +94,15 @@ void setup()
   // Print the IP address
   Serial.println(WiFi.localIP());
 
+  setClock();
+
 #if defined(ESP32)
   SPIFFS.begin(formatOnFail);
-#else
-  SPIFFS.begin();
-#endif
   Serial.println("SPIFFS started");
+#else
+  LittleFS.begin();
+  Serial.println("LittleFS started");
+#endif
   listFiles();
   //deleteFiles();
   downloadBitmaps_200x200();
@@ -176,6 +160,7 @@ void downloadBitmaps_test()
 
 void deleteFiles()
 {
+#if defined(ESP32)
   SPIFFS.remove("logo200x200.bmp");
   SPIFFS.remove("first200x200.bmp");
   SPIFFS.remove("second200x200.bmp");
@@ -197,6 +182,29 @@ void deleteFiles()
   SPIFFS.remove("tiger_320x200x24.bmp");
   SPIFFS.remove("tiger16T.bmp");
   SPIFFS.remove("woof.bmp");
+#else
+  LittleFS.remove("logo200x200.bmp");
+  LittleFS.remove("first200x200.bmp");
+  LittleFS.remove("second200x200.bmp");
+  LittleFS.remove("third200x200.bmp");
+  LittleFS.remove("fourth200x200.bmp");
+  LittleFS.remove("fifth200x200.bmp");
+  LittleFS.remove("sixth200x200.bmp");
+  LittleFS.remove("seventh200x200.bmp");
+  LittleFS.remove("eighth200x200.bmp");
+  LittleFS.remove("chanceflurries.bmp");
+  LittleFS.remove("betty_1.bmp");
+  LittleFS.remove("betty_4.bmp");
+  LittleFS.remove("marilyn_240x240x8.bmp");
+  LittleFS.remove("miniwoof.bmp");
+  LittleFS.remove("test.bmp");
+  LittleFS.remove("tiger.bmp");
+  LittleFS.remove("tiger_178x160x4.bmp");
+  LittleFS.remove("tiger_240x317x4.bmp");
+  LittleFS.remove("tiger_320x200x24.bmp");
+  LittleFS.remove("tiger16T.bmp");
+  LittleFS.remove("woof.bmp");
+#endif
 }
 
 void downloadFile_HTTP(const char* host, const char* path, const char* filename, const char* target)
@@ -244,7 +252,7 @@ void downloadFile_HTTP(const char* host, const char* path, const char* filename,
 #if defined(ESP32)
   fs::File file = SPIFFS.open(String("/") + target, "w+");
 #else
-  fs::File file = SPIFFS.open(target, "w+");
+  fs::File file = LittleFS.open(target, "w+");
 #endif
   if (!file)
   {
@@ -270,15 +278,18 @@ void downloadFile_HTTP(const char* host, const char* path, const char* filename,
 void downloadFile_HTTPS(const char* host, const char* path, const char* filename, const char* fingerprint, const char* target, const char* certificate)
 {
   // Use WiFiClientSecure class to create TLS connection
-#if USE_BearSSL
+#if defined (ESP8266)
   BearSSL::WiFiClientSecure client;
+  BearSSL::X509List cert(certificate ? certificate : certificate_rawcontent);
 #else
   WiFiClientSecure client;
 #endif
   Serial.println(); Serial.print("downloading file \""); Serial.print(filename);  Serial.println("\"");
   Serial.print("connecting to "); Serial.println(host);
 #if defined (ESP8266)
-  if (fingerprint) client.setFingerprint(fingerprint);
+  if (certificate) client.setTrustAnchors(&cert);
+  else if (fingerprint) client.setFingerprint(fingerprint);
+  else client.setInsecure();
 #elif defined (ESP32)
   if (certificate) client.setCACert(certificate);
 #endif
@@ -322,7 +333,7 @@ void downloadFile_HTTPS(const char* host, const char* path, const char* filename
 #if defined(ESP32)
   fs::File file = SPIFFS.open(String("/") + target, "w+");
 #else
-  fs::File file = SPIFFS.open(target, "w+");
+  fs::File file = LittleFS.open(target, "w+");
 #endif
   if (!file)
   {
@@ -363,4 +374,24 @@ void downloadFile_HTTPS(const char* host, const char* path, const char* filename
   }
   file.close();
   Serial.print("done, "); Serial.print(total); Serial.println(" bytes transferred");
+}
+
+// Set time via NTP, as required for x.509 validation
+void setClock()
+{
+  configTime(3 * 3600, 0, "pool.ntp.org", "time.nist.gov");
+
+  Serial.print("Waiting for NTP time sync: ");
+  time_t now = time(nullptr);
+  while (now < 8 * 3600 * 2)
+  {
+    delay(500);
+    Serial.print(".");
+    now = time(nullptr);
+  }
+  Serial.println("");
+  struct tm timeinfo;
+  gmtime_r(&now, &timeinfo);
+  Serial.print("Current time: ");
+  Serial.print(asctime(&timeinfo));
 }

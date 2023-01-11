@@ -1,7 +1,6 @@
 #if defined(ESP32)
 
 #include "FS.h"
-#include "SPIFFS.h"
 
 void listDir(fs::FS &fs, const char * dirname, uint8_t levels) {
   Serial.printf("Listing directory: %s\r\n", dirname);
@@ -41,21 +40,24 @@ void listFiles()
 
 #elif defined(ESP8266)
 
+#include <FS.h>
+#include <LittleFS.h>
+
 /*====================================================================================
-  This sketch contains support functions for the ESP6266 SPIFFS filing system
+  This sketch contains support functions for the ESP6266 LittleFS filing system
 
   Created by Bodmer 15th Jan 2017
   ==================================================================================*/
 
 //====================================================================================
-//                 Print a SPIFFS directory list (root directory)
+//                 Print a LittleFS directory list (root directory)
 //====================================================================================
 
 void listFiles(void) {
   Serial.println();
-  Serial.println("SPIFFS files found:");
+  Serial.println("LittleFS files found:");
 
-  fs::Dir dir = SPIFFS.openDir(""); // Root directory
+  fs::Dir dir = LittleFS.openDir(""); // Root directory
   String  line = "=====================================";
   uint32_t totalBytes = 0;
 
@@ -87,6 +89,6 @@ void listFiles(void) {
 
 void listFiles()
 {
-  Serial.println("SPIFFS listFiles() not implemented");
+  Serial.println("LittleFS listFiles() not implemented");
 }
 #endif

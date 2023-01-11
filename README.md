@@ -6,7 +6,7 @@
 - For SPI e-paper displays from Dalian Good Display 
 - and SPI e-paper boards from Waveshare
 
-### important note :
+### important note:
 - the display panels are for 3.3V supply and 3.3V data lines
 - never connect data lines directly to 5V Arduino data pins, use e.g. 4k7/10k resistor divider
 - series resistor only is not enough for reliable operation (back-feed effect through protection diodes)
@@ -15,9 +15,9 @@
 - the actual Waveshare display boards now have level converters and series regulator, safe for 5V
 - use 3k3 pull-down on SS for ESP8266 for boards with level converters
 - note that 7.5" e-paper displays don't work reliable if fed from 3.3V Arduino pin
-- note that Waveshare bords with "clever" reset circuit may need shortened reset pulse
+- note that Waveshare boards with "clever" reset circuit may need shortened reset pulse
 - use `init(115200, true, 2, false)` for Waveshare boards with "clever" reset circuit
-- note that Waveshare bords with "clever" reset circuit need 1k pull-up on RST on ESP8266, or different pin
+- note that Waveshare boards with "clever" reset circuit need 1k pull-up on RST on ESP8266, or different pin
 
 ### Paged Drawing, Picture Loop
  - This library uses paged drawing to limit RAM use and cope with missing single pixel update support
@@ -96,13 +96,14 @@
 - GDEW042Z15     4.2" b/w/r 400x300, UC8176 (IL0398)
 - GDEQ042Z21     4.2" b/w/r 400x300, UC8276, (Waveshare V2)
 - ACeP565        5.65" Waveshare 5.65" 7-color e-paper display 600x448
-- GDEW0583T7     5.83" b/w 600x448, UC8179 (IL0371)
-- GDEW0583T8     5.83" b/w 648x480, GD7965
-- GDEW0583Z83    5.83" b/w/r 648x480, GD7965
-- GDEW075T8      7.5" b/w 640x384, UC8179 (IL0371)
-- GDEW075T7      7.5" b/w 800x480, GD7965
-- GDEW075Z09     7.5" b/w/r 640x384, UC8179 (IL0371)
-- GDEW075Z08     7.5" b/w/r 800x480, GD7965
+- GDEW0583T7     5.83" b/w 600x448, UC8159c (IL0371)
+- GDEW0583T8     5.83" b/w 648x480, EK79655 (GD7965)
+- GDEW0583Z83    5.83" b/w/r 648x480, EK79655 (GD7965)
+- GDEW075T8      7.5" b/w 640x384, UC8159c (IL0371)
+- GDEW075T7      7.5" b/w 800x480, EK79655 (GD7965)
+- GDEY075T7      7.5" b/w 800x480, UC8179 (GD7965)
+- GDEW075Z09     7.5" b/w/r 640x384, UC8159c (IL0371)
+- GDEW075Z08     7.5" b/w/r 800x480, EK79655 (GD7965)
 - GDEH075Z90     7.5" b/w/r 880x528, SSD1677
 - GDEH116T91    11.6" b/w 960x640, SSD1677
 - GDEW1248T3    12.48" b/w 1304x984, UC8179
@@ -118,7 +119,20 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.4.9
+### Version 1.5.0
+- added support for GDEY075T7 7.5" b/w 800x480
+- updated GxEPD2_Example, added HSPI use for Waveshare ESP32 Driver Board
+- updated GxEPD2_SD_AVR_Example, fixes for BMP handling
+- updated GxEPD2_SD_Example, fixes for BMP handling, added HSPI use for Waveshare ESP32 Driver Board
+- updated GxEPD2_SerialFlash_Example, fixes for BMP handling
+- updated GxEPD2_SerialFlash_Loader, updated https certificates and use
+- updated GxEPD2_Spiffs_Example, fixes for BMP handling
+- updated GxEPD2_Spiffs_Loader, updated https certificates and use
+- added GxEPD2_WiFi_CertStore_Example, use of a BearSSL CertStore on ESP8266, like a browser
+- added GxEPD2_WiFi_CertStore_Loader, download root certificates (from Mozilla) to ESP8266 flash
+- updated GxEPD2_WiFi_Example, fixes for BMP handling, updated https certificates and use
+- updated GxEPD2_WS_ESP32_Driver, added HSPI use for Waveshare ESP32 Driver Board
+#### Version 1.4.9
 - added missing constructor lines to GxEPD2_display_selection.h
 - added panel details to comments in GxEPD2_display_selection.h
 - added panel details to Supported SPI e-paper panels in README.md

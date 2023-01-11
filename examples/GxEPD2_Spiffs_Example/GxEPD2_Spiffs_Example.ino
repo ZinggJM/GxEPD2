@@ -35,6 +35,8 @@
 
 #if defined(ESP32)
 #include "SPIFFS.h"
+#else
+#include <LittleFS.h>
 #endif
 
 #include <FS.h>
@@ -61,8 +63,14 @@ void setup()
 
   display.init(115200);
 
+#if defined(ESP32)
   SPIFFS.begin();
   Serial.println("SPIFFS started");
+#else
+  LittleFS.begin();
+  Serial.println("LittleFS started");
+#endif
+
   listFiles();
 
   if ((display.epd2.panel == GxEPD2::GDEW0154Z04) || (display.epd2.panel == GxEPD2::ACeP565) || false)
@@ -206,7 +214,7 @@ void drawBitmapsBuffered_other()
 
 static const uint16_t input_buffer_pixels = 800; // may affect performance
 
-static const uint16_t max_row_width = 1448; // for up to 6" display 1448x1072
+static const uint16_t max_row_width = 1872; // for up to 7.8" display 1872x1404
 static const uint16_t max_palette_pixels = 256; // for depth <= 8
 
 uint8_t input_buffer[3 * input_buffer_pixels]; // up to depth 24
@@ -230,7 +238,7 @@ void drawBitmapFromSpiffs(const char *filename, int16_t x, int16_t y, bool with_
 #if defined(ESP32)
   file = SPIFFS.open(String("/") + filename, "r");
 #else
-  file = SPIFFS.open(filename, "r");
+  file = LittleFS.open(filename, "r");
 #endif
   if (!file)
   {
@@ -241,11 +249,11 @@ void drawBitmapFromSpiffs(const char *filename, int16_t x, int16_t y, bool with_
   if (read16(file) == 0x4D42) // BMP signature
   {
     uint32_t fileSize = read32(file);
-    uint32_t creatorBytes = read32(file);
+    uint32_t creatorBytes = read32(file); (void)creatorBytes; //unused
     uint32_t imageOffset = read32(file); // Start of image data
     uint32_t headerSize = read32(file);
     uint32_t width  = read32(file);
-    uint32_t height = read32(file);
+    int32_t height = (int32_t) read32(file);
     uint16_t planes = read16(file);
     uint16_t depth = read16(file); // bits per pixel
     uint32_t format = read32(file);
@@ -277,7 +285,8 @@ void drawBitmapFromSpiffs(const char *filename, int16_t x, int16_t y, bool with_
         uint8_t bitmask = 0xFF;
         uint8_t bitshift = 8 - depth;
         uint16_t red, green, blue;
-        bool whitish, colored;
+        bool whitish = false;
+        bool colored = false;
         if (depth == 1) with_color = false;
         if (depth <= 8)
         {
@@ -416,7 +425,7 @@ void drawBitmapFromSpiffs_Buffered(const char *filename, int16_t x, int16_t y, b
 #if defined(ESP32)
   file = SPIFFS.open(String("/") + filename, "r");
 #else
-  file = SPIFFS.open(filename, "r");
+  file = LittleFS.open(filename, "r");
 #endif
   if (!file)
   {
@@ -427,11 +436,11 @@ void drawBitmapFromSpiffs_Buffered(const char *filename, int16_t x, int16_t y, b
   if (read16(file) == 0x4D42) // BMP signature
   {
     uint32_t fileSize = read32(file);
-    uint32_t creatorBytes = read32(file);
+    uint32_t creatorBytes = read32(file); (void)creatorBytes; //unused
     uint32_t imageOffset = read32(file); // Start of image data
     uint32_t headerSize = read32(file);
     uint32_t width  = read32(file);
-    uint32_t height = read32(file);
+    int32_t height = (int32_t) read32(file);
     uint16_t planes = read16(file);
     uint16_t depth = read16(file); // bits per pixel
     uint32_t format = read32(file);
@@ -463,7 +472,8 @@ void drawBitmapFromSpiffs_Buffered(const char *filename, int16_t x, int16_t y, b
         uint8_t bitmask = 0xFF;
         uint8_t bitshift = 8 - depth;
         uint16_t red, green, blue;
-        bool whitish, colored;
+        bool whitish = false;
+        bool colored = false;
         if (depth == 1) with_color = false;
         if (depth <= 8)
         {
