@@ -38,6 +38,7 @@ class GxEPD2
       GDEW0102T4, Waveshare_1_02_bw = GDEW0102T4,
       GDEP015OC1, Waveshare_1_54_bw = GDEP015OC1,
       DEPG0150BN,
+      HTEW0154T8_V20,
       GDEH0154D67, Waveshare_1_54_bw_D67 = GDEH0154D67,
       GDEW0154T8,
       GDEW0154M09,

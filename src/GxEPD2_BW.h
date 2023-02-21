@@ -33,6 +33,7 @@
 #include "GxEPD2_EPD.h"
 #include "epd/GxEPD2_102.h"
 #include "epd/GxEPD2_150_BN.h"
+#include "epd/GxEPD2_154_T8_V20.h"
 #include "epd/GxEPD2_154.h"
 #include "epd/GxEPD2_154_D67.h"
 #include "epd/GxEPD2_154_T8.h"
