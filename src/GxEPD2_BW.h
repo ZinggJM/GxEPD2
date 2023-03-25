@@ -240,8 +240,14 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
     // y and h should be multiple of 8, for rotation 1 or 3,
     // else window is increased as needed,
     // this is an addressing limitation of the e-paper controllers
-    void setPartialWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
+    void setPartialWindow(int16_t x, int16_t y, uint16_t w, uint16_t h)
     {
+      if (x < 0)  {
+        x = 0;
+      }
+      if (y<0)  {
+        y = 0;
+      }
       _pw_x = gx_uint16_min(x, width());
       _pw_y = gx_uint16_min(y, height());
       _pw_w = gx_uint16_min(w, width() - _pw_x);

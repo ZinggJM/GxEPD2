@@ -54,7 +54,7 @@ class GxEPD2_GFX : public GxEPD2_GFX_ROOT_CLASS
     // y and h should be multiple of 8, for rotation 1 or 3,
     // else window is increased as needed, 
     // this is an addressing limitation of the e-paper controllers
-    virtual void setPartialWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h) = 0;
+    virtual void setPartialWindow(int16_t x, int16_t y, uint16_t w, uint16_t h) = 0;
     virtual void firstPage() = 0;
     virtual bool nextPage() = 0;
     virtual void drawPaged(void (*drawCallback)(const void*), const void* pv) = 0;
