@@ -78,6 +78,7 @@ void GxEPD2_213_B73::_writeImage(uint8_t command, const uint8_t bitmap[], int16_
   if (!_using_partial_mode) _Init_Part();
   _setPartialRamArea(x1, y1, w1, h1);
   _writeCommand(command);
+  _startTransfer();
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -98,9 +99,10 @@ void GxEPD2_213_B73::_writeImage(uint8_t command, const uint8_t bitmap[], int16_
         data = bitmap[idx];
       }
       if (invert) data = ~data;
-      _writeData(data);
+      _transfer(data);
     }
   }
+  _endTransfer();
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
 
@@ -142,6 +144,7 @@ void GxEPD2_213_B73::_writeImagePart(uint8_t command, const uint8_t bitmap[], in
   if (!_using_partial_mode) _Init_Part();
   _setPartialRamArea(x1, y1, w1, h1);
   _writeCommand(command);
+  _startTransfer();
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -162,9 +165,10 @@ void GxEPD2_213_B73::_writeImagePart(uint8_t command, const uint8_t bitmap[], in
         data = bitmap[idx];
       }
       if (invert) data = ~data;
-      _writeData(data);
+      _transfer(data);
     }
   }
+  _endTransfer();
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
 

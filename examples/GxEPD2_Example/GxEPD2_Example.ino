@@ -49,7 +49,7 @@
 // or select the display class and display driver class in the following file (new style):
 #include "GxEPD2_display_selection_new_style.h"
 
-#if !defined(__AVR) && !defined(_BOARD_GENERIC_STM32F103C_H_) && !defined(ARDUINO_BLUEPILL_F103C8)
+#if !defined(__AVR) && !defined(STM32F1xx)
 
 // note 16.11.2019: the compiler may exclude code based on constant if statements (display.epd2.panel == constant),
 //                  therefore bitmaps may get optimized out by the linker
@@ -82,10 +82,12 @@
 #include "bitmaps/Bitmaps3c880x528.h" // 7.5"  b/w/r
 #include "bitmaps/WS_Bitmaps800x600.h" // 6.0"  grey
 #include "bitmaps/WS_Bitmaps7c192x143.h" // 5.65" 7-color
+//#include "bitmaps/WS_Bitmaps7c300x180.h" // 7.3" 7-color
 #endif
 #if defined(ESP32)
 #include "bitmaps/Bitmaps1304x984.h" // 12.48" b/w
 #include "bitmaps/Bitmaps3c1304x984.h" // 12.48" b/w/r
+#include "bitmaps/Bitmaps7c800x480.h" // 7.3" 7-color
 #endif
 
 #else
@@ -163,7 +165,7 @@ void setup()
   drawBitmaps();
   //return;
 #if !defined(__AVR) // takes too long!
-  if (display.epd2.panel == GxEPD2::ACeP565)
+  if ((display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46))
   {
     //draw7colorlines();
     //delay(2000);
@@ -773,6 +775,12 @@ void drawBitmaps()
 #endif
 #if defined(_WS_Bitmaps7c192x143_H_)
   drawBitmaps7c192x143();
+#endif
+#if defined(_GxBitmaps7c800x480_H_)
+  drawBitmaps7c800x480();
+#endif
+#if defined(_WS_Bitmaps7c300x180_H_)
+  drawBitmaps7c300x180();
 #endif
   if ((display.epd2.WIDTH >= 200) && (display.epd2.HEIGHT >= 200))
   {
@@ -1683,6 +1691,28 @@ void drawBitmaps7c192x143()
   if (display.epd2.panel == GxEPD2::ACeP565)
   {
     display.drawNative(WS_Bitmap7c192x143, 0, (display.epd2.WIDTH - 192) / 2, (display.epd2.HEIGHT - 143) / 2, 192, 143, false, false, true);
+    delay(5000);
+  }
+}
+#endif
+
+#if defined(_GxBitmaps7c800x480_H_)
+void drawBitmaps7c800x480()
+{
+  if (display.epd2.panel == GxEPD2::GDEY073D46)
+  {
+    display.epd2.drawDemoBitmap(Bitmap7c800x480, 0, 0, 0, 800, 480, 0, false, true); // special format
+    delay(5000);
+  }
+}
+#endif
+
+#if defined(_WS_Bitmaps7c300x180_H_)
+void drawBitmaps7c300x180()
+{
+  if (display.epd2.panel == GxEPD2::GDEY073D46)
+  {
+    display.drawNative(WS_Bitmap7c300x180, 0, (display.epd2.WIDTH - 300) / 2, (display.epd2.HEIGHT - 180) / 2, 300, 180, false, false, true);
     delay(5000);
   }
 }

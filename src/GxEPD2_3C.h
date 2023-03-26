@@ -30,25 +30,64 @@
 #endif
 
 #include "GxEPD2_EPD.h"
+
+#if !defined(__has_include) || __has_include("epd3c/GxEPD2_154c.h")
 #include "epd3c/GxEPD2_154c.h"
+#endif
+#if !defined(__has_include) || __has_include("epd3c/GxEPD2_154_Z90c.h")
 #include "epd3c/GxEPD2_154_Z90c.h"
+#endif
+#if !defined(__has_include) || __has_include("epd3c/GxEPD2_213c.h")
 #include "epd3c/GxEPD2_213c.h"
+#endif
+#if !defined(__has_include) || __has_include("epd3c/GxEPD2_213_Z19c.h")
 #include "epd3c/GxEPD2_213_Z19c.h"
+#endif
+#if !defined(__has_include) || __has_include("epd3c/GxEPD2_213_Z98c.h")
 #include "epd3c/GxEPD2_213_Z98c.h"
+#endif
+#if !defined(__has_include) || __has_include("epd3c/GxEPD2_290c.h")
 #include "epd3c/GxEPD2_290c.h"
+#endif
+#if !defined(__has_include) || __has_include("epd3c/GxEPD2_290_Z13c.h")
 #include "epd3c/GxEPD2_290_Z13c.h"
+#endif
+#if !defined(__has_include) || __has_include("epd3c/GxEPD2_290_C90c.h")
 #include "epd3c/GxEPD2_290_C90c.h"
+#endif
+#if !defined(__has_include) || __has_include("epd3c/GxEPD2_266c.h")
 #include "epd3c/GxEPD2_266c.h"
+#endif
+#if !defined(__has_include) || __has_include("epd3c/GxEPD2_150_BN.h")
 #include "epd3c/GxEPD2_270c.h"
+#endif
+#if !defined(__has_include) || __has_include("epd3c/GxEPD2_420c.h")
 #include "epd3c/GxEPD2_420c.h"
+#endif
+#if !defined(__has_include) || __has_include("epd3c/GxEPD2_420c_Z21.h")
 #include "epd3c/GxEPD2_420c_Z21.h"
+#endif
+#if !defined(__has_include) || __has_include("epd3c/GxEPD2_583c.h")
 #include "epd3c/GxEPD2_583c.h"
+#endif
+#if !defined(__has_include) || __has_include("epd3c/GxEPD2_583c_Z83.h")
 #include "epd3c/GxEPD2_583c_Z83.h"
-#include "epd3c/GxEPD2_565c.h"
+#endif
+#if !defined(__has_include) || __has_include("epd7c/GxEPD2_565c.h")
+#include "epd7c/GxEPD2_565c.h"
+#endif
+#if !defined(__has_include) || __has_include("epd3c/GxEPD2_750c.h")
 #include "epd3c/GxEPD2_750c.h"
+#endif
+#if !defined(__has_include) || __has_include("epd3c/GxEPD2_750c_Z08.h")
 #include "epd3c/GxEPD2_750c_Z08.h"
+#endif
+#if !defined(__has_include) || __has_include("epd3c/GxEPD2_750c_Z90.h")
 #include "epd3c/GxEPD2_750c_Z90.h"
+#endif
+#if !defined(__has_include) || __has_include("epd3c/GxEPD2_1248c.h")
 #include "epd3c/GxEPD2_1248c.h"
+#endif
 
 template<typename GxEPD2_Type, const uint16_t page_height>
 class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS

@@ -10,6 +10,7 @@
 
 #include <GxEPD2_BW.h> // including both doesn't use more code or ram
 #include <GxEPD2_3C.h> // including both doesn't use more code or ram
+#include <GxEPD2_7C.h> // same for all three
 
 // select the display class and display driver class in the following file (new style):
 #include "GxEPD2_display_selection_new_style.h"
@@ -20,7 +21,8 @@
 
 void setup()
 {
-  display.init();
+  //display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
+  display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
   // comment out next line to have no or minimal Adafruit_GFX code
   display.setTextColor(GxEPD_BLACK);
   display.firstPage();

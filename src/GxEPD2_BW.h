@@ -31,49 +31,154 @@
 #endif
 
 #include "GxEPD2_EPD.h"
+
+#if !defined(__has_include) || __has_include("epd/GxEPD2_102.h")
 #include "epd/GxEPD2_102.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_150_BN.h")
 #include "epd/GxEPD2_150_BN.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_154.h")
 #include "epd/GxEPD2_154.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_154_D67.h")
 #include "epd/GxEPD2_154_D67.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_154_T8.h")
 #include "epd/GxEPD2_154_T8.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_154_M09.h")
 #include "epd/GxEPD2_154_M09.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_154_M10.h")
 #include "epd/GxEPD2_154_M10.h"
+#endif
+#if !defined(__has_include) || __has_include("gdey/GxEPD2_154_GDEY0154D67.h")
+#include "gdey/GxEPD2_154_GDEY0154D67.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_213.h")
 #include "epd/GxEPD2_213.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_213_B72.h")
 #include "epd/GxEPD2_213_B72.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_213_B73.h")
 #include "epd/GxEPD2_213_B73.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_213_B74.h")
 #include "epd/GxEPD2_213_B74.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_213_flex.h")
 #include "epd/GxEPD2_213_flex.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_213_M21.h")
 #include "epd/GxEPD2_213_M21.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_213_T5D.h")
 #include "epd/GxEPD2_213_T5D.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_213_BN.h")
 #include "epd/GxEPD2_213_BN.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_213_GDEY0213B74.h")
+#include "gdey/GxEPD2_213_GDEY0213B74.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_260.h")
 #include "epd/GxEPD2_260.h"
-#include "epd/GxEPD2_266_BN.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_260_M01.h")
 #include "epd/GxEPD2_260_M01.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_266_BN.h")
+#include "epd/GxEPD2_266_BN.h"
+#endif
+#if !defined(__has_include) || __has_include("gdey/GxEPD2_266_GDEY0266T90.h")
+#include "gdey/GxEPD2_266_GDEY0266T90.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_290.h")
 #include "epd/GxEPD2_290.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_290_T5.h")
 #include "epd/GxEPD2_290_T5.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_290_T5D.h")
 #include "epd/GxEPD2_290_T5D.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_290_I6FD.h")
 #include "epd/GxEPD2_290_I6FD.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_290_M06.h")
 #include "epd/GxEPD2_290_M06.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_290_T94.h")
 #include "epd/GxEPD2_290_T94.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_290_GDEY029T94.h")
+#include "gdey/GxEPD2_290_GDEY029T94.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_290_T94_V2.h")
 #include "epd/GxEPD2_290_T94_V2.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_290_BS.h")
 #include "epd/GxEPD2_290_BS.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_270.h")
 #include "epd/GxEPD2_270.h"
-#include "epd/GxEPD2_270_T91.h"
+#endif
+#if !defined(__has_include) || __has_include("gdey/GxEPD2_270_GDEY027T91.h")
+#include "gdey/GxEPD2_270_GDEY027T91.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_371.h")
 #include "epd/GxEPD2_371.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_370_TC1.h")
 #include "epd/GxEPD2_370_TC1.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_420.h")
 #include "epd/GxEPD2_420.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_420_M01.h")
 #include "epd/GxEPD2_420_M01.h"
+#endif
+#if !defined(__has_include) || __has_include("gdey/GxEPD2_420_GDEY042T91.h")
+#include "gdey/GxEPD2_420_GDEY042T91.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_583.h")
 #include "epd/GxEPD2_583.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_583_T8.h")
 #include "epd/GxEPD2_583_T8.h"
+#endif
+#if !defined(__has_include) || __has_include("gdeq/GxEPD2_583_GDEQ0583T31.h")
+#include "gdeq/GxEPD2_583_GDEQ0583T31.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_750.h")
 #include "epd/GxEPD2_750.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_750_T7.h")
 #include "epd/GxEPD2_750_T7.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_750_YT7.h")
 #include "epd/GxEPD2_750_YT7.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_1160_T91.h")
 #include "epd/GxEPD2_1160_T91.h"
+#endif
+#if !defined(__has_include) || __has_include("epd/GxEPD2_1248.h")
 #include "epd/GxEPD2_1248.h"
+#endif
+#if !defined(__has_include) || __has_include("it8951/GxEPD2_it60.h")
 #include "it8951/GxEPD2_it60.h"
+#endif
+#if !defined(__has_include) || __has_include("it8951/GxEPD2_it60_1448x1072.h")
 #include "it8951/GxEPD2_it60_1448x1072.h"
+#endif
+#if !defined(__has_include) || __has_include("it8951/GxEPD2_it78_1872x1404.h")
 #include "it8951/GxEPD2_it78_1872x1404.h"
+#endif
+#if !defined(__has_include) || __has_include("it8951/GxEPD2_it103_1872x1404.h")
 #include "it8951/GxEPD2_it103_1872x1404.h"
+#endif
 
 template<typename GxEPD2_Type, const uint16_t page_height>
 class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS

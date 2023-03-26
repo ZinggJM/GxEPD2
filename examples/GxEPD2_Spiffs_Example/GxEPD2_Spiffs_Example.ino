@@ -61,7 +61,8 @@ void setup()
   Serial.println();
   Serial.println("GxEPD2_Spiffs_Example");
 
-  display.init(115200);
+  //display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
+  display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
 
 #if defined(ESP32)
   SPIFFS.begin();
@@ -73,10 +74,11 @@ void setup()
 
   listFiles();
 
-  if ((display.epd2.panel == GxEPD2::GDEW0154Z04) || (display.epd2.panel == GxEPD2::ACeP565) || false)
+  if ((display.epd2.panel == GxEPD2::GDEW0154Z04) || (display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46) || false)
   {
-    drawBitmapsBuffered_200x200();
-    drawBitmapsBuffered_other();
+    //drawBitmapsBuffered_200x200();
+    //drawBitmapsBuffered_other();
+    drawBitmapsBuffered_test();
   }
   else
   {
@@ -152,8 +154,8 @@ void drawBitmaps_test()
   delay(2000);
   drawBitmapFromSpiffs("tractor_4.bmp", 0, 0);
   delay(2000);
-  drawBitmapFromSpiffs("tractor_8.bmp", 0, 0);
-  delay(2000);
+  //drawBitmapFromSpiffs("tractor_8.bmp", 0, 0); // format 1: BI_RLE8 is not supported
+  //delay(2000);
   drawBitmapFromSpiffs("tractor_11.bmp", 0, 0);
   delay(2000);
   drawBitmapFromSpiffs("tractor_44.bmp", 0, 0);
@@ -209,6 +211,22 @@ void drawBitmapsBuffered_other()
   drawBitmapFromSpiffs_Buffered("tiger_320x200x24.bmp", w2 - 160, h2 - 100);
   delay(2000);
   drawBitmapFromSpiffs_Buffered("woof.bmp", w2 - 120, h2 - 160);
+  delay(2000);
+}
+
+void drawBitmapsBuffered_test()
+{
+  int16_t w2 = display.width() / 2;
+  int16_t h2 = display.height() / 2;
+  drawBitmapFromSpiffs_Buffered("betty_4.bmp", w2 - 102, h2 - 126);
+  delay(2000);
+  drawBitmapFromSpiffs_Buffered("bb4.bmp", 0, 0, false, true, true);
+  delay(2000);
+  drawBitmapFromSpiffs_Buffered("rgb32.bmp", 0, 0);
+  delay(2000);
+  drawBitmapFromSpiffs_Buffered("parrot.bmp", 0, 0);
+  delay(2000);
+  drawBitmapFromSpiffs_Buffered("5in65f3.bmp", 0, 0);
   delay(2000);
 }
 
@@ -331,6 +349,14 @@ void drawBitmapFromSpiffs(const char *filename, int16_t x, int16_t y, bool with_
             }
             switch (depth)
             {
+              case 32:
+                blue = input_buffer[in_idx++];
+                green = input_buffer[in_idx++];
+                red = input_buffer[in_idx++];
+                in_idx++; // skip alpha
+                whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
+                colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
+                break;
               case 24:
                 blue = input_buffer[in_idx++];
                 green = input_buffer[in_idx++];
@@ -359,6 +385,7 @@ void drawBitmapFromSpiffs(const char *filename, int16_t x, int16_t y, bool with_
                 }
                 break;
               case 1:
+              case 2:
               case 4:
               case 8:
                 {
@@ -415,7 +442,7 @@ void drawBitmapFromSpiffs_Buffered(const char *filename, int16_t x, int16_t y, b
   fs::File file;
   bool valid = false; // valid format to be handled
   bool flip = true; // bitmap is stored bottom-to-top
-  bool has_multicolors = display.epd2.panel == GxEPD2::ACeP565;
+  bool has_multicolors = (display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46);
   uint32_t startTime = millis();
   if ((x >= display.width()) || (y >= display.height())) return;
   Serial.println();
@@ -522,6 +549,15 @@ void drawBitmapFromSpiffs_Buffered(const char *filename, int16_t x, int16_t y, b
               }
               switch (depth)
               {
+                case 32:
+                  blue = input_buffer[in_idx++];
+                  green = input_buffer[in_idx++];
+                  red = input_buffer[in_idx++];
+                  in_idx++; // skip alpha
+                  whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
+                  colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
+                  color = ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | ((blue & 0xF8) >> 3);
+                  break;
                 case 24:
                   blue = input_buffer[in_idx++];
                   green = input_buffer[in_idx++];
@@ -553,6 +589,7 @@ void drawBitmapFromSpiffs_Buffered(const char *filename, int16_t x, int16_t y, b
                   }
                   break;
                 case 1:
+                case 2:
                 case 4:
                 case 8:
                   {

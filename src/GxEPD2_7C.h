@@ -30,7 +30,13 @@
 #endif
 
 #include "GxEPD2_EPD.h"
-#include "epd3c/GxEPD2_565c.h"
+
+#if !defined(__has_include) || __has_include("epd7c/GxEPD2_565c.h")
+#include "epd7c/GxEPD2_565c.h"
+#endif
+#if !defined(__has_include) || __has_include("epd7c/GxEPD2_730c_GDEY073D46.h")
+#include "epd7c/GxEPD2_730c_GDEY073D46.h"
+#endif
 
 template<typename GxEPD2_Type, const uint16_t page_height>
 class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
@@ -489,11 +495,8 @@ class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
             else if ((red >= 0x8000) && (green >= 0x8000) && (blue >= 0x8000)) cv7 = 0x01; // white
             else if ((red >= 0x8000) && (blue >= 0x8000)) cv7 = red > blue ? 0x04 : 0x03; // red, blue
             else if ((green >= 0x8000) && (blue >= 0x8000)) cv7 = green > blue ? 0x02 : 0x03; // green, blue
-            else if ((red >= 0x8000) && (green >= 0x8000))
-            {
-              static const uint16_t y2o_lim = ((GxEPD_YELLOW - GxEPD_ORANGE) / 2 + (GxEPD_ORANGE & 0x07E0)) << 5;
-              cv7 = green > y2o_lim ? 0x05 : 0x06; // yellow, orange
-            }
+            else if ((red >= 0x8000) && (green >= 0xC000)) cv7 = 0x5; // yellow
+            else if ((red >= 0x8000) && (green >= 0x4000)) cv7 = 0x6; // orange
             else if (red >= 0x8000) cv7 = 0x04; // red
             else if (green >= 0x8000) cv7 = 0x02; // green
             else cv7 = 0x03; // blue

@@ -20,6 +20,7 @@
 #define GxEPD2_154_T8_IS_BW true
 #define GxEPD2_154_M09_IS_BW true
 #define GxEPD2_154_M10_IS_BW true
+#define GxEPD2_154_GDEY0154D67_IS_BW true
 #define GxEPD2_213_IS_BW true
 #define GxEPD2_213_B72_IS_BW true
 #define GxEPD2_213_B73_IS_BW true
@@ -28,6 +29,13 @@
 #define GxEPD2_213_M21_IS_BW true
 #define GxEPD2_213_T5D_IS_BW true
 #define GxEPD2_213_BN_IS_BW true
+#define GxEPD2_213_GDEY0213B74_IS_BW true
+#define GxEPD2_260_IS_BW true
+#define GxEPD2_260_M01_IS_BW true
+#define GxEPD2_266_BN_IS_BW true
+#define GxEPD2_266_GDEY0266T90_IS_BW true
+#define GxEPD2_270_IS_BW true
+#define GxEPD2_270_GDEY027T91_IS_BW true
 #define GxEPD2_290_IS_BW true
 #define GxEPD2_290_T5_IS_BW true
 #define GxEPD2_290_T5D_IS_BW true
@@ -36,17 +44,15 @@
 #define GxEPD2_290_T94_V2_IS_BW true
 #define GxEPD2_290_BS_IS_BW true
 #define GxEPD2_290_M06_IS_BW true
-#define GxEPD2_260_IS_BW true
-#define GxEPD2_260_M01_IS_BW true
-#define GxEPD2_266_BN_IS_BW true
-#define GxEPD2_270_IS_BW true
-#define GxEPD2_270_T91_IS_BW true
+#define GxEPD2_290_GDEY029T94_IS_BW true
 #define GxEPD2_371_IS_BW true
 #define GxEPD2_370_TC1_IS_BW true
 #define GxEPD2_420_IS_BW true
 #define GxEPD2_420_M01_IS_BW true
+#define GxEPD2_420_GDEY042T91_IS_BW true
 #define GxEPD2_583_IS_BW true
 #define GxEPD2_583_T8_IS_BW true
+#define GxEPD2_583_GDEQ0583T31_IS_BW true
 #define GxEPD2_750_IS_BW true
 #define GxEPD2_750_T7_IS_BW true
 #define GxEPD2_750_YT7_IS_BW true
@@ -62,11 +68,11 @@
 #define GxEPD2_213c_IS_3C true
 #define GxEPD2_213_Z19c_IS_3C true
 #define GxEPD2_213_Z98c_IS_3C true
+#define GxEPD2_266c_IS_3C true
+#define GxEPD2_270c_IS_3C true
 #define GxEPD2_290c_IS_3C true
 #define GxEPD2_290_Z13c_IS_3C true
 #define GxEPD2_290_C90c_IS_3C true
-#define GxEPD2_266c_IS_3C true
-#define GxEPD2_270c_IS_3C true
 #define GxEPD2_420c_IS_3C true
 #define GxEPD2_420c_Z21_IS_3C true
 #define GxEPD2_583c_IS_3C true
@@ -77,6 +83,7 @@
 #define GxEPD2_1248c_IS_3C true
 // 7-color e-paper
 #define GxEPD2_565c_IS_7C true
+#define GxEPD2_730c_GDEY073D46_IS_7C true
 
 #if defined(GxEPD2_DISPLAY_CLASS) && defined(GxEPD2_DRIVER_CLASS)
 #define IS_GxEPD2_DRIVER(c, x) (c##x)
