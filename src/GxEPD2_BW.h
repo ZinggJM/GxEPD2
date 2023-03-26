@@ -80,7 +80,7 @@
 #if !defined(__has_include) || __has_include("epd/GxEPD2_213_BN.h")
 #include "epd/GxEPD2_213_BN.h"
 #endif
-#if !defined(__has_include) || __has_include("epd/GxEPD2_213_GDEY0213B74.h")
+#if !defined(__has_include) || __has_include("gdey/GxEPD2_213_GDEY0213B74.h")
 #include "gdey/GxEPD2_213_GDEY0213B74.h"
 #endif
 #if !defined(__has_include) || __has_include("epd/GxEPD2_260.h")
@@ -113,7 +113,7 @@
 #if !defined(__has_include) || __has_include("epd/GxEPD2_290_T94.h")
 #include "epd/GxEPD2_290_T94.h"
 #endif
-#if !defined(__has_include) || __has_include("epd/GxEPD2_290_GDEY029T94.h")
+#if !defined(__has_include) || __has_include("gdey/GxEPD2_290_GDEY029T94.h")
 #include "gdey/GxEPD2_290_GDEY029T94.h"
 #endif
 #if !defined(__has_include) || __has_include("epd/GxEPD2_290_T94_V2.h")
