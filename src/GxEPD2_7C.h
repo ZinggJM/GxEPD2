@@ -169,7 +169,7 @@ class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
     // display buffer content to screen, useful for full screen buffer
     void display(bool partial_update_mode = false)
     {
-      epd2.writeNative(_pixel_buffer, 0, 0, 0, WIDTH, _page_height);
+      epd2.writeNative(_pixel_buffer, 0, 0, 0, GxEPD2_Type::WIDTH, _page_height);
       epd2.refresh(partial_update_mode);
       if (!partial_update_mode) epd2.powerOff();
     }
@@ -187,7 +187,7 @@ class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
       w = gx_uint16_min(w, width() - x);
       h = gx_uint16_min(h, height() - y);
       _rotate(x, y, w, h);
-      epd2.writeNativePart(_pixel_buffer, 0, x, y, WIDTH, _page_height, x, y, w, h);
+      epd2.writeNativePart(_pixel_buffer, 0, x, y, GxEPD2_Type::WIDTH, _page_height, x, y, w, h);
       epd2.refresh(x, y, w, h);
     }
 
@@ -196,7 +196,7 @@ class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
       _using_partial_mode = false;
       _pw_x = 0;
       _pw_y = 0;
-      _pw_w = WIDTH;
+      _pw_w = GxEPD2_Type::WIDTH;
       _pw_h = HEIGHT;
     }
 
@@ -270,7 +270,7 @@ class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
       }
       else // full update
       {
-        epd2.writeNative(_pixel_buffer, 0, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
+        epd2.writeNative(_pixel_buffer, 0, 0, page_ys, GxEPD2_Type::WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
         _current_page++;
         if (_current_page == int16_t(_pages))
         {
@@ -322,7 +322,7 @@ class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
           uint16_t page_ys = _current_page * _page_height;
           fillScreen(GxEPD_WHITE);
           drawCallback(pv);
-          epd2.writeNative(_pixel_buffer, 0, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
+          epd2.writeNative(_pixel_buffer, 0, 0, page_ys, GxEPD2_Type::WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
         }
         epd2.refresh(false); // full update
         epd2.powerOff();
