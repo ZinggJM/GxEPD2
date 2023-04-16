@@ -14,7 +14,7 @@
 #include "GxEPD2_420c_Z21.h"
 
 GxEPD2_420c_Z21::GxEPD2_420c_Z21(int16_t cs, int16_t dc, int16_t rst, int16_t busy) :
-  GxEPD2_EPD(cs, dc, rst, busy, LOW, 20000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate)
+  GxEPD2_EPD(cs, dc, rst, busy, LOW, 40000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate) // 28s for GDEW042C37
 {
 }
 

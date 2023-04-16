@@ -9,8 +9,8 @@
 //
 // Library: https://github.com/ZinggJM/GxEPD2
 
-#ifndef _GxEPD2_7C_H_
-#define _GxEPD2_7C_H_
+#ifndef _GxEPD2_4C_H_
+#define _GxEPD2_4C_H_
 // uncomment next line to use class GFX of library GFX_Root instead of Adafruit_GFX
 //#include <GFX.h>
 
@@ -40,22 +40,19 @@
 #define __has_include(x) true
 #endif
 
-#if __has_include("epd7c/GxEPD2_565c.h")
-#include "epd7c/GxEPD2_565c.h"
-#endif
-#if __has_include("epd7c/GxEPD2_730c_GDEY073D46.h")
-#include "epd7c/GxEPD2_730c_GDEY073D46.h"
+#if __has_include("epd4c/GxEPD2_437c.h")
+#include "epd4c/GxEPD2_437c.h"
 #endif
 
 template<typename GxEPD2_Type, const uint16_t page_height>
-class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
+class GxEPD2_4C : public GxEPD2_GFX_BASE_CLASS
 {
   public:
     GxEPD2_Type epd2;
 #if ENABLE_GxEPD2_GFX
-    GxEPD2_7C(GxEPD2_Type epd2_instance) : GxEPD2_GFX_BASE_CLASS(epd2, GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
+    GxEPD2_4C(GxEPD2_Type epd2_instance) : GxEPD2_GFX_BASE_CLASS(epd2, GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
 #else
-    GxEPD2_7C(GxEPD2_Type epd2_instance) : GxEPD2_GFX_BASE_CLASS(GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
+    GxEPD2_4C(GxEPD2_Type epd2_instance) : GxEPD2_GFX_BASE_CLASS(GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
 #endif
     {
       _page_height = page_height;
@@ -111,10 +108,15 @@ class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
       y -= _current_page * _page_height;
       // check if in current page
       if ((y < 0) || (y >= int16_t(_page_height))) return;
-      uint32_t i = x / 2 + uint32_t(y) * (_pw_w / 2);
-      uint8_t pv = color7(color);
-      if (x & 1) _pixel_buffer[i] = (_pixel_buffer[i] & 0xF0) | pv;
-      else _pixel_buffer[i] = (_pixel_buffer[i] & 0x0F) | (pv << 4);
+      uint32_t i = x / 4 + uint32_t(y) * (_pw_w / 4);
+      uint8_t pv = color4(color);
+      switch(x % 4)
+      {
+        case 0: _pixel_buffer[i] = (_pixel_buffer[i] & 0x3F) | (pv << 6); break;
+        case 1: _pixel_buffer[i] = (_pixel_buffer[i] & 0xCF) | (pv << 4); break;
+        case 2: _pixel_buffer[i] = (_pixel_buffer[i] & 0xF3) | (pv << 2); break;
+        case 3: _pixel_buffer[i] = (_pixel_buffer[i] & 0xFC) | pv; break;
+      }
     }
 
     void init(uint32_t serial_diag_bitrate = 0) // = 0 : disabled
@@ -158,11 +160,10 @@ class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
 
     void fillScreen(uint16_t color)
     {
-      uint8_t pv = color7(color);
-      uint8_t pv2 = pv | pv << 4;
+      uint8_t pv = color4(color) * 0x55; // 0b01010101
       for (uint32_t x = 0; x < sizeof(_pixel_buffer); x++)
       {
-        _pixel_buffer[x] = pv2;
+        _pixel_buffer[x] = pv;
       }
     }
 
@@ -214,10 +215,10 @@ class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
       _pw_h = gx_uint16_min(h, height() - _pw_y);
       _rotate(_pw_x, _pw_y, _pw_w, _pw_h);
       _using_partial_mode = true;
-      // make _pw_x, _pw_w multiple of 2
-      _pw_w += _pw_x % 2;
-      if (_pw_w % 2 > 0) _pw_w += 2 - _pw_w % 2;
-      _pw_x -= _pw_x % 2;
+      // make _pw_x, _pw_w multiple of 4
+      _pw_w += _pw_x % 4;
+      if (_pw_w % 4 > 0) _pw_w += 4 - _pw_w % 4;
+      _pw_x -= _pw_x % 4;
     }
 
     void firstPage()
@@ -486,43 +487,43 @@ class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
           break;
       }
     }
-    uint8_t color7(uint16_t color)
+    uint8_t color4(uint16_t color)
     {
       static uint16_t _prev_color = GxEPD_BLACK;
-      static uint8_t _prev_color7 = 0x00; // black
-      if (color == _prev_color) return _prev_color7;
-      uint8_t cv7 = 0x00;
+      static uint8_t _prev_color4 = 0x00; // black
+      if (color == _prev_color) return _prev_color4;
+      uint8_t cv4 = 0x00;
       switch (color)
       {
-        case GxEPD_BLACK: cv7 = 0x00; break;
-        case GxEPD_WHITE: cv7 = 0x01; break;
-        case GxEPD_GREEN: cv7 = 0x02; break;
-        case GxEPD_BLUE:  cv7 = 0x03; break;
-        case GxEPD_RED:   cv7 = 0x04; break;
-        case GxEPD_YELLOW: cv7 = 0x05; break;
-        case GxEPD_ORANGE: cv7 = 0x06; break;
+        case GxEPD_BLACK: cv4 = 0x00; break;
+        case GxEPD_WHITE: cv4 = 0x01; break;
+        case GxEPD_GREEN: cv4 = 0x02; break; // use yellow?
+        case GxEPD_BLUE:  cv4 = 0x00; break; // use black
+        case GxEPD_RED:   cv4 = 0x03; break;
+        case GxEPD_YELLOW: cv4 = 0x02; break;
+        case GxEPD_ORANGE: cv4 = 0x02; break; // use yellow?
         default:
           {
             uint16_t red = color & 0xF800;
             uint16_t green = (color & 0x07E0) << 5;
             uint16_t blue = (color & 0x001F) << 11;
-            if ((red < 0x8000) && (green < 0x8000) && (blue < 0x8000)) cv7 = 0x00; // black
-            else if ((red >= 0x8000) && (green >= 0x8000) && (blue >= 0x8000)) cv7 = 0x01; // white
-            else if ((red >= 0x8000) && (blue >= 0x8000)) cv7 = red > blue ? 0x04 : 0x03; // red, blue
-            else if ((green >= 0x8000) && (blue >= 0x8000)) cv7 = green > blue ? 0x02 : 0x03; // green, blue
-            else if ((red >= 0x8000) && (green >= 0xC000)) cv7 = 0x05; // yellow
-            else if ((red >= 0x8000) && (green >= 0x4000)) cv7 = 0x06; // orange
-            else if (red >= 0x8000) cv7 = 0x04; // red
-            else if (green >= 0x8000) cv7 = 0x02; // green
-            else cv7 = 0x03; // blue
+            if ((red < 0x8000) && (green < 0x8000) && (blue < 0x8000)) cv4 = 0x00; // black
+            else if ((red >= 0x8000) && (green >= 0x8000) && (blue >= 0x8000)) cv4 = 0x01; // white
+            else if ((red >= 0x8000) && (blue >= 0x8000)) cv4 = 0x03; //  red, blue > red
+            else if ((green >= 0x8000) && (blue >= 0x8000)) cv4 = 0x01; //  green, blue > white
+            else if ((red >= 0x8000) && (green >= 0xC000)) cv4 = 0x02; // yellow
+            else if ((red >= 0x8000) && (green >= 0x4000)) cv4 = 0x03; // orange > red
+            else if (red >= 0x8000) cv4 = 0x04; // red
+            else if (green >= 0x8000) cv4 = 0x00; // green > black
+            else cv4 = 0x03; // blue
           }
       }
       _prev_color = color;
-      _prev_color7 = cv7;
-      return cv7;
+      _prev_color4 = cv4;
+      return cv4;
     }
   private:
-    uint8_t _pixel_buffer[(GxEPD2_Type::WIDTH / 2) * page_height];
+    uint8_t _pixel_buffer[(GxEPD2_Type::WIDTH / 4) * page_height];
     bool _using_partial_mode, _second_phase, _mirror;
     uint16_t _width_bytes, _pixel_bytes;
     int16_t _current_page;

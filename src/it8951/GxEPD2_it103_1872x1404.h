@@ -24,6 +24,7 @@ class GxEPD2_it103_1872x1404 : public GxEPD2_EPD
   public:
     // attributes
     static const uint16_t WIDTH = 1872;
+    static const uint16_t WIDTH_VISIBLE = WIDTH;
     static const uint16_t HEIGHT = 1404;
     static const GxEPD2::Panel panel = GxEPD2::ES103TC1;
     static const bool hasColor = false;

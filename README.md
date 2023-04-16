@@ -62,18 +62,18 @@
 - GDEY0154D67    1.54" b/w 200x200, SSD1681
 - GDEW0154Z04    1.54" b/w/r 200x200, IL0376F, no longer available
 - GDEH0154Z90    1.54" b/w/r 200x200, SSD1681, replacement for GDEW0154Z04
-- GDE0213B1      2.13" b/w 128x250, IL3895, phased out
-- GDEH0213B72    2.13" b/w 128x250, SSD1675A (IL3897), replacement for GDE0213B1
-- GDEH0213B73    2.13" b/w 128x250, SSD1675B, new replacement for GDE0213B1, GDEH0213B72
-- GDEM0213B74    2.13" b/w 128x250, SSD1680
+- GDE0213B1      2.13" b/w 122x250, IL3895, phased out
+- GDEH0213B72    2.13" b/w 122x250, SSD1675A (IL3897), replacement for GDE0213B1
+- GDEH0213B73    2.13" b/w 122x250, SSD1675B, new replacement for GDE0213B1, GDEH0213B72
+- GDEM0213B74    2.13" b/w 122x250, SSD1680
 - GDEW0213I5F    2.13" b/w 104x212, UC8151 (IL0373), flexible
-- GDEW0213T5D    2.13" b/w 128x296, UC8151 (IL0373)
+- GDEW0213T5D    2.13" b/w 104x212, UC8151 (IL0373)
 - GDEW0213M21    2.13" b/w 104x212, UC8151 (IL0373), DES
 - GDEW0213Z16    2.13" b/w/r 104x212, UC8151 (IL0373)
 - GDEW0213Z19    2.13" b/w/r 104x212, UC8151D
 - GDEY0213Z98    2.13" b/w/r 122x250, SSD1680
-- DEPG0213BN     2.13" b/w 128x250, SSD1680, e.g. LILYGO® TTGO T5 V2.3.1 2.13 inch
-- GDEY0213B74    2.13" b/w 128x250, SSD1680
+- DEPG0213BN     2.13" b/w 122x250, SSD1680, e.g. LILYGO® TTGO T5 V2.3.1 2.13 inch
+- GDEY0213B74    2.13" b/w 122x250, SSD1680
 - GDEW026T0      2.6" b/w 152x296, UC8151 (IL0373)
 - GDEW026M01     2.6" b/w 152x296, UC8151 (IL0373), DES
 - DEPG0266BN     2.66" b/w 152x296, SSD1680, e.g. LILYGO® TTGO T5 2.66 inch
@@ -99,6 +99,7 @@
 - GDEW042Z15     4.2" b/w/r 400x300, UC8176 (IL0398)
 - GDEQ042Z21     4.2" b/w/r 400x300, UC8276, (Waveshare V2)
 - GDEY042T91     4.2" b/w 400x300, SSD1683
+- Waveshare437inch4color Waveshare 4.37" 4-color e-paper display 512x368 
 - ACeP565        5.65" Waveshare 5.65" 7-color e-paper display 600x448
 - GDEW0583T7     5.83" b/w 600x448, UC8159c (IL0371)
 - GDEW0583T8     5.83" b/w 648x480, EK79655 (GD7965)
@@ -125,7 +126,12 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.5.1
+### Version 1.5.2
+- added support for Waveshare 4.37" 4-color e-paper display 512x368
+- fixed __has_include test (for packages that don't support __has_include)
+- added WIDTH_VISIBLE for correct graphics width for 2.13" b/w 122x250
+- added end() method, to release SPI and reset all pins to INPUT
+#### Version 1.5.1
 - added support for GDEY0154D67 1.54" b/w 200x200
 - added support for GDEY0213B74 2.13" b/w 128x250
 - updated support for GDEY027T91 2.7" b/w 176x264

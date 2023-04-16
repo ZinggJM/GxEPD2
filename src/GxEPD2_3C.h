@@ -31,61 +31,70 @@
 
 #include "GxEPD2_EPD.h"
 
-#if !defined(__has_include) || __has_include("epd3c/GxEPD2_154c.h")
+// for __has_include see https://en.cppreference.com/w/cpp/preprocessor/include
+// see also https://gcc.gnu.org/onlinedocs/cpp/_005f_005fhas_005finclude.html
+// #if !defined(__has_include) || __has_include("epd/GxEPD2_102.h") is not portable!
+
+#if !defined(__has_include)
+// include anyway, e.g. for Arduino Due
+#define __has_include(x) true
+#endif
+
+#if __has_include("epd3c/GxEPD2_154c.h")
 #include "epd3c/GxEPD2_154c.h"
 #endif
-#if !defined(__has_include) || __has_include("epd3c/GxEPD2_154_Z90c.h")
+#if __has_include("epd3c/GxEPD2_154_Z90c.h")
 #include "epd3c/GxEPD2_154_Z90c.h"
 #endif
-#if !defined(__has_include) || __has_include("epd3c/GxEPD2_213c.h")
+#if __has_include("epd3c/GxEPD2_213c.h")
 #include "epd3c/GxEPD2_213c.h"
 #endif
-#if !defined(__has_include) || __has_include("epd3c/GxEPD2_213_Z19c.h")
+#if __has_include("epd3c/GxEPD2_213_Z19c.h")
 #include "epd3c/GxEPD2_213_Z19c.h"
 #endif
-#if !defined(__has_include) || __has_include("epd3c/GxEPD2_213_Z98c.h")
+#if __has_include("epd3c/GxEPD2_213_Z98c.h")
 #include "epd3c/GxEPD2_213_Z98c.h"
 #endif
-#if !defined(__has_include) || __has_include("epd3c/GxEPD2_290c.h")
+#if __has_include("epd3c/GxEPD2_290c.h")
 #include "epd3c/GxEPD2_290c.h"
 #endif
-#if !defined(__has_include) || __has_include("epd3c/GxEPD2_290_Z13c.h")
+#if __has_include("epd3c/GxEPD2_290_Z13c.h")
 #include "epd3c/GxEPD2_290_Z13c.h"
 #endif
-#if !defined(__has_include) || __has_include("epd3c/GxEPD2_290_C90c.h")
+#if __has_include("epd3c/GxEPD2_290_C90c.h")
 #include "epd3c/GxEPD2_290_C90c.h"
 #endif
-#if !defined(__has_include) || __has_include("epd3c/GxEPD2_266c.h")
+#if __has_include("epd3c/GxEPD2_266c.h")
 #include "epd3c/GxEPD2_266c.h"
 #endif
-#if !defined(__has_include) || __has_include("epd3c/GxEPD2_150_BN.h")
+#if __has_include("epd3c/GxEPD2_150_BN.h")
 #include "epd3c/GxEPD2_270c.h"
 #endif
-#if !defined(__has_include) || __has_include("epd3c/GxEPD2_420c.h")
+#if __has_include("epd3c/GxEPD2_420c.h")
 #include "epd3c/GxEPD2_420c.h"
 #endif
-#if !defined(__has_include) || __has_include("epd3c/GxEPD2_420c_Z21.h")
+#if __has_include("epd3c/GxEPD2_420c_Z21.h")
 #include "epd3c/GxEPD2_420c_Z21.h"
 #endif
-#if !defined(__has_include) || __has_include("epd3c/GxEPD2_583c.h")
+#if __has_include("epd3c/GxEPD2_583c.h")
 #include "epd3c/GxEPD2_583c.h"
 #endif
-#if !defined(__has_include) || __has_include("epd3c/GxEPD2_583c_Z83.h")
+#if __has_include("epd3c/GxEPD2_583c_Z83.h")
 #include "epd3c/GxEPD2_583c_Z83.h"
 #endif
-#if !defined(__has_include) || __has_include("epd7c/GxEPD2_565c.h")
+#if __has_include("epd7c/GxEPD2_565c.h")
 #include "epd7c/GxEPD2_565c.h"
 #endif
-#if !defined(__has_include) || __has_include("epd3c/GxEPD2_750c.h")
+#if __has_include("epd3c/GxEPD2_750c.h")
 #include "epd3c/GxEPD2_750c.h"
 #endif
-#if !defined(__has_include) || __has_include("epd3c/GxEPD2_750c_Z08.h")
+#if __has_include("epd3c/GxEPD2_750c_Z08.h")
 #include "epd3c/GxEPD2_750c_Z08.h"
 #endif
-#if !defined(__has_include) || __has_include("epd3c/GxEPD2_750c_Z90.h")
+#if __has_include("epd3c/GxEPD2_750c_Z90.h")
 #include "epd3c/GxEPD2_750c_Z90.h"
 #endif
-#if !defined(__has_include) || __has_include("epd3c/GxEPD2_1248c.h")
+#if __has_include("epd3c/GxEPD2_1248c.h")
 #include "epd3c/GxEPD2_1248c.h"
 #endif
 
@@ -192,6 +201,12 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
       _using_partial_mode = false;
       _current_page = 0;
       setFullWindow();
+    }
+
+    // release SPI and control pins
+    void end() 
+    {
+      epd2.end();
     }
 
     void fillScreen(uint16_t color) // 0x0 black, >0x0 white, to buffer
