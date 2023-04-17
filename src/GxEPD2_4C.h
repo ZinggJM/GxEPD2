@@ -35,9 +35,17 @@
 // see also https://gcc.gnu.org/onlinedocs/cpp/_005f_005fhas_005finclude.html
 // #if !defined(__has_include) || __has_include("epd/GxEPD2_102.h") is not portable!
 
-#if !defined(__has_include)
-// include anyway, e.g. for Arduino Due
-#define __has_include(x) true
+#if defined __has_include
+#  if __has_include("GxEPD2.h")
+#    // __has_include can be used
+#  else
+#    // __has_include doesn't work for us, include anyway
+#    undef __has_include
+#    define __has_include(x) true
+#  endif
+#else
+#  // no __has_include, include anyway
+#  define __has_include(x) true
 #endif
 
 #if __has_include("epd4c/GxEPD2_437c.h")
