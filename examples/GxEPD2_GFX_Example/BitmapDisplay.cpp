@@ -15,7 +15,7 @@
 
 #include "BitmapDisplay.h"
 
-#if !defined(__AVR) && !defined(_BOARD_GENERIC_STM32F103C_H_)
+#if !defined(__AVR) && !defined(STM32F1xx)
 
 // note 16.11.2019: the compiler may exclude code based on constant if statements (display.epd2.panel == constant),
 //                  therefore bitmaps may get optimized out by the linker
@@ -39,7 +39,7 @@
 #include "bitmaps/Bitmaps3c176x264.h" // 2.7"  b/w/r
 #include "bitmaps/Bitmaps3c400x300.h" // 4.2"  b/w/r
 #if defined(ESP8266) || defined(ESP32)
-#include "bitmaps/Bitmaps3c800x480.h" // 7.5"  b/w/r
+//#include "bitmaps/Bitmaps3c800x480.h" // 7.5"  b/w/r // not enough code space for all
 #endif
 #if defined(ESP32)
 #include "bitmaps/WS_Bitmaps800x600.h" // 6.0"  grey

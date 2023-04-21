@@ -59,19 +59,28 @@
 - GDEW0154T8     1.54" b/w 152x152, UC8151 (IL0373)
 - GDEW0154M09    1.54" b/w 200x200, JD79653A
 - GDEW0154M10    1.54" b/w 152x152, UC8151D, DES
+- GDEY0154D67    1.54" b/w 200x200, SSD1681
 - GDEW0154Z04    1.54" b/w/r 200x200, IL0376F, no longer available
 - GDEH0154Z90    1.54" b/w/r 200x200, SSD1681, replacement for GDEW0154Z04
-- GDE0213B1      2.13" b/w 128x250, IL3895, phased out
-- GDEH0213B72    2.13" b/w 128x250, SSD1675A (IL3897), replacement for GDE0213B1
-- GDEH0213B73    2.13" b/w 128x250, SSD1675B, new replacement for GDE0213B1, GDEH0213B72
-- GDEM0213B74    2.13" b/w 128x250, SSD1680
+- GDE0213B1      2.13" b/w 122x250, IL3895, phased out
+- GDEH0213B72    2.13" b/w 122x250, SSD1675A (IL3897), replacement for GDE0213B1
+- GDEH0213B73    2.13" b/w 122x250, SSD1675B, new replacement for GDE0213B1, GDEH0213B72
+- GDEM0213B74    2.13" b/w 122x250, SSD1680
 - GDEW0213I5F    2.13" b/w 104x212, UC8151 (IL0373), flexible
-- GDEW0213T5D    2.13" b/w 128x296, UC8151 (IL0373)
+- GDEW0213T5D    2.13" b/w 104x212, UC8151 (IL0373)
 - GDEW0213M21    2.13" b/w 104x212, UC8151 (IL0373), DES
 - GDEW0213Z16    2.13" b/w/r 104x212, UC8151 (IL0373)
 - GDEW0213Z19    2.13" b/w/r 104x212, UC8151D
 - GDEY0213Z98    2.13" b/w/r 122x250, SSD1680
-- DEPG0213BN     2.13" b/w 128x250, SSD1680, e.g. LILYGO® TTGO T5 V2.3.1 2.13 inch
+- DEPG0213BN     2.13" b/w 122x250, SSD1680, e.g. LILYGO® TTGO T5 V2.3.1 2.13 inch
+- GDEY0213B74    2.13" b/w 122x250, SSD1680
+- GDEW026T0      2.6" b/w 152x296, UC8151 (IL0373)
+- GDEW026M01     2.6" b/w 152x296, UC8151 (IL0373), DES
+- DEPG0266BN     2.66" b/w 152x296, SSD1680, e.g. LILYGO® TTGO T5 2.66 inch
+- GDEY0266Z90    2.66" b/w/r 152x296, SSD1680
+- GDEW027C44     2.7" b/w/r 176x264, IL91874
+- GDEW027W3      2.7" b/w 176x264, EK79652 (IL91874)
+- GDEY027T91     2.7" b/w 176x264, SSD1680
 - GDEH029A1      2.9" b/w 128x296, SSD1608 (IL3820)
 - GDEW029T5      2.9" b/w 128x296, UC8151 (IL0373)
 - GDEW029T5D     2.9" b/w 128x296, UC8151D
@@ -82,23 +91,21 @@
 - GDEH029Z13     2.9" b/w/r 128x296, UC8151D
 - GDEM029C90     2.9" b/w/y 128x296, SSD1680
 - DEPG0290BS     2.9" b/w 128x296, SSD1680, e.g. LILYGO® TTGO T5 V2.4.1 2.9"
-- GDEW026T0      2.6" b/w 152x296, UC8151 (IL0373)
-- GDEW026M01     2.6" b/w 152x296, UC8151 (IL0373), DES
-- DEPG0266BN     2.66" b/w 152x296, SSD1680, e.g. LILYGO® TTGO T5 2.66 inch
-- GDEY0266Z90    2.66" b/w/r 152x296, SSD1680
-- GDEW027C44     2.7" b/w/r 176x264, IL91874
-- GDEW027W3      2.7" b/w 176x264, EK79652 (IL91874)
-- GDEY027T91     2.7" b/w 176x264, SSD1680
-- GDEW0371W7     3.7" b/w 240x416, UC8171 (IL0324)
+- GDEY029T94     2.9" b/w 128x296, SSD1680
 - ED037TC1       3.7" b/w 280x480, SSD1677, Waveshare 3.7"
+- GDEW0371W7     3.7" b/w 240x416, UC8171 (IL0324)
 - GDEW042T2      4.2" b/w 400x300, UC8176 (IL0398)
 - GDEW042M01     4.2" b/w 400x300, UC8176 (IL0398), DES
 - GDEW042Z15     4.2" b/w/r 400x300, UC8176 (IL0398)
 - GDEQ042Z21     4.2" b/w/r 400x300, UC8276, (Waveshare V2)
+- GDEY042T91     4.2" b/w 400x300, SSD1683
+- Waveshare437inch4color Waveshare 4.37" 4-color e-paper display 512x368 
 - ACeP565        5.65" Waveshare 5.65" 7-color e-paper display 600x448
 - GDEW0583T7     5.83" b/w 600x448, UC8159c (IL0371)
 - GDEW0583T8     5.83" b/w 648x480, EK79655 (GD7965)
 - GDEW0583Z83    5.83" b/w/r 648x480, EK79655 (GD7965)
+- GDEQ0583T31    5.83" b/w 648x480, UC8179
+- GDEY073D46     7.3" 800x480 7-color
 - GDEW075T8      7.5" b/w 640x384, UC8159c (IL0371)
 - GDEW075T7      7.5" b/w 800x480, EK79655 (GD7965)
 - GDEY075T7      7.5" b/w 800x480, UC8179 (GD7965)
@@ -119,7 +126,27 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.5.0
+### Version 1.5.2
+- added support for Waveshare 4.37" 4-color e-paper display 512x368
+- fixed __has_include test (for packages that don't support __has_include)
+- added WIDTH_VISIBLE for correct graphics width for 2.13" b/w 122x250
+- added end() method, to release SPI and reset all pins to INPUT
+#### Version 1.5.1
+- added support for GDEY0154D67 1.54" b/w 200x200
+- added support for GDEY0213B74 2.13" b/w 128x250
+- updated support for GDEY027T91 2.7" b/w 176x264
+- renamed driver class for GDEY027T91 to GxEPD2_270_GDEY027T91
+- added support for GDEY029T94 2.9" b/w 128x296
+- added support for GDEY042T91 4.2" b/w 400x300
+- added support for GDEQ0583T31 5.83" b/w 648x480
+- these panels have fast full refresh capability
+- fast full refresh can be disabled in the class header for low temperature use
+- added support for GDEY073D46 7.3" 800x480 7-color
+- all these new panels have been donated by Good Display
+- added __has_include test to GxEPD2_BW.h, GxEPD2_3C.h, GxEPD2_7C
+- this allows to remove or put aside unused driver classes for faster compile
+- several fixes and improvements
+#### Version 1.5.0
 - added support for GDEY075T7 7.5" b/w 800x480
 - updated GxEPD2_Example, added HSPI use for Waveshare ESP32 Driver Board
 - updated GxEPD2_SD_AVR_Example, fixes for BMP handling

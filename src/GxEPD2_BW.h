@@ -31,49 +31,171 @@
 #endif
 
 #include "GxEPD2_EPD.h"
+
+// for __has_include see https://en.cppreference.com/w/cpp/preprocessor/include
+// see also https://gcc.gnu.org/onlinedocs/cpp/_005f_005fhas_005finclude.html
+// #if !defined(__has_include) || __has_include("epd/GxEPD2_102.h") is not portable!
+
+#if defined __has_include
+#  if __has_include("GxEPD2.h")
+#    // __has_include can be used
+#  else
+#    // __has_include doesn't work for us, include anyway
+#    undef __has_include
+#    define __has_include(x) true
+#  endif
+#else
+#  // no __has_include, include anyway
+#  define __has_include(x) true
+#endif
+
+#if __has_include("epd/GxEPD2_102.h")
 #include "epd/GxEPD2_102.h"
+#endif
+#if __has_include("epd/GxEPD2_150_BN.h")
 #include "epd/GxEPD2_150_BN.h"
+#endif
+#if __has_include("epd/GxEPD2_154.h")
 #include "epd/GxEPD2_154.h"
+#endif
+#if __has_include("epd/GxEPD2_154_D67.h")
 #include "epd/GxEPD2_154_D67.h"
+#endif
+#if __has_include("epd/GxEPD2_154_T8.h")
 #include "epd/GxEPD2_154_T8.h"
+#endif
+#if __has_include("epd/GxEPD2_154_M09.h")
 #include "epd/GxEPD2_154_M09.h"
+#endif
+#if __has_include("epd/GxEPD2_154_M10.h")
 #include "epd/GxEPD2_154_M10.h"
+#endif
+#if __has_include("gdey/GxEPD2_154_GDEY0154D67.h")
+#include "gdey/GxEPD2_154_GDEY0154D67.h"
+#endif
+#if __has_include("epd/GxEPD2_213.h")
 #include "epd/GxEPD2_213.h"
+#endif
+#if __has_include("epd/GxEPD2_213_B72.h")
 #include "epd/GxEPD2_213_B72.h"
+#endif
+#if __has_include("epd/GxEPD2_213_B73.h")
 #include "epd/GxEPD2_213_B73.h"
+#endif
+#if __has_include("epd/GxEPD2_213_B74.h")
 #include "epd/GxEPD2_213_B74.h"
+#endif
+#if __has_include("epd/GxEPD2_213_flex.h")
 #include "epd/GxEPD2_213_flex.h"
+#endif
+#if __has_include("epd/GxEPD2_213_M21.h")
 #include "epd/GxEPD2_213_M21.h"
+#endif
+#if __has_include("epd/GxEPD2_213_T5D.h")
 #include "epd/GxEPD2_213_T5D.h"
+#endif
+#if __has_include("epd/GxEPD2_213_BN.h")
 #include "epd/GxEPD2_213_BN.h"
+#endif
+#if __has_include("gdey/GxEPD2_213_GDEY0213B74.h")
+#include "gdey/GxEPD2_213_GDEY0213B74.h"
+#endif
+#if __has_include("epd/GxEPD2_260.h")
 #include "epd/GxEPD2_260.h"
-#include "epd/GxEPD2_266_BN.h"
+#endif
+#if __has_include("epd/GxEPD2_260_M01.h")
 #include "epd/GxEPD2_260_M01.h"
+#endif
+#if __has_include("epd/GxEPD2_266_BN.h")
+#include "epd/GxEPD2_266_BN.h"
+#endif
+#if __has_include("gdey/GxEPD2_266_GDEY0266T90.h")
+#include "gdey/GxEPD2_266_GDEY0266T90.h"
+#endif
+#if __has_include("epd/GxEPD2_290.h")
 #include "epd/GxEPD2_290.h"
+#endif
+#if __has_include("epd/GxEPD2_290_T5.h")
 #include "epd/GxEPD2_290_T5.h"
+#endif
+#if __has_include("epd/GxEPD2_290_T5D.h")
 #include "epd/GxEPD2_290_T5D.h"
+#endif
+#if __has_include("epd/GxEPD2_290_I6FD.h")
 #include "epd/GxEPD2_290_I6FD.h"
+#endif
+#if __has_include("epd/GxEPD2_290_M06.h")
 #include "epd/GxEPD2_290_M06.h"
+#endif
+#if __has_include("epd/GxEPD2_290_T94.h")
 #include "epd/GxEPD2_290_T94.h"
+#endif
+#if __has_include("gdey/GxEPD2_290_GDEY029T94.h")
+#include "gdey/GxEPD2_290_GDEY029T94.h"
+#endif
+#if __has_include("epd/GxEPD2_290_T94_V2.h")
 #include "epd/GxEPD2_290_T94_V2.h"
+#endif
+#if __has_include("epd/GxEPD2_290_BS.h")
 #include "epd/GxEPD2_290_BS.h"
+#endif
+#if __has_include("epd/GxEPD2_270.h")
 #include "epd/GxEPD2_270.h"
-#include "epd/GxEPD2_270_T91.h"
+#endif
+#if __has_include("gdey/GxEPD2_270_GDEY027T91.h")
+#include "gdey/GxEPD2_270_GDEY027T91.h"
+#endif
+#if __has_include("epd/GxEPD2_371.h")
 #include "epd/GxEPD2_371.h"
+#endif
+#if __has_include("epd/GxEPD2_370_TC1.h")
 #include "epd/GxEPD2_370_TC1.h"
+#endif
+#if __has_include("epd/GxEPD2_420.h")
 #include "epd/GxEPD2_420.h"
+#endif
+#if __has_include("epd/GxEPD2_420_M01.h")
 #include "epd/GxEPD2_420_M01.h"
+#endif
+#if __has_include("gdey/GxEPD2_420_GDEY042T91.h")
+#include "gdey/GxEPD2_420_GDEY042T91.h"
+#endif
+#if __has_include("epd/GxEPD2_583.h")
 #include "epd/GxEPD2_583.h"
+#endif
+#if __has_include("epd/GxEPD2_583_T8.h")
 #include "epd/GxEPD2_583_T8.h"
+#endif
+#if __has_include("gdeq/GxEPD2_583_GDEQ0583T31.h")
+#include "gdeq/GxEPD2_583_GDEQ0583T31.h"
+#endif
+#if __has_include("epd/GxEPD2_750.h")
 #include "epd/GxEPD2_750.h"
+#endif
+#if __has_include("epd/GxEPD2_750_T7.h")
 #include "epd/GxEPD2_750_T7.h"
+#endif
+#if __has_include("epd/GxEPD2_750_YT7.h")
 #include "epd/GxEPD2_750_YT7.h"
+#endif
+#if __has_include("epd/GxEPD2_1160_T91.h")
 #include "epd/GxEPD2_1160_T91.h"
+#endif
+#if __has_include("epd/GxEPD2_1248.h")
 #include "epd/GxEPD2_1248.h"
+#endif
+#if __has_include("it8951/GxEPD2_it60.h")
 #include "it8951/GxEPD2_it60.h"
+#endif
+#if __has_include("it8951/GxEPD2_it60_1448x1072.h")
 #include "it8951/GxEPD2_it60_1448x1072.h"
+#endif
+#if __has_include("it8951/GxEPD2_it78_1872x1404.h")
 #include "it8951/GxEPD2_it78_1872x1404.h"
+#endif
+#if __has_include("it8951/GxEPD2_it103_1872x1404.h")
 #include "it8951/GxEPD2_it103_1872x1404.h"
+#endif
 
 template<typename GxEPD2_Type, const uint16_t page_height>
 class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
@@ -81,9 +203,9 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
   public:
     GxEPD2_Type epd2;
 #if ENABLE_GxEPD2_GFX
-    GxEPD2_BW(GxEPD2_Type epd2_instance) : GxEPD2_GFX_BASE_CLASS(epd2, GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
+    GxEPD2_BW(GxEPD2_Type epd2_instance) : GxEPD2_GFX_BASE_CLASS(epd2, GxEPD2_Type::WIDTH_VISIBLE, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
 #else
-    GxEPD2_BW(GxEPD2_Type epd2_instance) : GxEPD2_GFX_BASE_CLASS(GxEPD2_Type::WIDTH, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
+    GxEPD2_BW(GxEPD2_Type epd2_instance) : GxEPD2_GFX_BASE_CLASS(GxEPD2_Type::WIDTH_VISIBLE, GxEPD2_Type::HEIGHT), epd2(epd2_instance)
 #endif
     {
       _page_height = page_height;
@@ -182,6 +304,12 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
       setFullWindow();
     }
 
+    // release SPI and control pins
+    void end() 
+    {
+      epd2.end();
+    }
+
     void fillScreen(uint16_t color) // 0x0 black, >0x0 white, to buffer
     {
       uint8_t data = (color == GxEPD_BLACK) ? 0x00 : 0xFF;
@@ -194,12 +322,12 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
     // display buffer content to screen, useful for full screen buffer
     void display(bool partial_update_mode = false)
     {
-      if (partial_update_mode) epd2.writeImage(_buffer, 0, 0, WIDTH, _page_height);
-      else epd2.writeImageForFullRefresh(_buffer, 0, 0, WIDTH, _page_height);
+      if (partial_update_mode) epd2.writeImage(_buffer, 0, 0, GxEPD2_Type::WIDTH, _page_height);
+      else epd2.writeImageForFullRefresh(_buffer, 0, 0, GxEPD2_Type::WIDTH, _page_height);
       epd2.refresh(partial_update_mode);
       if (epd2.hasFastPartialUpdate)
       {
-        epd2.writeImageAgain(_buffer, 0, 0, WIDTH, _page_height);
+        epd2.writeImageAgain(_buffer, 0, 0, GxEPD2_Type::WIDTH, _page_height);
       }
       if (!partial_update_mode) epd2.powerOff();
     }
@@ -218,11 +346,11 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
       h = gx_uint16_min(h, height() - y);
       _rotate(x, y, w, h);
       uint16_t y_part = _reverse ? HEIGHT - h - y : y;
-      epd2.writeImagePart(_buffer, x, y_part, WIDTH, _page_height, x, y, w, h);
+      epd2.writeImagePart(_buffer, x, y_part, GxEPD2_Type::WIDTH, _page_height, x, y, w, h);
       epd2.refresh(x, y, w, h);
       if (epd2.hasFastPartialUpdate)
       {
-        epd2.writeImagePartAgain(_buffer, x, y_part, WIDTH, _page_height, x, y, w, h);
+        epd2.writeImagePartAgain(_buffer, x, y_part, GxEPD2_Type::WIDTH, _page_height, x, y, w, h);
       }
     }
 
@@ -231,7 +359,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
       _using_partial_mode = false;
       _pw_x = 0;
       _pw_y = 0;
-      _pw_w = WIDTH;
+      _pw_w = GxEPD2_Type::WIDTH;
       _pw_h = HEIGHT;
     }
 
@@ -278,11 +406,11 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
         }
         else // full update
         {
-          epd2.writeImageForFullRefresh(_buffer, 0, 0, WIDTH, HEIGHT);
+          epd2.writeImageForFullRefresh(_buffer, 0, 0, GxEPD2_Type::WIDTH, HEIGHT);
           epd2.refresh(false);
           if (epd2.hasFastPartialUpdate)
           {
-            epd2.writeImageAgain(_buffer, 0, 0, WIDTH, HEIGHT);
+            epd2.writeImageAgain(_buffer, 0, 0, GxEPD2_Type::WIDTH, HEIGHT);
             //epd2.refresh(true); // not needed
           }
           epd2.powerOff();
@@ -332,8 +460,8 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
       }
       else // full update
       {
-        if (!_second_phase) epd2.writeImageForFullRefresh(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
-        else epd2.writeImageAgain(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
+        if (!_second_phase) epd2.writeImageForFullRefresh(_buffer, 0, page_ys, GxEPD2_Type::WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
+        else epd2.writeImageAgain(_buffer, 0, page_ys, GxEPD2_Type::WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
         _current_page++;
         if (_current_page == int16_t(_pages))
         {
@@ -377,11 +505,11 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
         }
         else // full update
         {
-          epd2.writeImageForFullRefresh(_buffer, 0, 0, WIDTH, HEIGHT);
+          epd2.writeImageForFullRefresh(_buffer, 0, 0, GxEPD2_Type::WIDTH, HEIGHT);
           epd2.refresh(false);
           if (epd2.hasFastPartialUpdate)
           {
-            epd2.writeImageAgain(_buffer, 0, 0, WIDTH, HEIGHT);
+            epd2.writeImageAgain(_buffer, 0, 0, GxEPD2_Type::WIDTH, HEIGHT);
             //epd2.refresh(true); // not needed
             epd2.powerOff();
           }
@@ -419,7 +547,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
           uint16_t page_ys = _current_page * _page_height;
           fillScreen(GxEPD_WHITE);
           drawCallback(pv);
-          epd2.writeImageForFullRefresh(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
+          epd2.writeImageForFullRefresh(_buffer, 0, page_ys, GxEPD2_Type::WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
         }
         epd2.refresh(false); // full update after first phase
         if (epd2.hasFastPartialUpdate)
@@ -430,7 +558,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
             uint16_t page_ys = _current_page * _page_height;
             fillScreen(GxEPD_WHITE);
             drawCallback(pv);
-            epd2.writeImageAgain(_buffer, 0, page_ys, WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
+            epd2.writeImageAgain(_buffer, 0, page_ys, GxEPD2_Type::WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
           }
           //epd2.refresh(true); // partial update after second phase // not needed
         }

@@ -58,6 +58,10 @@
 // mapping suggestion for AVR, UNO, NANO etc.
 // BUSY -> 7, RST -> 9, DC -> 8, CS-> 10, CLK -> 13, DIN -> 11
 
+// mapping suggestion for AVR, Arduino Micro, Leonardo
+// note: on Leonardo board HW SPI pins are on 6-pin ICSP header
+// BUSY -> 7, RST -> 9, DC -> 8, CS-> 10, CLK -> 15, DIN -> 16
+
 // mapping of Waveshare Universal e-Paper Raw Panel Driver Shield for Arduino / NUCLEO
 // BUSY -> 7, RST -> 8, DC -> 9, CS-> 10, CLK -> 13, DIN -> 11
 

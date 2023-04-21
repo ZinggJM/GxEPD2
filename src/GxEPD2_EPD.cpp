@@ -68,7 +68,7 @@ void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset
     pinMode(_busy, INPUT);
   }
   _pSPIx->begin();
-  if (_busy == MISO) // may be overridden, to be verified
+  if (_busy == MISO) // may be overridden
   {
     pinMode(_busy, INPUT);
   }
@@ -76,6 +76,18 @@ void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset
   {
     pinMode(_dc, OUTPUT);
   }
+  if (_cs == MISO) // may be overridden
+  {
+    pinMode(_cs, INPUT);
+  }
+}
+
+void GxEPD2_EPD::end()
+{
+  _pSPIx->end();
+  if (_cs >= 0) pinMode(_cs, INPUT);
+  if (_dc >= 0) pinMode(_dc, INPUT);
+  if (_rst >= 0) pinMode(_rst, INPUT);
 }
 
 void GxEPD2_EPD::setBusyCallback(void (*busyCallback)(const void*), const void* busy_callback_parameter)

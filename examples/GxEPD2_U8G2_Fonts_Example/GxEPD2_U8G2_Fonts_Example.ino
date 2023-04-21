@@ -43,7 +43,8 @@ void setup()
   Serial.begin(115200);
   Serial.println();
   Serial.println("setup");
-  display.init();
+  //display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
+  display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
   u8g2Fonts.begin(display); // connect u8g2 procedures to Adafruit GFX
   helloWorld();
   delay(1000);
