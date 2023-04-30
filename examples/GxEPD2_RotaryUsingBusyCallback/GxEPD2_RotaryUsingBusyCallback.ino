@@ -108,7 +108,7 @@ void helloWorld()
 
 const char EncoderValue[] = "Encoder = ";
 
-#if defined(ESP8266) || defined(ESP32)
+#if (defined(ESP8266) || defined(ESP32)) && false
 #include <StreamString.h>
 #define PrintString StreamString
 #else

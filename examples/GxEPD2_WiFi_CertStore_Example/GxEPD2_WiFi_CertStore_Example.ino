@@ -45,66 +45,73 @@
 //#define GxEPD2_DISPLAY_CLASS GxEPD2_7C
 
 // select the display driver class (only one) for your  panel
-//#define GxEPD2_DRIVER_CLASS GxEPD2_102     // GxEPD2_102   80x128, UC8175
-//#define GxEPD2_DRIVER_CLASS GxEPD2_150_BN // GDEP0150BN 200x200, SSD1681, TTGO T5 V2.4.1
-//#define GxEPD2_DRIVER_CLASS GxEPD2_154     // GDEP015OC1  200x200, IL3829, no longer available
-//#define GxEPD2_DRIVER_CLASS GxEPD2_154_D67 // GDEH0154D67 200x200, SSD1681
-//#define GxEPD2_DRIVER_CLASS GxEPD2_154_T8  // GDEW0154T8  152x152, UC8151 (IL0373)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_154_M09 // GDEW0154M09 200x200, JD79653A
-//#define GxEPD2_DRIVER_CLASS GxEPD2_154_M10 // GDEW0154M10 152x152, UC8151D
-//#define GxEPD2_DRIVER_CLASS GxEPD2_213     // GDE0213B1   128x250, IL3895, phased out
-//#define GxEPD2_DRIVER_CLASS GxEPD2_213_B72 // GDEH0213B72 128x250, SSD1675A (IL3897)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_213_B73 // GDEH0213B73 128x250, SSD1675B
-//#define GxEPD2_DRIVER_CLASS GxEPD2_213_B74 // GDEM0213B74 128x250, SSD1680
-//#define GxEPD2_DRIVER_CLASS GxEPD2_213_flex // GDEW0213I5F 104x212, UC8151 (IL0373)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_213_M21 // GDEW0213M21 104x212, UC8151 (IL0373)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_213_T5D // GDEW0213T5D 104x212, UC8151D
-//#define GxEPD2_DRIVER_CLASS GxEPD2_213_BN // DEPG0213BN  128x250, SSD1680, TTGO T5 V2.4.1, V2.3.1
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290     // GDEH029A1   128x296, SSD1608 (IL3820)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_T5  // GDEW029T5   128x296, UC8151 (IL0373)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_T5D // GDEW029T5D  128x296, UC8151D
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_I6FD // GDEW029I6FD  128x296, UC8151D
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_T94 // GDEM029T94  128x296, SSD1680
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_T94_V2 // GDEM029T94  128x296, SSD1680, Waveshare 2.9" V2 variant
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_BS // DEPG0290BS  128x296, SSD1680
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_M06 // GDEW029M06  128x296, UC8151D
-//#define GxEPD2_DRIVER_CLASS GxEPD2_260     // GDEW026T0   152x296, UC8151 (IL0373)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_260_M01 // GDEW026M01  152x296, UC8151 (IL0373)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_266_BN // DEPG0266BN  152x296, SSD1680, TTGO T5 V2.66, TTGO T5 V2.4.1
-//#define GxEPD2_DRIVER_CLASS GxEPD2_270     // GDEW027W3   176x264, EK79652 (IL91874)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_270_T91 // GDEY027T91   176x264, SSD1680
-//#define GxEPD2_DRIVER_CLASS GxEPD2_371     // GDEW0371W7  240x416, UC8171 (IL0324)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_370_TC1 // ED037TC1  280x480, SSD1677, Waveshare 3.7"
-//#define GxEPD2_DRIVER_CLASS GxEPD2_420     // GDEW042T2   400x300, UC8176 (IL0398)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_420_M01 // GDEW042M01  400x300, UC8176 (IL0398)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_583     // GDEW0583T7  600x448, UC8179 (IL0371)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_583_T8  // GDEW0583T8  648x480, GD7965
-//#define GxEPD2_DRIVER_CLASS GxEPD2_750     // GDEW075T8   640x384, UC8179 (IL0371)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_750_T7  // GDEW075T7   800x480, GD7965
-//#define GxEPD2_DRIVER_CLASS GxEPD2_750_YT7  // GDEY075T7   800x480, GD7965
-//#define GxEPD2_DRIVER_CLASS GxEPD2_1160_T91 // GDEH116T91 960x640, SSD1677
-//#define GxEPD2_DRIVER_CLASS GxEPD2_1248     // GDEW1248T3  1304x984, UC8179
+//#define GxEPD2_DRIVER_CLASS GxEPD2_102     // GDEW0102T4   80x128, UC8175, (WFT0102CZA2)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_150_BN  // DEPG0150BN 200x200, SSD1681, (FPC8101), TTGO T5 V2.4.1
+//#define GxEPD2_DRIVER_CLASS GxEPD2_154     // GDEP015OC1  200x200, IL3829, (WFC0000CZ07), no longer available
+//#define GxEPD2_DRIVER_CLASS GxEPD2_154_D67 // GDEH0154D67 200x200, SSD1681, (HINK-E154A07-A1)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_154_T8  // GDEW0154T8  152x152, UC8151 (IL0373), (WFT0154CZ17)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_154_M09 // GDEW0154M09 200x200, JD79653A, (WFT0154CZB3)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_154_M10 // GDEW0154M10 152x152, UC8151D, (WFT0154CZ17)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_154_GDEY0154D67 // GDEY0154D67 200x200, SSD1681, (FPC-B001 20.05.21)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213     // GDE0213B1   128x250, IL3895, (HINK-E0213-G01), phased out
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213_B72 // GDEH0213B72 128x250, SSD1675A (IL3897), (HINK-E0213A22-A0 SLH1852)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213_B73 // GDEH0213B73 128x250, SSD1675B, (HINK-E0213A22-A0 SLH1914)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213_B74 // GDEM0213B74 128x250, SSD1680, FPC-7528B)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213_flex // GDEW0213I5F 104x212, UC8151 (IL0373), (WFT0213CZ16)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213_M21 // GDEW0213M21 104x212, UC8151 (IL0373), (WFT0213CZ16)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213_T5D // GDEW0213T5D 104x212, UC8151D, (WFT0213CZ16)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213_BN // DEPG0213BN  128x250, SSD1680, (FPC-7528B), TTGO T5 V2.4.1, V2.3.1
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213_GDEY0213B74 // GDEY0213B74 128x250, SSD1680, (FPC-A002 20.04.08)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_260     // GDEW026T0   152x296, UC8151 (IL0373), (WFT0154CZ17)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_260_M01 // GDEW026M01  152x296, UC8151 (IL0373), (WFT0260CZB2)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_266_BN // DEPG0266BN   152x296, SSD1680, (FPC7510), TTGO T5 V2.66, TTGO T5 V2.4.1
+//#define GxEPD2_DRIVER_CLASS GxEPD2_266_GDEY0266T90 // GDEY0266T90 152x296, SSD1680, (FPC-A003 HB)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_270     // GDEW027W3   176x264, EK79652 (IL91874), (WFI0190CZ22)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_270_GDEY027T91 // GDEY027T91 176x264, SSD1680, (FB)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_290     // GDEH029A1   128x296, SSD1608 (IL3820), (E029A01-FPC-A1 SYX1553)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_290_T5  // GDEW029T5   128x296, UC8151 (IL0373), (WFT0290CZ10)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_290_T5D // GDEW029T5D  128x296, UC8151D, (WFT0290CZ10)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_290_I6FD // GDEW029I6FD  128x296, UC8151D, (WFT0290CZ10)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_290_T94 // GDEM029T94  128x296, SSD1680, (FPC-7519 rev.b)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_290_T94_V2 // GDEM029T94  128x296, SSD1680, (FPC-7519 rev.b), Waveshare 2.9" V2 variant
+//#define GxEPD2_DRIVER_CLASS GxEPD2_290_BS // DEPG0290BS  128x296, SSD1680, (FPC-7519 rev.b)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_290_M06 // GDEW029M06  128x296, UC8151D, (WFT0290CZ10)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_290_GDEY029T94 // GDEY029T94 128x296, SSD1680, (FPC-A005 20.06.15)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_371     // GDEW0371W7  240x416, UC8171 (IL0324), (missing)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_370_TC1 // ED037TC1  280x480, SSD1677, (ICA-FU-20 ichia 2029), Waveshare 3.7"
+//#define GxEPD2_DRIVER_CLASS GxEPD2_420     // GDEW042T2   400x300, UC8176 (IL0398), (WFT042CZ15)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_420_M01 // GDEW042M01  400x300, UC8176 (IL0398), (WFT042CZ15)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_420_GDEY042T91 // GDEY042T91 400x300, SSD1683 (no inking)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_583     // GDEW0583T7  600x448, UC8159c (IL0371), (missing)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_583_T8  // GDEW0583T8  648x480, EK79655 (GD7965), (WFT0583CZ61)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_583_GDEQ0583T31 // GDEQ0583T31  648x480, UC8179, (P583010-MF1-B)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_750     // GDEW075T8   640x384, UC8159c (IL0371), (WF0583CZ09)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_750_T7  // GDEW075T7   800x480, EK79655 (GD7965), (WFT0583CZ61)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_750_YT7  // GDEY075T7  800x480, UC8179 (GD7965), (FPC-C001 20.8.20)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_1160_T91 // GDEH116T91 960x640, SSD1677, (none or hidden)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_1248     // GDEW1248T3 1304x984, UC8179, (WFT1248BZ23,WFT1248BZ24)
 // 3-color e-papers
-//#define GxEPD2_DRIVER_CLASS GxEPD2_154c     // GDEW0154Z04 200x200, IL0376F, no longer available
-//#define GxEPD2_DRIVER_CLASS GxEPD2_154_Z90c // GDEH0154Z90 200x200, SSD1681
-//#define GxEPD2_DRIVER_CLASS GxEPD2_213c     // GDEW0213Z16 104x212, UC8151 (IL0373)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_213_Z19c // GDEW0213Z19 104x212, UC8151D
-//#define GxEPD2_DRIVER_CLASS GxEPD2_213_Z98c // GDEY0213Z98 122x250, SSD1680
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290c     // GDEW029Z10  128x296, UC8151 (IL0373)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_Z13c // GDEH029Z13  128x296, UC8151D
-//#define GxEPD2_DRIVER_CLASS GxEPD2_290_C90c // GDEM029C90  128x296, SSD1680
-//#define GxEPD2_DRIVER_CLASS GxEPD2_266c     // GDEY0266Z90 152x296, SSD1680
-//#define GxEPD2_DRIVER_CLASS GxEPD2_270c     // GDEW027C44  176x264, IL91874
-//#define GxEPD2_DRIVER_CLASS GxEPD2_420c     // GDEW042Z15  400x300, UC8176 (IL0398)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_420c_Z21 // GDEQ042Z21  400x300, UC8276
-//#define GxEPD2_DRIVER_CLASS GxEPD2_583c     // GDEW0583Z21 600x448, UC8179 (IL0371)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_583c_Z83 // GDEW0583Z83 648x480, GD7965
-//#define GxEPD2_DRIVER_CLASS GxEPD2_750c     // GDEW075Z09  640x384, UC8179 (IL0371)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_750c_Z08 // GDEW075Z08  800x480, GD7965
-//#define GxEPD2_DRIVER_CLASS GxEPD2_750c_Z90 // GDEH075Z90  880x528, SSD1677
-//#define GxEPD2_DRIVER_CLASS GxEPD2_1248c    // GDEY1248Z51  1304x984, UC8179
+//#define GxEPD2_DRIVER_CLASS GxEPD2_154c     // GDEW0154Z04 200x200, IL0376F, (WFT0000CZ04), no longer available
+//#define GxEPD2_DRIVER_CLASS GxEPD2_154_Z90c // GDEH0154Z90 200x200, SSD1681, (HINK-E154A07-A1)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213c     // GDEW0213Z16 104x212, UC8151 (IL0373), (WFT0213CZ16)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213_Z19c // GDEH0213Z19 104x212, UC8151D, (HINK-E0213A20-A2 2020-11-19)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213_Z98c // GDEY0213Z98 122x250, SSD1680, (FPC-A002 20.04.08)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_266c     // GDEY0266Z90 152x296, SSD1680, (FPC-7510)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_270c     // GDEW027C44  176x264, IL91874, (WFI0190CZ22)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_290c     // GDEW029Z10  128x296, UC8151 (IL0373), (WFT0290CZ10)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_290_Z13c // GDEH029Z13  128x296, UC8151D, (HINK-E029A10-A3 20160809)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_290_C90c // GDEM029C90  128x296, SSD1680, (FPC-7519 rev.b)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_420c     // GDEW042Z15  400x300, UC8176 (IL0398), (WFT0420CZ15)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_420c_Z21 // GDEQ042Z21  400x300, UC8276, (hidden)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_583c     // GDEW0583Z21 600x448, UC8159c (IL0371), (missing)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_583c_Z83 // GDEW0583Z83 648x480, EK79655 (GD7965), (WFT0583CZ61)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_750c     // GDEW075Z09  640x384, UC8159c (IL0371), (WF0583CZ09)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_750c_Z08 // GDEW075Z08  800x480, EK79655 (GD7965), (WFT0583CZ61)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_750c_Z90 // GDEH075Z90  880x528, SSD1677, (HINK-E075A07-A0)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_1248c    // GDEY1248Z51 1304x984, UC8179, (WFT1248BZ23,WFT1248BZ24)
 // 7-color e-paper
-//#define GxEPD2_DRIVER_CLASS GxEPD2_565c // Waveshare 5.65" 7-color (3C graphics)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_565c // Waveshare 5.65" 7-color
+//#define GxEPD2_DRIVER_CLASS GxEPD2_730c_GDEY073D46 // GDEY073D46 800x480 7-color, (N-FPC-001 2021.11.26)
 // grey levels parallel IF e-papers on Waveshare e-Paper IT8951 Driver HAT
 //#define GxEPD2_DRIVER_CLASS GxEPD2_it60           // ED060SCT 800x600
 //#define GxEPD2_DRIVER_CLASS GxEPD2_it60_1448x1072 // ED060KC1 1448x1072
@@ -296,10 +303,10 @@ void setup()
 
 #endif
 
-  if ((display.epd2.panel == GxEPD2::GDEW0154Z04) || (display.epd2.panel == GxEPD2::ACeP565) || false)
+  if ((display.epd2.panel == GxEPD2::GDEW0154Z04) || (display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46) || false)
   {
-    drawBitmapsBuffered_200x200();
-    drawBitmapsBuffered_other();
+    //drawBitmapsBuffered_200x200();
+    //drawBitmapsBuffered_other();
     drawBitmapsBuffered_7C();
   }
   else
@@ -391,8 +398,8 @@ void drawBitmaps_test()
   delay(2000);
   showBitmapFrom_HTTPS(host_rawcontent, path_rawcontent, "tractor_4.bmp", fp_rawcontent, 0, 0);
   delay(2000);
-  showBitmapFrom_HTTPS(host_rawcontent, path_rawcontent, "tractor_8.bmp", fp_rawcontent, 0, 0);
-  delay(2000);
+  //showBitmapFrom_HTTPS(host_rawcontent, path_rawcontent, "tractor_8.bmp", fp_rawcontent, 0, 0); // format 1: BI_RLE8 is not supported
+  //delay(2000);
   showBitmapFrom_HTTPS(host_rawcontent, path_rawcontent, "tractor_11.bmp", fp_rawcontent, 0, 0);
   delay(2000);
   showBitmapFrom_HTTPS(host_rawcontent, path_rawcontent, "tractor_44.bmp", fp_rawcontent, 0, 0);
@@ -459,7 +466,7 @@ void drawBitmapsBuffered_other()
 
 void drawBitmapsBuffered_7C()
 {
-  if (display.epd2.panel == GxEPD2::ACeP565)
+  if ((display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46))
   {
     showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_c, "5in65f.bmp", fp_rawcontent, 0, 0);
     delay(2000);
@@ -646,6 +653,14 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
             }
             switch (depth)
             {
+              case 32:
+                blue = input_buffer[in_idx++];
+                green = input_buffer[in_idx++];
+                red = input_buffer[in_idx++];
+                in_idx++; // skip alpha
+                whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
+                colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
+                break;
               case 24:
                 blue = input_buffer[in_idx++];
                 green = input_buffer[in_idx++];
@@ -674,6 +689,7 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
                 }
                 break;
               case 1:
+              case 2:
               case 4:
               case 8:
                 {
@@ -734,7 +750,7 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
   bool connection_ok = false;
   bool valid = false; // valid format to be handled
   bool flip = true; // bitmap is stored bottom-to-top
-  bool has_multicolors = display.epd2.panel == GxEPD2::ACeP565;
+  bool has_multicolors = (display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46);
   uint32_t startTime = millis();
   if ((x >= display.width()) || (y >= display.height())) return;
   display.fillScreen(GxEPD_WHITE);
@@ -876,6 +892,15 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
             }
             switch (depth)
             {
+              case 32:
+                blue = input_buffer[in_idx++];
+                green = input_buffer[in_idx++];
+                red = input_buffer[in_idx++];
+                in_idx++; // skip alpha
+                whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
+                colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
+                color = ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | ((blue & 0xF8) >> 3);
+                break;
               case 24:
                 blue = input_buffer[in_idx++];
                 green = input_buffer[in_idx++];
@@ -907,6 +932,7 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
                 }
                 break;
               case 1:
+              case 2:
               case 4:
               case 8:
                 {
@@ -1137,6 +1163,14 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
             }
             switch (depth)
             {
+              case 32:
+                blue = input_buffer[in_idx++];
+                green = input_buffer[in_idx++];
+                red = input_buffer[in_idx++];
+                in_idx++; // skip alpha
+                whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
+                colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
+                break;
               case 24:
                 blue = input_buffer[in_idx++];
                 green = input_buffer[in_idx++];
@@ -1165,6 +1199,7 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
                 }
                 break;
               case 1:
+              case 2:
               case 4:
               case 8:
                 {
@@ -1228,7 +1263,7 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
   bool connection_ok = false;
   bool valid = false; // valid format to be handled
   bool flip = true; // bitmap is stored bottom-to-top
-  bool has_multicolors = display.epd2.panel == GxEPD2::ACeP565;
+  bool has_multicolors = (display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46);
   uint32_t startTime = millis();
   if ((x >= display.width()) || (y >= display.height())) return;
   display.fillScreen(GxEPD_WHITE);
@@ -1390,6 +1425,15 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
             }
             switch (depth)
             {
+              case 32:
+                blue = input_buffer[in_idx++];
+                green = input_buffer[in_idx++];
+                red = input_buffer[in_idx++];
+                in_idx++; // skip alpha
+                whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
+                colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
+                color = ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | ((blue & 0xF8) >> 3);
+                break;
               case 24:
                 blue = input_buffer[in_idx++];
                 green = input_buffer[in_idx++];
@@ -1421,6 +1465,7 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
                 }
                 break;
               case 1:
+              case 2:
               case 4:
               case 8:
                 {

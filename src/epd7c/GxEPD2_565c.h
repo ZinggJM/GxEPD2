@@ -3,7 +3,7 @@
 //
 // based on Demo Example from Good Display: http://www.e-paper-display.com/download_detail/downloadsId=808.html
 // Panel: 5.65inch ACeP 7-Color E-Paper : https://www.waveshare.com/product/displays/e-paper/5.65inch-e-paper-module-f.htm
-// Controller: unknonw
+// Controller: unknown
 //
 // Author: Jean-Marc Zingg
 //

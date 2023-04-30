@@ -31,7 +31,7 @@
 // The logical configuration would be to use the e-paper connection on HSPI with re-mapped pins, and use VSPI for other SPI clients.
 // VSPI with standard VSPI pins is used by the global SPI instance of the Arduino IDE ESP32 package.
 //
-// Alternately VSPI with re-mapped pins can be used with the ESP32 Driver Board FPC connector. 
+// Alternately VSPI with re-mapped pins can be used with the ESP32 Driver Board FPC connector.
 // This was used with the original example GxEPD2_WS_ESP32_Driver.ino.
 // Then the standard HW SPI pins can be used for other clients through HSPI with re-mapped pins.
 // This is not the prefered configuration, but also works. Available in this example for test.
@@ -119,7 +119,9 @@ void setup()
   SPI.begin(13, 12, 14, 15); // remap SPI for EPD
   hspi.begin(SCK, MISO, MOSI, SS); // remap hspi for SD
 #endif
-  display.init(115200);
+
+  //display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
+  display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
 
   Serial.print("Initializing SD card...");
 #if defined(ESP32) && defined(USE_HSPI_FOR_SD)
@@ -137,10 +139,13 @@ void setup()
 #endif
   Serial.println("SD OK!");
 
-  if ((display.epd2.panel == GxEPD2::GDEW0154Z04) || (display.epd2.panel == GxEPD2::ACeP565) || false)
+  listFiles();
+
+  if ((display.epd2.panel == GxEPD2::GDEW0154Z04) || (display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46) || false)
   {
-    drawBitmapsBuffered_200x200();
-    drawBitmapsBuffered_other();
+    //drawBitmapsBuffered_200x200();
+    //drawBitmapsBuffered_other();
+    drawBitmapsBuffered_test();
   }
   else
   {
@@ -156,6 +161,39 @@ void setup()
 
 void loop(void)
 {
+}
+
+void listFiles()
+{
+  Serial.println("All Files on SD:");
+  File root = SD.open("/");
+  if (root)
+  {
+    if (root.isDirectory())
+    {
+      File file = root.openNextFile();
+      while (file)
+      {
+        Serial.print("  ");
+        Serial.print(file.name());
+        spaces(20 - strlen(file.name()));
+        Serial.print("  ");
+        Serial.print(file.size());
+        Serial.print(" bytes");
+        Serial.println();
+        file = root.openNextFile();
+      }
+      Serial.println("no more files...");
+    } else Serial.print("Not a directory");
+  } else Serial.print("failed to open root directory");
+}
+
+void spaces(int num)
+{
+  for (int i = 0; i < num; i++)
+  {
+    Serial.print(" ");
+  }
 }
 
 void drawBitmaps_200x200()
@@ -232,8 +270,8 @@ void drawBitmaps_test()
   delay(2000);
   drawBitmapFromSD("tractor_4.bmp", 0, 0);
   delay(2000);
-  drawBitmapFromSD("tractor_8.bmp", 0, 0);
-  delay(2000);
+  //drawBitmapFromSD("tractor_8.bmp", 0, 0); // format 1: BI_RLE8 is not supported
+  //delay(2000);
   drawBitmapFromSD("tractor_11.bmp", 0, 0);
   delay(2000);
   drawBitmapFromSD("tractor_44.bmp", 0, 0);
@@ -307,6 +345,12 @@ void drawBitmapsBuffered_test()
   drawBitmapFromSD_Buffered("betty_4.bmp", w2 - 102, h2 - 126);
   delay(2000);
   drawBitmapFromSD_Buffered("bb4.bmp", 0, 0, false, true, true);
+  delay(2000);
+  drawBitmapFromSD_Buffered("rgb32.bmp", 0, 0);
+  delay(2000);
+  drawBitmapFromSD_Buffered("parrot.bmp", 0, 0);
+  delay(2000);
+  drawBitmapFromSD_Buffered("5in65f3.bmp", 0, 0);
   delay(2000);
 }
 
@@ -436,6 +480,14 @@ void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_colo
             }
             switch (depth)
             {
+              case 32:
+                blue = input_buffer[in_idx++];
+                green = input_buffer[in_idx++];
+                red = input_buffer[in_idx++];
+                in_idx++; // skip alpha
+                whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
+                colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
+                break;
               case 24:
                 blue = input_buffer[in_idx++];
                 green = input_buffer[in_idx++];
@@ -464,6 +516,7 @@ void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_colo
                 }
                 break;
               case 1:
+              case 2:
               case 4:
               case 8:
                 {
@@ -520,7 +573,7 @@ void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool 
   File file;
   bool valid = false; // valid format to be handled
   bool flip = true; // bitmap is stored bottom-to-top
-  bool has_multicolors = display.epd2.panel == GxEPD2::ACeP565;
+  bool has_multicolors = (display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46);
   uint32_t startTime = millis();
   if ((x >= display.width()) || (y >= display.height())) return;
   Serial.println();
@@ -632,6 +685,15 @@ void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool 
               }
               switch (depth)
               {
+                case 32:
+                  blue = input_buffer[in_idx++];
+                  green = input_buffer[in_idx++];
+                  red = input_buffer[in_idx++];
+                  in_idx++; // skip alpha
+                  whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
+                  colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
+                  color = ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | ((blue & 0xF8) >> 3);
+                  break;
                 case 24:
                   blue = input_buffer[in_idx++];
                   green = input_buffer[in_idx++];
@@ -663,6 +725,7 @@ void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool 
                   }
                   break;
                 case 1:
+                case 2:
                 case 4:
                 case 8:
                   {

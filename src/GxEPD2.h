@@ -28,7 +28,7 @@
 // values for 7-color EPDs only
 #define GxEPD_BLUE      0x001F //   0,   0, 255
 #define GxEPD_GREEN     0x07E0 //   0, 255,   0
-#define GxEPD_ORANGE    0xFD20 // 255, 165,   0
+#define GxEPD_ORANGE    0xFC00 // 255, 128,   0
 
 class GxEPD2
 {
@@ -43,6 +43,7 @@ class GxEPD2
       GDEW0154T8,
       GDEW0154M09,
       GDEW0154M10,
+      GDEY0154D67,
       GDE0213B1,  Waveshare_2_13_bw = GDE0213B1,
       GDEH0213B72,  Waveshare_2_13_bw_B72 = GDEH0213B72,
       GDEH0213B73,  Waveshare_2_13_bw_B73 = GDEH0213B73,
@@ -51,15 +52,18 @@ class GxEPD2
       GDEW0213M21,
       GDEW0213T5D,
       DEPG0213BN,
+      GDEY0213B74,
       GDEW026T0,  Waveshare_2_6_bw = GDEW026T0,
       GDEW026M01,
       DEPG0266BN,
+      GDEY0266T90,
       GDEH029A1,  Waveshare_2_9_bw = GDEH029A1,
       GDEW029T5,  Waveshare_2_9_bw_T5 = GDEW029T5,
       GDEW029T5D,
       GDEW029I6FD,
       GDEW029M06,
       GDEM029T94,
+      GDEY029T94,
       DEPG0290BS,
       GDEW027W3,  Waveshare_2_7_bw = GDEW027W3,
       GDEY027T91,
@@ -67,8 +71,10 @@ class GxEPD2
       GDEW0371W7, Waveshare_3_7_bw = GDEW0371W7,
       GDEW042T2,  Waveshare_4_2_bw = GDEW042T2,
       GDEW042M01,
+      GDEY042T91,
       GDEW0583T7, Waveshare_5_83_bw = GDEW0583T7,
       GDEW0583T8,
+      GDEQ0583T31,
       GDEW075T8,  Waveshare_7_5_bw = GDEW075T8,
       GDEW075T7,  Waveshare_7_5_bw_T7 = GDEW075T7,
       GDEY075T7,
@@ -93,7 +99,9 @@ class GxEPD2
       GDEQ042Z21,  Waveshare_4_2_V2_bwr = GDEQ042Z21,
       GDEW0583Z21, Waveshare_5_83_bwr = GDEW0583Z21,
       GDEW0583Z83,
+      Waveshare437inch4color,
       ACeP565,     Waveshare_5_65_7c = ACeP565,
+      GDEY073D46,
       GDEW075Z09,  Waveshare_7_5_bwr = GDEW075Z09,
       GDEW075Z08,  Waveshare_7_5_bwr_Z08 = GDEW075Z08,
       GDEH075Z90,  Waveshare_7_5_bwr_Z90 = GDEH075Z90,

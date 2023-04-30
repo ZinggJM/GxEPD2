@@ -38,18 +38,18 @@
 
 #include <GxEPD2_BW.h>
 #include <GxEPD2_3C.h>
+#include <GxEPD2_4C.h>
 #include <GxEPD2_7C.h>
 #include <Fonts/FreeMonoBold9pt7b.h>
 
 // select the display constructor line in one of the following files (old style):
 #include "GxEPD2_display_selection.h"
 #include "GxEPD2_display_selection_added.h"
-//#include "GxEPD2_display_selection_more.h" // private
 
 // or select the display class and display driver class in the following file (new style):
 #include "GxEPD2_display_selection_new_style.h"
 
-#if !defined(__AVR) && !defined(_BOARD_GENERIC_STM32F103C_H_) && !defined(ARDUINO_BLUEPILL_F103C8)
+#if !defined(__AVR) && !defined(STM32F1xx)
 
 // note 16.11.2019: the compiler may exclude code based on constant if statements (display.epd2.panel == constant),
 //                  therefore bitmaps may get optimized out by the linker
@@ -81,11 +81,14 @@
 #include "bitmaps/Bitmaps3c800x480.h" // 7.5"  b/w/r
 #include "bitmaps/Bitmaps3c880x528.h" // 7.5"  b/w/r
 #include "bitmaps/WS_Bitmaps800x600.h" // 6.0"  grey
+#include "bitmaps/WS_Bitmaps4c168x168.h" // 4.37" 4-color
 #include "bitmaps/WS_Bitmaps7c192x143.h" // 5.65" 7-color
+//#include "bitmaps/WS_Bitmaps7c300x180.h" // 7.3" 7-color
 #endif
 #if defined(ESP32)
 #include "bitmaps/Bitmaps1304x984.h" // 12.48" b/w
 #include "bitmaps/Bitmaps3c1304x984.h" // 12.48" b/w/r
+#include "bitmaps/Bitmaps7c800x480.h" // 7.3" 7-color
 #endif
 
 #else
@@ -111,7 +114,7 @@
 
 #if defined(ARDUINO_ARCH_RP2040) && defined(ARDUINO_RASPBERRY_PI_PICO)
 // SPI pins used by GoodDisplay DESPI-PICO. note: steals standard I2C pins PIN_WIRE_SDA (6), PIN_WIRE_SCL (7)
-// uncomment next line for use with GoodDisplay DESPI-PICO.
+// uncomment next line for use with GoodDisplay DESPI-PICO. // MbedSPI(int miso, int mosi, int sck);
 arduino::MbedSPI SPI0(4, 7, 6); // need be valid pins for same SPI channel, else fails blinking 4 long 4 short
 #endif
 
@@ -161,9 +164,10 @@ void setup()
     delay(1000);
   }
   drawBitmaps();
+  drawGraphics();
   //return;
 #if !defined(__AVR) // takes too long!
-  if (display.epd2.panel == GxEPD2::ACeP565)
+  if ((display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46))
   {
     //draw7colorlines();
     //delay(2000);
@@ -771,8 +775,17 @@ void drawBitmaps()
 #ifdef _GxBitmaps3c880x528_H_
   drawBitmaps3c880x528();
 #endif
+#if defined(_WS_Bitmaps4c168x168_H_)
+  drawBitmaps4c168x168();
+#endif
 #if defined(_WS_Bitmaps7c192x143_H_)
   drawBitmaps7c192x143();
+#endif
+#if defined(_GxBitmaps7c800x480_H_)
+  drawBitmaps7c800x480();
+#endif
+#if defined(_WS_Bitmaps7c300x180_H_)
+  drawBitmaps7c300x180();
 #endif
   if ((display.epd2.WIDTH >= 200) && (display.epd2.HEIGHT >= 200))
   {
@@ -1677,12 +1690,45 @@ void drawBitmaps3c1304x984()
 }
 #endif
 
+#if defined(_WS_Bitmaps4c168x168_H_)
+void drawBitmaps4c168x168()
+{
+  if (display.epd2.panel == GxEPD2::Waveshare437inch4color)
+  {
+    display.drawNative(WS_Bitmap4c168x168, 0, (display.epd2.WIDTH - 168) / 2, (display.epd2.HEIGHT - 168) / 2, 168, 168, false, false, true);
+    delay(5000);
+  }
+}
+#endif
+
 #if defined(_WS_Bitmaps7c192x143_H_)
 void drawBitmaps7c192x143()
 {
   if (display.epd2.panel == GxEPD2::ACeP565)
   {
     display.drawNative(WS_Bitmap7c192x143, 0, (display.epd2.WIDTH - 192) / 2, (display.epd2.HEIGHT - 143) / 2, 192, 143, false, false, true);
+    delay(5000);
+  }
+}
+#endif
+
+#if defined(_GxBitmaps7c800x480_H_)
+void drawBitmaps7c800x480()
+{
+  if (display.epd2.panel == GxEPD2::GDEY073D46)
+  {
+    display.epd2.drawDemoBitmap(Bitmap7c800x480, 0, 0, 0, 800, 480, 0, false, true); // special format
+    delay(5000);
+  }
+}
+#endif
+
+#if defined(_WS_Bitmaps7c300x180_H_)
+void drawBitmaps7c300x180()
+{
+  if (display.epd2.panel == GxEPD2::GDEY073D46)
+  {
+    display.drawNative(WS_Bitmap7c300x180, 0, (display.epd2.WIDTH - 300) / 2, (display.epd2.HEIGHT - 180) / 2, 300, 180, false, false, true);
     delay(5000);
   }
 }
@@ -1736,6 +1782,22 @@ void draw7colorlines()
     display.fillRect(0, y, 2, 2, GxEPD_BLACK); display.fillRect(10, y, 2, 2, GxEPD_GREEN);
     display.fillRect(20, y, 2, 2, GxEPD_BLUE); display.fillRect(30, y, 2, 2, GxEPD_RED);
     display.fillRect(40, y, 2, 2, GxEPD_YELLOW); display.fillRect(50, y, 2, 2, GxEPD_ORANGE);
+  }
+  while (display.nextPage());
+}
+
+void drawGraphics()
+{
+  display.setRotation(0);
+  display.firstPage();
+  do
+  {
+    display.drawRect(display.width() / 8, display.height() / 8, display.width() * 3 / 4, display.height() * 3 / 4, GxEPD_BLACK);
+    display.drawLine(display.width() / 8, display.height() / 8, display.width() * 7 / 8, display.height() * 7 / 8, GxEPD_BLACK);
+    display.drawLine(display.width() / 8, display.height() * 7 / 8, display.width() *7 / 8, display.height() / 8, GxEPD_BLACK);
+    display.drawCircle(display.width() / 2, display.height() / 2, display.height() / 4, GxEPD_BLACK);
+    display.drawPixel(display.width() / 4, display.height() / 2 , GxEPD_BLACK);
+    display.drawPixel(display.width() * 3 / 4, display.height() / 2 , GxEPD_BLACK);
   }
   while (display.nextPage());
 }

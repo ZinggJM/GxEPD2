@@ -25,10 +25,12 @@ void GxEPD2_154::clearScreen(uint8_t value)
     _Init_Full();
     _setPartialRamArea(0, 0, WIDTH, HEIGHT);
     _writeCommand(0x24);
+    _startTransfer();
     for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
     {
-      _writeData(value);
+      _transfer(value);
     }
+    _endTransfer();
     _Update_Full();
     _initial_refresh = false; // initial full update done
   }
@@ -37,19 +39,23 @@ void GxEPD2_154::clearScreen(uint8_t value)
     if (!_using_partial_mode) _Init_Part();
     _setPartialRamArea(0, 0, WIDTH, HEIGHT);
     _writeCommand(0x24);
+    _startTransfer();
     for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
     {
-      _writeData(value);
+      _transfer(value);
     }
+    _endTransfer();
     _Update_Part();
   }
   if (!_using_partial_mode) _Init_Part();
   _setPartialRamArea(0, 0, WIDTH, HEIGHT);
   _writeCommand(0x24);
+  _startTransfer();
   for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
-    _writeData(value);
+    _transfer(value);
   }
+  _endTransfer();
   _Update_Part();
 }
 
@@ -66,10 +72,12 @@ void GxEPD2_154::_writeScreenBuffer(uint8_t value)
   if (!_using_partial_mode) _Init_Part();
   _setPartialRamArea(0, 0, WIDTH, HEIGHT);
   _writeCommand(0x24);
+  _startTransfer();
   for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
   {
-    _writeData(value);
+    _transfer(value);
   }
+  _endTransfer();
 }
 
 void GxEPD2_154::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
@@ -91,6 +99,7 @@ void GxEPD2_154::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_
   if (!_using_partial_mode) _Init_Part();
   _setPartialRamArea(x1, y1, w1, h1);
   _writeCommand(0x24);
+  _startTransfer();
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -111,9 +120,10 @@ void GxEPD2_154::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_
         data = bitmap[idx];
       }
       if (invert) data = ~data;
-      _writeData(data);
+      _transfer(data);
     }
   }
+  _endTransfer();
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
 
@@ -143,6 +153,7 @@ void GxEPD2_154::writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t 
   if (!_using_partial_mode) _Init_Part();
   _setPartialRamArea(x1, y1, w1, h1);
   _writeCommand(0x24);
+  _startTransfer();
   for (int16_t i = 0; i < h1; i++)
   {
     for (int16_t j = 0; j < w1 / 8; j++)
@@ -163,9 +174,10 @@ void GxEPD2_154::writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t 
         data = bitmap[idx];
       }
       if (invert) data = ~data;
-      _writeData(data);
+      _transfer(data);
     }
   }
+  _endTransfer();
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
 
@@ -252,7 +264,7 @@ void GxEPD2_154::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
   int16_t y1 = y < 0 ? 0 : y; // limit
   w1 = x1 + w1 < int16_t(WIDTH) ? w1 : int16_t(WIDTH) - x1; // limit
   h1 = y1 + h1 < int16_t(HEIGHT) ? h1 : int16_t(HEIGHT) - y1; // limit
-  if ((w1 <= 0) || (h1 <= 0)) return; 
+  if ((w1 <= 0) || (h1 <= 0)) return;
   // make x1, w1 multiple of 8
   w1 += x1 % 8;
   if (w1 % 8 > 0) w1 += 8 - w1 % 8;

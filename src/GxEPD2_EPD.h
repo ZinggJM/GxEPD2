@@ -35,6 +35,7 @@ class GxEPD2_EPD
                uint16_t w, uint16_t h, GxEPD2::Panel p, bool c, bool pu, bool fpu);
     virtual void init(uint32_t serial_diag_bitrate = 0); // serial_diag_bitrate = 0 : disabled
     virtual void init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration = 10, bool pulldown_rst_mode = false);
+    virtual void end(); // release SPI and control pins
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     virtual void clearScreen(uint8_t value) = 0; // init controller memory and screen (default white)
     virtual void writeScreenBuffer(uint8_t value) = 0; // init controller memory (default white)
@@ -78,6 +79,9 @@ class GxEPD2_EPD
     //                                int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
     // write sprite of native data to controller memory, with screen refresh; x and w should be multiple of 8
     //    virtual void drawNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
+    // a demo bitmap can use yet another bitmap format, e.g. 7-color bitmap from Good Display for GDEY073D46
+    virtual void writeDemoBitmap(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, int16_t mode = 0, bool mirror_y = false, bool pgm = false){};
+    virtual void drawDemoBitmap(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, int16_t mode = 0, bool mirror_y = false, bool pgm = false){};
     virtual void refresh(bool partial_update_mode = false) = 0; // screen refresh from controller memory to full screen
     virtual void refresh(int16_t x, int16_t y, int16_t w, int16_t h) = 0; // screen refresh from controller memory, partial screen
     virtual void powerOff() = 0; // turns off generation of panel driving voltages, avoids screen fading over time

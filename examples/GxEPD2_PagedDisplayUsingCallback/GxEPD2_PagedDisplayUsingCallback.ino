@@ -89,7 +89,8 @@ void setup()
   Serial.begin(115200);
   Serial.println();
   Serial.println("setup");
-  display.init(115200);
+  //display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
+  display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
   // first update should be full refresh
   helloWorld();
   delay(1000);
@@ -132,8 +133,6 @@ void helloWorldCallback(const void*)
 void helloWorld()
 {
   //Serial.println("helloWorld");
-  uint16_t x = (display.width() - 160) / 2;
-  uint16_t y = display.height() / 2;
   display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
   display.setTextColor(GxEPD_BLACK);
@@ -192,7 +191,7 @@ void helloArduinoCallback(const void*)
 void helloArduino()
 {
   //Serial.println("helloArduino");
-  uint16_t x = (display.width() - 160) / 2;
+  //uint16_t x = (display.width() - 160) / 2;
   uint16_t y = display.height() / 4;
   display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
@@ -215,7 +214,7 @@ void helloEpaperCallback(const void*)
 void helloEpaper()
 {
   //Serial.println("helloEpaper");
-  uint16_t x = (display.width() - 160) / 2;
+  //uint16_t x = (display.width() - 160) / 2;
   uint16_t y = display.height() * 3 / 4;
   display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
@@ -294,7 +293,7 @@ void showPartialUpdate()
   helloWorld();
   // use asymmetric values for test
   ShowBoxParameters boxParameters{10, 15, 70, 20, GxEPD_WHITE};
-  ShowValueParameters valueParameters{10, 15, 70, 20, 13.95};
+  ShowValueParameters valueParameters{10, 15, 70, 20, 0, 13.95};
   valueParameters.cursor_y = valueParameters.y + valueParameters.h - 6;
   float value = 13.95;
   uint16_t incr = display.epd2.hasFastPartialUpdate ? 1 : 3;
