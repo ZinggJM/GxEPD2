@@ -54,6 +54,9 @@
 #if __has_include("epd7c/GxEPD2_730c_GDEY073D46.h")
 #include "epd7c/GxEPD2_730c_GDEY073D46.h"
 #endif
+#if __has_include("epd7c/GxEPD2_730c.h")
+#include "epd7c/GxEPD2_730c.h"
+#endif
 
 template<typename GxEPD2_Type, const uint16_t page_height>
 class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
