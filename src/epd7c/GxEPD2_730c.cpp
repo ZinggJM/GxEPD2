@@ -663,15 +663,13 @@ void GxEPD2_730c::_Init_Part()
 void GxEPD2_730c::_Update_Full()
 {
   _writeCommand(0x12); // Display Refresh
-  _writeData(0x01);
-  delay(1);
+  _writeData(0x00);
   _waitWhileBusy("_Update_Full", full_refresh_time);
 }
 
 void GxEPD2_730c::_Update_Part()
 {
   _writeCommand(0x12); // Display Refresh
-  _writeData(0x00);
-  delay(1);
+  _writeData(0x01);
   _waitWhileBusy("_Update_Part", partial_refresh_time);
 }
