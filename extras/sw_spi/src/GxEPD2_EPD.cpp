@@ -38,6 +38,7 @@ GxEPD2_EPD::GxEPD2_EPD(int16_t cs, int16_t dc, int16_t rst, int16_t busy, int16_
   _power_is_on = false;
   _using_partial_mode = false;
   _hibernating = false;
+  _init_display_done = false;
   _reset_duration = 20;
 }
 
@@ -54,6 +55,7 @@ void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset
   _power_is_on = false;
   _using_partial_mode = false;
   _hibernating = false;
+  _init_display_done = false;
   _reset_duration = reset_duration;
   if (serial_diag_bitrate > 0)
   {
@@ -90,6 +92,15 @@ void GxEPD2_EPD::init(int16_t sck, int16_t mosi, uint32_t serial_diag_bitrate, b
     pinMode(_mosi, OUTPUT);
   } else _sck = -1;
   init(serial_diag_bitrate, initial, reset_duration, pulldown_rst_mode);
+}
+
+void GxEPD2_EPD::end()
+{
+  pinMode(_sck, INPUT);
+  pinMode(_mosi, INPUT);
+  if (_cs >= 0) pinMode(_cs, INPUT);
+  if (_dc >= 0) pinMode(_dc, INPUT);
+  if (_rst >= 0) pinMode(_rst, INPUT);
 }
 
 void GxEPD2_EPD::_reset()

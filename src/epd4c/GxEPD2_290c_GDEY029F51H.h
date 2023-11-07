@@ -1,9 +1,9 @@
 // Display Library for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 // Requires HW SPI and Adafruit_GFX. Caution: the e-paper panels require 3.3V supply AND data lines!
 //
-// based on Demo Example from Waveshare: https://github.com/waveshare/e-Paper/tree/master/Arduino/epd4in37g
-// Panel: 4.37inch 4-Color E-Paper : https://www.waveshare.com/product/displays/e-paper/4.37inch-e-paper-module-g.htm
-// Controller: unknown
+// based on Demo Example from Good Display: https://www.good-display.com/comp/xcompanyFile/downloadNew.do?appId=24&fid=1785&id=1151
+// Panel: GDEY029F51H : https://www.good-display.com/product/464.html
+// Controller: JD79667, no specs, see GDEY0266F51H panel specs for command list subset
 //
 // Author: Jean-Marc Zingg
 //
@@ -11,28 +11,28 @@
 //
 // Library: https://github.com/ZinggJM/GxEPD2
 
-#ifndef _GxEPD2_437c_H_
-#define _GxEPD2_437c_H_
+#ifndef _GxEPD2_290c_GDEY029F51H_H_
+#define _GxEPD2_290c_GDEY029F51H_H_
 
 #include "../GxEPD2_EPD.h"
 
-class GxEPD2_437c : public GxEPD2_EPD
+class GxEPD2_290c_GDEY029F51H : public GxEPD2_EPD
 {
   public:
     // attributes
-    static const uint16_t WIDTH = 512;
+    static const uint16_t WIDTH = 168;
     static const uint16_t WIDTH_VISIBLE = WIDTH;
-    static const uint16_t HEIGHT = 368;
-    static const GxEPD2::Panel panel = GxEPD2::Waveshare437inch4color;
+    static const uint16_t HEIGHT = 384;
+    static const GxEPD2::Panel panel = GxEPD2::GDEY029F51H;
     static const bool hasColor = true;
-    static const bool hasPartialUpdate = true;
+    static const bool hasPartialUpdate = true; // can be switched off
     static const bool hasFastPartialUpdate = false;
-    static const uint16_t power_on_time = 200; // ms, e.g. 172000us
-    static const uint16_t power_off_time = 150; // ms, e.g. 140000us
-    static const uint16_t full_refresh_time = 12000; // ms, e.g. 12709000us
-    static const uint16_t partial_refresh_time = 13000; // ms, e.g. 12709000us
+    static const uint16_t power_on_time = 200; // ms, e.g. 157485us
+    static const uint16_t power_off_time = 100; // ms, e.g. 81338us
+    static const uint16_t full_refresh_time = 25000; // ms, e.g. 21428295us
+    static const uint16_t partial_refresh_time = 25000; // ms, e.g. 21428295us
     // constructor
-    GxEPD2_437c(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
+    GxEPD2_290c_GDEY029F51H(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
     // methods (virtual)
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     void clearScreen(uint8_t value = 0xFF); // init controller memory and screen (default white)

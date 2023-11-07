@@ -28,6 +28,7 @@ GxEPD2_EPD::GxEPD2_EPD(int16_t cs, int16_t dc, int16_t rst, int16_t busy, int16_
   _power_is_on = false;
   _using_partial_mode = false;
   _hibernating = false;
+  _init_display_done = false;
   _reset_duration = 10;
   _busy_callback = 0;
   _busy_callback_parameter = 0;
@@ -46,6 +47,7 @@ void GxEPD2_EPD::init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset
   _power_is_on = false;
   _using_partial_mode = false;
   _hibernating = false;
+  _init_display_done = false;
   _reset_duration = reset_duration;
   if (serial_diag_bitrate > 0)
   {

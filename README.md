@@ -43,6 +43,8 @@
 
 - Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
 - Good Display ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
+- Note that these topics are closed. Use only for reference.
+- create a new topic for each question or issue in https://forum.arduino.cc/c/using-arduino/displays/23
 
 ### Note on documentation
 - GxEPD2 uses Adafruit_GFX for Graphics and Text support, which is well documented there
@@ -78,6 +80,7 @@
 - GDEW026M01     2.6" b/w 152x296, UC8151 (IL0373), DES
 - DEPG0266BN     2.66" b/w 152x296, SSD1680, e.g. LILYGO® TTGO T5 2.66 inch
 - GDEY0266Z90    2.66" b/w/r 152x296, SSD1680
+- GDEY0266F51H   2.66" 4-color 184x460, JD79667
 - GDEW027C44     2.7" b/w/r 176x264, IL91874
 - GDEW027W3      2.7" b/w 176x264, EK79652 (IL91874)
 - GDEY027T91     2.7" b/w 176x264, SSD1680
@@ -92,13 +95,17 @@
 - GDEM029C90     2.9" b/w/y 128x296, SSD1680
 - DEPG0290BS     2.9" b/w 128x296, SSD1680, e.g. LILYGO® TTGO T5 V2.4.1 2.9"
 - GDEY029T94     2.9" b/w 128x296, SSD1680
+- GDEY029F51H    2.9" 4-color 168x384, JD79667
+- Waveshare3inch4color 3.0" 4-color 168x400
 - ED037TC1       3.7" b/w 280x480, SSD1677, Waveshare 3.7"
 - GDEW0371W7     3.7" b/w 240x416, UC8171 (IL0324)
 - GDEW042T2      4.2" b/w 400x300, UC8176 (IL0398)
 - GDEW042M01     4.2" b/w 400x300, UC8176 (IL0398), DES
 - GDEW042Z15     4.2" b/w/r 400x300, UC8176 (IL0398)
 - GDEQ042Z21     4.2" b/w/r 400x300, UC8276, (Waveshare V2)
-- GDEY042T91     4.2" b/w 400x300, SSD1683
+- GDEY042T81     4.2" b/w 400x300, SSD1683
+- GDEY0420F51    4.2" 4-color 400x300, HX8717
+- GDEQ0426T82    4.26" b/w 800x480, SSD1677
 - Waveshare437inch4color Waveshare 4.37" 4-color e-paper display 512x368 
 - ACeP565        5.65" Waveshare 5.65" 7-color e-paper display 600x448
 - GDEW0583T7     5.83" b/w 600x448, UC8159c (IL0371)
@@ -126,7 +133,16 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.5.2
+### Version 1.5.3
+- added support for GDEQ0426T82 4.26" b/w 800x480
+- added support for GDEY0266F51H 2.66" 4-color 184x460
+- added support for GDEY029F51H 2.9" 4-color 168x384
+- added support for GDEY0420F51 4.2" 4-color 400x300
+- added support for Waveshare 3.00" 4-color e-paper display 168x400
+- updated support for Waveshare 4.37" 4-color e-paper display 512x368
+- the 4-color displays have partial window addressing and refresh
+- renamed GDEY042T91 to its new official name GDEY042T81
+#### Version 1.5.2
 - added support for Waveshare 4.37" 4-color e-paper display 512x368
 - fixed __has_include test (for packages that don't support __has_include)
 - added WIDTH_VISIBLE for correct graphics width for 2.13" b/w 122x250

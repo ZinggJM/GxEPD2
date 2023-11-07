@@ -48,6 +48,18 @@
 #  define __has_include(x) true
 #endif
 
+#if __has_include("epd4c/GxEPD2_266c_GDEY0266F51H.h")
+#include "epd4c/GxEPD2_266c_GDEY0266F51H.h"
+#endif
+#if __has_include("epd4c/GxEPD2_290c_GDEY029F51H.h")
+#include "epd4c/GxEPD2_290c_GDEY029F51H.h"
+#endif
+#if __has_include("epd4c/GxEPD2_300c.h")
+#include "epd4c/GxEPD2_300c.h"
+#endif
+#if __has_include("epd4c/GxEPD2_420c_GDEY0420F51.h")
+#include "epd4c/GxEPD2_420c_GDEY0420F51.h"
+#endif
 #if __has_include("epd4c/GxEPD2_437c.h")
 #include "epd4c/GxEPD2_437c.h"
 #endif

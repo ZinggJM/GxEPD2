@@ -81,7 +81,13 @@
 #include "bitmaps/Bitmaps3c800x480.h" // 7.5"  b/w/r
 #include "bitmaps/Bitmaps3c880x528.h" // 7.5"  b/w/r
 #include "bitmaps/WS_Bitmaps800x600.h" // 6.0"  grey
+// 4-color
+#include "bitmaps/Bitmaps4c184x360.h" // 2.66" 4-color
+#include "bitmaps/Bitmaps4c168x384.h" // 2.9" 4-color
 #include "bitmaps/WS_Bitmaps4c168x168.h" // 4.37" 4-color
+#include "bitmaps/WS_Bitmaps4c168x400.h" // 3.00" 4-color
+#include "bitmaps/Bitmaps4c400x300.h" // 4.2"" 4-color
+// 7-color
 #include "bitmaps/WS_Bitmaps7c192x143.h" // 5.65" 7-color
 //#include "bitmaps/WS_Bitmaps7c300x180.h" // 7.3" 7-color
 #endif
@@ -142,6 +148,12 @@ void setup()
   //display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
   display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
   //display.init(115200, true, 10, false, SPI0, SPISettings(4000000, MSBFIRST, SPI_MODE0)); // extended init method with SPI channel and/or settings selection
+  if (display.pages() > 1)
+  {
+    delay(100);
+    Serial.print("pages = "); Serial.print(display.pages()); Serial.print(" page height = "); Serial.println(display.pageHeight());
+    delay(1000);
+  }
   // first update should be full refresh
   helloWorld();
   delay(1000);
@@ -163,6 +175,7 @@ void setup()
     showFont("glcdfont", 0);
     delay(1000);
   }
+  //drawGrid(); return;
   drawBitmaps();
   drawGraphics();
   //return;
@@ -190,6 +203,7 @@ void setup()
   display.powerOff();
 #endif
   Serial.println("setup done");
+  display.end();
 }
 
 void loop()
@@ -701,6 +715,43 @@ void showPartialUpdate()
   }
 }
 
+void drawGrid()
+{
+  uint16_t x, y;
+  display.firstPage();
+  do
+  {
+    x = 0;
+    do
+    {
+      display.drawLine(x, 0, x, display.height() - 1, GxEPD_BLACK);
+      x += 10;
+    }
+    while (x < display.width());
+    y = 0;
+    do
+    {
+      display.drawLine(0, y, display.width() - 1, y, GxEPD_BLACK);
+      y += 10;
+    }
+    while (y < display.height());
+    x = 0;
+    do
+    {
+      display.fillCircle(x, display.height() / 2, 3, GxEPD_BLACK);
+      x += 50;
+    }
+    while (x <= display.width());
+    y = 0;
+    do
+    {
+      display.fillCircle(display.width() / 2, y, 3, GxEPD_BLACK);
+      y += 50;
+    }
+    while (y <= display.height());
+  }
+  while (display.nextPage());
+}
 
 void drawBitmaps()
 {
@@ -777,6 +828,18 @@ void drawBitmaps()
 #endif
 #if defined(_WS_Bitmaps4c168x168_H_)
   drawBitmaps4c168x168();
+#endif
+#if defined(_WS_Bitmaps4c168x168_H_)
+  drawBitmaps4c168x168();
+#endif
+#if defined(_GxBitmaps4c168x384_H_)
+  drawBitmaps4c168x384();
+#endif
+#if defined(_GxBitmaps4c184x360_H_)
+  drawBitmaps4c184x360();
+#endif
+#if defined(_GxBitmaps4c400x300_H_)
+  drawBitmaps4c400x300();
 #endif
 #if defined(_WS_Bitmaps7c192x143_H_)
   drawBitmaps7c192x143();
@@ -1693,9 +1756,53 @@ void drawBitmaps3c1304x984()
 #if defined(_WS_Bitmaps4c168x168_H_)
 void drawBitmaps4c168x168()
 {
-  if (display.epd2.panel == GxEPD2::Waveshare437inch4color)
+  if ((display.epd2.panel == GxEPD2::Waveshare437inch4color) || (display.epd2.panel == GxEPD2::Waveshare3inch4color))
   {
     display.drawNative(WS_Bitmap4c168x168, 0, (display.epd2.WIDTH - 168) / 2, (display.epd2.HEIGHT - 168) / 2, 168, 168, false, false, true);
+    delay(5000);
+  }
+}
+#endif
+
+#if defined(_WS_Bitmaps4c168x400_H_)
+void drawBitmaps4c168x400()
+{
+  if (display.epd2.panel == GxEPD2::Waveshare3inch4color)
+  {
+    display.drawNative(WS_Bitmap4c168x400, 0, (display.epd2.WIDTH - 168) / 2, (display.epd2.HEIGHT - 400) / 2, 168, 400, false, false, true);
+    delay(5000);
+  }
+}
+#endif
+
+#if defined(_GxBitmaps4c168x384_H_)
+void drawBitmaps4c168x384()
+{
+  if (display.epd2.panel == GxEPD2::GDEY029F51H)
+  {
+    display.drawNative(Bitmap4c168x384, 0, (display.epd2.WIDTH - 168) / 2, (display.epd2.HEIGHT - 384) / 2, 168, 384, false, false, true);
+    delay(5000);
+  }
+}
+#endif
+
+#if defined(_GxBitmaps4c184x360_H_)
+void drawBitmaps4c184x360()
+{
+  if (display.epd2.panel == GxEPD2::GDEY0266F51H)
+  {
+    display.drawNative(Bitmap4c184x360, 0, (display.epd2.WIDTH - 184) / 2, (display.epd2.HEIGHT - 360) / 2, 184, 360, false, false, true);
+    delay(5000);
+  }
+}
+#endif
+
+#if defined(_GxBitmaps4c400x300_H_)
+void drawBitmaps4c400x300()
+{
+  if (display.epd2.panel == GxEPD2::GDEY0420F51)
+  {
+    display.drawNative(Bitmap4c400x300, 0, (display.epd2.WIDTH - 400) / 2, (display.epd2.HEIGHT - 300) / 2, 400, 300, false, false, true);
     delay(5000);
   }
 }
@@ -1794,7 +1901,7 @@ void drawGraphics()
   {
     display.drawRect(display.width() / 8, display.height() / 8, display.width() * 3 / 4, display.height() * 3 / 4, GxEPD_BLACK);
     display.drawLine(display.width() / 8, display.height() / 8, display.width() * 7 / 8, display.height() * 7 / 8, GxEPD_BLACK);
-    display.drawLine(display.width() / 8, display.height() * 7 / 8, display.width() *7 / 8, display.height() / 8, GxEPD_BLACK);
+    display.drawLine(display.width() / 8, display.height() * 7 / 8, display.width() * 7 / 8, display.height() / 8, GxEPD_BLACK);
     display.drawCircle(display.width() / 2, display.height() / 2, display.height() / 4, GxEPD_BLACK);
     display.drawPixel(display.width() / 4, display.height() / 2 , GxEPD_BLACK);
     display.drawPixel(display.width() * 3 / 4, display.height() / 2 , GxEPD_BLACK);

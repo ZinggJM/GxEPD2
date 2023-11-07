@@ -157,8 +157,11 @@
 #if __has_include("epd/GxEPD2_420_M01.h")
 #include "epd/GxEPD2_420_M01.h"
 #endif
-#if __has_include("gdey/GxEPD2_420_GDEY042T91.h")
-#include "gdey/GxEPD2_420_GDEY042T91.h"
+#if __has_include("gdey/GxEPD2_420_GDEY042T81.h")
+#include "gdey/GxEPD2_420_GDEY042T81.h"
+#endif
+#if __has_include("gdeq/GxEPD2_426_GDEQ0426T82.h")
+#include "gdeq/GxEPD2_426_GDEQ0426T82.h"
 #endif
 #if __has_include("epd/GxEPD2_583.h")
 #include "epd/GxEPD2_583.h"
@@ -255,12 +258,12 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
       }
       // transpose partial window to 0,0
       x -= _pw_x;
-      y -= _pw_y;
+      if (!_reverse) y -= _pw_y;
+      else y = HEIGHT - _pw_y - y - 1;
       // clip to (partial) window
       if ((x < 0) || (x >= int16_t(_pw_w)) || (y < 0) || (y >= int16_t(_pw_h))) return;
       // adjust for current page
       y -= _current_page * _page_height;
-      if (_reverse) y = _page_height - y - 1;
       // check if in current page
       if ((y < 0) || (y >= int16_t(_page_height))) return;
       uint16_t i = x / 8 + y * (_pw_w / 8);
@@ -282,7 +285,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
     // initial false for re-init after processor deep sleep wake up, if display power supply was kept
     // this can be used to avoid the repeated initial full refresh on displays with fast partial update
     // NOTE: garbage will result on fast partial update displays, if initial full update is omitted after power loss
-    // reset_duration = 10 is default; a value of 2 may help with "clever" reset circuit of newer boards from Waveshare 
+    // reset_duration = 10 is default; a value of 2 may help with "clever" reset circuit of newer boards from Waveshare
     // pulldown_rst_mode true for alternate RST handling to avoid feeding 5V through RST pin
     void init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration = 10, bool pulldown_rst_mode = false)
     {
@@ -305,7 +308,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
     }
 
     // release SPI and control pins
-    void end() 
+    void end()
     {
       epd2.end();
     }
@@ -346,11 +349,11 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
       h = gx_uint16_min(h, height() - y);
       _rotate(x, y, w, h);
       uint16_t y_part = _reverse ? HEIGHT - h - y : y;
-      epd2.writeImagePart(_buffer, x, y_part, GxEPD2_Type::WIDTH, _page_height, x, y, w, h);
-      epd2.refresh(x, y, w, h);
+      epd2.writeImagePart(_buffer, x, y_part, GxEPD2_Type::WIDTH, _page_height, x, y_part, w, h);
+      epd2.refresh(x, y_part, w, h);
       if (epd2.hasFastPartialUpdate)
       {
-        epd2.writeImagePartAgain(_buffer, x, y_part, GxEPD2_Type::WIDTH, _page_height, x, y, w, h);
+        epd2.writeImagePartAgain(_buffer, x, y_part, GxEPD2_Type::WIDTH, _page_height, x, y_part, w, h);
       }
     }
 
@@ -380,6 +383,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
       _pw_w += _pw_x % 8;
       if (_pw_w % 8 > 0) _pw_w += 8 - _pw_w % 8;
       _pw_x -= _pw_x % 8;
+      if (_reverse) _pw_y = HEIGHT - _pw_h - _pw_y;
     }
 
     void firstPage()
@@ -395,12 +399,11 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
       {
         if (_using_partial_mode)
         {
-          uint32_t offset = _reverse ? (HEIGHT - _pw_h) * _pw_w / 8 : 0;
-          epd2.writeImage(_buffer + offset, _pw_x, _pw_y, _pw_w, _pw_h);
+          epd2.writeImage(_buffer, _pw_x, _pw_y, _pw_w, _pw_h);
           epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
           if (epd2.hasFastPartialUpdate)
           {
-            epd2.writeImageAgain(_buffer + offset, _pw_x, _pw_y, _pw_w, _pw_h);
+            epd2.writeImageAgain(_buffer, _pw_x, _pw_y, _pw_w, _pw_h);
             //epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h); // not needed
           }
         }
@@ -429,9 +432,8 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
         {
           //Serial.print("writeImage("); Serial.print(_pw_x); Serial.print(", "); Serial.print(dest_ys); Serial.print(", ");
           //Serial.print(_pw_w); Serial.print(", "); Serial.print(dest_ye - dest_ys); Serial.println(")");
-          uint32_t offset = _reverse ? (_page_height - (dest_ye - dest_ys)) * _pw_w / 8 : 0;
-          if (!_second_phase) epd2.writeImage(_buffer + offset, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
-          else epd2.writeImageAgain(_buffer + offset, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
+          if (!_second_phase) epd2.writeImage(_buffer, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
+          else epd2.writeImageAgain(_buffer, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
         }
         else
         {
@@ -494,12 +496,11 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
         drawCallback(pv);
         if (_using_partial_mode)
         {
-          uint32_t offset = _reverse ? (HEIGHT - _pw_h) * _pw_w / 8 : 0;
-          epd2.writeImage(_buffer + offset, _pw_x, _pw_y, _pw_w, _pw_h);
+          epd2.writeImage(_buffer, _pw_x, _pw_y, _pw_w, _pw_h);
           epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
           if (epd2.hasFastPartialUpdate)
           {
-            epd2.writeImageAgain(_buffer + offset, _pw_x, _pw_y, _pw_w, _pw_h);
+            epd2.writeImageAgain(_buffer, _pw_x, _pw_y, _pw_w, _pw_h);
             //epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h); // not needed
           }
         }
@@ -530,9 +531,8 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
             {
               fillScreen(GxEPD_WHITE);
               drawCallback(pv);
-              uint32_t offset = _reverse ? (_page_height - (dest_ye - dest_ys)) * _pw_w / 8 : 0;
-              if (phase == 1) epd2.writeImage(_buffer + offset, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
-              else epd2.writeImageAgain(_buffer + offset, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
+              if (phase == 1) epd2.writeImage(_buffer, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
+              else epd2.writeImageAgain(_buffer, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
             }
           }
           epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
