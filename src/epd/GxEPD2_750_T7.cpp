@@ -311,6 +311,13 @@ void GxEPD2_750_T7::_InitDisplay()
   _writeData (0x07); // VGH=20V,VGL=-20V
   _writeData (0x3f); // VDH=15V
   _writeData (0x3f); // VDL=-15V
+  _writeCommand(0x82); // VCOM DC Setting
+  _writeData(0x24);  // VCOM
+  _writeCommand(0x06); // Booster Setting
+  _writeData(0x27);
+  _writeData(0x27);
+  _writeData(0x2F);
+  _writeData(0x17);  
   _writeCommand(0x00); //PANEL SETTING
   _writeData(0x1f); //KW: 3f, KWR: 2F, BWROTP: 0f, BWOTP: 1f
   _writeCommand(0x61); //tres
@@ -325,6 +332,11 @@ void GxEPD2_750_T7::_InitDisplay()
   _writeData(0x07);
   _writeCommand(0x60); //TCON SETTING
   _writeData(0x22);
+  _writeCommand(0x65);
+  _writeData(0x00);
+  _writeData(0x00);  // 800*480
+  _writeData(0x00);
+  _writeData(0x00);  
 }
 
 // experimental partial screen update LUTs with balanced charge
