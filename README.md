@@ -18,6 +18,8 @@
 - note that Waveshare boards with "clever" reset circuit may need shortened reset pulse
 - use `init(115200, true, 2, false)` for Waveshare boards with "clever" reset circuit
 - note that Waveshare boards with "clever" reset circuit need 1k pull-up on RST on ESP8266, or different pin
+- note that the new Waveshare Universal e-Paper Raw Panel Driver HAT Rev 2.3 needs PWR connected to VCC or driven HIGH
+- see https://www.waveshare.com/wiki/E-Paper_Driver_HAT
 
 ### Paged Drawing, Picture Loop
  - This library uses paged drawing to limit RAM use and cope with missing single pixel update support

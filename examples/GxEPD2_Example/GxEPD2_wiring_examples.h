@@ -13,6 +13,12 @@
 // Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
 // Good Display ePaper for Arduino: https://forum.arduino.cc/index.php?topic=436411.0
 
+// connection suggestions concerning Waveshare e-paper HAT Rev 2.3:
+// DON'T FORGET to connect the PWR pin to VCC, to enable power to the board.
+// RST is no longer used to disable power to the board, as with earlier revisions.
+// Note, for 3.3V processors, no level converters are needed. Use DESPI-C02 instead. Uses less power.
+// See https://www.buyepaper.com/products/development-kit-connection-adapter-board-for-eaper-display-demo-kit
+
 // mapping suggestion from Waveshare SPI e-Paper to Wemos D1 mini
 // BUSY -> D2, RST -> D4, DC -> D3, CS -> D8, CLK -> D5, DIN -> D7, GND -> GND, 3.3V -> 3.3V
 // NOTE: connect 3.3k pull-down from D8 to GND if your board or shield has level converters
@@ -84,3 +90,6 @@
 
 // mapping of my proto board for Raspberry Pi Pico RP2040 (previous default SPI pins)
 // BUSY -> 7, RST -> 9, DC -> 8, CS-> 5, CLK -> 2, DIN -> 3
+
+// mapping of Waveshare Pico-ePaper-2.9
+// BUSY -> 13, RST -> 12, DC -> 8, CS-> 9, CLK -> 10, DIN -> 11
