@@ -20,7 +20,7 @@ GxEPD2_213_B72::GxEPD2_213_B72(int16_t cs, int16_t dc, int16_t rst, int16_t busy
 void GxEPD2_213_B72::clearScreen(uint8_t value)
 {
   writeScreenBuffer(value);
-  refresh(true);
+  refresh(false);
   writeScreenBufferAgain(value);
 }
 

@@ -1,9 +1,9 @@
 // Display Library for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 // Requires HW SPI and Adafruit_GFX. Caution: the e-paper panels require 3.3V supply AND data lines!
 //
-// based on Demo Example from Good Display, available here: http://www.e-paper-display.com/download_detail/downloadsId=806.html
-// Panel: GDEM029T94 : https://www.good-display.com/product/360.html
-// Controller : SSD1680 : https://www.good-display.com/companyfile/101.html
+// based on Demo Example from Good Display: https://www.good-display.com/product/426.html
+// Panel: GDEQ031T10 : https://www.good-display.com/product/426.html
+// Controller: UC8253 : https://v4.cecdn.yun300.cn/100001_1909185148/UC8253.pdf
 //
 // Author: Jean-Marc Zingg
 //
@@ -11,28 +11,30 @@
 //
 // Library: https://github.com/ZinggJM/GxEPD2
 
-#ifndef _GxEPD2_290_T94_H_
-#define _GxEPD2_290_T94_H_
+#ifndef _GxEPD2_310_GDEQ031T10_H_
+#define _GxEPD2_310_GDEQ031T10_H_
 
 #include "../GxEPD2_EPD.h"
 
-class GxEPD2_290_T94 : public GxEPD2_EPD
+class GxEPD2_310_GDEQ031T10 : public GxEPD2_EPD
 {
   public:
     // attributes
-    static const uint16_t WIDTH = 128;
+    static const uint16_t WIDTH = 240;
     static const uint16_t WIDTH_VISIBLE = WIDTH;
-    static const uint16_t HEIGHT = 296;
-    static const GxEPD2::Panel panel = GxEPD2::GDEM029T94;
+    static const uint16_t HEIGHT = 320;
+    static const GxEPD2::Panel panel = GxEPD2::GDEQ031T10;
     static const bool hasColor = false;
     static const bool hasPartialUpdate = true;
-    static const bool hasFastPartialUpdate = true;
-    static const uint16_t power_on_time = 100; // ms, e.g. 95868us
-    static const uint16_t power_off_time = 150; // ms, e.g. 140350us
-    static const uint16_t full_refresh_time = 3200; // ms, e.g. 3154996us
-    static const uint16_t partial_refresh_time = 500; // ms, e.g. 458231us
+    static const bool usePartialUpdateWindow = true; // set false for better image
+    static const bool hasFastPartialUpdate = true; // set this false to force full refresh always
+    static const bool useFastFullUpdate = true; // set false for extended (low) temperature range, 1015000us vs 3082001us
+    static const uint16_t power_on_time = 50; // ms, e.g. 45000us
+    static const uint16_t power_off_time = 50; // ms, e.g. 45000us
+    static const uint16_t full_refresh_time = 1100; // ms, e.g. 1015000us
+    static const uint16_t partial_refresh_time = 700; // ms, e.g. 650000us
     // constructor
-    GxEPD2_290_T94(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
+    GxEPD2_310_GDEQ031T10(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
     // methods (virtual)
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     void clearScreen(uint8_t value = 0xFF); // init controller memory and screen (default white)

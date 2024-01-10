@@ -1,7 +1,7 @@
 // Display Library example for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 // Requires HW SPI and Adafruit_GFX. Caution: the e-paper panels require 3.3V supply AND data lines!
 //
-// Display Library based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
+// Display Library based on Demo Example from Good Display: https://www.good-display.com/companyfile/32/
 //
 // Author: Jean-Marc Zingg
 //
@@ -17,9 +17,11 @@
 // NOTE: you need to SAVE the modified example to a saveable location for UTF-8 characters to work
 //       e.g. for Umlauts
 
-// Supporting Arduino Forum Topics:
-// Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
-// Good Display ePaper for Arduino: https://forum.arduino.cc/index.php?topic=436411.0
+// Supporting Arduino Forum Topics (closed, read only):
+// Good Display ePaper for Arduino: https://forum.arduino.cc/t/good-display-epaper-for-arduino/419657
+// Waveshare e-paper displays with SPI: https://forum.arduino.cc/t/waveshare-e-paper-displays-with-spi/467865
+//
+// Add new topics in https://forum.arduino.cc/c/using-arduino/displays/23 for new questions and issues
 
 // see GxEPD2_wiring_examples.h for wiring suggestions and examples
 
@@ -29,6 +31,7 @@
 
 #include <GxEPD2_BW.h>
 #include <GxEPD2_3C.h>
+#include <GxEPD2_4C.h>
 #include <GxEPD2_7C.h>
 #include <Fonts/FreeMonoBold9pt7b.h>
 #include <U8g2_for_Adafruit_GFX.h>
@@ -37,6 +40,8 @@
 #include "GxEPD2_display_selection_new_style.h"
 
 U8G2_FOR_ADAFRUIT_GFX u8g2Fonts;
+
+// for handling alternative SPI pins (ESP32, RP2040) see example GxEPD2_Example.ino
 
 void setup()
 {

@@ -1,7 +1,7 @@
 // Display Library example for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 // Requires HW SPI and Adafruit_GFX. Caution: the e-paper panels require 3.3V supply AND data lines!
 //
-// Display Library based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
+// Display Library based on Demo Example from Good Display: https://www.good-display.com/companyfile/32/
 //
 // Author: Jean-Marc Zingg
 //
@@ -9,14 +9,22 @@
 //
 // Library: https://github.com/ZinggJM/GxEPD2
 
-// Supporting Arduino Forum Topics:
-// Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
-// Good Display ePaper for Arduino: https://forum.arduino.cc/index.php?topic=436411.0
+// Supporting Arduino Forum Topics (closed, read only):
+// Good Display ePaper for Arduino: https://forum.arduino.cc/t/good-display-epaper-for-arduino/419657
+// Waveshare e-paper displays with SPI: https://forum.arduino.cc/t/waveshare-e-paper-displays-with-spi/467865
+//
+// Add new topics in https://forum.arduino.cc/c/using-arduino/displays/23 for new questions and issues
+
+// connection suggestions concerning Waveshare e-paper HAT Rev 2.3:
+// DON'T FORGET to connect the PWR pin to VCC, to enable power to the board.
+// RST is no longer used to disable power to the board, as with earlier revisions.
+// Note, for 3.3V processors, no level converters are needed. Use DESPI-C02 instead. Uses less power.
+// See https://www.buyepaper.com/products/development-kit-connection-adapter-board-for-eaper-display-demo-kit
 
 // mapping suggestion from Waveshare SPI e-Paper to Wemos D1 mini
 // BUSY -> D2, RST -> D4, DC -> D3, CS -> D8, CLK -> D5, DIN -> D7, GND -> GND, 3.3V -> 3.3V
 // NOTE: connect 3.3k pull-down from D8 to GND if your board or shield has level converters
-// NOTE for ESP8266: using SS (GPIO15) for CS may cause boot mode problems, use different pin in case, or 4k7 pull-down
+// NOTE for ESP8266: using SS (GPIO15) for CS may cause boot mode problems, use different pin in case, or 3.3k pull-down
 // NOTE: connect 1k pull-up from D4 (RST) to 3.3V if your board or shield has the "clever" reset circuit, or use a different pin
 
 // mapping suggestion from Waveshare SPI e-Paper to generic ESP8266
@@ -52,6 +60,10 @@
 // BUSY -> 4, RST -> 0, DC -> 2, CS -> SS(5), CLK -> SCK(18), DIN -> MOSI(23), GND -> GND, 3.3V -> 3.3V
 // for use with Board: "ESP32 Dev Module":
 
+// mapping suggestion for ESP32S2, e.g. LOLIN ESP32 S2 mini, direct connection of DESPI-C02
+// BUSY -> 39, RST -> 37, DC -> 35, CS -> 33, CLK -> 18, DIN -> 16, GND -> GND, 3.3V -> 3.3V
+// for use with Board: "LOLIN S2 MINI":
+
 // new mapping suggestion for STM32F1, e.g. STM32F103C8T6 "BluePill"
 // BUSY -> A1, RST -> A2, DC -> A3, CS-> A4, CLK -> A5, DIN -> A7
 
@@ -76,8 +88,18 @@
 // note: can't use SS on MKR1000: is defined as 24, should be 4
 // BUSY -> 5, RST -> 6, DC -> 7, CS-> 4, CLK -> 9, DIN -> 8
 
-// mapping suggestion for Arduino Nano RP2040 Connect
+// mapping suggestion for Arduino Nano RP2040 Connect (Arduino MBED OS Nano Boards)
 // BUSY -> 7, RST -> 9, DC -> 8, CS-> 10, CLK -> 13, DIN -> 11
 
-// mapping suggestion for Raspberry Pi Pico RP2040
+// mapping suggestion for Raspberry Pi Pico RP2040 (Arduino MBED OS RP2040 Boards)
+// BUSY -> 7, RST -> 9, DC -> 8, CS-> 5, CLK -> 18, DIN -> 19
+
+// mapping of my proto board for Raspberry Pi Pico RP2040 (previous default SPI pins)
 // BUSY -> 7, RST -> 9, DC -> 8, CS-> 5, CLK -> 2, DIN -> 3
+
+// mapping of my new proto board like Waveshare Pico-ePaper-2.9
+// needs 10k pull-up on RST when used with Arduino MBED OS RP2040 Boards
+// BUSY -> 13, RST -> 12, DC -> 8, CS-> 9, CLK -> 10, DIN -> 11
+
+// mapping of Waveshare Pico-ePaper-2.9
+// BUSY -> 13, RST -> 12, DC -> 8, CS-> 9, CLK -> 10, DIN -> 11

@@ -55,6 +55,13 @@
 - for the concept of paged drawing and picture loop see: 
 - https://github.com/olikraus/u8glib/wiki/tpictureloop
 
+### Note on issues and pull requests
+- issues should be reported in the Arduino Forum Displays.
+- issues on GitHub are disabled; there were too many false issues.
+- pull requests are not welcome, will not be merged.
+- pull requests can't be disabled, but will be closed.
+- please place information about interesting fork additions in the Arduino Forum Displays.
+
 ### Supported SPI e-paper panels from Good Display:
 - GDEW0102T4     1.02" b/w 80x128, UC8175
 - DEPG0150BN     1.50" b/w 200x200, SSD1681, e.g. LILYGO® TTGO T5 V2.4.1 1.50 inch
@@ -99,6 +106,7 @@
 - GDEY029T94     2.9" b/w 128x296, SSD1680
 - GDEY029F51H    2.9" 4-color 168x384, JD79667
 - Waveshare3inch4color 3.0" 4-color 168x400
+- GDEQ031T10     3.1" b/w 240x320, UC8253
 - ED037TC1       3.7" b/w 280x480, SSD1677, Waveshare 3.7"
 - GDEW0371W7     3.7" b/w 240x416, UC8171 (IL0324)
 - GDEW042T2      4.2" b/w 400x300, UC8176 (IL0398)
@@ -115,6 +123,7 @@
 - GDEW0583Z83    5.83" b/w/r 648x480, EK79655 (GD7965)
 - GDEQ0583T31    5.83" b/w 648x480, UC8179
 - GDEY073D46     7.3" 800x480 7-color
+- ACeP730        7.3" Waveshare 7-color e-paper display 800x480, PhotoPainter
 - GDEW075T8      7.5" b/w 640x384, UC8159c (IL0371)
 - GDEW075T7      7.5" b/w 800x480, EK79655 (GD7965)
 - GDEY075T7      7.5" b/w 800x480, UC8179 (GD7965)
@@ -135,7 +144,16 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.5.3
+### Version 1.5.4
+- added support for GDEQ031T10 3.1" b/w 240x320
+- updated support for GDEY075T7 7.5" b/w 800x480
+- renamed driver class GxEPD2_750_YT7 to GxEPD2_750_GDEY075T7
+- the actual GDEY075T7 panels have fast full refresh capability
+- added support for Waveshare 7.3" 7-color, driver class GxEPD2_730c_ACeP_730
+- added support for Waveshare 7.3" 7-color PhotoPainter with RPi Pico RP2040
+- updated b/w driver classes for SSD controllers
+- updated 7-color driver classes (design cleanup)
+#### Version 1.5.3
 - added support for GDEQ0426T82 4.26" b/w 800x480
 - added support for GDEY0266F51H 2.66" 4-color 184x460
 - added support for GDEY029F51H 2.9" 4-color 168x384

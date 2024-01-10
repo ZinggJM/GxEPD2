@@ -20,27 +20,29 @@ GxEPD2_266_GDEY0266T90::GxEPD2_266_GDEY0266T90(int16_t cs, int16_t dc, int16_t r
 
 void GxEPD2_266_GDEY0266T90::clearScreen(uint8_t value)
 {
-  writeScreenBuffer(value);
-  refresh(true);
-  writeScreenBufferAgain(value);
+  // full refresh needed for all cases (previous != screen)
+  _writeScreenBuffer(0x26, value); // set previous
+  _writeScreenBuffer(0x24, value); // set current
+  refresh(false); // full refresh
+  _initial_write = false;
 }
 
 void GxEPD2_266_GDEY0266T90::writeScreenBuffer(uint8_t value)
 {
-  if (!_using_partial_mode) _Init_Part();
-  if (_initial_write) _writeScreenBuffer(0x26, value); // set previous
+  if (_initial_write) return clearScreen(value);
   _writeScreenBuffer(0x24, value); // set current
-  _initial_write = false; // initial full screen buffer clean done
 }
 
 void GxEPD2_266_GDEY0266T90::writeScreenBufferAgain(uint8_t value)
 {
-  if (!_using_partial_mode) _Init_Part();
   _writeScreenBuffer(0x24, value); // set current
+  _writeScreenBuffer(0x26, value); // set previous
 }
 
 void GxEPD2_266_GDEY0266T90::_writeScreenBuffer(uint8_t command, uint8_t value)
 {
+  if (!_init_display_done) _InitDisplay();
+  _setPartialRamArea(0, 0, WIDTH, HEIGHT);
   _writeCommand(command);
   _startTransfer();
   for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT) / 8; i++)
@@ -57,19 +59,18 @@ void GxEPD2_266_GDEY0266T90::writeImage(const uint8_t bitmap[], int16_t x, int16
 
 void GxEPD2_266_GDEY0266T90::writeImageForFullRefresh(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  _writeImage(0x26, bitmap, x, y, w, h, invert, mirror_y, pgm);
-  _writeImage(0x24, bitmap, x, y, w, h, invert, mirror_y, pgm);
+  _writeImage(0x26, bitmap, x, y, w, h, invert, mirror_y, pgm); // set previous
+  _writeImage(0x24, bitmap, x, y, w, h, invert, mirror_y, pgm); // set current
 }
 
 
 void GxEPD2_266_GDEY0266T90::writeImageAgain(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  _writeImage(0x24, bitmap, x, y, w, h, invert, mirror_y, pgm);
+  _writeImage(0x24, bitmap, x, y, w, h, invert, mirror_y, pgm); // set current
 }
 
 void GxEPD2_266_GDEY0266T90::_writeImage(uint8_t command, const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  if (_initial_write) writeScreenBuffer(); // initial full screen buffer clean
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
   int16_t wb = (w + 7) / 8; // width bytes, bitmaps are padded
   x -= x % 8; // byte boundary
@@ -83,7 +84,8 @@ void GxEPD2_266_GDEY0266T90::_writeImage(uint8_t command, const uint8_t bitmap[]
   w1 -= dx;
   h1 -= dy;
   if ((w1 <= 0) || (h1 <= 0)) return;
-  if (!_using_partial_mode) _Init_Part();
+  if (!_init_display_done) _InitDisplay();
+  if (_initial_write) writeScreenBuffer(); // initial full screen buffer clean
   _setPartialRamArea(x1, y1, w1, h1);
   _writeCommand(command);
   _startTransfer();
@@ -129,7 +131,6 @@ void GxEPD2_266_GDEY0266T90::writeImagePartAgain(const uint8_t bitmap[], int16_t
 void GxEPD2_266_GDEY0266T90::_writeImagePart(uint8_t command, const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
                                      int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  if (_initial_write) writeScreenBuffer(); // initial full screen buffer clean
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
   if ((w_bitmap < 0) || (h_bitmap < 0) || (w < 0) || (h < 0)) return;
   if ((x_part < 0) || (x_part >= w_bitmap)) return;
@@ -149,7 +150,8 @@ void GxEPD2_266_GDEY0266T90::_writeImagePart(uint8_t command, const uint8_t bitm
   w1 -= dx;
   h1 -= dy;
   if ((w1 <= 0) || (h1 <= 0)) return;
-  if (!_using_partial_mode) _Init_Part();
+  if (!_init_display_done) _InitDisplay();
+  if (_initial_write) writeScreenBuffer(); // initial full screen buffer clean
   _setPartialRamArea(x1, y1, w1, h1);
   _writeCommand(command);
   _startTransfer();
@@ -250,7 +252,6 @@ void GxEPD2_266_GDEY0266T90::refresh(bool partial_update_mode)
   if (partial_update_mode) refresh(0, 0, WIDTH, HEIGHT);
   else
   {
-    if (_using_partial_mode) _Init_Full();
     _Update_Full();
     _initial_refresh = false; // initial full update done
   }
@@ -271,7 +272,6 @@ void GxEPD2_266_GDEY0266T90::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
   w1 += x1 % 8;
   if (w1 % 8 > 0) w1 += 8 - w1 % 8;
   x1 -= x1 % 8;
-  if (!_using_partial_mode) _Init_Part();
   _setPartialRamArea(x1, y1, w1, h1);
   _Update_Part();
 }
@@ -289,6 +289,7 @@ void GxEPD2_266_GDEY0266T90::hibernate()
     _writeCommand(0x10); // deep sleep mode
     _writeData(0x1);     // enter deep sleep
     _hibernating = true;
+    _init_display_done = false;
   }
 }
 
@@ -354,24 +355,12 @@ void GxEPD2_266_GDEY0266T90::_InitDisplay()
   _writeCommand(0x18); //Read built-in temperature sensor
   _writeData(0x80);  
   _setPartialRamArea(0, 0, WIDTH, HEIGHT);
-}
-
-void GxEPD2_266_GDEY0266T90::_Init_Full()
-{
-  _InitDisplay();
-  _PowerOn();
-  _using_partial_mode = false;
-}
-
-void GxEPD2_266_GDEY0266T90::_Init_Part()
-{
-  _InitDisplay();
-  _PowerOn();
-  _using_partial_mode = true;
+  _init_display_done = true;
 }
 
 void GxEPD2_266_GDEY0266T90::_Update_Full()
 {
+  _PowerOn();
   if (useFastFullUpdate)
   {
     _writeCommand(0x1A); // Write to temperature register
@@ -390,6 +379,7 @@ void GxEPD2_266_GDEY0266T90::_Update_Full()
 
 void GxEPD2_266_GDEY0266T90::_Update_Part()
 {
+  _PowerOn();
   _writeCommand(0x22);
   _writeData(0xfc);
   _writeCommand(0x20);

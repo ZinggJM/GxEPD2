@@ -7,15 +7,13 @@
 - Keep It Simple: I will try to add enhancements to separate classes or subclasses.
 
 ### issues:
+- issues should be reported in the Arduino Forum Displays.
+- issues on GitHub are disabled; there were too many false issues.
 - please post only issues that are real issues with this library!
-- please add all information according to the issue template
-- issues are disabled because above rules were not obeyed
 
 ### pull requests:
-- I will not merge pull request. There may be exceptions to this. I may add (modified) fixes.
-- pull requests are useful to inform users and me about interesting additions in forked repositories.
-- I will close or remove pull request at will.
-- enhancements as separate classes are preferred.
-- contributors of the "Trittbrettfahrer" kind will be disappointed.
+- pull requests are not welcome, will not be merged.
+- pull requests can't be disabled, but will be closed.
+- please place information about interesting fork additions in the Arduino Forum Displays.
 
 ## Thank you for all the inspiration I get for this library.

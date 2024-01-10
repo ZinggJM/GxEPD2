@@ -1,7 +1,7 @@
 // Display Library example for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 // Requires HW SPI and Adafruit_GFX. Caution: the e-paper panels require 3.3V supply AND data lines!
 //
-// Display Library based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
+// Display Library based on Demo Example from Good Display: https://www.good-display.com/companyfile/32/
 //
 // Author: Jean-Marc Zingg
 //
@@ -9,9 +9,11 @@
 //
 // Library: https://github.com/ZinggJM/GxEPD2
 
-// Supporting Arduino Forum Topics:
-// Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
-// Good Display ePaper for Arduino: https://forum.arduino.cc/index.php?topic=436411.0
+// Supporting Arduino Forum Topics (closed, read only):
+// Good Display ePaper for Arduino: https://forum.arduino.cc/t/good-display-epaper-for-arduino/419657
+// Waveshare e-paper displays with SPI: https://forum.arduino.cc/t/waveshare-e-paper-displays-with-spi/467865
+//
+// Add new topics in https://forum.arduino.cc/c/using-arduino/displays/23 for new questions and issues
 
 // see GxEPD2_wiring_examples.h for wiring suggestions and examples
 
@@ -63,6 +65,7 @@
 #include "bitmaps/Bitmaps128x296.h" // 2.9"  b/w
 #include "bitmaps/Bitmaps152x296.h" // 2.6"  b/w
 #include "bitmaps/Bitmaps176x264.h" // 2.7"  b/w
+#include "bitmaps/Bitmaps240x360.h" // 3.1" b/w
 #include "bitmaps/Bitmaps240x416.h" // 3.71"  b/w
 #include "bitmaps/Bitmaps400x300.h" // 4.2"  b/w
 #include "bitmaps/Bitmaps648x480.h" // 5.38"  b/w
@@ -89,9 +92,9 @@
 #include "bitmaps/Bitmaps4c400x300.h" // 4.2"" 4-color
 // 7-color
 #include "bitmaps/WS_Bitmaps7c192x143.h" // 5.65" 7-color
-//#include "bitmaps/WS_Bitmaps7c300x180.h" // 7.3" 7-color
+#include "bitmaps/WS_Bitmaps7c300x180.h" // 7.3" 7-color
 #endif
-#if defined(ESP32)
+#if defined(ESP32) || defined(ARDUINO_ARCH_RP2040)
 #include "bitmaps/Bitmaps1304x984.h" // 12.48" b/w
 #include "bitmaps/Bitmaps3c1304x984.h" // 12.48" b/w/r
 #include "bitmaps/Bitmaps7c800x480.h" // 7.3" 7-color
@@ -108,6 +111,7 @@
 //#include "bitmaps/Bitmaps176x264.h" // 2.7"  b/w
 ////#include "bitmaps/Bitmaps400x300.h" // 4.2"  b/w // not enough code space
 ////#include "bitmaps/Bitmaps640x384.h" // 7.5"  b/w // not enough code space
+////#include "bitmaps/Bitmaps800x480.h" // 7.5"  b/w // not enough code space
 // 3-color
 //#include "bitmaps/Bitmaps3c200x200.h" // 1.54" b/w/r
 //#include "bitmaps/Bitmaps3c104x212.h" // 2.13" b/w/r
@@ -118,10 +122,22 @@
 
 #endif
 
-#if defined(ARDUINO_ARCH_RP2040) && defined(ARDUINO_RASPBERRY_PI_PICO)
+#if defined(ARDUINO_ARCH_RP2040) && (defined(ARDUINO_RASPBERRY_PI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO_W))
+#if defined(__MBED__)
 // SPI pins used by GoodDisplay DESPI-PICO. note: steals standard I2C pins PIN_WIRE_SDA (6), PIN_WIRE_SCL (7)
 // uncomment next line for use with GoodDisplay DESPI-PICO. // MbedSPI(int miso, int mosi, int sck);
-arduino::MbedSPI SPI0(4, 7, 6); // need be valid pins for same SPI channel, else fails blinking 4 long 4 short
+arduino::MbedSPI SPIn(4, 7, 6); // need be valid pins for same SPI channel, else fails blinking 4 long 4 short
+// uncomment next line for use with my proto board. // MbedSPI(int miso, int mosi, int sck);
+//arduino::MbedSPI SPIn(4, 3, 2); // need be valid pins for same SPI channel, else fails blinking 4 long 4 short
+// uncomment next line for use with Waveshare Pico-ePaper-2.9 or PhotoPainter. // MbedSPI(int miso, int mosi, int sck);
+//arduino::MbedSPI SPIn(12, 11, 10); // need be valid pins for same SPI channel, else fails blinking 4 long 4 short
+#else // package https://github.com/earlephilhower/arduino-pico
+// SPIClassRP2040(spi_inst_t *spi, pin_size_t rx, pin_size_t cs, pin_size_t sck, pin_size_t tx);
+// uncomment next line for use with my proto board.
+//SPIClassRP2040 SPIn(spi0, 4, 5, 2, 3); // need be valid pins for same SPI channel, else fails blinking 4 long 4 short
+// uncomment next line for use with Waveshare Pico-ePaper-2.9 or Waveshare PhotoPainter module
+SPIClassRP2040 SPIn(spi1, 12, 13, 10, 11); // need be valid pins for same SPI channel, else fails blinking 4 long 4 short
+#endif
 #endif
 
 #if defined(ESP32) && defined(USE_HSPI_FOR_EPD)
@@ -134,20 +150,26 @@ void setup()
   Serial.println();
   Serial.println("setup");
   delay(100);
-#if defined(ARDUINO_ARCH_RP2040) && defined(ARDUINO_RASPBERRY_PI_PICO)
-  // uncomment next line for use with GoodDisplay DESPI-PICO, or use the extended init method
-  //display.epd2.selectSPI(SPI0, SPISettings(4000000, MSBFIRST, SPI_MODE0));
+#if defined(ARDUINO_ARCH_RP2040) && (defined(ARDUINO_RASPBERRY_PI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO_W))
+  // uncomment next line for use with GoodDisplay DESPI-PICO or my proto board, or Waveshare RPi boards
+  display.epd2.selectSPI(SPIn, SPISettings(4000000, MSBFIRST, SPI_MODE0));
   // uncomment next 2 lines to allow recovery from configuration failures
   pinMode(15, INPUT_PULLUP); // safety pin
   while (!digitalRead(15)) delay(100); // check safety pin for fail recovery
+  // recovery can be done also by holding BOOTSEL during power-up.
+  // uncomment next line for Waveshare PhotoPainter module
+  pinMode(16, OUTPUT); digitalWrite(16, HIGH); // power to the paper
 #endif
 #if defined(ESP32) && defined(USE_HSPI_FOR_EPD)
   hspi.begin(13, 12, 14, 15); // remap hspi for EPD (swap pins)
   display.epd2.selectSPI(hspi, SPISettings(4000000, MSBFIRST, SPI_MODE0));
+#elif (defined(ARDUINO_ARCH_ESP32) && defined(ARDUINO_LOLIN_S2_MINI))
+  // SPI.begin(sck, miso, mosi, ss); // preset for remapped pins
+  SPI.begin(18, -1, 16, 33); // my LOLIN ESP32 S2 mini connection
 #endif
   //display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
   display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
-  //display.init(115200, true, 10, false, SPI0, SPISettings(4000000, MSBFIRST, SPI_MODE0)); // extended init method with SPI channel and/or settings selection
+  //display.init(115200, true, 10, false, SPIn, SPISettings(4000000, MSBFIRST, SPI_MODE0)); // extended init method with SPI channel and/or settings selection
   if (display.pages() > 1)
   {
     delay(100);
@@ -180,12 +202,13 @@ void setup()
   drawGraphics();
   //return;
 #if !defined(__AVR) // takes too long!
-  if ((display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46))
+  if ((display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::ACeP730))
   {
     //draw7colorlines();
     //delay(2000);
     draw7colors();
     delay(4000);
+    //return;
   }
 #endif
   if (display.epd2.hasPartialUpdate)
@@ -755,6 +778,7 @@ void drawGrid()
 
 void drawBitmaps()
 {
+  display.setRotation(0);
   display.setFullWindow();
 #ifdef _GxBitmaps80x128_H_
   drawBitmaps80x128();
@@ -773,6 +797,9 @@ void drawBitmaps()
 #endif
 #ifdef _GxBitmaps152x296_H_
   drawBitmaps152x296();
+#endif
+#ifdef _GxBitmaps240x320_H_
+  drawBitmaps240x320();
 #endif
 #ifdef _GxBitmaps176x264_H_
   drawBitmaps176x264();
@@ -1154,6 +1181,37 @@ void drawBitmaps152x296()
 }
 #endif
 
+#ifdef _GxBitmaps240x320_H_
+void drawBitmaps240x320()
+{
+#if !defined(__AVR)
+  const unsigned char* bitmaps[] =
+  {
+    Bitmap240x320_1, Bitmap240x320_2, Bitmap240x320_3, Bitmap240x320_4, Bitmap240x320_5
+  };
+#else
+  const unsigned char* bitmaps[] =
+  {
+    Bitmap240x320_1, Bitmap240x320_2
+  };
+#endif
+  if ((display.epd2.WIDTH == 240) && (display.epd2.HEIGHT == 320) && !display.epd2.hasColor)
+  {
+    for (uint16_t i = 0; i < sizeof(bitmaps) / sizeof(char*); i++)
+    {
+      display.firstPage();
+      do
+      {
+        display.fillScreen(GxEPD_WHITE);
+        display.drawInvertedBitmap(0, 0, bitmaps[i], 240, 320, GxEPD_BLACK);
+      }
+      while (display.nextPage());
+      delay(2000);
+    }
+  }
+}
+#endif
+
 #ifdef _GxBitmaps176x264_H_
 void drawBitmaps176x264()
 {
@@ -1303,7 +1361,12 @@ void drawBitmaps648x480()
 #ifdef _GxBitmaps800x480_H_
 void drawBitmaps800x480()
 {
-#if !defined(__AVR)
+#if defined(ARDUINO_UNOR4_MINIMA) || defined(ARDUINO_UNOR4_WIFI)
+  const unsigned char* bitmaps[] =
+  {
+    Bitmap800x480_3, Bitmap800x480_4
+  };
+#elif !defined(__AVR)
   const unsigned char* bitmaps[] =
   {
     Bitmap800x480_1, Bitmap800x480_2, Bitmap800x480_3, Bitmap800x480_4
@@ -1822,7 +1885,7 @@ void drawBitmaps7c192x143()
 #if defined(_GxBitmaps7c800x480_H_)
 void drawBitmaps7c800x480()
 {
-  if (display.epd2.panel == GxEPD2::GDEY073D46)
+  if ((display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::ACeP730))
   {
     display.epd2.drawDemoBitmap(Bitmap7c800x480, 0, 0, 0, 800, 480, 0, false, true); // special format
     delay(5000);
@@ -1833,7 +1896,7 @@ void drawBitmaps7c800x480()
 #if defined(_WS_Bitmaps7c300x180_H_)
 void drawBitmaps7c300x180()
 {
-  if (display.epd2.panel == GxEPD2::GDEY073D46)
+  if ((display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::ACeP730))
   {
     display.drawNative(WS_Bitmap7c300x180, 0, (display.epd2.WIDTH - 300) / 2, (display.epd2.HEIGHT - 180) / 2, 300, 180, false, false, true);
     delay(5000);

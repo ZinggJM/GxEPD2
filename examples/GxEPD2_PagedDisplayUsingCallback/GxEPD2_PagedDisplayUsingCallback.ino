@@ -1,7 +1,7 @@
 // Display Library example for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 // Requires HW SPI and Adafruit_GFX. Caution: the e-paper panels require 3.3V supply AND data lines!
 //
-// Display Library based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
+// Display Library based on Demo Example from Good Display: https://www.good-display.com/companyfile/32/
 //
 // Author: Jean-Marc Zingg
 //
@@ -9,9 +9,11 @@
 //
 // Library: https://github.com/ZinggJM/GxEPD2
 
-// Supporting Arduino Forum Topics:
-// Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
-// Good Display ePaper for Arduino: https://forum.arduino.cc/index.php?topic=436411.0
+// Supporting Arduino Forum Topics (closed, read only):
+// Good Display ePaper for Arduino: https://forum.arduino.cc/t/good-display-epaper-for-arduino/419657
+// Waveshare e-paper displays with SPI: https://forum.arduino.cc/t/waveshare-e-paper-displays-with-spi/467865
+//
+// Add new topics in https://forum.arduino.cc/c/using-arduino/displays/23 for new questions and issues
 
 // see GxEPD2_wiring_examples.h for wiring suggestions and examples
 
@@ -84,6 +86,8 @@
 
 #endif
 
+// for handling alternative SPI pins (ESP32, RP2040) see example GxEPD2_Example.ino
+
 void setup()
 {
   Serial.begin(115200);
@@ -121,106 +125,163 @@ void loop()
 {
 }
 
-void helloWorldCallback(const void*)
+const char HelloWorld[] = "Hello World!";
+const char HelloArduino[] = "Hello Arduino!";
+const char HelloEpaper[] = "Hello E-Paper!";
+
+struct coordinates
 {
-  uint16_t x = (display.width() - 160) / 2;
-  uint16_t y = display.height() / 2;
-  display.fillScreen(GxEPD_WHITE);
-  display.setCursor(x, y);
-  display.println("Hello World!");
+  uint16_t x;
+  uint16_t y;
+};
+
+void helloWorldCallback(const void* p)
+{
+  const coordinates& where(*reinterpret_cast<const coordinates*>(p));
+  display.setCursor(where.x, where.y);
+  display.print(HelloWorld);
 }
 
 void helloWorld()
 {
   //Serial.println("helloWorld");
+  coordinates cursor;
   display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
+  if (display.epd2.WIDTH < 104) display.setFont(0);
   display.setTextColor(GxEPD_BLACK);
+  int16_t tbx, tby; uint16_t tbw, tbh;
+  display.getTextBounds(HelloWorld, 0, 0, &tbx, &tby, &tbw, &tbh);
+  // center bounding box by transposition of origin:
+  cursor.x = ((display.width() - tbw) / 2) - tbx;
+  cursor.y = ((display.height() - tbh) / 2) - tby;
   display.setFullWindow();
-  display.drawPaged(helloWorldCallback, 0);
+  display.drawPaged(helloWorldCallback, &cursor);
   //Serial.println("helloWorld done");
 }
 
-void helloFullScreenPartialModeCallback(const void*)
+struct text_at
 {
-  uint16_t x = (display.width() - 160) / 2;
-  uint16_t y = display.height() / 2;
+  const char* text;
+  coordinates where;
+};
+
+void helloFullScreenPartialModeCallback(const void* p)
+{
+  const text_at* what(reinterpret_cast<const text_at*>(p));
   display.fillScreen(GxEPD_WHITE);
-  display.setCursor(x, y);
-  display.println("Hello World!");
-  y = display.height() / 4;
-  display.setCursor(x, y);
-  display.println("full screen");
-  y = display.height() * 3 / 4;
-  if (display.width() <= 200) x = 0;
-  display.setCursor(x, y);
-  if (display.epd2.hasFastPartialUpdate)
-  {
-    display.println("fast partial mode");
-  }
-  else if (display.epd2.hasPartialUpdate)
-  {
-    display.println("slow partial mode");
-  }
-  else
-  {
-    display.println("no partial mode");
-  }
+  display.setCursor(what[0].where.x, what[0].where.y);
+  display.print(what[0].text);
+  display.setCursor(what[1].where.x, what[1].where.y);
+  display.print(what[1].text);
+  display.setCursor(what[2].where.x, what[2].where.y);
+  display.print(what[2].text);
 }
 
 void helloFullScreenPartialMode()
 {
   //Serial.println("helloFullScreenPartialMode");
+  const char fullscreen[] = "full screen update";
+  const char fpm[] = "fast partial mode";
+  const char spm[] = "slow partial mode";
+  const char npm[] = "no partial mode";
+  text_at what[3];
   display.setPartialWindow(0, 0, display.width(), display.height());
   display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
+  if (display.epd2.WIDTH < 104) display.setFont(0);
   display.setTextColor(GxEPD_BLACK);
-  display.drawPaged(helloFullScreenPartialModeCallback, 0);
+  const char* updatemode;
+  if (display.epd2.hasFastPartialUpdate)
+  {
+    updatemode = fpm;
+  }
+  else if (display.epd2.hasPartialUpdate)
+  {
+    updatemode = spm;
+  }
+  else
+  {
+    updatemode = npm;
+  }
+  int16_t tbx, tby; uint16_t tbw, tbh;
+  // center update text
+  display.getTextBounds(fullscreen, 0, 0, &tbx, &tby, &tbw, &tbh);
+  what[0].text = fullscreen;
+  what[0].where.x = ((display.width() - tbw) / 2) - tbx;
+  what[0].where.y = ((display.height() / 4) - tbh / 2) - tby;
+  // center update mode
+  display.getTextBounds(updatemode, 0, 0, &tbx, &tby, &tbw, &tbh);
+  what[1].text = updatemode;
+  what[1].where.x = ((display.width() - tbw) / 2) - tbx;
+  what[1].where.y = ((display.height() * 3 / 4) - tbh / 2) - tby;
+  // center HelloWorld
+  display.getTextBounds(HelloWorld, 0, 0, &tbx, &tby, &tbw, &tbh);
+  what[2].text = HelloWorld;
+  what[2].where.x = ((display.width() - tbw) / 2) - tbx;
+  what[2].where.y = ((display.height() - tbh) / 2) - tby;
+  display.drawPaged(helloFullScreenPartialModeCallback, &what);
   //Serial.println("helloFullScreenPartialMode done");
 }
 
-void helloArduinoCallback(const void*)
+void helloArduinoCallback(const void* p)
 {
-  uint16_t x = (display.width() - 160) / 2;
-  uint16_t y = display.height() / 4;
-  display.fillScreen(GxEPD_WHITE);
-  display.setCursor(x, y);
-  display.println("Hello Arduino!");
+  const coordinates& where(*reinterpret_cast<const coordinates*>(p));
+  display.setCursor(where.x, where.y);
+  display.print(HelloArduino);
 }
 
 void helloArduino()
 {
   //Serial.println("helloArduino");
-  //uint16_t x = (display.width() - 160) / 2;
-  uint16_t y = display.height() / 4;
+  coordinates cursor;
   display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
+  if (display.epd2.WIDTH < 104) display.setFont(0);
   display.setTextColor(display.epd2.hasColor ? GxEPD_RED : GxEPD_BLACK);
-  display.setPartialWindow(0, y - 14, display.width(), 20);
-  display.drawPaged(helloArduinoCallback, 0);
+  int16_t tbx, tby; uint16_t tbw, tbh;
+  // align with centered HelloWorld
+  display.getTextBounds(HelloWorld, 0, 0, &tbx, &tby, &tbw, &tbh);
+  cursor.x = ((display.width() - tbw) / 2) - tbx;
+  // height might be different
+  display.getTextBounds(HelloArduino, 0, 0, &tbx, &tby, &tbw, &tbh);
+  cursor.y = ((display.height() / 4) - tbh / 2) - tby; // y is base line!
+  // make the window big enough to cover (overwrite) descenders of previous text
+  uint16_t wh = FreeMonoBold9pt7b.yAdvance;
+  uint16_t wy = (display.height() / 4) - wh / 2;
+  display.setPartialWindow(0, wy, display.width(), wh);
+  display.drawPaged(helloArduinoCallback, &cursor);
   delay(1000);
   //Serial.println("helloArduino done");
 }
 
-void helloEpaperCallback(const void*)
+void helloEpaperCallback(const void* p)
 {
-  uint16_t x = (display.width() - 160) / 2;
-  uint16_t y = display.height() * 3 / 4;
-  display.fillScreen(GxEPD_WHITE);
-  display.setCursor(x, y);
-  display.println("Hello E-Paper!");
+  const coordinates& where(*reinterpret_cast<const coordinates*>(p));
+  display.setCursor(where.x, where.y);
+  display.print(HelloEpaper);
 }
 
 void helloEpaper()
 {
   //Serial.println("helloEpaper");
-  //uint16_t x = (display.width() - 160) / 2;
-  uint16_t y = display.height() * 3 / 4;
+  coordinates cursor;
   display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
+  if (display.epd2.WIDTH < 104) display.setFont(0);
   display.setTextColor(display.epd2.hasColor ? GxEPD_RED : GxEPD_BLACK);
-  display.setPartialWindow(0, y - 14, display.width(), 20);
-  display.drawPaged(helloEpaperCallback, 0);
+  int16_t tbx, tby; uint16_t tbw, tbh;
+  // align with centered HelloWorld
+  display.getTextBounds(HelloWorld, 0, 0, &tbx, &tby, &tbw, &tbh);
+  cursor.x = ((display.width() - tbw) / 2) - tbx;
+  // height might be different
+  display.getTextBounds(HelloEpaper, 0, 0, &tbx, &tby, &tbw, &tbh);
+  cursor.y = ((display.height() * 3 / 4) - tbh / 2) - tby; // y is base line!
+  // make the window big enough to cover (overwrite) descenders of previous text
+  uint16_t wh = FreeMonoBold9pt7b.yAdvance;
+  uint16_t wy = (display.height() * 3 / 4) - wh / 2;
+  display.setPartialWindow(0, wy, display.width(), wh);
+  display.drawPaged(helloEpaperCallback, &cursor);
   //Serial.println("helloEpaper done");
 }
 

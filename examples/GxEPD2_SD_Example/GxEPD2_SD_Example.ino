@@ -1,7 +1,7 @@
 // GxEPD2_SD_Example : Display Library example for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 // Requires HW SPI and Adafruit_GFX. Caution: the e-paper panels require 3.3V supply AND data lines!
 //
-// Display Library based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
+// Display Library based on Demo Example from Good Display: https://www.good-display.com/companyfile/32/
 //
 // BMP handling code extracts taken from: https://github.com/prenticedavid/MCUFRIEND_kbv/tree/master/examples/showBMP_kbv_Uno
 //
@@ -13,9 +13,11 @@
 //
 // note that BMP bitmaps are drawn at physical position in physical orientation of the screen
 
-// Supporting Arduino Forum Topics:
-// Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
-// Good Display ePaper for Arduino: https://forum.arduino.cc/index.php?topic=436411.0
+// Supporting Arduino Forum Topics (closed, read only):
+// Good Display ePaper for Arduino: https://forum.arduino.cc/t/good-display-epaper-for-arduino/419657
+// Waveshare e-paper displays with SPI: https://forum.arduino.cc/t/waveshare-e-paper-displays-with-spi/467865
+//
+// Add new topics in https://forum.arduino.cc/c/using-arduino/displays/23 for new questions and issues
 
 // see GxEPD2_wiring_examples.h for wiring suggestions and examples
 
@@ -84,6 +86,31 @@ SPIClass hspi(HSPI);
 #endif
 #endif
 
+#if defined(ARDUINO_ARCH_RP2040) && defined(ARDUINO_RASPBERRY_PI_PICO)
+// Waveshare PhotoPainter
+#define EPD_RST_PIN     12
+#define EPD_DC_PIN      8
+#define EPD_CS_PIN      9
+#define EPD_BUSY_PIN    13
+#define EPD_CLK_PIN     10  
+#define EPD_MOSI_PIN    11
+#define SD_CS_PIN       5
+#define SD_CLK_PIN      2
+#define SD_MOSI_PIN     3
+#define SD_MISO_PIN     4
+#define EPD_CS EPD_CS_PIN
+#define SD_CS SD_CS_PIN
+#if defined(__MBED__)
+// MbedSPI(int miso, int mosi, int sck);
+arduino::MbedSPI EPD_SPI(12, EPD_MOSI_PIN, EPD_CLK_PIN);
+arduino::MbedSPI SD_SPI(SD_MISO_PIN, SD_MOSI_PIN, SD_CS_PIN);
+#else // package https://github.com/earlephilhower/arduino-pico
+// SPIClassRP2040(spi_inst_t *spi, pin_size_t rx, pin_size_t cs, pin_size_t sck, pin_size_t tx);
+SPIClassRP2040 EPD_SPI(spi1, 12, 13, 10, 11);
+SPIClassRP2040 SD_SPI(spi0, SD_MISO_PIN, SD_CS_PIN, SD_CLK_PIN, SD_MOSI_PIN);
+#endif
+#endif
+
 #if defined(__AVR)
 #define SD_CS 6  // adapt to your wiring
 #define EPD_CS SS // adapt to your wiring
@@ -96,8 +123,9 @@ SPIClass hspi(HSPI);
 // don't forget to modify or override EPD_CS if needed
 #include "GxEPD2_display_selection_new_style.h"
 
-// function declaration with default parameter
 // note that BMP bitmaps are drawn at physical position in physical orientation of the screen
+
+// function declaration with default parameter
 void drawBitmapFromSD(const char *filename, int16_t x, int16_t y, bool with_color = true);
 
 // bitmap drawing using buffered graphics, e.g. for small bitmaps or for GxEPD2_154c
@@ -108,6 +136,7 @@ void drawBitmapFromSD_Buffered(const char *filename, int16_t x, int16_t y, bool 
 
 void setup()
 {
+  delay(5000);
   Serial.begin(115200);
   Serial.println();
   Serial.println("GxEPD2_SD_Example");
@@ -120,12 +149,24 @@ void setup()
   hspi.begin(SCK, MISO, MOSI, SS); // remap hspi for SD
 #endif
 
+#if defined(ARDUINO_ARCH_RP2040) && defined(ARDUINO_RASPBERRY_PI_PICO)
+  display.epd2.selectSPI(EPD_SPI, SPISettings(4000000, MSBFIRST, SPI_MODE0));
+  // uncomment next line for Waveshare PhotoPainter module
+  pinMode(16, OUTPUT); digitalWrite(16, HIGH); // power to the paper
+#endif
+
   //display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
   display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
 
   Serial.print("Initializing SD card...");
 #if defined(ESP32) && defined(USE_HSPI_FOR_SD)
   if (!SD.begin(SD_CS, hspi))
+  {
+    Serial.println("SD failed!");
+    return;
+  }
+#elif defined(ARDUINO_ARCH_RP2040) && defined(ARDUINO_RASPBERRY_PI_PICO)
+  if (!SD.begin(SD_CS, SD_SPI))
   {
     Serial.println("SD failed!");
     return;
@@ -141,11 +182,12 @@ void setup()
 
   listFiles();
 
-  if ((display.epd2.panel == GxEPD2::GDEW0154Z04) || (display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46) || false)
+  if ((display.epd2.panel == GxEPD2::GDEW0154Z04) || (display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::ACeP730) || false)
   {
     //drawBitmapsBuffered_200x200();
     //drawBitmapsBuffered_other();
     drawBitmapsBuffered_test();
+    //drawBitmapsBuffered_7c();
   }
   else
   {
@@ -342,16 +384,42 @@ void drawBitmapsBuffered_test()
 {
   int16_t w2 = display.width() / 2;
   int16_t h2 = display.height() / 2;
-  drawBitmapFromSD_Buffered("betty_4.bmp", w2 - 102, h2 - 126);
+  //drawBitmapFromSD_Buffered("betty_4.bmp", w2 - 102, h2 - 126);
+  //delay(2000);
+  drawBitmapFromSD_Buffered("bb4.bmp", w2 - 17, h2 - 9, false, true, true);
   delay(2000);
-  drawBitmapFromSD_Buffered("bb4.bmp", 0, 0, false, true, true);
+  drawBitmapFromSD_Buffered("rgb32.bmp", w2 - 64, h2 - 32);
   delay(2000);
-  drawBitmapFromSD_Buffered("rgb32.bmp", 0, 0);
+  drawBitmapFromSD_Buffered("parrot.bmp", w2- 64, h2 - 80);
   delay(2000);
-  drawBitmapFromSD_Buffered("parrot.bmp", 0, 0);
+  drawBitmapFromSD_Buffered("5in65f3.bmp", w2 - 300, h2 - 224);
   delay(2000);
-  drawBitmapFromSD_Buffered("5in65f3.bmp", 0, 0);
-  delay(2000);
+}
+
+void drawBitmapsBuffered_7c()
+{
+  drawBitmapFromSD_Buffered("pic/building-7362300_1920_scale_output.bmp", 0, 0);
+  delay(3000);
+  drawBitmapFromSD_Buffered("pic/girl-3480900_1920_scale_output.bmp", 0, 0);
+  delay(3000);
+  drawBitmapFromSD_Buffered("pic/miniature-3589682_1920_scale_output.bmp", 0, 0);
+  delay(3000);
+  display.setRotation(1);
+  drawBitmapFromSD_Buffered("pic/pexels-boys-in-bristol-photography-13318095_scale_output.bmp", 0, 0);
+  delay(3000);
+  drawBitmapFromSD_Buffered("pic/pexels-efe-ersoy-15686039_scale_output.bmp", 0, 0);
+  delay(3000);
+  drawBitmapFromSD_Buffered("pic/pexels-jill-burrow-6069730_scale_output.bmp", 0, 0);
+  delay(3000);
+  drawBitmapFromSD_Buffered("pic/pexels-yelena-odintsova-15792199_scale_output.bmp", 0, 0);
+  delay(3000);
+  drawBitmapFromSD_Buffered("pic/pexels-ольга-солодилова-15912787_scale_output.bmp", 0, 0);
+  delay(3000);
+  display.setRotation(0);
+  drawBitmapFromSD_Buffered("pic/venice-2896591_1920_scale_output", 0, 0);
+  delay(3000);
+  drawBitmapFromSD_Buffered("pic/venice-2937352_1920_scale_output.bmp", 0, 0);
+  delay(3000);
 }
 
 //static const uint16_t input_buffer_pixels = 20; // may affect performance

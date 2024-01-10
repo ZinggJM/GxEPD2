@@ -74,8 +74,6 @@ class GxEPD2_213_B74 : public GxEPD2_EPD
     void _PowerOn();
     void _PowerOff();
     void _InitDisplay();
-    void _Init_Full();
-    void _Init_Part();
     void _Update_Full();
     void _Update_Part();
 };

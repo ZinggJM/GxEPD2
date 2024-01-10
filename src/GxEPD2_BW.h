@@ -1,7 +1,7 @@
 // Display Library for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
-// Requires HW SPI and Adafruit_GFX. Caution: these e-papers require 3.3V supply AND data lines!
+// Requires HW SPI and Adafruit_GFX. Caution: the e-paper panels require 3.3V supply AND data lines!
 //
-// based on Demo Example from Good Display: http://www.e-paper-display.com/download_list/downloadcategoryid=34&isMode=false.html
+// Display Library based on Demo Example from Good Display: https://www.good-display.com/companyfile/32/
 //
 // Author: Jean-Marc Zingg
 //
@@ -145,6 +145,9 @@
 #if __has_include("gdey/GxEPD2_270_GDEY027T91.h")
 #include "gdey/GxEPD2_270_GDEY027T91.h"
 #endif
+#if __has_include("gdeq/GxEPD2_310_GDEQ031T10.h")
+#include "gdeq/GxEPD2_310_GDEQ031T10.h"
+#endif
 #if __has_include("epd/GxEPD2_371.h")
 #include "epd/GxEPD2_371.h"
 #endif
@@ -178,8 +181,8 @@
 #if __has_include("epd/GxEPD2_750_T7.h")
 #include "epd/GxEPD2_750_T7.h"
 #endif
-#if __has_include("epd/GxEPD2_750_YT7.h")
-#include "epd/GxEPD2_750_YT7.h"
+#if __has_include("gdey/GxEPD2_750_GDEY075T7.h")
+#include "gdey/GxEPD2_750_GDEY075T7.h"
 #endif
 #if __has_include("epd/GxEPD2_1160_T91.h")
 #include "epd/GxEPD2_1160_T91.h"

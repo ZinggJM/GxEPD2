@@ -1,7 +1,7 @@
 // Display Library for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 // Requires HW SPI and Adafruit_GFX. Caution: the e-paper panels require 3.3V supply AND data lines!
 //
-// based on Demo Example from Good Display: 
+// based on Demo Example from Good Display: https://www.good-display.com/comp/xcompanyFile/downloadNew.do?appId=24&fid=1373&id=1125
 // Panel: GDEY075T7 : https://www.good-display.com/product/396.html
 // Controller: UC8179 : https://v4.cecdn.yun300.cn/100001_1909185148/UC8179.pdf
 //
@@ -11,12 +11,12 @@
 //
 // Library: https://github.com/ZinggJM/GxEPD2
 
-#ifndef _GxEPD2_750_YT7_H_
-#define _GxEPD2_750_YT7_H_
+#ifndef _GxEPD2_750_GDEY075T7_H_
+#define _GxEPD2_750_GDEY075T7_H_
 
 #include "../GxEPD2_EPD.h"
 
-class GxEPD2_750_YT7 : public GxEPD2_EPD
+class GxEPD2_750_GDEY075T7 : public GxEPD2_EPD
 {
   public:
     // attributes
@@ -28,12 +28,14 @@ class GxEPD2_750_YT7 : public GxEPD2_EPD
     static const bool hasPartialUpdate = true;
     static const bool usePartialUpdateWindow = false; // set false for better image
     static const bool hasFastPartialUpdate = true; // set this false to force full refresh always
-    static const uint16_t power_on_time = 140; // ms, e.g. 134460us
-    static const uint16_t power_off_time = 42; // ms, e.g. 40033us
-    static const uint16_t full_refresh_time = 4200; // ms, e.g. 4108238us
-    static const uint16_t partial_refresh_time = 1600; // ms, e.g. 1584124us
+    static const bool useFastFullUpdate = true; // set false for extended (low) temperature range
+    static const bool useFastPartialUpdateFromOTP = true; // set this false for earlier batches, such as the panel I have (1580258us)
+    static const uint16_t power_on_time = 140; // ms, e.g. 129018us
+    static const uint16_t power_off_time = 42; // ms, e.g. 40430us
+    static const uint16_t full_refresh_time = 1200; // ms, e.g. 1171000us
+    static const uint16_t partial_refresh_time = 450; // ms, e.g. 435000us
     // constructor
-    GxEPD2_750_YT7(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
+    GxEPD2_750_GDEY075T7(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
     // methods (virtual)
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     void clearScreen(uint8_t value = 0xFF); // init controller memory and screen (default white)

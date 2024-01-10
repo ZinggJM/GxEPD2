@@ -1,10 +1,9 @@
 // Display Library for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
 // Requires HW SPI and Adafruit_GFX. Caution: the e-paper panels require 3.3V supply AND data lines!
 //
-// based on Demo Example from Good Display: http://www.e-paper-display.com/download_detail/downloadsId=808.html
-// Panel: 5.65inch ACeP 7-Color E-Paper : https://www.waveshare.com/product/displays/e-paper/5.65inch-e-paper-module-f.htm
+// based on Demo Example from Good Display: https://www.good-display.com/product/442.html
+// Panel: 7.3inch ACeP 7-Color E-Paper : https://www.waveshare.com/product/displays/e-paper/7.3inch-e-paper-f.htm
 // Controller: unknown
-// initcode extracted from Waveshare library file epd5in65f.cpp available here: https://www.waveshare.com/wiki/5.65inch_e-Paper_Module_(F)
 //
 // Author: Jean-Marc Zingg
 //
@@ -12,31 +11,31 @@
 //
 // Library: https://github.com/ZinggJM/GxEPD2
 
-#include "GxEPD2_565c.h"
+#include "GxEPD2_730c_ACeP_730.h"
 
-GxEPD2_565c::GxEPD2_565c(int16_t cs, int16_t dc, int16_t rst, int16_t busy) :
-  GxEPD2_EPD(cs, dc, rst, busy, LOW, 25000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate)
+GxEPD2_730c_ACeP_730::GxEPD2_730c_ACeP_730(int16_t cs, int16_t dc, int16_t rst, int16_t busy) :
+  GxEPD2_EPD(cs, dc, rst, busy, LOW, 60000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate)
 {
   _paged = false;
 }
 
-void GxEPD2_565c::clearScreen(uint8_t value)
+void GxEPD2_730c_ACeP_730::clearScreen(uint8_t value)
 {
   clearScreen(value, 0xFF);
 }
 
-void GxEPD2_565c::clearScreen(uint8_t black_value, uint8_t color_value)
+void GxEPD2_730c_ACeP_730::clearScreen(uint8_t black_value, uint8_t color_value)
 {
   writeScreenBuffer(black_value, color_value);
   refresh();
 }
 
-void GxEPD2_565c::writeScreenBuffer(uint8_t value)
+void GxEPD2_730c_ACeP_730::writeScreenBuffer(uint8_t value)
 {
   writeScreenBuffer(value, 0xFF);
 }
 
-void GxEPD2_565c::writeScreenBuffer(uint8_t black_value, uint8_t color_value)
+void GxEPD2_730c_ACeP_730::writeScreenBuffer(uint8_t black_value, uint8_t color_value)
 {
   if (!_init_display_done) _InitDisplay();
   _writeCommand(0x10);
@@ -50,7 +49,7 @@ void GxEPD2_565c::writeScreenBuffer(uint8_t black_value, uint8_t color_value)
   _initial_write = false; // initial full screen buffer clean done
 }
 
-void GxEPD2_565c::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_730c_ACeP_730::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   //Serial.print("writeImage("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", ");
   //Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
@@ -122,7 +121,7 @@ void GxEPD2_565c::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
 
-void GxEPD2_565c::writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_730c_ACeP_730::writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   if (!black && !color) return;
   if (!color) return writeImage(black, x, y, w, h, invert, mirror_y, pgm);
@@ -218,8 +217,8 @@ void GxEPD2_565c::writeImage(const uint8_t* black, const uint8_t* color, int16_t
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
 
-void GxEPD2_565c::writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                                 int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_730c_ACeP_730::writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+    int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
   if ((w_bitmap < 0) || (h_bitmap < 0) || (w < 0) || (h < 0)) return;
@@ -279,8 +278,8 @@ void GxEPD2_565c::writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
 
-void GxEPD2_565c::writeImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                                 int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_730c_ACeP_730::writeImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+    int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   //Serial.print("writeImagePart("); Serial.print(x_part); Serial.print(", "); Serial.print(y_part); Serial.print(", ");
   //Serial.print(w_bitmap); Serial.print(", "); Serial.print(h_bitmap); Serial.print(", ");
@@ -360,7 +359,7 @@ void GxEPD2_565c::writeImagePart(const uint8_t* black, const uint8_t* color, int
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
 
-void GxEPD2_565c::writeNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_730c_ACeP_730::writeNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   if (data1)
   {
@@ -428,8 +427,8 @@ void GxEPD2_565c::writeNative(const uint8_t* data1, const uint8_t* data2, int16_
   }
 }
 
-void GxEPD2_565c::writeNativePart(const uint8_t* data1, const uint8_t* data2, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                                  int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_730c_ACeP_730::writeNativePart(const uint8_t* data1, const uint8_t* data2, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+    int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   //Serial.print("writeNativePart("); Serial.print(x_part); Serial.print(", "); Serial.print(y_part); Serial.print(", ");
   //Serial.print(w_bitmap); Serial.print(", "); Serial.print(h_bitmap); Serial.print(", ");
@@ -489,39 +488,39 @@ void GxEPD2_565c::writeNativePart(const uint8_t* data1, const uint8_t* data2, in
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
 
-void GxEPD2_565c::drawImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_730c_ACeP_730::drawImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   writeImage(bitmap, x, y, w, h, invert, mirror_y, pgm);
   refresh(x, y, w, h);
 }
 
-void GxEPD2_565c::drawImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                                int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_730c_ACeP_730::drawImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+    int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   writeImagePart(bitmap, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
   refresh(x, y, w, h);
 }
 
-void GxEPD2_565c::drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_730c_ACeP_730::drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   writeImage(black, color, x, y, w, h, invert, mirror_y, pgm);
   refresh(x, y, w, h);
 }
 
-void GxEPD2_565c::drawImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                                int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_730c_ACeP_730::drawImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+    int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   writeImagePart(black, color, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
   refresh(x, y, w, h);
 }
 
-void GxEPD2_565c::drawNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_730c_ACeP_730::drawNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   writeNative(data1, data2, x, y, w, h, invert, mirror_y, pgm);
   refresh(x, y, w, h);
 }
 
-void GxEPD2_565c::refresh(bool partial_update_mode)
+void GxEPD2_730c_ACeP_730::refresh(bool partial_update_mode)
 {
   _PowerOn();
   _writeCommand(0x12); // Display Refresh
@@ -530,7 +529,7 @@ void GxEPD2_565c::refresh(bool partial_update_mode)
   _waitWhileBusy("_refresh", full_refresh_time);
 }
 
-void GxEPD2_565c::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
+void GxEPD2_730c_ACeP_730::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
 {
   _PowerOn();
   _writeCommand(0x12); // Display Refresh
@@ -539,12 +538,12 @@ void GxEPD2_565c::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
   _waitWhileBusy("_refresh", full_refresh_time);
 }
 
-void GxEPD2_565c::powerOff()
+void GxEPD2_730c_ACeP_730::powerOff()
 {
   _PowerOff();
 }
 
-void GxEPD2_565c::hibernate()
+void GxEPD2_730c_ACeP_730::hibernate()
 {
   _PowerOff();
   if (_rst >= 0)
@@ -556,14 +555,14 @@ void GxEPD2_565c::hibernate()
   }
 }
 
-void GxEPD2_565c::setPaged()
+void GxEPD2_730c_ACeP_730::setPaged()
 {
   _paged = true;
   if (!_init_display_done) _InitDisplay();
   _writeCommand(0x10);
 }
 
-void GxEPD2_565c::_PowerOn()
+void GxEPD2_730c_ACeP_730::_PowerOn()
 {
   if (!_power_is_on)
   {
@@ -573,17 +572,18 @@ void GxEPD2_565c::_PowerOn()
   _power_is_on = true;
 }
 
-void GxEPD2_565c::_PowerOff()
+void GxEPD2_730c_ACeP_730::_PowerOff()
 {
   if (_power_is_on)
   {
     _writeCommand(0x02);
+    _writeData(0x00);
     _waitWhileBusy("_PowerOff", power_off_time);
   }
   _power_is_on = false;
 }
 
-void GxEPD2_565c::_InitDisplay()
+void GxEPD2_730c_ACeP_730::_InitDisplay()
 {
   if ((_rst >= 0) && (_hibernating || _initial_write))
   {
@@ -598,36 +598,143 @@ void GxEPD2_565c::_InitDisplay()
     _hibernating = false;
     _power_is_on = false;
   }
-  _writeCommand(0x00); // Panel Settings
-  _writeData(0xEF);
+  _writeCommand(0xAA); // CMDH
+  _writeData(0x49);
+  _writeData(0x55);
+  _writeData(0x20);
   _writeData(0x08);
-  _writeCommand(0x01); // Power Settings
-  _writeData(0x37);
+  _writeData(0x09);
+  _writeData(0x18);
+  _writeCommand(0x01); // PWRR
+  _writeData(0x3F);
   _writeData(0x00);
-  _writeData(0x23);
-  _writeData(0x23);
-  _writeCommand(0x03); // Power Off Sequence
+  _writeData(0x32);
+  _writeData(0x2A);
+  _writeData(0x0E);
+  _writeData(0x2A);
+  _writeCommand(0x00); // PSR
+  _writeData(0x5F);
+  _writeData(0x69);
+  _writeCommand(0x03); // POFS
   _writeData(0x00);
-  _writeCommand(0x06); // Booster Soft Start
-  _writeData(0xC7);
-  _writeData(0xC7);
-  _writeData(0x1D);
-  _writeCommand(0x30); // PLL Control
-  _writeData(0x3C);    // 50 Hz
-  _writeCommand(0x40); // Temperature Sensor Command
-  _writeData(0x00);    // ??
-  _writeCommand(0x50); // VCOM and Data Interval Setting
-  _writeData(0x37);    // white border
-  _writeCommand(0x60); // undocumented
+  _writeData(0x54);
+  _writeData(0x00);
+  _writeData(0x44); 
+  _writeCommand(0x05); // BTST1
+  _writeData(0x40);
+  _writeData(0x1F);
+  _writeData(0x1F);
+  _writeData(0x2C);
+  _writeCommand(0x06); // BTST2
+  _writeData(0x6F);
+  _writeData(0x1F);
+  _writeData(0x1F);
   _writeData(0x22);
-  _writeCommand(0x61); // Resolution Setting
+  _writeCommand(0x08); // BTST3
+  _writeData(0x6F);
+  _writeData(0x1F);
+  _writeData(0x1F);
+  _writeData(0x22);
+  _writeCommand(0x13); // IPC
+  _writeData(0x00);
+  _writeData(0x04);
+  _writeCommand(0x30); // PLL
+  _writeData(0x3C);
+  _writeCommand(0x41); // TSE
+  _writeData(0x00);
+  _writeCommand(0x50); // CDI
+  _writeData(0x3F);
+  _writeCommand(0x60); // TCON
   _writeData(0x02);
-  _writeData(0x58);
-  _writeData(0x01);
-  _writeData(0xC0);
-  _writeCommand(0xE3); // undocumented
-  _writeData(0xAA);
-  delay(100);
-  _writeCommand(0x50); // VCOM and Data Interval Setting
-  _writeData(0x37);    // white border
+  _writeData(0x00);
+  _writeCommand(0x61); // TRES
+  _writeData(0x03);
+  _writeData(0x20);
+  _writeData(0x01); 
+  _writeData(0xE0);
+  _writeCommand(0x82); // VDCS
+  _writeData(0x1E); 
+  _writeCommand(0x84); // T_VDCS
+  _writeData(0x00);
+  _writeCommand(0x86); // AGID
+  _writeData(0x00);
+  _writeCommand(0xE3); // PWS
+  _writeData(0x2F);
+  _writeCommand(0xE0); // CCSET
+  _writeData(0x00); 
+  _writeCommand(0xE6); // TSSET
+  _writeData(0x00);
+  _PowerOn();
+  _init_display_done = true;
+}
+
+uint8_t GxEPD2_730c_ACeP_730::_colorOfDemoBitmap(uint8_t from)
+{
+  switch (from)
+  {
+    case 0xFF: return (0x01); // white;
+    case 0xFC: return (0x05); // yellow;
+    case 0xF1: return (0x06); // orange;
+    case 0xE5: return (0x04); // red;
+    case 0x4B: return (0x03); // blue;
+    case 0x39: return (0x02); // green;
+    case 0x00: return (0x00); // black;
+    default: return (0x01); // white;
+  }
+}
+
+void GxEPD2_730c_ACeP_730::writeDemoBitmap(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, int16_t mode, bool mirror_y, bool pgm)
+{
+  (void) mode;
+  if (data1)
+  {
+    //Serial.print("writeNative("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", ");
+    //Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
+    if (!_init_display_done) _InitDisplay();
+    delay(1); // yield() to avoid WDT on ESP8266 and ESP32
+    {
+      _paged = false;
+      if ((w <= 0) || (h <= 0)) return;
+      _writeCommand(0x10);
+      _startTransfer();
+      for (int16_t i = 0; i < int16_t(HEIGHT); i++)
+      {
+        for (int16_t j = 0; j < int16_t(WIDTH); j += 2)
+        {
+          uint8_t data = 0x11;
+          if (data1)
+          {
+            if ((j >= x) && (j < x + w) && (i >= y) && (i < y + h))
+            {
+              uint32_t idx = mirror_y ? (j - x) + uint32_t((h - 1 - (i - y))) * w : (j - x) + uint32_t(i - y) * w;
+              if (pgm)
+              {
+#if defined(__AVR) || defined(ESP8266) || defined(ESP32)
+                data = _colorOfDemoBitmap(pgm_read_byte(&data1[idx++])) << 4;
+                data |= _colorOfDemoBitmap(pgm_read_byte(&data1[idx]));
+#else
+                data = _colorOfDemoBitmap(data1[idx++]) << 4;
+                data |= _colorOfDemoBitmap(data1[idx]);
+#endif
+              }
+              else
+              {
+                data = _colorOfDemoBitmap(data1[idx++]) << 4;
+                data |= _colorOfDemoBitmap(data1[idx]);
+              }
+            }
+          }
+          _transfer(data);
+        }
+      }
+      _endTransfer();
+    }
+    delay(1); // yield() to avoid WDT on ESP8266 and ESP32
+  }
+}
+
+void GxEPD2_730c_ACeP_730::drawDemoBitmap(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, int16_t mode, bool mirror_y, bool pgm)
+{
+  writeDemoBitmap(data1, data2, x, y, w, h, mode, mirror_y, pgm);
+  refresh(x, y, w, h);
 }

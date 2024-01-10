@@ -5,7 +5,7 @@
 // Controller : SSD1680 : https://www.good-display.com/companyfile/101.html
 // Display: LILYGO® T5 V2.3.1 2.13 inch : https://www.aliexpress.com/item/32869729970.html
 //
-// Author: Jean-Marc Zingg/
+// Author: Jean-Marc Zingg
 //
 // Version: see library.properties
 //
@@ -74,7 +74,6 @@ class GxEPD2_213_BN : public GxEPD2_EPD
     void _PowerOn();
     void _PowerOff();
     void _InitDisplay();
-    void _Init_Full();
     void _Init_Part();
     void _Update_Full();
     void _Update_Part();
