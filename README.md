@@ -144,7 +144,11 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.5.4
+### Version 1.5.5
+- updated 7-color driver classes (design cleanup fixed)
+- note: Waveshare PhotoPainter doesn't work with MBED Pico package
+- note: use package https://github.com/earlephilhower/arduino-pico for PhotoPainter
+#### Version 1.5.4
 - added support for GDEQ031T10 3.1" b/w 240x320
 - updated support for GDEY075T7 7.5" b/w 800x480
 - renamed driver class GxEPD2_750_YT7 to GxEPD2_750_GDEY075T7

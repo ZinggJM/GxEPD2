@@ -129,7 +129,8 @@
 arduino::MbedSPI SPIn(4, 7, 6); // need be valid pins for same SPI channel, else fails blinking 4 long 4 short
 // uncomment next line for use with my proto board. // MbedSPI(int miso, int mosi, int sck);
 //arduino::MbedSPI SPIn(4, 3, 2); // need be valid pins for same SPI channel, else fails blinking 4 long 4 short
-// uncomment next line for use with Waveshare Pico-ePaper-2.9 or PhotoPainter. // MbedSPI(int miso, int mosi, int sck);
+// uncomment next line for use with Waveshare Pico-ePaper-2.9. // MbedSPI(int miso, int mosi, int sck);
+// note: doesn't work with Waveshare PhotoPainter, conflict on pin 12. use philhower package instead.
 //arduino::MbedSPI SPIn(12, 11, 10); // need be valid pins for same SPI channel, else fails blinking 4 long 4 short
 #else // package https://github.com/earlephilhower/arduino-pico
 // SPIClassRP2040(spi_inst_t *spi, pin_size_t rx, pin_size_t cs, pin_size_t sck, pin_size_t tx);

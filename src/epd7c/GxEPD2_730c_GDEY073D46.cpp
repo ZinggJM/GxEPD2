@@ -46,7 +46,6 @@ void GxEPD2_730c_GDEY073D46::writeScreenBuffer(uint8_t black_value, uint8_t colo
     _transfer(0xFF == black_value ? 0x11 : black_value);
   }
   _endTransfer();
-  _initial_write = false; // initial full screen buffer clean done
 }
 
 void GxEPD2_730c_GDEY073D46::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
@@ -55,7 +54,6 @@ void GxEPD2_730c_GDEY073D46::writeImage(const uint8_t bitmap[], int16_t x, int16
   //Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
   if (!_init_display_done) _InitDisplay();
-  if (_initial_write) writeScreenBuffer();
   if (_paged && (x == 0) && (w == int16_t(WIDTH)) && (h < int16_t(HEIGHT)))
   {
     //Serial.println("paged");
@@ -129,7 +127,6 @@ void GxEPD2_730c_GDEY073D46::writeImage(const uint8_t* black, const uint8_t* col
   //Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
   if (!_init_display_done) _InitDisplay();
-  if (_initial_write) writeScreenBuffer();
   if (_paged && (x == 0) && (w == int16_t(WIDTH)) && (h < int16_t(HEIGHT)))
   {
     //Serial.println("paged");
@@ -240,7 +237,6 @@ void GxEPD2_730c_GDEY073D46::writeImagePart(const uint8_t bitmap[], int16_t x_pa
   h1 -= dy;
   if ((w1 <= 0) || (h1 <= 0)) return;
   if (!_init_display_done) _InitDisplay();
-  if (_initial_write) writeScreenBuffer();
   _writeCommand(0x10);
   _startTransfer();
   for (int16_t i = 0; i < int16_t(HEIGHT); i++)
@@ -307,7 +303,6 @@ void GxEPD2_730c_GDEY073D46::writeImagePart(const uint8_t* black, const uint8_t*
   h1 -= dy;
   if ((w1 <= 0) || (h1 <= 0)) return;
   if (!_init_display_done) _InitDisplay();
-  if (_initial_write) writeScreenBuffer();
   _writeCommand(0x10);
   _startTransfer();
   for (int16_t i = 0; i < int16_t(HEIGHT); i++)
@@ -367,7 +362,6 @@ void GxEPD2_730c_GDEY073D46::writeNative(const uint8_t* data1, const uint8_t* da
     //Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
     delay(1); // yield() to avoid WDT on ESP8266 and ESP32
     if (!_init_display_done) _InitDisplay();
-    if (_initial_write) writeScreenBuffer();
     if (_paged && (x == 0) && (w == int16_t(WIDTH)) && (h < int16_t(HEIGHT)))
     {
       //Serial.println("paged");
@@ -455,7 +449,6 @@ void GxEPD2_730c_GDEY073D46::writeNativePart(const uint8_t* data1, const uint8_t
   h1 -= dy;
   if ((w1 <= 0) || (h1 <= 0)) return;
   if (!_init_display_done) _InitDisplay();
-  if (_initial_write) writeScreenBuffer();
   _writeCommand(0x10);
   _startTransfer();
   for (int16_t i = 0; i < int16_t(HEIGHT); i++)
@@ -589,12 +582,13 @@ void GxEPD2_730c_GDEY073D46::_InitDisplay()
   {
     pinMode(_rst, OUTPUT); // just in case
     digitalWrite(_rst, HIGH);
-    delay(20);
+    delay(50); // needs a little longer
     digitalWrite(_rst, LOW);
     delay(20);
     digitalWrite(_rst, HIGH);
     delay(2);
     _waitWhileBusy("_InitDisplay reset", power_on_time);
+    _initial_write = false; // used for initial reset done
     _hibernating = false;
     _power_is_on = false;
   }

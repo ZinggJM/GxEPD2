@@ -285,8 +285,7 @@ void GxEPD2_750_GDEY075T7::_setPartialRamArea(uint16_t x, uint16_t y, uint16_t w
   _writeData(y % 256);
   _writeData(ye / 256);
   _writeData(ye % 256);
-  _writeData(0x01); // don't see any difference
-  //_writeData(0x00); // don't see any difference
+  _writeData(0x01);
 }
 
 void GxEPD2_750_GDEY075T7::_PowerOn()
