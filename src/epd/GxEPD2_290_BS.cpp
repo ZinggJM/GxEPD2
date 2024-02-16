@@ -322,7 +322,7 @@ void GxEPD2_290_BS::_PowerOn()
   if (!_power_is_on)
   {
     _writeCommand(0x22);
-    _writeData(0xf8);
+    _writeData(0xe0);
     _writeCommand(0x20);
     _waitWhileBusy("_PowerOn", power_on_time);
   }
@@ -398,19 +398,19 @@ void GxEPD2_290_BS::_Init_Part()
 void GxEPD2_290_BS::_Update_Full()
 {
   _using_partial_mode = false;
-  _PowerOn();
   _writeCommand(0x22);
-  _writeData(0xf4);
+  _writeData(0xf7);
   _writeCommand(0x20);
   _waitWhileBusy("_Update_Full", full_refresh_time);
+  _power_is_on = false;
 }
 
 void GxEPD2_290_BS::_Update_Part()
 {
   if (!_using_partial_mode) _Init_Part();
-  _PowerOn();
   _writeCommand(0x22);
   _writeData(0xcc);
   _writeCommand(0x20);
   _waitWhileBusy("_Update_Part", partial_refresh_time);
+  _power_is_on = true;
 }
