@@ -144,7 +144,9 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.5.5
+### Version 1.5.6
+- version for ongoing fixes and additions
+#### Version 1.5.5
 - updated 7-color driver classes (design cleanup fixed)
 - note: Waveshare PhotoPainter doesn't work with MBED Pico package
 - note: use package https://github.com/earlephilhower/arduino-pico for PhotoPainter
