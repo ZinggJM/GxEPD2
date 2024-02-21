@@ -65,6 +65,7 @@ void GxEPD2_154_D67::writeImageForFullRefresh(const uint8_t bitmap[], int16_t x,
 
 void GxEPD2_154_D67::writeImageAgain(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
+  _writeImage(0x26, bitmap, x, y, w, h, invert, mirror_y, pgm); // set previous
   _writeImage(0x24, bitmap, x, y, w, h, invert, mirror_y, pgm); // set current
 }
 
@@ -124,6 +125,7 @@ void GxEPD2_154_D67::writeImagePart(const uint8_t bitmap[], int16_t x_part, int1
 void GxEPD2_154_D67::writeImagePartAgain(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
     int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
+  _writeImagePart(0x26, bitmap, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
   _writeImagePart(0x24, bitmap, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
 }
 
@@ -316,7 +318,7 @@ void GxEPD2_154_D67::_PowerOn()
   if (!_power_is_on)
   {
     _writeCommand(0x22);
-    _writeData(0xf8);
+    _writeData(0xe0);
     _writeCommand(0x20);
     _waitWhileBusy("_PowerOn", power_on_time);
   }
@@ -356,18 +358,18 @@ void GxEPD2_154_D67::_InitDisplay()
 
 void GxEPD2_154_D67::_Update_Full()
 {
-  _PowerOn();
   _writeCommand(0x22);
-  _writeData(0xf4);
+  _writeData(0xf7);
   _writeCommand(0x20);
   _waitWhileBusy("_Update_Full", full_refresh_time);
+  _power_is_on = false;
 }
 
 void GxEPD2_154_D67::_Update_Part()
 {
-  _PowerOn();
   _writeCommand(0x22);
   _writeData(0xfc);
   _writeCommand(0x20);
   _waitWhileBusy("_Update_Part", partial_refresh_time);
+  _power_is_on = true;
 }
