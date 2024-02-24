@@ -135,10 +135,12 @@
 - GDEY1248Z51   12.48" b/w/r 1304x984, UC8179
 #### Supported SPI e-paper panels & boards from Waveshare: compare with Good Display, same panel
 #### other supported panels
+- GYE042A87     4.2" b/w 400x300, SSD1683 (HINK-E042-A07-FPC-A1)
+- SE0420NQ04    4.2" b/w 400x300, UC8276C (OPM042A2_V1.0)
 - ED060SCT        6" grey levels, on Waveshare e-Paper IT8951 Driver HAT
 - ED060KC1        6" grey levels, 1448x1072, on Waveshare e-Paper IT8951 Driver HAT
-- ED078KC2        7.8" grey levels, 1872x1404, on Waveshare e-Paper IT8951 Driver HAT
-- ES103TC1       10.3" grey levels, 1872x1404, on Waveshare e-Paper IT8951 Driver HAT
+- ED078KC2      7.8" grey levels, 1872x1404, on Waveshare e-Paper IT8951 Driver HAT
+- ES103TC1     10.3" grey levels, 1872x1404, on Waveshare e-Paper IT8951 Driver HAT
 
 ### I can and will only support e-paper panels I have!
 - promotion panels from suppliers are welcome, to add support to GxEPD2
@@ -146,6 +148,8 @@
 
 ### Version 1.5.6
 - version for ongoing fixes and additions
+- added support for GYE042A87  4.2" b/w 400x300
+- added support for SE0420NQ04 4.2" b/w 400x300
 #### Version 1.5.5
 - updated 7-color driver classes (design cleanup fixed)
 - note: Waveshare PhotoPainter doesn't work with MBED Pico package

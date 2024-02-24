@@ -163,6 +163,12 @@
 #if __has_include("gdey/GxEPD2_420_GDEY042T81.h")
 #include "gdey/GxEPD2_420_GDEY042T81.h"
 #endif
+#if __has_include("other/GxEPD2_420_GYE042A87.h")
+#include "other/GxEPD2_420_GYE042A87.h"
+#endif
+#if __has_include("other/GxEPD2_420_SE0420NQ04.h")
+#include "other/GxEPD2_420_SE0420NQ04.h"
+#endif
 #if __has_include("gdeq/GxEPD2_426_GDEQ0426T82.h")
 #include "gdeq/GxEPD2_426_GDEQ0426T82.h"
 #endif

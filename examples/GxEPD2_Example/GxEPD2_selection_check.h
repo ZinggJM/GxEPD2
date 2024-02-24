@@ -53,6 +53,8 @@
 #define GxEPD2_420_IS_BW true
 #define GxEPD2_420_M01_IS_BW true
 #define GxEPD2_420_GDEY042T81_IS_BW true
+#define GxEPD2_420_GYE042A87_IS_BW true
+#define GxEPD2_420_SE0420NQ04_IS_BW true
 #define GxEPD2_426_GDEQ0426T82_IS_BW true
 #define GxEPD2_583_IS_BW true
 #define GxEPD2_583_T8_IS_BW true
