@@ -122,6 +122,7 @@
 - GDEW0583T8     5.83" b/w 648x480, EK79655 (GD7965)
 - GDEW0583Z83    5.83" b/w/r 648x480, EK79655 (GD7965)
 - GDEQ0583T31    5.83" b/w 648x480, UC8179
+- GDEQ0583Z31    5.83" b/w/r 648x480, UC8179C
 - GDEY073D46     7.3" 800x480 7-color
 - ACeP730        7.3" Waveshare 7-color e-paper display 800x480, PhotoPainter
 - GDEW075T8      7.5" b/w 640x384, UC8159c (IL0371)
@@ -150,6 +151,7 @@
 - version for ongoing fixes and additions
 - added support for GYE042A87  4.2" b/w 400x300
 - added support for SE0420NQ04 4.2" b/w 400x300
+- added support for GDEQ0583Z31 5.83" b/w/r 648x480
 #### Version 1.5.5
 - updated 7-color driver classes (design cleanup fixed)
 - note: Waveshare PhotoPainter doesn't work with MBED Pico package

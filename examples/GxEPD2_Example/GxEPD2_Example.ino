@@ -1722,12 +1722,13 @@ void drawBitmaps3c648x480()
 #if !defined(__AVR)
   bitmap_pair bitmap_pairs[] =
   {
-    {Bitmap3c648x480_black, Bitmap3c648x480_red}
+    {Bitmap3c648x480_black, Bitmap3c648x480_red},
+    {Bitmap3c648x480_black_2, Bitmap3c648x480_red_2}
   };
 #else
   bitmap_pair bitmap_pairs[] = {}; // not enough code space
 #endif
-  if (display.epd2.panel == GxEPD2::GDEW0583Z83)
+  if ((display.epd2.panel == GxEPD2::GDEW0583Z83) || (display.epd2.panel == GxEPD2::GDEQ0583Z31))
   {
     for (uint16_t i = 0; i < sizeof(bitmap_pairs) / sizeof(bitmap_pair); i++)
     {

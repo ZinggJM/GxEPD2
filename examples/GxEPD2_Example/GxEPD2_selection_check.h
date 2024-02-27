@@ -83,6 +83,7 @@
 #define GxEPD2_420c_Z21_IS_3C true
 #define GxEPD2_583c_IS_3C true
 #define GxEPD2_583c_Z83_IS_3C true
+#define GxEPD2_583c_GDEQ0583Z31_IS_3C true
 #define GxEPD2_750c_IS_3C true
 #define GxEPD2_750c_Z08_IS_3C true
 #define GxEPD2_750c_Z90_IS_3C true
