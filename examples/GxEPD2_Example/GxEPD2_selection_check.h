@@ -62,6 +62,7 @@
 #define GxEPD2_750_IS_BW true
 #define GxEPD2_750_T7_IS_BW true
 #define GxEPD2_750_GDEY075T7_IS_BW true
+#define GxEPD2_1020_GDEM102T91_IS_BW true
 #define GxEPD2_1160_T91_IS_BW true
 #define GxEPD2_1248_IS_BW true
 #define GxEPD2_it60_IS_BW true

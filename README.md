@@ -131,6 +131,7 @@
 - GDEW075Z09     7.5" b/w/r 640x384, UC8159c (IL0371)
 - GDEW075Z08     7.5" b/w/r 800x480, EK79655 (GD7965)
 - GDEH075Z90     7.5" b/w/r 880x528, SSD1677
+- GDEM102T91    10.2" b/w 960x640, SSD1677
 - GDEH116T91    11.6" b/w 960x640, SSD1677
 - GDEW1248T3    12.48" b/w 1304x984, UC8179
 - GDEY1248Z51   12.48" b/w/r 1304x984, UC8179
@@ -152,6 +153,7 @@
 - added support for GYE042A87  4.2" b/w 400x300
 - added support for SE0420NQ04 4.2" b/w 400x300
 - added support for GDEQ0583Z31 5.83" b/w/r 648x480
+- added support for GDEM102T91 10.2" b/w 960x640, SSD1677
 #### Version 1.5.5
 - updated 7-color driver classes (design cleanup fixed)
 - note: Waveshare PhotoPainter doesn't work with MBED Pico package
