@@ -84,6 +84,7 @@
 #include "bitmaps/Bitmaps3c648x480.h" // 5.83" b/w/r
 #include "bitmaps/Bitmaps3c800x480.h" // 7.5"  b/w/r
 #include "bitmaps/Bitmaps3c880x528.h" // 7.5"  b/w/r
+#include "bitmaps/Bitmaps3c960x640.h" // 11.6" b/w/r
 #include "bitmaps/WS_Bitmaps800x600.h" // 6.0"  grey
 // 4-color
 #include "bitmaps/Bitmaps4c184x360.h" // 2.66" 4-color
@@ -858,6 +859,10 @@ void drawBitmaps()
 #ifdef _GxBitmaps3c880x528_H_
   drawBitmaps3c880x528();
 #endif
+#ifdef _GxBitmaps3c960x640_H_
+  drawBitmaps3c960x640();
+#endif
+  // 4-color
 #if defined(_WS_Bitmaps4c168x168_H_)
   drawBitmaps4c168x168();
 #endif
@@ -1819,6 +1824,14 @@ void drawBitmaps3c880x528()
     }
     display.mirror(m);
   }
+}
+#endif
+
+#if defined(ESP32) && defined(_GxBitmaps3c960x640_H_)
+void drawBitmaps3c960x640()
+{
+  display.drawImage(Bitmap3c960x640_black, Bitmap3c960x640_red, 0, 0, 960, 640, false, false, true);
+  delay(2000);
 }
 #endif
 

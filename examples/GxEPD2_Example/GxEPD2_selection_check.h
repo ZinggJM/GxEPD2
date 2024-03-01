@@ -88,6 +88,7 @@
 #define GxEPD2_750c_IS_3C true
 #define GxEPD2_750c_Z08_IS_3C true
 #define GxEPD2_750c_Z90_IS_3C true
+#define GxEPD2_1160c_GDEY116Z91_IS_3C true
 #define GxEPD2_1248c_IS_3C true
 // 4-color e-paper
 #define GxEPD2_266c_GDEY0266F51H_IS_4C true
