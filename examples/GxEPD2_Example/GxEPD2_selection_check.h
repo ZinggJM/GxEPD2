@@ -65,6 +65,7 @@
 #define GxEPD2_1020_GDEM102T91_IS_BW true
 #define GxEPD2_1160_T91_IS_BW true
 #define GxEPD2_1248_IS_BW true
+#define GxEPD2_1330_GDEM133T91_IS_BW true
 #define GxEPD2_it60_IS_BW true
 #define GxEPD2_it60_1448x1072_IS_BW true
 #define GxEPD2_it78_1872x1404_IS_BW true

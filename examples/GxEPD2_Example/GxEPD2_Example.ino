@@ -72,6 +72,7 @@
 #include "bitmaps/Bitmaps640x384.h" // 7.5"  b/w
 #include "bitmaps/Bitmaps800x480.h" // 7.5"  b/w
 #include "bitmaps/Bitmaps960x640.h" // 10.2"  b/w
+#include "bitmaps/Bitmaps960x680.h" // 13.3"  b/w
 // 3-color
 #include "bitmaps/Bitmaps3c200x200.h" // 1.54" b/w/r
 #include "bitmaps/Bitmaps3c104x212.h" // 2.13" b/w/r
@@ -862,6 +863,9 @@ void drawBitmaps()
 #ifdef _GxBitmaps3c960x640_H_
   drawBitmaps3c960x640();
 #endif
+#if defined(ESP32) && defined(_GxBitmaps960x680_H_)
+  drawBitmaps960x680();
+#endif
   // 4-color
 #if defined(_WS_Bitmaps4c168x168_H_)
   drawBitmaps4c168x168();
@@ -1415,6 +1419,17 @@ void drawBitmaps960x640()
     display.drawImage(Bitmap960x640_1, 0, 0, 960, 640, false, true, true); delay(5000);
     display.drawImage(Bitmap960x640_2, 0, 0, 960, 640, false, true, true); delay(5000);
     display.drawImage(Bitmap960x640_3, 0, 0, 960, 640, false, true, true); delay(5000);
+  }
+}
+#endif
+
+#if defined(ESP32) && defined(_GxBitmaps960x680_H_)
+void drawBitmaps960x680()
+{
+  if ((display.epd2.WIDTH == 960) && (display.epd2.HEIGHT == 680) && !display.epd2.hasColor)
+  {
+    display.drawImage(Bitmap960x680_1, 0, 0, 960, 680, false, true, true); delay(5000);
+    display.drawImage(Bitmap960x680_2, 0, 0, 960, 680, false, true, true); delay(5000);
   }
 }
 #endif

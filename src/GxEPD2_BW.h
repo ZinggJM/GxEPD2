@@ -196,6 +196,9 @@
 #if __has_include("epd/GxEPD2_1160_T91.h")
 #include "epd/GxEPD2_1160_T91.h"
 #endif
+#if __has_include("gdem/GxEPD2_1330_GDEM133T91.h")
+#include "gdem/GxEPD2_1330_GDEM133T91.h"
+#endif
 #if __has_include("epd/GxEPD2_1248.h")
 #include "epd/GxEPD2_1248.h"
 #endif

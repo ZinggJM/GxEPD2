@@ -84,6 +84,7 @@ class GxEPD2
       GDEM102T91,
       GDEH116T91,
       GDEW1248T3, Waveshare_12_24_bw = GDEW1248T3,
+      GDEM133T91,
       ED060SCT, // on Waveshare IT8951 Driver HAT
       ED060KC1, // on Waveshare IT8951 Driver HAT 1448x1072
       ED078KC2, // on Waveshare IT8951 Driver HAT 1872x1404
