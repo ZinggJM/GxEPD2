@@ -96,7 +96,7 @@ void GxEPD2_1020_GDEM102T91::_writeImage(uint8_t command, const uint8_t bitmap[]
     {
       uint8_t data;
       // use wb, h of bitmap for index!
-      int32_t idx = mirror_y ? j + dx / 8 + ((h - 1 - (i + dy))) * wb : j + dx / 8 + (i + dy) * wb;
+      uint32_t idx = mirror_y ? j + dx / 8 + uint32_t((h - 1 - (i + dy))) * wb : j + dx / 8 + uint32_t(i + dy) * wb;
       if (pgm)
       {
 #if defined(__AVR) || defined(ESP8266) || defined(ESP32)
@@ -163,7 +163,7 @@ void GxEPD2_1020_GDEM102T91::_writeImagePart(uint8_t command, const uint8_t bitm
     {
       uint8_t data;
       // use wb_bitmap, h_bitmap of bitmap for index!
-      int32_t idx = mirror_y ? x_part / 8 + j + dx / 8 + ((h_bitmap - 1 - (y_part + i + dy))) * wb_bitmap : x_part / 8 + j + dx / 8 + (y_part + i + dy) * wb_bitmap;
+      uint32_t idx = mirror_y ? x_part / 8 + j + dx / 8 + uint32_t((h_bitmap - 1 - (y_part + i + dy))) * wb_bitmap : x_part / 8 + j + dx / 8 + uint32_t(y_part + i + dy) * wb_bitmap;
       if (pgm)
       {
 #if defined(__AVR) || defined(ESP8266) || defined(ESP32)

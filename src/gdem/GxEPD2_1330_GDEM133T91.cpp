@@ -96,7 +96,7 @@ void GxEPD2_1330_GDEM133T91::_writeImage(uint8_t command, const uint8_t bitmap[]
     {
       uint8_t data;
       // use wb, h of bitmap for index!
-      int32_t idx = mirror_y ? j + dx / 8 + ((h - 1 - (i + dy))) * wb : j + dx / 8 + (i + dy) * wb;
+      uint32_t idx = mirror_y ? j + dx / 8 + uint32_t((h - 1 - (i + dy))) * wb : j + dx / 8 + uint32_t(i + dy) * wb;
       if (pgm)
       {
 #if defined(__AVR) || defined(ESP8266) || defined(ESP32)
@@ -163,7 +163,7 @@ void GxEPD2_1330_GDEM133T91::_writeImagePart(uint8_t command, const uint8_t bitm
     {
       uint8_t data;
       // use wb_bitmap, h_bitmap of bitmap for index!
-      int32_t idx = mirror_y ? x_part / 8 + j + dx / 8 + ((h_bitmap - 1 - (y_part + i + dy))) * wb_bitmap : x_part / 8 + j + dx / 8 + (y_part + i + dy) * wb_bitmap;
+      uint32_t idx = mirror_y ? x_part / 8 + j + dx / 8 + uint32_t((h_bitmap - 1 - (y_part + i + dy))) * wb_bitmap : x_part / 8 + j + dx / 8 + uint32_t(y_part + i + dy) * wb_bitmap;
       if (pgm)
       {
 #if defined(__AVR) || defined(ESP8266) || defined(ESP32)
@@ -349,37 +349,20 @@ void GxEPD2_1330_GDEM133T91::_InitDisplay()
   _writeCommand(0x12);  //SWRESET
   delay(15); // 10ms according to specs
   //_waitWhileBusy("_InitDisplay", power_on_time);
-#if 1
-    _writeCommand(0x0C);  // Soft start setting
-    _writeData(0xAE);
-    _writeData(0xC7);
-    _writeData(0xC3);
-    _writeData(0xC0);
-    _writeData(0x80);  
-    _writeCommand(0x01);  // Set MUX as 527
-    _writeData(0xA7);
-    _writeData(0x02);
-    _writeData(0x00);
-    _writeCommand(0x3C); // VBD
-    _writeData(0x01); // LUT1, for white
-    _writeCommand(0x18);
-    _writeData(0x80);
-#else
   _writeCommand(0x0C);  // Soft start setting
   _writeData(0xAE);
   _writeData(0xC7);
   _writeData(0xC3);
   _writeData(0xC0);
-  _writeData(0xFF);   //0x80 To 0xFF
+  _writeData(0x80);
   _writeCommand(0x01);  // Set MUX as 527
-  _writeData(0x7F);
+  _writeData(0xA7);
   _writeData(0x02);
   _writeData(0x00);
   _writeCommand(0x3C); // VBD
   _writeData(0x01); // LUT1, for white
   _writeCommand(0x18);
   _writeData(0x80);
-#endif
   _setPartialRamArea(0, 0, WIDTH, HEIGHT);
   _init_display_done = true;
 }

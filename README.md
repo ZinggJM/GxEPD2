@@ -137,6 +137,7 @@
 - GDEW1248T3    12.48" b/w 1304x984, UC8179
 - GDEY1248Z51   12.48" b/w/r 1304x984, UC8179
 - GDEM133T91    13.3" b/w 960x680, SSD1677
+- GDEM133Z91    13.3" b/w/r 960x680, SSD1677
 #### Supported SPI e-paper panels & boards from Waveshare: compare with Good Display, same panel
 #### other supported panels
 - GYE042A87     4.2" b/w 400x300, SSD1683 (HINK-E042-A07-FPC-A1)
@@ -158,6 +159,7 @@
 - added support for GDEM102T91 10.2" b/w 960x640, SSD1677
 - added support for GDEY116Z91 11.6" b/w/r 960x640, SSD1677
 - added support for GDEM133T91 13.3" b/w 960x680, SSD1677
+- added support for GDEM133Z91 13.3" b/w/r 960x680, SSD1677
 #### Version 1.5.5
 - updated 7-color driver classes (design cleanup fixed)
 - note: Waveshare PhotoPainter doesn't work with MBED Pico package
