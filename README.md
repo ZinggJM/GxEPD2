@@ -160,6 +160,7 @@
 - added support for GDEY116Z91 11.6" b/w/r 960x640, SSD1677
 - added support for GDEM133T91 13.3" b/w 960x680, SSD1677
 - added support for GDEM133Z91 13.3" b/w/r 960x680, SSD1677
+- improved differential refresh for SE0420NQ04
 #### Version 1.5.5
 - updated 7-color driver classes (design cleanup fixed)
 - note: Waveshare PhotoPainter doesn't work with MBED Pico package
