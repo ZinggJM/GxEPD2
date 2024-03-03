@@ -864,7 +864,7 @@ void drawBitmaps()
 #ifdef _GxBitmaps3c880x528_H_
   drawBitmaps3c880x528();
 #endif
-#ifdef _GxBitmaps3c960x640_H_
+#if defined(ESP32) && defined(_GxBitmaps3c960x640_H_)
   drawBitmaps3c960x640();
 #endif
 #if defined(ESP32) && defined(_GxBitmaps3c960x680_H_)

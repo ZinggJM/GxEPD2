@@ -62,8 +62,10 @@
 #define GxEPD2_750_IS_BW true
 #define GxEPD2_750_T7_IS_BW true
 #define GxEPD2_750_GDEY075T7_IS_BW true
+#define GxEPD2_1020_GDEM102T91_IS_BW true
 #define GxEPD2_1160_T91_IS_BW true
 #define GxEPD2_1248_IS_BW true
+#define GxEPD2_1330_GDEM133T91_IS_BW true
 #define GxEPD2_it60_IS_BW true
 #define GxEPD2_it60_1448x1072_IS_BW true
 #define GxEPD2_it78_1872x1404_IS_BW true
@@ -83,10 +85,13 @@
 #define GxEPD2_420c_Z21_IS_3C true
 #define GxEPD2_583c_IS_3C true
 #define GxEPD2_583c_Z83_IS_3C true
+#define GxEPD2_583c_GDEQ0583Z31_IS_3C true
 #define GxEPD2_750c_IS_3C true
 #define GxEPD2_750c_Z08_IS_3C true
 #define GxEPD2_750c_Z90_IS_3C true
+#define GxEPD2_1160c_GDEY116Z91_IS_3C true
 #define GxEPD2_1248c_IS_3C true
+#define GxEPD2_1330c_GDEM133Z91_IS_3C true
 // 4-color e-paper
 #define GxEPD2_266c_GDEY0266F51H_IS_4C true
 #define GxEPD2_290c_GDEY029F51H_IS_4C true
