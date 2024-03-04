@@ -30,8 +30,8 @@ class GxEPD2_420_SE0420NQ04 : public GxEPD2_EPD
     static const bool hasFastPartialUpdate = true;
     static const uint16_t power_on_time = 50; // ms, e.g. 46001us
     static const uint16_t power_off_time = 50; // ms, e.g. 40001us
-    static const uint16_t full_refresh_time = 4000; // ms, e.g. 3579001us
-    static const uint16_t partial_refresh_time = 600; // ms, e.g. 503001us
+    static const uint16_t full_refresh_time = 3200; // ms, e.g. 3104000us
+    static const uint16_t partial_refresh_time = 620; // ms, e.g. 603000us
     // constructor
     GxEPD2_420_SE0420NQ04(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
     // methods (virtual)
