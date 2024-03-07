@@ -323,10 +323,13 @@ void GxEPD2_213::_PowerOn()
 
 void GxEPD2_213::_PowerOff()
 {
-  _writeCommand(0x22);
-  _writeData(0xc3);
-  _writeCommand(0x20);
-  _waitWhileBusy("_PowerOff", power_off_time);
+  if (_power_is_on)
+  {
+    _writeCommand(0x22);
+    _writeData(0xc3);
+    _writeCommand(0x20);
+    _waitWhileBusy("_PowerOff", power_off_time);
+  }
   _power_is_on = false;
   _using_partial_mode = false;
 }
