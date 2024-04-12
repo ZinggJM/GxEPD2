@@ -32,6 +32,7 @@
 
 #include <GxEPD2_BW.h>
 #include <GxEPD2_3C.h>
+#include <GxEPD2_4C.h>
 #include <GxEPD2_7C.h>
 
 // NOTE: you may need to adapt or select for your wiring in the processor specific conditional compile sections below
@@ -75,21 +76,25 @@
 //#define GxEPD2_DRIVER_CLASS GxEPD2_290_BS // DEPG0290BS  128x296, SSD1680, (FPC-7519 rev.b)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_290_M06 // GDEW029M06  128x296, UC8151D, (WFT0290CZ10)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_290_GDEY029T94 // GDEY029T94 128x296, SSD1680, (FPC-A005 20.06.15)
-#define GxEPD2_DRIVER_CLASS GxEPD2_310_GDEQ031T10 // GDEQ031T10 240x320, UC8253, (no inking, backside mark KEGMO 3100)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_310_GDEQ031T10 // GDEQ031T10 240x320, UC8253, (no inking, backside mark KEGMO 3100)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_371     // GDEW0371W7  240x416, UC8171 (IL0324), (missing)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_370_TC1 // ED037TC1  280x480, SSD1677, (ICA-FU-20 ichia 2029), Waveshare 3.7"
 //#define GxEPD2_DRIVER_CLASS GxEPD2_420     // GDEW042T2   400x300, UC8176 (IL0398), (WFT042CZ15)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_420_M01 // GDEW042M01  400x300, UC8176 (IL0398), (WFT042CZ15)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_420_GDEY042T81 // GDEY042T81 400x300, SSD1683 (no inking)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_420_GYE042A87  // GYE042A87, 400x300, SSD1683 (HINK-E042-A07-FPC-A1)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_420_SE0420NQ04 // SE0420NQ04, 400x300, UC8276C (OPM042A2_V1.0)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_426_GDEQ0426T82 // GDEQ0426T82 480x800, SSD1677 (P426010-MF1-A)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_583     // GDEW0583T7  600x448, UC8159c (IL0371), (missing)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_583_T8  // GDEW0583T8  648x480, EK79655 (GD7965), (WFT0583CZ61)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_583_GDEQ0583T31 // GDEQ0583T31  648x480, UC8179, (P583010-MF1-B)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750     // GDEW075T8   640x384, UC8159c (IL0371), (WF0583CZ09)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750_T7  // GDEW075T7   800x480, EK79655 (GD7965), (WFT0583CZ61)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_750_YT7  // GDEY075T7  800x480, UC8179 (GD7965), (FPC-C001 20.8.20)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_750_GDEY075T7  // GDEY075T7  800x480, UC8179 (GD7965), (FPC-C001 20.08.20)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_1020_GDEM102T91 // GDEM102T91 960x640, SSD1677, (FPC7705 REV.b)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_1160_T91 // GDEH116T91 960x640, SSD1677, (none or hidden)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_1248     // GDEW1248T3 1304x984, UC8179, (WFT1248BZ23,WFT1248BZ24)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_1330_GDEM133T91 // GDEM133T91 960x680, SSD1677, (FPC-7701 REV.B)
 // 3-color e-papers
 //#define GxEPD2_DRIVER_CLASS GxEPD2_154c     // GDEW0154Z04 200x200, IL0376F, (WFT0000CZ04), no longer available
 //#define GxEPD2_DRIVER_CLASS GxEPD2_154_Z90c // GDEH0154Z90 200x200, SSD1681, (HINK-E154A07-A1)
@@ -105,10 +110,13 @@
 //#define GxEPD2_DRIVER_CLASS GxEPD2_420c_Z21 // GDEQ042Z21  400x300, UC8276, (hidden)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_583c     // GDEW0583Z21 600x448, UC8159c (IL0371), (missing)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_583c_Z83 // GDEW0583Z83 648x480, EK79655 (GD7965), (WFT0583CZ61)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_583c_GDEQ0583Z31 // GDEQ0583Z31 648x480, UC8179C, 
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750c     // GDEW075Z09  640x384, UC8159c (IL0371), (WF0583CZ09)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750c_Z08 // GDEW075Z08  800x480, EK79655 (GD7965), (WFT0583CZ61)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750c_Z90 // GDEH075Z90  880x528, SSD1677, (HINK-E075A07-A0)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_1160c_GDEY116Z91 // GDEY116Z91 960x640, SSD1677, (FPV-K002 22.04.15)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_1248c    // GDEY1248Z51 1304x984, UC8179, (WFT1248BZ23,WFT1248BZ24)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_1330c_GDEM133Z91 // GDEM133Z91 960x680, SSD1677 (FPC-7701 REV.B)
 // 4-color e-paper
 //#define GxEPD2_DRIVER_CLASS GxEPD2_266c_GDEY0266F51H // GDEY0266F51H 184x360, JD79667 (FPC-H006 22.04.02)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_290c_GDEY029F51H // GDEY029F51H 168x384, JD79667 (FPC-H004 22.03.24)
@@ -118,6 +126,7 @@
 // 7-color e-paper
 //#define GxEPD2_DRIVER_CLASS GxEPD2_565c // Waveshare 5.65" 7-color
 //#define GxEPD2_DRIVER_CLASS GxEPD2_730c_GDEY073D46 // GDEY073D46 800x480 7-color, (N-FPC-001 2021.11.26)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_730c_ACeP_730 // Waveshare 7.3" 7-color
 // grey levels parallel IF e-papers on Waveshare e-Paper IT8951 Driver HAT
 //#define GxEPD2_DRIVER_CLASS GxEPD2_it60           // ED060SCT 800x600
 //#define GxEPD2_DRIVER_CLASS GxEPD2_it60_1448x1072 // ED060KC1 1448x1072
@@ -244,17 +253,19 @@ const int httpsPort = 443;
 
 #include "GxEPD2_github_raw_certs.h"
 
-const char* certificate_rawcontent = cert_DigiCert_TLS_RSA_SHA256_2020_CA1; // ok, should work until 2031-04-13 23:59:59
-//const char* certificate_rawcontent = github_io_chain_pem_first;  // ok, should work until Tue, 21 Mar 2023 23:59:59 GMT
-//const char* certificate_rawcontent = github_io_chain_pem_second;  // ok, should work until Tue, 21 Mar 2023 23:59:59 GMT
-//const char* certificate_rawcontent = github_io_chain_pem_third;  // ok, should work until Tue, 21 Mar 2023 23:59:59 GMT
+const char* certificate_rawcontent = github_io_pem;  // ok, should work until Fri, 14 Mar 2025 23:59:59 GMT
+
+//const char* certificate_rawcontent = cert_DigiCert_TLS_RSA_SHA256_2020_CA1; // not ok, should work until 2031-04-13 23:59:59
+//const char* certificate_rawcontent = github_io_chain_pem_first;  // not ok, should work until Fri, 14 Mar 2025 23:59:59 GMT
+//const char* certificate_rawcontent = github_io_chain_pem_second;  // ok, should work until Fri, 14 Mar 2025 23:59:59 GMT
+//const char* certificate_rawcontent = github_io_chain_pem_third;  // not ok, should work until Fri, 14 Mar 2025 23:59:59 GMT
 
 const char* host_rawcontent   = "raw.githubusercontent.com";
 const char* path_rawcontent   = "/ZinggJM/GxEPD2/master/extras/bitmaps/";
 const char* path_prenticedavid   = "/prenticedavid/MCUFRIEND_kbv/master/extras/bitmaps/";
 const char* path_waveshare_c  = "/waveshare/e-Paper/master/RaspberryPi_JetsonNano/c/pic/";
 const char* path_waveshare_py = "/waveshare/e-Paper/master/RaspberryPi_JetsonNano/python/pic/";
-const char* fp_rawcontent     = "8F 0E 79 24 71 C5 A7 D2 A7 46 76 30 C1 3C B7 2A 13 B0 01 B2"; // as of 29.7.2022
+const char* fp_rawcontent     = "97:D8:C5:70:0F:12:24:6C:88:BC:FA:06:7E:8C:A7:4D:A8:62:67:28"; // SHA-1 as of 12.04.2024
 
 // note that BMP bitmaps are drawn at physical position in physical orientation of the screen
 void showBitmapFrom_HTTP(const char* host, const char* path, const char* filename, int16_t x, int16_t y, bool with_color = true);

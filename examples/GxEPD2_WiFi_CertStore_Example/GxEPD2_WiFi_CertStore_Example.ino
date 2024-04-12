@@ -45,6 +45,7 @@
 // select the display class (only one), matching the kind of display panel
 #define GxEPD2_DISPLAY_CLASS GxEPD2_BW
 //#define GxEPD2_DISPLAY_CLASS GxEPD2_3C
+//#define GxEPD2_DISPLAY_CLASS GxEPD2_4C
 //#define GxEPD2_DISPLAY_CLASS GxEPD2_7C
 
 // select the display driver class (only one) for your  panel
@@ -56,15 +57,15 @@
 //#define GxEPD2_DRIVER_CLASS GxEPD2_154_M09 // GDEW0154M09 200x200, JD79653A, (WFT0154CZB3)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_154_M10 // GDEW0154M10 152x152, UC8151D, (WFT0154CZ17)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_154_GDEY0154D67 // GDEY0154D67 200x200, SSD1681, (FPC-B001 20.05.21)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_213     // GDE0213B1   128x250, IL3895, (HINK-E0213-G01), phased out
-//#define GxEPD2_DRIVER_CLASS GxEPD2_213_B72 // GDEH0213B72 128x250, SSD1675A (IL3897), (HINK-E0213A22-A0 SLH1852)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_213_B73 // GDEH0213B73 128x250, SSD1675B, (HINK-E0213A22-A0 SLH1914)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_213_B74 // GDEM0213B74 128x250, SSD1680, FPC-7528B)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213     // GDE0213B1   122x250, IL3895, (HINK-E0213-G01), phased out
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213_B72 // GDEH0213B72 122x250, SSD1675A (IL3897), (HINK-E0213A22-A0 SLH1852)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213_B73 // GDEH0213B73 122x250, SSD1675B, (HINK-E0213A22-A0 SLH1914)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213_B74 // GDEM0213B74 122x250, SSD1680, FPC-7528B)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_213_flex // GDEW0213I5F 104x212, UC8151 (IL0373), (WFT0213CZ16)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_213_M21 // GDEW0213M21 104x212, UC8151 (IL0373), (WFT0213CZ16)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_213_T5D // GDEW0213T5D 104x212, UC8151D, (WFT0213CZ16)
-//#define GxEPD2_DRIVER_CLASS GxEPD2_213_BN // DEPG0213BN  128x250, SSD1680, (FPC-7528B), TTGO T5 V2.4.1, V2.3.1
-//#define GxEPD2_DRIVER_CLASS GxEPD2_213_GDEY0213B74 // GDEY0213B74 128x250, SSD1680, (FPC-A002 20.04.08)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213_BN // DEPG0213BN  122x250, SSD1680, (FPC-7528B), TTGO T5 V2.4.1, V2.3.1
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213_GDEY0213B74 // GDEY0213B74 122x250, SSD1680, (FPC-A002 20.04.08)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_260     // GDEW026T0   152x296, UC8151 (IL0373), (WFT0154CZ17)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_260_M01 // GDEW026M01  152x296, UC8151 (IL0373), (WFT0260CZB2)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_266_BN // DEPG0266BN   152x296, SSD1680, (FPC7510), TTGO T5 V2.66, TTGO T5 V2.4.1
@@ -86,6 +87,8 @@
 //#define GxEPD2_DRIVER_CLASS GxEPD2_420     // GDEW042T2   400x300, UC8176 (IL0398), (WFT042CZ15)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_420_M01 // GDEW042M01  400x300, UC8176 (IL0398), (WFT042CZ15)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_420_GDEY042T81 // GDEY042T81 400x300, SSD1683 (no inking)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_420_GYE042A87  // GYE042A87, 400x300, SSD1683 (HINK-E042-A07-FPC-A1)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_420_SE0420NQ04 // SE0420NQ04, 400x300, UC8276C (OPM042A2_V1.0)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_426_GDEQ0426T82 // GDEQ0426T82 480x800, SSD1677 (P426010-MF1-A)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_583     // GDEW0583T7  600x448, UC8159c (IL0371), (missing)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_583_T8  // GDEW0583T8  648x480, EK79655 (GD7965), (WFT0583CZ61)
@@ -93,8 +96,10 @@
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750     // GDEW075T8   640x384, UC8159c (IL0371), (WF0583CZ09)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750_T7  // GDEW075T7   800x480, EK79655 (GD7965), (WFT0583CZ61)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750_GDEY075T7  // GDEY075T7  800x480, UC8179 (GD7965), (FPC-C001 20.08.20)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_1020_GDEM102T91 // GDEM102T91 960x640, SSD1677, (FPC7705 REV.b)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_1160_T91 // GDEH116T91 960x640, SSD1677, (none or hidden)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_1248     // GDEW1248T3 1304x984, UC8179, (WFT1248BZ23,WFT1248BZ24)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_1330_GDEM133T91 // GDEM133T91 960x680, SSD1677, (FPC-7701 REV.B)
 // 3-color e-papers
 //#define GxEPD2_DRIVER_CLASS GxEPD2_154c     // GDEW0154Z04 200x200, IL0376F, (WFT0000CZ04), no longer available
 //#define GxEPD2_DRIVER_CLASS GxEPD2_154_Z90c // GDEH0154Z90 200x200, SSD1681, (HINK-E154A07-A1)
@@ -110,10 +115,13 @@
 //#define GxEPD2_DRIVER_CLASS GxEPD2_420c_Z21 // GDEQ042Z21  400x300, UC8276, (hidden)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_583c     // GDEW0583Z21 600x448, UC8159c (IL0371), (missing)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_583c_Z83 // GDEW0583Z83 648x480, EK79655 (GD7965), (WFT0583CZ61)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_583c_GDEQ0583Z31 // GDEQ0583Z31 648x480, UC8179C, 
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750c     // GDEW075Z09  640x384, UC8159c (IL0371), (WF0583CZ09)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750c_Z08 // GDEW075Z08  800x480, EK79655 (GD7965), (WFT0583CZ61)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750c_Z90 // GDEH075Z90  880x528, SSD1677, (HINK-E075A07-A0)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_1160c_GDEY116Z91 // GDEY116Z91 960x640, SSD1677, (FPV-K002 22.04.15)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_1248c    // GDEY1248Z51 1304x984, UC8179, (WFT1248BZ23,WFT1248BZ24)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_1330c_GDEM133Z91 // GDEM133Z91 960x680, SSD1677 (FPC-7701 REV.B)
 // 4-color e-paper
 //#define GxEPD2_DRIVER_CLASS GxEPD2_266c_GDEY0266F51H // GDEY0266F51H 184x360, JD79667 (FPC-H006 22.04.02)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_290c_GDEY029F51H // GDEY029F51H 168x384, JD79667 (FPC-H004 22.03.24)
@@ -138,23 +146,25 @@
 // somehow there should be an easier way to do this
 #define GxEPD2_BW_IS_GxEPD2_BW true
 #define GxEPD2_3C_IS_GxEPD2_3C true
+#define GxEPD2_4C_IS_GxEPD2_4C true
 #define GxEPD2_7C_IS_GxEPD2_7C true
 #define GxEPD2_1248_IS_GxEPD2_1248 true
 #define GxEPD2_1248c_IS_GxEPD2_1248c true
 #define IS_GxEPD(c, x) (c##x)
 #define IS_GxEPD2_BW(x) IS_GxEPD(GxEPD2_BW_IS_, x)
 #define IS_GxEPD2_3C(x) IS_GxEPD(GxEPD2_3C_IS_, x)
+#define IS_GxEPD2_4C(x) IS_GxEPD(GxEPD2_4C_IS_, x)
 #define IS_GxEPD2_7C(x) IS_GxEPD(GxEPD2_7C_IS_, x)
 #define IS_GxEPD2_1248(x) IS_GxEPD(GxEPD2_1248_IS_, x)
 #define IS_GxEPD2_1248c(x) IS_GxEPD(GxEPD2_1248c_IS_, x)
 
 #if defined (ESP8266)
-#define MAX_DISPLAY_BUFFER_SIZE (81920ul-34000ul-35000ul) // ~34000 base use, WiFiClientSecure seems to need about 35k more to work (with CertStore)
+#define MAX_DISPLAY_BUFFER_SIZE (81920ul-34000ul-38000ul) // ~34000 base use, WiFiClientSecure seems to need about 38k more to work (with CertStore)
 // for site people.math.sc.edu an increased RX buffer is required for timely decodes, client.setBufferSizes(8192, 4096); // may help. needs more space:
-//#define MAX_DISPLAY_BUFFER_SIZE (81920ul-34000ul-37000ul) // ~34000 base use, WiFiClientSecure seems to need about 37k more to work (with CertStore)
+//#define MAX_DISPLAY_BUFFER_SIZE (81920ul-34000ul-38000ul) // ~34000 base use, WiFiClientSecure seems to need about 38k more to work (with CertStore)
 #if IS_GxEPD2_BW(GxEPD2_DISPLAY_CLASS)
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8))
-#elif IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS)
+#elif IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS) || IS_GxEPD2_4C(GxEPD2_DISPLAY_CLASS)
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8))
 #elif IS_GxEPD2_7C(GxEPD2_DISPLAY_CLASS)
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2))
@@ -165,13 +175,15 @@ GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> displ
 //GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=15*/ EPD_CS, /*DC=4*/ 4, /*RST=2*/ 2, /*BUSY=5*/ 5));
 // mapping of Waveshare e-Paper ESP8266 Driver Board, old version
 //GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=15*/ EPD_CS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
+#undef MAX_DISPLAY_BUFFER_SIZE
+#undef MAX_HEIGHT
 #endif
 
 #if defined(ESP32)
 #define MAX_DISPLAY_BUFFER_SIZE 65536ul // e.g.
 #if IS_GxEPD2_BW(GxEPD2_DISPLAY_CLASS)
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8))
-#elif IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS)
+#elif IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS) || IS_GxEPD2_4C(GxEPD2_DISPLAY_CLASS)
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8))
 #elif IS_GxEPD2_7C(GxEPD2_DISPLAY_CLASS)
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2))
@@ -185,6 +197,7 @@ GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> displ
 //GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=5*/ 5, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // LILYGO_T5_V2.4.1
 //GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=5*/ EPD_CS, /*DC=*/ 19, /*RST=*/ 4, /*BUSY=*/ 34)); // LILYGO® TTGO T5 2.66
 //GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=5*/ EPD_CS, /*DC=*/ 2, /*RST=*/ 0, /*BUSY=*/ 4)); // e.g. TTGO T8 ESP32-WROVER
+//GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ 15, /*DC=*/ 27, /*RST=*/ 26, /*BUSY=*/ 25)); // Waveshare ESP32 Driver Board
 #endif
 #else // GxEPD2_1248 or GxEPD2_1248c
 // Waveshare 12.48 b/w or b/w/r SPI display board and frame or Good Display 12.48 b/w panel GDEW1248T3 or b/w/r panel GDEY1248Z51
@@ -194,6 +207,8 @@ GxEPD2_DISPLAY_CLASS < GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS) > di
     /*dc1=*/ 25, /*dc2=*/ 17, /*rst1=*/ 33, /*rst2=*/ 5,
     /*busy_m1=*/ 32, /*busy_s1=*/ 26, /*busy_m2=*/ 18, /*busy_s2=*/ 4));
 #endif
+#undef MAX_DISPLAY_BUFFER_SIZE
+#undef MAX_HEIGHT
 #endif
 
 #if defined (ESP8266)
@@ -225,7 +240,7 @@ const char* password = "........";
 const int httpPort  = 80;
 const int httpsPort = 443;
 
-const char* fp_rawcontent     = "8F 0E 79 24 71 C5 A7 D2 A7 46 76 30 C1 3C B7 2A 13 B0 01 B2"; // as of 29.7.2022
+const char* fp_rawcontent     = "97:D8:C5:70:0F:12:24:6C:88:BC:FA:06:7E:8C:A7:4D:A8:62:67:28"; // SHA-1 as of 12.04.2024
 
 const char* host_rawcontent   = "raw.githubusercontent.com";
 const char* path_rawcontent   = "/ZinggJM/GxEPD2/master/extras/bitmaps/";
@@ -260,6 +275,14 @@ void setup()
   SPI.begin(13, 12, 14, 15); // map and init SPI pins SCK(13), MISO(12), MOSI(14), SS(15)
 #endif
 
+  if (display.pages() > 1)
+  {
+    delay(100);
+    Serial.println();
+    Serial.print("pages = "); Serial.print(display.pages()); Serial.print(" page height = "); Serial.println(display.pageHeight());
+    delay(1000);
+  }
+
 #ifdef RE_INIT_NEEDED
   WiFi.persistent(true);
   WiFi.mode(WIFI_STA); // switch off AP
@@ -280,7 +303,7 @@ void setup()
     Serial.println(ssid);
     WiFi.begin(ssid, password);
   }
-  int ConnectTimeout = 30; // 15 seconds
+  int ConnectTimeout = 60; // 30 seconds
   while (WiFi.status() != WL_CONNECTED)
   {
     delay(500);
@@ -1022,7 +1045,8 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
   Serial.println(); Serial.print("downloading file \""); Serial.print(filename);  Serial.println("\"");
   Serial.print("connecting to "); Serial.println(host);
 #if defined (ESP8266)
-  client.setBufferSizes(4096, 4096); // required
+  //client.setBufferSizes(4096, 4096); // required
+  client.setBufferSizes(8192, 4096); // may help for some sites
   client.setCertStore(&certStore);
 #elif defined (ESP32)
   if (certificate) client.setCACert(certificate);
