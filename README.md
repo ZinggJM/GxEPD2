@@ -151,7 +151,11 @@
 - promotion panels from suppliers are welcome, to add support to GxEPD2
 - donation panels from users are welcome, to add support to GxEPD2
 
-### Version 1.5.6
+### Version 1.5.7
+- version for ongoing additions, work in  progress
+- GDEY0213F51 2.13" 4-color 122x250
+- GDEM1085T51 10.85 b/w 1360x480
+#### Version 1.5.6
 - version for ongoing fixes and additions
 - added support for GYE042A87  4.2" b/w 400x300
 - added support for SE0420NQ04 4.2" b/w 400x300

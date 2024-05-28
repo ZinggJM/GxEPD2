@@ -89,6 +89,7 @@
 #include "bitmaps/Bitmaps3c960x680.h" // 13.3" b/w/r
 #include "bitmaps/WS_Bitmaps800x600.h" // 6.0"  grey
 // 4-color
+#include "bitmaps/Bitmaps4c128x250.h" // 2.13" 4-color
 #include "bitmaps/Bitmaps4c184x360.h" // 2.66" 4-color
 #include "bitmaps/Bitmaps4c168x384.h" // 2.9" 4-color
 #include "bitmaps/WS_Bitmaps4c168x168.h" // 4.37" 4-color
@@ -871,6 +872,9 @@ void drawBitmaps()
   drawBitmaps3c960x680();
 #endif
   // 4-color
+#if defined(_GxBitmaps4c128x250_H_)
+  drawBitmaps4c128x250();
+#endif
 #if defined(_WS_Bitmaps4c168x168_H_)
   drawBitmaps4c168x168();
 #endif
@@ -1876,6 +1880,17 @@ void drawBitmaps3c1304x984()
     //display.drawImage(Bitmap3c1304x984_black, Bitmap3c1304x984_red, 0, 0, 1304, 984, false, false, true);
     display.writeImage(0, Bitmap3c1304x984_red, 0, 0, 1304, 984, true, false, true); // red bitmap is inverted
     display.drawImage(Bitmap3c1304x984_black, 0, 0, 0, 1304, 984, true, false, true); // black bitmap is normal
+  }
+}
+#endif
+
+#if defined(_GxBitmaps4c128x250_H_)
+void drawBitmaps4c128x250()
+{
+  if (display.epd2.panel == GxEPD2::GDEY0213F51)
+  {
+    display.drawNative(Bitmap4c128x250, 0, 0, 0, 128, 250, false, false, true);
+    delay(5000);
   }
 }
 #endif

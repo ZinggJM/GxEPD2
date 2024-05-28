@@ -93,6 +93,7 @@
 #define GxEPD2_1248c_IS_3C true
 #define GxEPD2_1330c_GDEM133Z91_IS_3C true
 // 4-color e-paper
+#define GxEPD2_213c_GDEY0213F51_IS_4C true
 #define GxEPD2_266c_GDEY0266F51H_IS_4C true
 #define GxEPD2_290c_GDEY029F51H_IS_4C true
 #define GxEPD2_300c_IS_4C true
@@ -112,14 +113,29 @@
 #if IS_GxEPD2_BW(GxEPD2_DISPLAY_CLASS) && IS_GxEPD2_DRIVER_3C(GxEPD2_DRIVER_CLASS)
 #error "GxEPD2_BW used with 3-color driver class"
 #endif
+#if IS_GxEPD2_BW(GxEPD2_DISPLAY_CLASS) && IS_GxEPD2_DRIVER_4C(GxEPD2_DRIVER_CLASS)
+#error "GxEPD2_BW used with 4-color driver class"
+#endif
+#if IS_GxEPD2_BW(GxEPD2_DISPLAY_CLASS) && IS_GxEPD2_DRIVER_7C(GxEPD2_DRIVER_CLASS)
+#error "GxEPD2_BW used with 7-color driver class"
+#endif
 #if IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS) && IS_GxEPD2_DRIVER_BW(GxEPD2_DRIVER_CLASS)
 #error "GxEPD2_3C used with b/w driver class"
+#endif
+#if IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS) && IS_GxEPD2_DRIVER_4C(GxEPD2_DRIVER_CLASS)
+#error "GxEPD2_3C used with 4-color driver class""
+#endif
+#if IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS) && IS_GxEPD2_DRIVER_7C(GxEPD2_DRIVER_CLASS)
+#error "GxEPD2_3C used with 7-color driver class""
 #endif
 #if IS_GxEPD2_4C(GxEPD2_DISPLAY_CLASS) && IS_GxEPD2_DRIVER_BW(GxEPD2_DRIVER_CLASS)
 #error "GxEPD2_4C used with b/w driver class"
 #endif
 #if IS_GxEPD2_4C(GxEPD2_DISPLAY_CLASS) && IS_GxEPD2_DRIVER_3C(GxEPD2_DRIVER_CLASS)
 #error "GxEPD2_4C used with 3-color driver class"
+#endif
+#if IS_GxEPD2_4C(GxEPD2_DISPLAY_CLASS) && IS_GxEPD2_DRIVER_7C(GxEPD2_DRIVER_CLASS)
+#error "GxEPD2_4C used with 7-color driver class"
 #endif
 #if IS_GxEPD2_7C(GxEPD2_DISPLAY_CLASS) && !IS_GxEPD2_DRIVER_7C(GxEPD2_DRIVER_CLASS)
 #error "GxEPD2_7C used with less colors driver class"
