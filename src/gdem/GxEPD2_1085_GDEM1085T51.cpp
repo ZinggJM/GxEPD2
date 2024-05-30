@@ -3,7 +3,7 @@
 //
 // based on Demo Example from Good Display, available here: https://www.good-display.com/companyfile/32/
 // Panel: GDEM1085T51 : https://www.good-display.com/product/503.html
-// Controller : JD79686AB : 
+// Controller : JD79686AB :
 //
 // Author: Jean-Marc Zingg
 //
@@ -43,27 +43,28 @@ void GxEPD2_1085_GDEM1085T51::init(uint32_t serial_diag_bitrate, bool initial, u
 
 void GxEPD2_1085_GDEM1085T51::clearScreen(uint8_t value)
 {
-  writeScreenBuffer(value);
-  refresh(true);
-  writeScreenBufferAgain(value);
+  // full refresh needed for all cases (previous != screen)
+  _writeScreenBuffer(0x10, value); // set previous
+  _writeScreenBuffer(0x13, value); // set current
+  refresh(false); // full refresh
+  _initial_write = false;
 }
 
 void GxEPD2_1085_GDEM1085T51::writeScreenBuffer(uint8_t value)
 {
-  _initial_write = false; // initial full screen buffer clean done
-  if (!_using_partial_mode) _Init_Part();
+  if (_initial_write) return clearScreen(value);
   _writeScreenBuffer(0x13, value); // set current
-  if (_initial_refresh) _writeScreenBuffer(0x26, value); // set previous
 }
 
 void GxEPD2_1085_GDEM1085T51::writeScreenBufferAgain(uint8_t value)
 {
-  if (!_using_partial_mode) _Init_Part();
   _writeScreenBuffer(0x10, value); // set previous
+  _writeScreenBuffer(0x13, value); // set current
 }
 
 void GxEPD2_1085_GDEM1085T51::_writeScreenBuffer(uint8_t command, uint8_t value)
 {
+  if (!_init_display_done) _InitDisplay();
   _writeCommandToMaster(command);
   _startTransferToMaster();
   for (uint32_t i = 0; i < uint32_t(WIDTH / 2) * uint32_t(HEIGHT) / 8; i++)
@@ -82,18 +83,27 @@ void GxEPD2_1085_GDEM1085T51::_writeScreenBuffer(uint8_t command, uint8_t value)
 
 void GxEPD2_1085_GDEM1085T51::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  _writeImage(0x13, bitmap, x, y, w, h, invert, mirror_y, pgm);
+  Serial.print("writeImage("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", "); Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
+  _writeImage(0x13, bitmap, x, y, w, h, invert, mirror_y, pgm); // set current
+}
+
+void GxEPD2_1085_GDEM1085T51::writeImageForFullRefresh(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+{
+  Serial.print("writeImageForFullRefresh("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", "); Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
+  _writeImage(0x10, bitmap, x, y, w, h, invert, mirror_y, pgm); // set previous
+  _writeImage(0x13, bitmap, x, y, w, h, invert, mirror_y, pgm); // set current
 }
 
 void GxEPD2_1085_GDEM1085T51::writeImageAgain(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  _writeImage(0x10, bitmap, x, y, w, h, invert, mirror_y, pgm);
+  Serial.print("writeImageAgain("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", "); Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
+  _writeImage(0x10, bitmap, x, y, w, h, invert, mirror_y, pgm); // set previous
+  _writeImage(0x13, bitmap, x, y, w, h, invert, mirror_y, pgm); // set current
 }
 
 void GxEPD2_1085_GDEM1085T51::_writeImage(uint8_t command, const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  Serial.print("_writeImage("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", "); Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
-  if (_initial_write) writeScreenBuffer(); // initial full screen buffer clean
+  //Serial.print("_writeImage("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", "); Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
   int16_t wb = (w + 7) / 8; // width bytes, bitmaps are padded
   x -= x % 8; // byte boundary
@@ -107,7 +117,8 @@ void GxEPD2_1085_GDEM1085T51::_writeImage(uint8_t command, const uint8_t bitmap[
   w1 -= dx;
   h1 -= dy;
   if ((w1 <= 0) || (h1 <= 0)) return;
-  if (!_using_partial_mode) _Init_Part();
+  if (!_init_display_done) _InitDisplay();
+  if (_initial_write) writeScreenBuffer(); // initial full screen buffer clean
   if (x1 < WIDTH / 2)
   {
     int16_t wm = x1 + w1 <= WIDTH / 2 ? w1 : WIDTH / 2 - x1;
@@ -145,7 +156,7 @@ void GxEPD2_1085_GDEM1085T51::_writeImage(uint8_t command, const uint8_t bitmap[
   {
     int16_t xs = x1 <= WIDTH / 2 ? WIDTH / 2 : x1;
     int16_t ws = x1 <= WIDTH / 2 ? x1 + w1 - WIDTH / 2 : w1;
-    Serial.print("_writeImage xs("); Serial.print(xs); Serial.print(", "); Serial.print(ws); Serial.print(", "); Serial.print(dx); Serial.print(", "); Serial.print(dy); Serial.println(")");
+    //Serial.print("_writeImage xs("); Serial.print(xs); Serial.print(", "); Serial.print(ws); Serial.print(", "); Serial.print(dx); Serial.print(", "); Serial.print(dy); Serial.println(")");
     _writeCommandToSlave(0x91); // partial in
     _setPartialRamAreaSlave(xs - WIDTH / 2, y1, ws, h1);
     _writeCommandToSlave(command);
@@ -357,6 +368,8 @@ void GxEPD2_1085_GDEM1085T51::refresh(int16_t x, int16_t y, int16_t w, int16_t h
   _Update_Part();
   _writeCommandToBoth(0x92); // partial out
 #else
+  _setPartialRamAreaMaster(0, 0, WIDTH / 2, HEIGHT);
+  _setPartialRamAreaSlave(0, 0, WIDTH / 2, HEIGHT);
   _Update_Part();
 #endif
 }
@@ -374,6 +387,7 @@ void GxEPD2_1085_GDEM1085T51::hibernate()
     _writeCommand(0x07); // deep sleep
     _writeData(0xA5);    // check code
     _hibernating = true;
+    _init_display_done = false;
   }
 }
 
@@ -506,7 +520,6 @@ void GxEPD2_1085_GDEM1085T51::_PowerOff()
 void GxEPD2_1085_GDEM1085T51::_InitDisplay()
 {
   if (_hibernating) _reset();
-#if 1
   // from A32-GDEM1085T51-P-20240314
   _writeCommandToBoth(0x4D);
   _writeDataToBoth(0x55);
@@ -522,8 +535,8 @@ void GxEPD2_1085_GDEM1085T51::_InitDisplay()
   _writeDataToBoth(0x02);
   _writeCommandToSlave(0xAE);
   _writeDataToSlave(0xA0);
-  _writeCommandToBoth(0xE0);
-  _writeDataToBoth(0x01);
+  _writeCommandToBoth(0xE0); // Cascade Setting (CCSET)
+  _writeDataToBoth(0x01);    // CCEN (clock for slave)
   _writeCommandToBoth(0x00); // Panel setting
   _writeDataToBoth(0x9F);    // otp
   _writeDataToBoth(0x0D);    // ??
@@ -543,122 +556,31 @@ void GxEPD2_1085_GDEM1085T51::_InitDisplay()
   _writeDataToBoth(0x00);
   _writeDataToBoth(0x00);
   _writeDataToBoth(0x00);
-  _writeDataToBoth(0x00);  
+  _writeDataToBoth(0x00);
   _writeCommandToBoth(0x60); // TCON setting
   _writeDataToBoth(0x31);    // ??
   _writeCommandToBoth(0x50); // VCOM and DATA interval setting
   _writeDataToBoth(0x97);    // LUTBW, 10 hsync
-  _writeCommandToBoth(0xE8);  
-  _writeDataToBoth(0x01); 
-  _writeCommandToBoth(0x04);  //power on  
-  delay(200);  
-  _waitWhileBusy("_PowerOn", power_on_time);
-  _power_is_on = true;
-#elif 1
-  // from GDEM1085Z51 demo
-  _writeCommandToBoth(0x4D);
-  _writeDataToBoth(0x55);
-  _writeCommandToBoth(0xA6);
-  _writeDataToBoth(0x38);
-  _writeCommandToBoth(0xB4);
-  _writeDataToBoth(0x5D);
-  _writeCommandToBoth(0xB6);
-  _writeDataToBoth(0x80);
-  _writeCommandToBoth(0xB7);
-  _writeDataToBoth(0x00);
-  _writeCommandToBoth(0xF7);
-  _writeDataToBoth(0x02);
-  _writeCommandToSlave(0xAE);
-  _writeDataToSlave(0xA0);
-  _writeCommandToBoth(0xE0);
-  _writeDataToBoth(0x01);
-  _writeCommandToBoth(0x00);//Panel setting
-  //_writeDataToBoth(0x8F);
-  _writeDataToBoth(0x9F); //otp
-  _writeDataToBoth(0x4D);
-  _writeCommandToBoth(0x06);//boost
-  _writeDataToBoth(0x57);
-  _writeDataToBoth(0x24);
-  _writeDataToBoth(0x28);
-  _writeDataToBoth(0x32);
-  _writeDataToBoth(0x08);
-  _writeDataToBoth(0x48);
-  _writeCommandToBoth(0x61);//resolution setting
-  _writeDataToBoth(0X02);//680   1360*480
-  _writeDataToBoth(0XA8);
-  _writeDataToBoth(0X01);//480
-  _writeDataToBoth(0XE0);
-  _writeCommandToBoth(0x62);
-  _writeDataToBoth(0x00);
-  _writeDataToBoth(0x00);
-  _writeDataToBoth(0x00);
-  _writeDataToBoth(0x00);
-  _writeCommandToBoth(0x60);
-  _writeDataToBoth(0x31);
-  _writeCommandToBoth(0x50);//VCOM and DATA interval setting(CDI)
-  _writeDataToBoth(0x77);
   _writeCommandToBoth(0xE8);
   _writeDataToBoth(0x01);
-  _writeCommandToBoth(0x04);  //power on
-  _waitWhileBusy("_PowerOn", power_on_time);
-  _power_is_on = true;
-#else
-  // from bad GDEM1085T51 demo
-  _writeCommand(0xF8);  // Enter FITI Command
-  _writeData(0x7C);
-  _writeData(0x00);
-  _writeCommand(0xF8);  // Enter FITI Command
-  _writeData(0x60);
-  _writeData(0xA5);
-  _writeCommand(0xF8);
-  _writeData(0x92);
-  _writeData(0x08);
-  _writeCommand(0xF8);
-  _writeData(0x93);
-  _writeData(0x18);
-  _writeCommand(0xF8);
-  _writeData(0x7E);
-  _writeData(0x01);
-  _writeCommand(0x01); // power setting
-  _writeData(0x03);    // VDS_EN, VDG_EN (internal DC/DC)
-  _writeData(0x00);    // VGH 20V, VGL -20V, VCOM default
-  _writeData(0x3F);    // VSH 15V
-  _writeData(0x3F);    // VSL -15V
-  _writeData(0x28);    // VSHR 6.4V
-  _writeCommand(0x06); // Booster Setting
-  _writeData(0x57);    // 20ms, str 3, period 8
-  _writeData(0x63);    // 20ms, str 5, period 4
-  _writeData(0x34);    // str 4, period 5 ////////////20091009
-  _writeCommand(0x60); // TCON setting
-  _writeData(0x04);    // ??
-  _writeCommand(0x00); // Panel setting
-  _writeData(0x9F);    //otp
-  _writeCommand(0x30); // OSC Setting
-  _writeData(0x3C);    // 50Hz
-  _writeCommand(0x61); // Resolution setting
-  _writeData(0x02);    // 640
-  _writeData(0xA8);    //
-  _writeData(0x01);    // 480
-  _writeData(0xE0);
-  _writeCommand(0x82); // VCOM DC Setting
-  _writeData(0x1F);    // ??
-  _writeCommand(0x50); // VCOM and DATA interval setting
-  _writeData(0x97);    //LUTBW, 10 hsync
-  _writeCommand(0x26); // Set VCOM/Red states
-  _writeData(0x00);    // 7 states (default)
-  _writeCommand(0xE8); // ??
-  _writeData(0x40);
-  _writeCommand(0xE0); // ??
-  _writeData(0x01);
-#endif
+  //  _writeCommandToBoth(0x04);  //power on
+  //  delay(200);
+  //  _waitWhileBusy("_PowerOn", power_on_time);
+  //  _power_is_on = true;
+  _init_display_done = true;
 }
 
 void GxEPD2_1085_GDEM1085T51::_Init_Full()
 {
   Serial.println("_Init_Full");
+  if (_using_partial_mode)
+  {
+    _reset();
+    _power_is_on = false;
+  }
   _InitDisplay();
-  //_writeCommandToBoth(0xE8);  
-  //_writeDataToBoth(0x01); 
+  //_writeCommandToBoth(0xE8);
+  //_writeDataToBoth(0x01);
   _PowerOn();
   _using_partial_mode = false;
 }
@@ -666,10 +588,15 @@ void GxEPD2_1085_GDEM1085T51::_Init_Full()
 void GxEPD2_1085_GDEM1085T51::_Init_Part()
 {
   Serial.println("_Init_Part");
-#if 1
+  if (!_using_partial_mode)
+  {
+    _reset();
+    _power_is_on = false;
+  }
+#if 0
   _InitDisplay();
-  //_writeCommandToBoth(0xE8);  
-  //_writeDataToBoth(0x01); 
+  //_writeCommandToBoth(0xE8);
+  //_writeDataToBoth(0x01);
   _PowerOn();
   _using_partial_mode = true;
 #else
@@ -688,8 +615,8 @@ void GxEPD2_1085_GDEM1085T51::_Init_Part()
   _writeDataToBoth(0x02);
   _writeCommandToSlave(0xAE);
   _writeDataToSlave(0xA0);
-  _writeCommandToBoth(0xE0);
-  _writeDataToBoth(0x01);
+  _writeCommandToBoth(0xE0); // Cascade Setting (CCSET)
+  _writeDataToBoth(0x01);    // CCEN (clock for slave)
   _writeCommandToBoth(0x00); // Panel setting
   _writeDataToBoth(0x9F);    // otp
   _writeDataToBoth(0x0D);    // ??
@@ -709,36 +636,42 @@ void GxEPD2_1085_GDEM1085T51::_Init_Part()
   _writeDataToBoth(0x00);
   _writeDataToBoth(0x00);
   _writeDataToBoth(0x00);
-  _writeDataToBoth(0x00);  
+  _writeDataToBoth(0x00);
   _writeCommandToBoth(0x82); // VCOM DC Setting
   _writeDataToBoth(0x12);    // ??
   _writeCommandToBoth(0x60); // TCON setting
   _writeDataToBoth(0x31);    // ??
-  _writeCommandToBoth(0x50); // VCOM and DATA interval setting  
+  _writeCommandToBoth(0x50); // VCOM and DATA interval setting
   _writeDataToBoth(0x97);
-  //_writeCommandToBoth(0x50); // VCOM and DATA interval setting    
+  //_writeCommandToBoth(0x50); // VCOM and DATA interval setting
   //_writeDataToBoth(0x97);    // LUTBW, 10 hsync
-  _writeCommandToBoth(0xE0); // ??
-  _writeDataToBoth(0x03);    // ??
+  _writeCommandToBoth(0xE0); // Cascade Setting (CCSET)
+  _writeDataToBoth(0x03);    // TSFIX, CCEN (clock for slave)
   _writeCommandToBoth(0xE5); // Force Temperature
   _writeDataToBoth(0x64);    // 100, differential update
-  _writeCommandToBoth(0x04); //POWER ON
-  delay(100);  
-  _waitWhileBusy("_PowerOn", power_on_time);
-  _power_is_on = true;
-  _PowerOn();
+  //  _writeCommandToBoth(0x04); //POWER ON
+  //  delay(100);
+  //  _waitWhileBusy("_PowerOn", power_on_time);
+  //  _power_is_on = true;
+  //  _PowerOn();
   _using_partial_mode = true;
 #endif
 }
 
 void GxEPD2_1085_GDEM1085T51::_Update_Full()
 {
+  _PowerOn();
+  _writeCommandToBoth(0xE0); // Cascade Setting (CCSET)
+  _writeDataToBoth(0x01);    // no TSFIX, CCEN (clock for slave)
+  _writeCommandToBoth(0xE8);
+  _writeDataToBoth(0x01);
   _writeCommandToBoth(0x12); //display refresh
   _waitWhileBusy("_Update_Full", full_refresh_time);
 }
 
 void GxEPD2_1085_GDEM1085T51::_Update_Part()
 {
+  _PowerOn();
   _writeCommandToBoth(0x12); //display refresh
   _waitWhileBusy("_Update_Part", partial_refresh_time);
 }
