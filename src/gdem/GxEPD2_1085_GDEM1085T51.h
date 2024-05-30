@@ -94,16 +94,6 @@ class GxEPD2_1085_GDEM1085T51 : public GxEPD2_EPD
     void _Update_Part();
   private:
     int16_t _cs2;
-    static const unsigned char lut_20_vcomDC[];
-    static const unsigned char lut_21_ww[];
-    static const unsigned char lut_22_bw[];
-    static const unsigned char lut_23_wb[];
-    static const unsigned char lut_24_bb[];
-    static const unsigned char lut_20_vcomDC_partial[];
-    static const unsigned char lut_21_ww_partial[];
-    static const unsigned char lut_22_bw_partial[];
-    static const unsigned char lut_23_wb_partial[];
-    static const unsigned char lut_24_bb_partial[];
 };
 
 #endif
