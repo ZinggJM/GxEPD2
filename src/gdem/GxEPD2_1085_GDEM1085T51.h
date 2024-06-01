@@ -88,6 +88,7 @@ class GxEPD2_1085_GDEM1085T51 : public GxEPD2_EPD
     void _setPartialRamAreaSlave(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
     void _PowerOn();
     void _PowerOff();
+    void _soft_reset();
     void _InitDisplay();
     void _Init_Full();
     void _Init_Part();

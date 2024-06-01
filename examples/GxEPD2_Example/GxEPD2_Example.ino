@@ -101,6 +101,7 @@
 #endif
 #if defined(ESP32) || defined(ARDUINO_ARCH_RP2040)
 #include "bitmaps/Bitmaps1304x984.h" // 12.48" b/w
+#include "bitmaps/Bitmaps1360x480.h" // 10.85" b/w
 #include "bitmaps/Bitmaps3c1304x984.h" // 12.48" b/w/r
 #include "bitmaps/Bitmaps7c800x480.h" // 7.3" 7-color
 #endif
@@ -205,6 +206,7 @@ void setup()
   }
   //drawGrid(); return;
   drawBitmaps();
+  //display.powerOff(); return;
   drawGraphics();
   //return;
 #if !defined(__AVR) // takes too long!
@@ -905,6 +907,9 @@ void drawBitmaps()
 #ifdef _GxBitmaps200x200_H_
     drawBitmaps200x200();
 #endif
+#if defined(ESP32) && defined(_GxBitmaps1360x480_H_)
+    drawBitmaps1360x480();
+#endif
     // 3-color
 #ifdef _GxBitmaps3c200x200_H_
     drawBitmaps3c200x200();
@@ -1468,6 +1473,35 @@ void drawBitmaps1304x984()
   if (display.epd2.panel == GxEPD2::GDEW1248T3)
   {
     display.drawImage(Bitmap1304x984, 0, 0, display.epd2.WIDTH, display.epd2.HEIGHT, false, false, true);
+  }
+}
+#endif
+
+#if defined(ESP32) && defined(_GxBitmaps1360x480_H_)
+void drawBitmaps1360x480()
+{
+  if (display.epd2.panel == GxEPD2::GDEM1085T51)
+  {
+    display.drawImage(Bitmap1360x480_1, 0, 0, display.epd2.WIDTH, display.epd2.HEIGHT, false, false, true);
+    delay(3000);
+    display.drawImage(Bitmap1360x480_p1, 0, 0, display.epd2.WIDTH, display.epd2.HEIGHT, false, false, true);
+    delay(3000);
+    display.drawImage(Bitmap1360x480_p2, 0, 0, display.epd2.WIDTH, display.epd2.HEIGHT, false, false, true);
+    delay(3000);
+    display.drawImage(Bitmap1360x480_p3, 0, 0, display.epd2.WIDTH, display.epd2.HEIGHT, false, false, true);
+    delay(3000);
+    display.clearScreen();
+    int16_t wp = display.epd2.WIDTH / 5;
+    int16_t hp = display.epd2.HEIGHT / 5;
+    for (int16_t i = 0; i < 5; i++)
+    {
+      for (int16_t j = 0; j < 5; j++)
+      {
+        display.writeImagePart(Bitmap1360x480_1, i * wp, j * hp, 1360, 480, i * wp, j * hp, wp, hp, false, false, true);
+        display.refresh(true);
+        delay(1000);
+      }
+    }
   }
 }
 #endif

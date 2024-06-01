@@ -83,20 +83,20 @@ void GxEPD2_1085_GDEM1085T51::_writeScreenBuffer(uint8_t command, uint8_t value)
 
 void GxEPD2_1085_GDEM1085T51::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  Serial.print("writeImage("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", "); Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
+  //Serial.print("writeImage("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", "); Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
   _writeImage(0x13, bitmap, x, y, w, h, invert, mirror_y, pgm); // set current
 }
 
 void GxEPD2_1085_GDEM1085T51::writeImageForFullRefresh(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  Serial.print("writeImageForFullRefresh("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", "); Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
+  //Serial.print("writeImageForFullRefresh("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", "); Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
   _writeImage(0x10, bitmap, x, y, w, h, invert, mirror_y, pgm); // set previous
   _writeImage(0x13, bitmap, x, y, w, h, invert, mirror_y, pgm); // set current
 }
 
 void GxEPD2_1085_GDEM1085T51::writeImageAgain(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  Serial.print("writeImageAgain("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", "); Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
+  //Serial.print("writeImageAgain("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", "); Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
   _writeImage(0x10, bitmap, x, y, w, h, invert, mirror_y, pgm); // set previous
   _writeImage(0x13, bitmap, x, y, w, h, invert, mirror_y, pgm); // set current
 }
@@ -156,7 +156,6 @@ void GxEPD2_1085_GDEM1085T51::_writeImage(uint8_t command, const uint8_t bitmap[
   {
     int16_t xs = x1 <= WIDTH / 2 ? WIDTH / 2 : x1;
     int16_t ws = x1 <= WIDTH / 2 ? x1 + w1 - WIDTH / 2 : w1;
-    //Serial.print("_writeImage xs("); Serial.print(xs); Serial.print(", "); Serial.print(ws); Serial.print(", "); Serial.print(dx); Serial.print(", "); Serial.print(dy); Serial.println(")");
     _writeCommandToSlave(0x91); // partial in
     _setPartialRamAreaSlave(xs - WIDTH / 2, y1, ws, h1);
     _writeCommandToSlave(command);
@@ -205,7 +204,8 @@ void GxEPD2_1085_GDEM1085T51::writeImagePartAgain(const uint8_t bitmap[], int16_
 void GxEPD2_1085_GDEM1085T51::_writeImagePart(uint8_t command, const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
     int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  if (_initial_write) writeScreenBuffer(); // initial full screen buffer clean
+  //Serial.print("_writeImagePart("); Serial.print(x_part); Serial.print(", "); Serial.print(y_part); Serial.print(", "); Serial.print(w_bitmap); Serial.print(", "); Serial.print(h_bitmap); Serial.print(", ");
+  //Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", "); Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
   if ((w_bitmap < 0) || (h_bitmap < 0) || (w < 0) || (h < 0)) return;
   if ((x_part < 0) || (x_part >= w_bitmap)) return;
@@ -225,36 +225,75 @@ void GxEPD2_1085_GDEM1085T51::_writeImagePart(uint8_t command, const uint8_t bit
   w1 -= dx;
   h1 -= dy;
   if ((w1 <= 0) || (h1 <= 0)) return;
-  if (!_using_partial_mode) _Init_Part();
-  _writeCommand(0x91); // partial in
-  _setPartialRamAreaMaster(x1, y1, w1, h1);
-  _writeCommand(command);
-  _startTransfer();
-  for (int16_t i = 0; i < h1; i++)
+  if (!_init_display_done) _InitDisplay();
+  if (_initial_write) writeScreenBuffer(); // initial full screen buffer clean
+  if (x1 < WIDTH / 2)
   {
-    for (int16_t j = 0; j < w1 / 8; j++)
+    int16_t wm = x1 + w1 <= WIDTH / 2 ? w1 : WIDTH / 2 - x1;
+    _writeCommandToMaster(0x91); // partial in
+    _setPartialRamAreaMaster(x1, y1, wm, h1);
+    _writeCommandToMaster(command);
+    _startTransferToMaster();
+    for (int16_t i = 0; i < h1; i++)
     {
-      uint8_t data;
-      // use wb_bitmap, h_bitmap of bitmap for index!
-      int16_t idx = mirror_y ? x_part / 8 + j + dx / 8 + ((h_bitmap - 1 - (y_part + i + dy))) * wb_bitmap : x_part / 8 + j + dx / 8 + (y_part + i + dy) * wb_bitmap;
-      if (pgm)
+      for (int16_t j = 0; j < wm / 8; j++)
       {
+        uint8_t data;
+        // use wb_bitmap, h_bitmap of bitmap for index!
+        int32_t idx = mirror_y ? x_part / 8 + j + dx / 8 + int32_t((h_bitmap - 1 - (y_part + i + dy))) * wb_bitmap : x_part / 8 + j + dx / 8 + int32_t(y_part + i + dy) * wb_bitmap;
+        if (pgm)
+        {
 #if defined(__AVR) || defined(ESP8266) || defined(ESP32)
-        data = pgm_read_byte(&bitmap[idx]);
+          data = pgm_read_byte(&bitmap[idx]);
 #else
-        data = bitmap[idx];
+          data = bitmap[idx];
 #endif
+        }
+        else
+        {
+          data = bitmap[idx];
+        }
+        if (invert) data = ~data;
+        _transfer(data);
       }
-      else
-      {
-        data = bitmap[idx];
-      }
-      if (invert) data = ~data;
-      _transfer(data);
     }
+    _endTransferToMaster();
+    _writeCommandToMaster(0x92); // partial out
   }
-  _endTransfer();
-  _writeCommand(0x92); // partial out
+  if (x1 + w1 > WIDTH / 2)
+  {
+    int16_t xs = x1 <= WIDTH / 2 ? WIDTH / 2 : x1;
+    int16_t ws = x1 <= WIDTH / 2 ? x1 + w1 - WIDTH / 2 : w1;
+    _writeCommandToSlave(0x91); // partial in
+    _setPartialRamAreaSlave(xs - WIDTH / 2, y1, ws, h1);
+    _writeCommandToSlave(command);
+    _startTransferToSlave();
+    for (int16_t i = 0; i < h1; i++)
+    {
+      for (int16_t j = 0; j < ws / 8; j++)
+      {
+        uint8_t data;
+        // use wb_bitmap, h_bitmap of bitmap for index!
+        int32_t idx = mirror_y ? x_part / 8 + (xs - x1) / 8 + j + dx / 8 + int32_t((h_bitmap - 1 - (y_part + i + dy))) * wb_bitmap : x_part / 8 + (xs - x1) / 8 + j + dx / 8 + int32_t(y_part + i + dy) * wb_bitmap;
+        if (pgm)
+        {
+#if defined(__AVR) || defined(ESP8266) || defined(ESP32)
+          data = pgm_read_byte(&bitmap[idx]);
+#else
+          data = bitmap[idx];
+#endif
+        }
+        else
+        {
+          data = bitmap[idx];
+        }
+        if (invert) data = ~data;
+        _transfer(data);
+      }
+    }
+    _endTransferToSlave();
+    _writeCommandToSlave(0x92); // partial out
+  }
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
 
@@ -460,7 +499,7 @@ void GxEPD2_1085_GDEM1085T51::_endTransferToSlave()
 
 void GxEPD2_1085_GDEM1085T51::_setPartialRamAreaMaster(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
 {
-  Serial.print("_setPartialRamAreaMaster("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", "); Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
+  //Serial.print("_setPartialRamAreaMaster("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", "); Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
   uint16_t xe = (x + w - 1) | 0x0007; // byte boundary inclusive (last byte)
   uint16_t ye = y + h - 1;
   x &= 0xFFF8; // byte boundary
@@ -479,7 +518,7 @@ void GxEPD2_1085_GDEM1085T51::_setPartialRamAreaMaster(uint16_t x, uint16_t y, u
 
 void GxEPD2_1085_GDEM1085T51::_setPartialRamAreaSlave(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
 {
-  Serial.print("_setPartialRamAreaSlave("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", "); Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
+  //Serial.print("_setPartialRamAreaSlave("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", "); Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
   uint16_t xe = (x + w - 1) | 0x0007; // byte boundary inclusive (last byte)
   uint16_t ye = y + h - 1;
   x &= 0xFFF8; // byte boundary
@@ -513,8 +552,19 @@ void GxEPD2_1085_GDEM1085T51::_PowerOff()
     _writeCommandToBoth(0x02); // power off
     _waitWhileBusy("_PowerOff", power_off_time);
     _power_is_on = false;
-    _using_partial_mode = false;
   }
+}
+
+void GxEPD2_1085_GDEM1085T51::_soft_reset()
+{
+  if (_hibernating) _reset();
+  _writeCommandToBoth(0x00); // Panel setting
+  _writeDataToBoth(0x9E);    // RST_N
+  delay(2);
+  _writeCommandToBoth(0x00); // Panel setting
+  _writeDataToBoth(0x9F);    // otp
+  _waitWhileBusy("_soft_reset", power_on_time);
+  _power_is_on = false;
 }
 
 void GxEPD2_1085_GDEM1085T51::_InitDisplay()
@@ -563,21 +613,13 @@ void GxEPD2_1085_GDEM1085T51::_InitDisplay()
   _writeDataToBoth(0x97);    // LUTBW, 10 hsync
   _writeCommandToBoth(0xE8);
   _writeDataToBoth(0x01);
-  //  _writeCommandToBoth(0x04);  //power on
-  //  delay(200);
-  //  _waitWhileBusy("_PowerOn", power_on_time);
-  //  _power_is_on = true;
   _init_display_done = true;
 }
 
 void GxEPD2_1085_GDEM1085T51::_Init_Full()
 {
-  Serial.println("_Init_Full");
-  if (_using_partial_mode)
-  {
-    _reset();
-    _power_is_on = false;
-  }
+  //Serial.println("_Init_Full");
+  if (_using_partial_mode) _soft_reset();
   _InitDisplay();
   //_writeCommandToBoth(0xE8);
   //_writeDataToBoth(0x01);
@@ -587,12 +629,8 @@ void GxEPD2_1085_GDEM1085T51::_Init_Full()
 
 void GxEPD2_1085_GDEM1085T51::_Init_Part()
 {
-  Serial.println("_Init_Part");
-  if (!_using_partial_mode)
-  {
-    _reset();
-    _power_is_on = false;
-  }
+  //Serial.println("_Init_Part");
+  if (!_using_partial_mode) _soft_reset();
 #if 0
   _InitDisplay();
   //_writeCommandToBoth(0xE8);
@@ -649,11 +687,7 @@ void GxEPD2_1085_GDEM1085T51::_Init_Part()
   _writeDataToBoth(0x03);    // TSFIX, CCEN (clock for slave)
   _writeCommandToBoth(0xE5); // Force Temperature
   _writeDataToBoth(0x64);    // 100, differential update
-  //  _writeCommandToBoth(0x04); //POWER ON
-  //  delay(100);
-  //  _waitWhileBusy("_PowerOn", power_on_time);
-  //  _power_is_on = true;
-  //  _PowerOn();
+  _PowerOn();
   _using_partial_mode = true;
 #endif
 }
