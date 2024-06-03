@@ -1483,13 +1483,13 @@ void drawBitmaps1360x480()
   if (display.epd2.panel == GxEPD2::GDEM1085T51)
   {
     display.drawImage(Bitmap1360x480_1, 0, 0, display.epd2.WIDTH, display.epd2.HEIGHT, false, false, true);
-    delay(3000);
+    delay(2000);
     display.drawImage(Bitmap1360x480_p1, 0, 0, display.epd2.WIDTH, display.epd2.HEIGHT, false, false, true);
-    delay(3000);
+    delay(1000);
     display.drawImage(Bitmap1360x480_p2, 0, 0, display.epd2.WIDTH, display.epd2.HEIGHT, false, false, true);
-    delay(3000);
+    delay(1000);
     display.drawImage(Bitmap1360x480_p3, 0, 0, display.epd2.WIDTH, display.epd2.HEIGHT, false, false, true);
-    delay(3000);
+    delay(1000);
     display.clearScreen();
     int16_t wp = display.epd2.WIDTH / 5;
     int16_t hp = display.epd2.HEIGHT / 5;
@@ -1499,7 +1499,7 @@ void drawBitmaps1360x480()
       {
         display.writeImagePart(Bitmap1360x480_1, i * wp, j * hp, 1360, 480, i * wp, j * hp, wp, hp, false, false, true);
         display.refresh(true);
-        delay(1000);
+        delay(500);
       }
     }
   }

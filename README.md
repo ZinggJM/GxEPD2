@@ -83,6 +83,7 @@
 - GDEW0213Z16    2.13" b/w/r 104x212, UC8151 (IL0373)
 - GDEW0213Z19    2.13" b/w/r 104x212, UC8151D
 - GDEY0213Z98    2.13" b/w/r 122x250, SSD1680
+- GDEY0213F51    2.13" 4-color 122x250, JD79661
 - DEPG0213BN     2.13" b/w 122x250, SSD1680, e.g. LILYGO® TTGO T5 V2.3.1 2.13 inch
 - GDEY0213B74    2.13" b/w 122x250, SSD1680
 - GDEW026T0      2.6" b/w 152x296, UC8151 (IL0373)
@@ -132,6 +133,7 @@
 - GDEW075Z08     7.5" b/w/r 800x480, EK79655 (GD7965)
 - GDEH075Z90     7.5" b/w/r 880x528, SSD1677
 - GDEM102T91    10.2" b/w 960x640, SSD1677
+- GDEM1085T51   10.85 b/w 1360x480, JD79686AB
 - GDEH116T91    11.6" b/w 960x640, SSD1677
 - GDEY116Z91    11.6" b/w/r 960x640, SSD1677
 - GDEW1248T3    12.48" b/w 1304x984, UC8179
@@ -148,13 +150,12 @@
 - ES103TC1     10.3" grey levels, 1872x1404, on Waveshare e-Paper IT8951 Driver HAT
 
 ### I can and will only support e-paper panels I have!
-- promotion panels from suppliers are welcome, to add support to GxEPD2
-- donation panels from users are welcome, to add support to GxEPD2
+- I can't accept panel donations to add support to GxEPD2 currently, I need a break.
+- I can take note of panels of interest for users, to maybe add support later.
 
 ### Version 1.5.7
-- version for ongoing additions, work in  progress
-- GDEY0213F51 2.13" 4-color 122x250
-- GDEM1085T51 10.85 b/w 1360x480
+- added support for GDEY0213F51 2.13" 4-color 122x250, JD79661
+- added support for GDEM1085T51 10.85 b/w 1360x480, JD79686AB
 #### Version 1.5.6
 - version for ongoing fixes and additions
 - added support for GYE042A87  4.2" b/w 400x300
