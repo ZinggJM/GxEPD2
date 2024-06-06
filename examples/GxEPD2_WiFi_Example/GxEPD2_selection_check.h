@@ -124,10 +124,10 @@
 #error "GxEPD2_3C used with b/w driver class"
 #endif
 #if IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS) && IS_GxEPD2_DRIVER_4C(GxEPD2_DRIVER_CLASS)
-#error "GxEPD2_3C used with 4-color driver class""
+#error "GxEPD2_3C used with 4-color driver class"
 #endif
 #if IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS) && IS_GxEPD2_DRIVER_7C(GxEPD2_DRIVER_CLASS)
-#error "GxEPD2_3C used with 7-color driver class""
+#error "GxEPD2_3C used with 7-color driver class"
 #endif
 #if IS_GxEPD2_4C(GxEPD2_DISPLAY_CLASS) && IS_GxEPD2_DRIVER_BW(GxEPD2_DRIVER_CLASS)
 #error "GxEPD2_4C used with b/w driver class"
