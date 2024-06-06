@@ -82,6 +82,7 @@ class GxEPD2
       GDEW075T7,  Waveshare_7_5_bw_T7 = GDEW075T7,
       GDEY075T7,
       GDEM102T91,
+      GDEM1085T51,
       GDEH116T91,
       GDEW1248T3, Waveshare_12_24_bw = GDEW1248T3,
       GDEM133T91,
@@ -112,6 +113,7 @@ class GxEPD2
       GDEY1248Z51,
       GDEM133Z91,
       // 4-color
+      GDEY0213F51,
       GDEY0266F51H,
       GDEY029F51H,
       Waveshare3inch4color,

@@ -15,6 +15,20 @@
 //
 // Add new topics in https://forum.arduino.cc/c/using-arduino/displays/23 for new questions and issues
 
+// mapping of Good Display Arduino UNO Development Kit DEArduino-L, e.g. to DESPI-C02
+// BUSY -> 4, RES -> 5, D/C -> 6, CS-> 7, SCK -> 13, SDI -> 11
+
+// mapping of Good Display ESP8266 Development Kit ESP8266-L, e.g. to DESPI-C02
+// BUSY -> GPIO16, RES -> GPIO5, D/C -> GPIO4, CS-> GPIO2, SCK -> GPIO14, SDI -> GPIO13
+
+// mapping of Good Display ESP32 Development Kit ESP32-L, e.g. to DESPI-C02
+// BUSY -> GPIO13, RES -> GPIO12, D/C -> GPIO14, CS-> GPIO27, SCK -> GPIO18, SDI -> GPIO23
+
+// mapping of Good Display STM32 Development Kit DESPI-L, e.g. to DESPI-C02
+// BUSY -> PE13, RES -> PE14, D/C -> PE14, CS-> PD8, SCK -> PD9, SDI -> PD10
+// needs jumpers from PA5 (PIN_SPI_SCK) to SCK for EPD and PA7 (PIN_SPI_MOSI) to SDI for EPD. PD9 and PD10 are not HW SPI capable.
+// BUSY -> PE13, RES -> PE14, D/C -> PE14, CS-> PD8, SCK -> PA5, SDI -> PA7 // for HW SPI with GxEPD2
+
 // connection suggestions concerning Waveshare e-paper HAT Rev 2.3:
 // DON'T FORGET to connect the PWR pin to VCC, to enable power to the board.
 // RST is no longer used to disable power to the board, as with earlier revisions.

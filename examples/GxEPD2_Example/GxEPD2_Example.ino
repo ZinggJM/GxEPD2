@@ -89,6 +89,7 @@
 #include "bitmaps/Bitmaps3c960x680.h" // 13.3" b/w/r
 #include "bitmaps/WS_Bitmaps800x600.h" // 6.0"  grey
 // 4-color
+#include "bitmaps/Bitmaps4c128x250.h" // 2.13" 4-color
 #include "bitmaps/Bitmaps4c184x360.h" // 2.66" 4-color
 #include "bitmaps/Bitmaps4c168x384.h" // 2.9" 4-color
 #include "bitmaps/WS_Bitmaps4c168x168.h" // 4.37" 4-color
@@ -100,6 +101,7 @@
 #endif
 #if defined(ESP32) || defined(ARDUINO_ARCH_RP2040)
 #include "bitmaps/Bitmaps1304x984.h" // 12.48" b/w
+#include "bitmaps/Bitmaps1360x480.h" // 10.85" b/w
 #include "bitmaps/Bitmaps3c1304x984.h" // 12.48" b/w/r
 #include "bitmaps/Bitmaps7c800x480.h" // 7.3" 7-color
 #endif
@@ -204,6 +206,7 @@ void setup()
   }
   //drawGrid(); return;
   drawBitmaps();
+  //display.powerOff(); return;
   drawGraphics();
   //return;
 #if !defined(__AVR) // takes too long!
@@ -871,6 +874,9 @@ void drawBitmaps()
   drawBitmaps3c960x680();
 #endif
   // 4-color
+#if defined(_GxBitmaps4c128x250_H_)
+  drawBitmaps4c128x250();
+#endif
 #if defined(_WS_Bitmaps4c168x168_H_)
   drawBitmaps4c168x168();
 #endif
@@ -900,6 +906,9 @@ void drawBitmaps()
     // show these after the specific bitmaps
 #ifdef _GxBitmaps200x200_H_
     drawBitmaps200x200();
+#endif
+#if defined(ESP32) && defined(_GxBitmaps1360x480_H_)
+    drawBitmaps1360x480();
 #endif
     // 3-color
 #ifdef _GxBitmaps3c200x200_H_
@@ -1468,6 +1477,35 @@ void drawBitmaps1304x984()
 }
 #endif
 
+#if defined(ESP32) && defined(_GxBitmaps1360x480_H_)
+void drawBitmaps1360x480()
+{
+  if (display.epd2.panel == GxEPD2::GDEM1085T51)
+  {
+    display.drawImage(Bitmap1360x480_1, 0, 0, display.epd2.WIDTH, display.epd2.HEIGHT, false, false, true);
+    delay(2000);
+    display.drawImage(Bitmap1360x480_p1, 0, 0, display.epd2.WIDTH, display.epd2.HEIGHT, false, false, true);
+    delay(1000);
+    display.drawImage(Bitmap1360x480_p2, 0, 0, display.epd2.WIDTH, display.epd2.HEIGHT, false, false, true);
+    delay(1000);
+    display.drawImage(Bitmap1360x480_p3, 0, 0, display.epd2.WIDTH, display.epd2.HEIGHT, false, false, true);
+    delay(1000);
+    display.clearScreen();
+    int16_t wp = display.epd2.WIDTH / 5;
+    int16_t hp = display.epd2.HEIGHT / 5;
+    for (int16_t i = 0; i < 5; i++)
+    {
+      for (int16_t j = 0; j < 5; j++)
+      {
+        display.writeImagePart(Bitmap1360x480_1, i * wp, j * hp, 1360, 480, i * wp, j * hp, wp, hp, false, false, true);
+        display.refresh(true);
+        delay(500);
+      }
+    }
+  }
+}
+#endif
+
 struct bitmap_pair
 {
   const unsigned char* black;
@@ -1876,6 +1914,17 @@ void drawBitmaps3c1304x984()
     //display.drawImage(Bitmap3c1304x984_black, Bitmap3c1304x984_red, 0, 0, 1304, 984, false, false, true);
     display.writeImage(0, Bitmap3c1304x984_red, 0, 0, 1304, 984, true, false, true); // red bitmap is inverted
     display.drawImage(Bitmap3c1304x984_black, 0, 0, 0, 1304, 984, true, false, true); // black bitmap is normal
+  }
+}
+#endif
+
+#if defined(_GxBitmaps4c128x250_H_)
+void drawBitmaps4c128x250()
+{
+  if (display.epd2.panel == GxEPD2::GDEY0213F51)
+  {
+    display.drawNative(Bitmap4c128x250, 0, 0, 0, 128, 250, false, false, true);
+    delay(5000);
   }
 }
 #endif
