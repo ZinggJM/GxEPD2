@@ -119,6 +119,7 @@
 - GDEQ0426T82    4.26" b/w 800x480, SSD1677
 - Waveshare437inch4color Waveshare 4.37" 4-color e-paper display 512x368 
 - ACeP565        5.65" Waveshare 5.65" 7-color e-paper display 600x448
+- GDEP0565D90    5.65" 7-color 600x448
 - GDEW0583T7     5.83" b/w 600x448, UC8159c (IL0371)
 - GDEW0583T8     5.83" b/w 648x480, EK79655 (GD7965)
 - GDEW0583Z83    5.83" b/w/r 648x480, EK79655 (GD7965)
@@ -153,7 +154,9 @@
 - I can't accept panel donations to add support to GxEPD2 currently, I need a break.
 - I can take note of panels of interest for users, to maybe add support later.
 
-### Version 1.5.7
+### Version 1.5.8
+- added support for GDEP0565D90 5.65" 7-color 600x448
+#### Version 1.5.7
 - added support for GDEY0213F51 2.13" 4-color 122x250, JD79661
 - added support for GDEM1085T51 10.85 b/w 1360x480, JD79686AB
 #### Version 1.5.6

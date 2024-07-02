@@ -51,6 +51,9 @@
 #if __has_include("epd7c/GxEPD2_565c.h")
 #include "epd7c/GxEPD2_565c.h"
 #endif
+#if __has_include("epd7c/GxEPD2_565c_GDEP0565D90.h")
+#include "epd7c/GxEPD2_565c_GDEP0565D90.h"
+#endif
 #if __has_include("epd7c/GxEPD2_730c_GDEY073D46.h")
 #include "epd7c/GxEPD2_730c_GDEY073D46.h"
 #endif

@@ -107,6 +107,7 @@
 //#define GxEPD2_DRIVER_CLASS GxEPD2_437c     // Waveshare 4.37" 4-color
 // 7-color e-paper
 //#define GxEPD2_DRIVER_CLASS GxEPD2_565c // Waveshare 5.65" 7-color
+//#define GxEPD2_DRIVER_CLASS GxEPD2_565c_GDEP0565D90 // GDEP0565D90 600x448 7-color (E219454, AB1024-EGA AC0750TC1)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_730c_GDEY073D46 // GDEY073D46 800x480 7-color, (N-FPC-001 2021.11.26)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_730c_ACeP_730 // Waveshare 7.3" 7-color
 // grey levels parallel IF e-papers on Waveshare e-Paper IT8951 Driver HAT

@@ -102,6 +102,7 @@
 #define GxEPD2_437c_IS_4C true
 // 7-color e-paper
 #define GxEPD2_565c_IS_7C true
+#define GxEPD2_565c_GDEP0565D90_IS_7C true
 #define GxEPD2_730c_GDEY073D46_IS_7C true
 #define GxEPD2_730c_ACeP_730_IS_7C true
 

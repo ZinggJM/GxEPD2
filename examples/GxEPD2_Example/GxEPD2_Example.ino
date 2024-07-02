@@ -96,6 +96,7 @@
 #include "bitmaps/WS_Bitmaps4c168x400.h" // 3.00" 4-color
 #include "bitmaps/Bitmaps4c400x300.h" // 4.2"" 4-color
 // 7-color
+#include "bitmaps/Bitmaps7c600x448.h" // 5.65" 7-color
 #include "bitmaps/WS_Bitmaps7c192x143.h" // 5.65" 7-color
 #include "bitmaps/WS_Bitmaps7c300x180.h" // 7.3" 7-color
 #endif
@@ -210,7 +211,7 @@ void setup()
   drawGraphics();
   //return;
 #if !defined(__AVR) // takes too long!
-  if ((display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::ACeP730))
+  if ((display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::ACeP730) || (display.epd2.panel == GxEPD2::GDEP0565D90))
   {
     //draw7colorlines();
     //delay(2000);
@@ -891,6 +892,10 @@ void drawBitmaps()
 #endif
 #if defined(_GxBitmaps4c400x300_H_)
   drawBitmaps4c400x300();
+#endif
+  // 7-color
+#if defined(_GxBitmaps7c600x448_H_)
+  drawBitmaps7c600x448();
 #endif
 #if defined(_WS_Bitmaps7c192x143_H_)
   drawBitmaps7c192x143();
@@ -1984,6 +1989,17 @@ void drawBitmaps4c400x300()
 }
 #endif
 
+#if defined(_GxBitmaps7c600x448_H_)
+void drawBitmaps7c600x448()
+{
+  if (display.epd2.panel == GxEPD2::GDEP0565D90)
+  {
+    display.epd2.drawDemoBitmap(Bitmap7c600x448, 0, 0, 0, 600, 448, 1, false, true);
+    delay(5000);
+  }
+}
+#endif
+
 #if defined(_WS_Bitmaps7c192x143_H_)
 void drawBitmaps7c192x143()
 {
@@ -1998,7 +2014,7 @@ void drawBitmaps7c192x143()
 #if defined(_GxBitmaps7c800x480_H_)
 void drawBitmaps7c800x480()
 {
-  if ((display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::ACeP730))
+  if ((display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::ACeP730)|| (display.epd2.panel == GxEPD2::GDEP0565D90))
   {
     display.epd2.drawDemoBitmap(Bitmap7c800x480, 0, 0, 0, 800, 480, 0, false, true); // special format
     delay(5000);
@@ -2009,7 +2025,7 @@ void drawBitmaps7c800x480()
 #if defined(_WS_Bitmaps7c300x180_H_)
 void drawBitmaps7c300x180()
 {
-  if ((display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::ACeP730))
+  if ((display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::ACeP730) || (display.epd2.panel == GxEPD2::GDEP0565D90))
   {
     display.drawNative(WS_Bitmap7c300x180, 0, (display.epd2.WIDTH - 300) / 2, (display.epd2.HEIGHT - 180) / 2, 300, 180, false, false, true);
     delay(5000);

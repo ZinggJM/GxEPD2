@@ -101,6 +101,7 @@
 // 7-color e-paper
 //GxEPD2_3C < GxEPD2_565c, GxEPD2_565c::HEIGHT / 4 > display(GxEPD2_565c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // Waveshare 5.65" 7-color (3C graphics)
 //GxEPD2_7C < GxEPD2_565c, GxEPD2_565c::HEIGHT / 4 > display(GxEPD2_565c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // Waveshare 5.65" 7-color
+//GxEPD2_7C < GxEPD2_565c_GDEP0565D90, GxEPD2_565c_GDEP0565D90::HEIGHT / 2 > display(GxEPD2_565c_GDEP0565D90(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEP0565D90 600x448 7-color (E219454, AB1024-EGA AC0750TC1)
 //GxEPD2_7C < GxEPD2_730c_GDEY073D46, GxEPD2_730c_GDEY073D46::HEIGHT / 6 > display(GxEPD2_730c_GDEY073D46(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEY073D46 800x480 7-color, (N-FPC-001 2021.11.26)
 // grey levels parallel IF e-papers on Waveshare e-Paper IT8951 Driver HAT
 // HRDY -> 4, RST -> 2, CS -> SS(15), SCK -> SCK(14), MOSI -> MOSI(D7(13)), MISO -> MISO(D6(12)), GND -> GND, 5V -> 5V
@@ -193,6 +194,7 @@
 //GxEPD2_4C < GxEPD2_437c, GxEPD2_437c::HEIGHT / 4 > display(GxEPD2_437c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=2*/ 2, /*BUSY=5*/ 5)); // Waveshare 4.37" 4-color
 // 7-color e-paper
 //GxEPD2_7C < GxEPD2_565c, GxEPD2_565c::HEIGHT / 4 > display(GxEPD2_565c(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=2*/ 2, /*BUSY=5*/ 5)); // Waveshare 5.65" 7-color
+//GxEPD2_7C < GxEPD2_565c_GDEP0565D90, GxEPD2_565c_GDEP0565D90::HEIGHT / 2 > display(GxEPD2_565c_GDEP0565D90(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=2*/ 2, /*BUSY=5*/ 5)); // GDEP0565D90 600x448 7-color (E219454, AB1024-EGA AC0750TC1)
 //GxEPD2_7C < GxEPD2_730c_GDEY073D46, GxEPD2_730c_GDEY073D46::HEIGHT / 6 > display(GxEPD2_730c_GDEY073D46(/*CS=15*/ SS, /*DC=4*/ 4, /*RST=2*/ 2, /*BUSY=5*/ 5)); // GDEY073D46 800x480 7-color, (N-FPC-001 2021.11.26)
 #endif
 
@@ -281,6 +283,7 @@
 // 7-color e-paper
 //GxEPD2_3C < GxEPD2_565c, GxEPD2_565c::HEIGHT / 2 > display(GxEPD2_565c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // Waveshare 5.65" 7-color (3C graphics)
 //GxEPD2_7C < GxEPD2_565c, GxEPD2_565c::HEIGHT / 2 > display(GxEPD2_565c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // Waveshare 5.65" 7-color
+//GxEPD2_7C < GxEPD2_565c_GDEP0565D90, GxEPD2_565c_GDEP0565D90::HEIGHT / 2 > display(GxEPD2_565c_GDEP0565D90(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEP0565D90 600x448 7-color (E219454, AB1024-EGA AC0750TC1)
 //GxEPD2_7C < GxEPD2_730c_GDEY073D46, GxEPD2_730c_GDEY073D46::HEIGHT / 4 > display(GxEPD2_730c_GDEY073D46(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEY073D46 800x480 7-color, (N-FPC-001 2021.11.26)
 
 // grey levels parallel IF e-papers on Waveshare e-Paper IT8951 Driver HAT
@@ -387,6 +390,7 @@
 // 7-color e-paper
 //GxEPD2_3C < GxEPD2_565c, GxEPD2_565c::HEIGHT / 2 > display(GxEPD2_565c(/*CS=*/ 15, /*DC=*/ 27, /*RST=*/ 26, /*BUSY=*/ 25)); // Waveshare 5.65" 7-color (3C graphics)
 //GxEPD2_7C < GxEPD2_565c, GxEPD2_565c::HEIGHT / 2 > display(GxEPD2_565c(/*CS=*/ 15, /*DC=*/ 27, /*RST=*/ 26, /*BUSY=*/ 25)); // Waveshare 5.65" 7-color
+//GxEPD2_7C < GxEPD2_565c_GDEP0565D90, GxEPD2_565c_GDEP0565D90::HEIGHT / 2 > display(GxEPD2_565c_GDEP0565D90(/*CS=*/ 15, /*DC=*/ 27, /*RST=*/ 26, /*BUSY=*/ 25)); // GDEP0565D90 600x448 7-color (E219454, AB1024-EGA AC0750TC1)
 //GxEPD2_7C < GxEPD2_730c_GDEY073D46, GxEPD2_730c_GDEY073D46::HEIGHT / 4 > display(GxEPD2_730c_GDEY073D46(/*CS=*/ 15, /*DC=*/ 27, /*RST=*/ 26, /*BUSY=*/ 25)); // GDEY073D46 800x480 7-color, (N-FPC-001 2021.11.26)
 #endif
 
@@ -480,6 +484,7 @@
 // 7-color e-paper
 #define MAX_HEIGHT_7C(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2)) // 2 pixel per byte
 //GxEPD2_7C<GxEPD2_565c, MAX_HEIGHT_7C(GxEPD2_565c)> display(GxEPD2_565c(/*CS=PA4*/ SS, /*DC=*/ PA3, /*RST=*/ PA2, /*BUSY=*/ PA1)); // Waveshare 5.65" 7-color
+//GxEPD2_7C < GxEPD2_565c_GDEP0565D90, GxEPD2_565c_GDEP0565D90::HEIGHT / 2 > display(GxEPD2_565c_GDEP0565D90(/*CS=PA4*/ SS, /*DC=*/ PA3, /*RST=*/ PA2, /*BUSY=*/ PA1)); // GDEP0565D90 600x448 7-color (E219454, AB1024-EGA AC0750TC1)
 //GxEPD2_7C<GxEPD2_730c_GDEY073D46, MAX_HEIGHT_7C(GxEPD2_730c_GDEY073D46)> display(GxEPD2_730c_GDEY073D46(/*CS=PA4*/ SS, /*DC=*/ PA3, /*RST=*/ PA2, /*BUSY=*/ PA1)); // GDEY073D46 800x480 7-color, (N-FPC-001 2021.11.26)
 #undef MAX_DISPLAY_BUFFER_SIZE
 #undef MAX_HEIGHT
@@ -577,6 +582,7 @@
 // 7-color e-paper
 #define MAX_HEIGHT_7C(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2)) // 2 pixel per byte
 //GxEPD2_7C<GxEPD2_565c, MAX_HEIGHT_7C(GxEPD2_565c)> display(GxEPD2_565c(/*CS=*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // Waveshare 5.65" 7-color
+//GxEPD2_7C < GxEPD2_565c_GDEP0565D90, GxEPD2_565c_GDEP0565D90::HEIGHT / 2 > display(GxEPD2_565c_GDEP0565D90(/*CS=*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // GDEP0565D90 600x448 7-color (E219454, AB1024-EGA AC0750TC1)
 //GxEPD2_7C<GxEPD2_730c_GDEY073D46, MAX_HEIGHT_7C(GxEPD2_730c_GDEY073D46)> display(GxEPD2_730c_GDEY073D46(/*CS=*/ SS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // GDEY073D46 800x480 7-color, (N-FPC-001 2021.11.26)
 
 // ***** for mapping of Waveshare Universal e-Paper Raw Panel Driver Shield for Arduino / NUCLEO *****
@@ -663,6 +669,8 @@
 //GxEPD2_4C <GxEPD2_437c, MAX_HEIGHT_3C(GxEPD2_437c)> display(GxEPD2_437c(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // Waveshare 4.37" 4-color
 // 7-color e-paper
 //GxEPD2_7C<GxEPD2_565c, MAX_HEIGHT_7C(GxEPD2_565c)> display(GxEPD2_565c(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // Waveshare 5.65" 7-color
+//GxEPD2_7C < GxEPD2_565c_GDEP0565D90, GxEPD2_565c_GDEP0565D90::HEIGHT / 2 > display(GxEPD2_565c_GDEP0565D90(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEP0565D90 600x448 7-color (E219454, AB1024-EGA AC0750TC1)
+//GxEPD2_7C<GxEPD2_730c_GDEY073D46, MAX_HEIGHT_7C(GxEPD2_730c_GDEY073D46)> display(GxEPD2_730c_GDEY073D46(/*CS=10*/ SS, /*DC=*/ 9, /*RST=*/ 8, /*BUSY=*/ 7)); // GDEY073D46 800x480 7-color, (N-FPC-001 2021.11.26)
 
 // Waveshare 12.48 b/w SPI display board and frame or Good Display 12.48 b/w panel GDEW1248T3
 // general constructor for use with standard SPI pins, default SCK, MISO and MOSI, for UNO on UNO connectors

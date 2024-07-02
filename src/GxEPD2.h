@@ -121,6 +121,7 @@ class GxEPD2
       Waveshare437inch4color,
       // 7-color
       ACeP565,     Waveshare_5_65_7c = ACeP565,
+      GDEP0565D90,
       GDEY073D46,
       ACeP730,     Waveshare_7_30_7c = ACeP730
     };
