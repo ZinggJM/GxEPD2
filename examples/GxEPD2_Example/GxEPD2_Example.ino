@@ -94,7 +94,8 @@
 #include "bitmaps/Bitmaps4c168x384.h" // 2.9" 4-color
 #include "bitmaps/WS_Bitmaps4c168x168.h" // 4.37" 4-color
 #include "bitmaps/WS_Bitmaps4c168x400.h" // 3.00" 4-color
-#include "bitmaps/Bitmaps4c400x300.h" // 4.2"" 4-color
+#include "bitmaps/Bitmaps4c400x300.h" // 4.2" 4-color
+#include "bitmaps/Bitmaps4c960x640.h" // 11.6" 4-color
 // 7-color
 #include "bitmaps/Bitmaps7c600x448.h" // 5.65" 7-color
 #include "bitmaps/WS_Bitmaps7c192x143.h" // 5.65" 7-color
@@ -874,38 +875,6 @@ void drawBitmaps()
 #if defined(ESP32) && defined(_GxBitmaps3c960x680_H_)
   drawBitmaps3c960x680();
 #endif
-  // 4-color
-#if defined(_GxBitmaps4c128x250_H_)
-  drawBitmaps4c128x250();
-#endif
-#if defined(_WS_Bitmaps4c168x168_H_)
-  drawBitmaps4c168x168();
-#endif
-#if defined(_WS_Bitmaps4c168x168_H_)
-  drawBitmaps4c168x168();
-#endif
-#if defined(_GxBitmaps4c168x384_H_)
-  drawBitmaps4c168x384();
-#endif
-#if defined(_GxBitmaps4c184x360_H_)
-  drawBitmaps4c184x360();
-#endif
-#if defined(_GxBitmaps4c400x300_H_)
-  drawBitmaps4c400x300();
-#endif
-  // 7-color
-#if defined(_GxBitmaps7c600x448_H_)
-  drawBitmaps7c600x448();
-#endif
-#if defined(_WS_Bitmaps7c192x143_H_)
-  drawBitmaps7c192x143();
-#endif
-#if defined(_GxBitmaps7c800x480_H_)
-  drawBitmaps7c800x480();
-#endif
-#if defined(_WS_Bitmaps7c300x180_H_)
-  drawBitmaps7c300x180();
-#endif
   if ((display.epd2.WIDTH >= 200) && (display.epd2.HEIGHT >= 200))
   {
     // show these after the specific bitmaps
@@ -920,6 +889,38 @@ void drawBitmaps()
     drawBitmaps3c200x200();
 #endif
   }
+  // 4-color
+#if defined(_GxBitmaps4c128x250_H_)
+  drawBitmaps4c128x250();
+#endif
+#if defined(_WS_Bitmaps4c168x168_H_)
+  drawBitmaps4c168x168();
+#endif
+#if defined(_GxBitmaps4c168x384_H_)
+  drawBitmaps4c168x384();
+#endif
+#if defined(_GxBitmaps4c184x360_H_)
+  drawBitmaps4c184x360();
+#endif
+#if defined(_GxBitmaps4c400x300_H_)
+  drawBitmaps4c400x300();
+#endif
+#if defined(_GxBitmaps4c960x640_H_)
+  drawBitmaps4c960x640();
+#endif
+  // 7-color
+#if defined(_GxBitmaps7c600x448_H_)
+  drawBitmaps7c600x448();
+#endif
+#if defined(_WS_Bitmaps7c192x143_H_)
+  drawBitmaps7c192x143();
+#endif
+#if defined(_GxBitmaps7c800x480_H_)
+  drawBitmaps7c800x480();
+#endif
+#if defined(_WS_Bitmaps7c300x180_H_)
+  drawBitmaps7c300x180();
+#endif
 #if defined(ESP32) && defined(_GxBitmaps3c1304x984_H_)
   drawBitmaps3c1304x984();
 #endif
@@ -1937,7 +1938,7 @@ void drawBitmaps4c128x250()
 #if defined(_WS_Bitmaps4c168x168_H_)
 void drawBitmaps4c168x168()
 {
-  if ((display.epd2.panel == GxEPD2::Waveshare437inch4color) || (display.epd2.panel == GxEPD2::Waveshare3inch4color))
+  if ((display.epd2.panel == GxEPD2::Waveshare437inch4color) || (display.epd2.panel == GxEPD2::Waveshare3inch4color) || (display.epd2.panel == GxEPD2::GDEY116F51))
   {
     display.drawNative(WS_Bitmap4c168x168, 0, (display.epd2.WIDTH - 168) / 2, (display.epd2.HEIGHT - 168) / 2, 168, 168, false, false, true);
     delay(5000);
@@ -1984,6 +1985,17 @@ void drawBitmaps4c400x300()
   if (display.epd2.panel == GxEPD2::GDEY0420F51)
   {
     display.drawNative(Bitmap4c400x300, 0, (display.epd2.WIDTH - 400) / 2, (display.epd2.HEIGHT - 300) / 2, 400, 300, false, false, true);
+    delay(5000);
+  }
+}
+#endif
+
+#if defined(_GxBitmaps4c960x640_H_)
+void drawBitmaps4c960x640()
+{
+  if (display.epd2.panel == GxEPD2::GDEY116F51)
+  {
+    display.drawNative(Bitmap4c960x640, 0, (display.epd2.WIDTH - 960) / 2, (display.epd2.HEIGHT - 640) / 2, 960, 640, true, false, true);
     delay(5000);
   }
 }

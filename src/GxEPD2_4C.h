@@ -66,6 +66,9 @@
 #if __has_include("epd4c/GxEPD2_437c.h")
 #include "epd4c/GxEPD2_437c.h"
 #endif
+#if __has_include("epd4c/GxEPD2_1160c_GDEY116F51.h")
+#include "epd4c/GxEPD2_1160c_GDEY116F51.h"
+#endif
 
 template<typename GxEPD2_Type, const uint16_t page_height>
 class GxEPD2_4C : public GxEPD2_GFX_BASE_CLASS

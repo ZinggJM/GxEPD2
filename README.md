@@ -137,6 +137,7 @@
 - GDEM1085T51   10.85 b/w 1360x480, JD79686AB
 - GDEH116T91    11.6" b/w 960x640, SSD1677
 - GDEY116Z91    11.6" b/w/r 960x640, SSD1677
+- GDEY116F51    11.6" 4-color 960x640, SSD2677
 - GDEW1248T3    12.48" b/w 1304x984, UC8179
 - GDEY1248Z51   12.48" b/w/r 1304x984, UC8179
 - GDEM133T91    13.3" b/w 960x680, SSD1677
@@ -156,6 +157,7 @@
 
 ### Version 1.5.8
 - added support for GDEP0565D90 5.65" 7-color 600x448
+- added support for GDEY116F51 11.6"  4-color 960x640, SSD2677
 #### Version 1.5.7
 - added support for GDEY0213F51 2.13" 4-color 122x250, JD79661
 - added support for GDEM1085T51 10.85 b/w 1360x480, JD79686AB
