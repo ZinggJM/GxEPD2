@@ -105,6 +105,7 @@
 - GDEM029C90     2.9" b/w/y 128x296, SSD1680
 - DEPG0290BS     2.9" b/w 128x296, SSD1680, e.g. LILYGO® TTGO T5 V2.4.1 2.9"
 - GDEY029T94     2.9" b/w 128x296, SSD1680
+- GDEY029T71H    2.9" b/w 128x384, SSD1685
 - GDEY029F51H    2.9" 4-color 168x384, JD79667
 - Waveshare3inch4color 3.0" 4-color 168x400
 - GDEQ031T10     3.1" b/w 240x320, UC8253
@@ -158,6 +159,7 @@
 ### Version 1.5.8
 - added support for GDEP0565D90 5.65" 7-color 600x448
 - added support for GDEY116F51 11.6"  4-color 960x640, SSD2677
+- added support for GDEY029T71H 2.9" b/w 128x384, SSD1685
 #### Version 1.5.7
 - added support for GDEY0213F51 2.13" 4-color 122x250, JD79661
 - added support for GDEM1085T51 10.85 b/w 1360x480, JD79686AB

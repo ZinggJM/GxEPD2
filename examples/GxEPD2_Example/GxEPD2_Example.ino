@@ -63,6 +63,7 @@
 #include "bitmaps/Bitmaps104x212.h" // 2.13" b/w flexible GDEW0213I5F
 #include "bitmaps/Bitmaps128x250.h" // 2.13" b/w
 #include "bitmaps/Bitmaps128x296.h" // 2.9"  b/w
+#include "bitmaps/Bitmaps168x384.h" // 2.9"  b/w
 #include "bitmaps/Bitmaps152x296.h" // 2.6"  b/w
 #include "bitmaps/Bitmaps176x264.h" // 2.7"  b/w
 #include "bitmaps/Bitmaps240x360.h" // 3.1" b/w
@@ -185,6 +186,7 @@ void setup()
     Serial.print("pages = "); Serial.print(display.pages()); Serial.print(" page height = "); Serial.println(display.pageHeight());
     delay(1000);
   }
+  //display.clearScreen(); return;
   // first update should be full refresh
   helloWorld();
   delay(1000);
@@ -207,6 +209,7 @@ void setup()
     delay(1000);
   }
   //drawGrid(); return;
+  //drawCornerTest(); return;
   drawBitmaps();
   //display.powerOff(); return;
   drawGraphics();
@@ -805,6 +808,9 @@ void drawBitmaps()
 #ifdef _GxBitmaps128x296_H_
   drawBitmaps128x296();
 #endif
+#ifdef _GxBitmaps168x384_H_
+  drawBitmaps168x384();
+#endif
 #ifdef _GxBitmaps152x296_H_
   drawBitmaps152x296();
 #endif
@@ -1179,6 +1185,39 @@ void drawBitmaps128x296()
       delay(2000);
     }
     display.mirror(m);
+  }
+}
+#endif
+
+#ifdef _GxBitmaps168x384_H_
+void drawBitmaps168x384()
+{
+#if !defined(__AVR)
+  const unsigned char* bitmaps[] =
+  {
+    Bitmap168x384_1, Bitmap168x384_2, Bitmap168x384_3, Bitmap168x384_4, Bitmap168x384_5
+  };
+#else
+  const unsigned char* bitmaps[] =
+  {
+    Bitmap168x384_1, Bitmap168x384_2, Bitmap168x384_3, Bitmap168x384_4, Bitmap168x384_5
+  };
+#endif
+  if ((display.epd2.WIDTH == 168) && (display.epd2.HEIGHT == 384) && !display.epd2.hasColor)
+  {
+    bool mirrored = display.mirror(true);
+    for (uint16_t i = 0; i < sizeof(bitmaps) / sizeof(char*); i++)
+    {
+      display.firstPage();
+      do
+      {
+        display.fillScreen(GxEPD_WHITE);
+        display.drawInvertedBitmap(0, 0, bitmaps[i], 168, 384, GxEPD_BLACK);
+      }
+      while (display.nextPage());
+      delay(2000);
+    }
+    display.mirror(mirrored);
   }
 }
 #endif
@@ -2111,4 +2150,5 @@ void drawGraphics()
     display.drawPixel(display.width() * 3 / 4, display.height() / 2 , GxEPD_BLACK);
   }
   while (display.nextPage());
+  delay(1000);
 }

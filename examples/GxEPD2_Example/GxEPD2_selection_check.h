@@ -47,6 +47,7 @@
 #define GxEPD2_290_BS_IS_BW true
 #define GxEPD2_290_M06_IS_BW true
 #define GxEPD2_290_GDEY029T94_IS_BW true
+#define GxEPD2_290_GDEY029T71H_IS_BW true
 #define GxEPD2_310_GDEQ031T10_IS_BW true
 #define GxEPD2_371_IS_BW true
 #define GxEPD2_370_TC1_IS_BW true
