@@ -117,6 +117,7 @@
 //#include "bitmaps/Bitmaps104x212.h" // 2.13" b/w flexible GDEW0213I5F
 //#include "bitmaps/Bitmaps128x250.h" // 2.13" b/w
 //#include "bitmaps/Bitmaps128x296.h" // 2.9"  b/w
+#include "bitmaps/Bitmaps168x384.h" // 2.9"  b/w
 //#include "bitmaps/Bitmaps176x264.h" // 2.7"  b/w
 ////#include "bitmaps/Bitmaps400x300.h" // 4.2"  b/w // not enough code space
 ////#include "bitmaps/Bitmaps640x384.h" // 7.5"  b/w // not enough code space
@@ -1200,7 +1201,7 @@ void drawBitmaps168x384()
 #else
   const unsigned char* bitmaps[] =
   {
-    Bitmap168x384_1, Bitmap168x384_2, Bitmap168x384_3, Bitmap168x384_4, Bitmap168x384_5
+    Bitmap168x384_1
   };
 #endif
   if ((display.epd2.WIDTH == 168) && (display.epd2.HEIGHT == 384) && !display.epd2.hasColor)
