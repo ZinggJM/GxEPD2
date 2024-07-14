@@ -139,6 +139,9 @@
 #if __has_include("epd/GxEPD2_290_BS.h")
 #include "epd/GxEPD2_290_BS.h"
 #endif
+#if __has_include("gdey/GxEPD2_290_GDEY029T71H.h")
+#include "gdey/GxEPD2_290_GDEY029T71H.h"
+#endif
 #if __has_include("epd/GxEPD2_270.h")
 #include "epd/GxEPD2_270.h"
 #endif

@@ -64,6 +64,7 @@ class GxEPD2
       GDEM029T94,
       GDEY029T94,
       DEPG0290BS,
+      GDEY029T71H,
       GDEW027W3,  Waveshare_2_7_bw = GDEW027W3,
       GDEY027T91,
       GDEQ031T10,
@@ -119,8 +120,10 @@ class GxEPD2
       Waveshare3inch4color,
       GDEY0420F51,
       Waveshare437inch4color,
+      GDEY116F51,
       // 7-color
       ACeP565,     Waveshare_5_65_7c = ACeP565,
+      GDEP0565D90,
       GDEY073D46,
       ACeP730,     Waveshare_7_30_7c = ACeP730
     };

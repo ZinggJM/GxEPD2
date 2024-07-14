@@ -105,6 +105,7 @@
 - GDEM029C90     2.9" b/w/y 128x296, SSD1680
 - DEPG0290BS     2.9" b/w 128x296, SSD1680, e.g. LILYGO® TTGO T5 V2.4.1 2.9"
 - GDEY029T94     2.9" b/w 128x296, SSD1680
+- GDEY029T71H    2.9" b/w 128x384, SSD1685
 - GDEY029F51H    2.9" 4-color 168x384, JD79667
 - Waveshare3inch4color 3.0" 4-color 168x400
 - GDEQ031T10     3.1" b/w 240x320, UC8253
@@ -119,6 +120,7 @@
 - GDEQ0426T82    4.26" b/w 800x480, SSD1677
 - Waveshare437inch4color Waveshare 4.37" 4-color e-paper display 512x368 
 - ACeP565        5.65" Waveshare 5.65" 7-color e-paper display 600x448
+- GDEP0565D90    5.65" 7-color 600x448
 - GDEW0583T7     5.83" b/w 600x448, UC8159c (IL0371)
 - GDEW0583T8     5.83" b/w 648x480, EK79655 (GD7965)
 - GDEW0583Z83    5.83" b/w/r 648x480, EK79655 (GD7965)
@@ -136,6 +138,7 @@
 - GDEM1085T51   10.85 b/w 1360x480, JD79686AB
 - GDEH116T91    11.6" b/w 960x640, SSD1677
 - GDEY116Z91    11.6" b/w/r 960x640, SSD1677
+- GDEY116F51    11.6" 4-color 960x640, SSD2677
 - GDEW1248T3    12.48" b/w 1304x984, UC8179
 - GDEY1248Z51   12.48" b/w/r 1304x984, UC8179
 - GDEM133T91    13.3" b/w 960x680, SSD1677
@@ -153,7 +156,11 @@
 - I can't accept panel donations to add support to GxEPD2 currently, I need a break.
 - I can take note of panels of interest for users, to maybe add support later.
 
-### Version 1.5.7
+### Version 1.5.8
+- added support for GDEP0565D90 5.65" 7-color 600x448
+- added support for GDEY116F51 11.6"  4-color 960x640, SSD2677
+- added support for GDEY029T71H 2.9" b/w 128x384, SSD1685
+#### Version 1.5.7
 - added support for GDEY0213F51 2.13" 4-color 122x250, JD79661
 - added support for GDEM1085T51 10.85 b/w 1360x480, JD79686AB
 #### Version 1.5.6
