@@ -145,6 +145,7 @@
 - GDEM133Z91    13.3" b/w/r 960x680, SSD1677
 #### Supported SPI e-paper panels & boards from Waveshare: compare with Good Display, same panel
 #### other supported panels
+- HINK-E0213-A31-A0 2.13" b/w/y 250x122, SSD1675B (GDEY0213Z98)
 - GYE042A87     4.2" b/w 400x300, SSD1683 (HINK-E042-A07-FPC-A1)
 - SE0420NQ04    4.2" b/w 400x300, UC8276C (OPM042A2_V1.0)
 - ED060SCT        6" grey levels, on Waveshare e-Paper IT8951 Driver HAT
