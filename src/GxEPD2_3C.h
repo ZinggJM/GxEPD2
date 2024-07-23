@@ -75,6 +75,9 @@
 #if __has_include("epd3c/GxEPD2_266c.h")
 #include "epd3c/GxEPD2_266c.h"
 #endif
+#if __has_include("epd3c/GxEPD2_266_SESc.h")
+    #include "epd3c/GxEPD2_266_SESc.h"
+#endif
 #if __has_include("epd3c/GxEPD2_150_BN.h")
 #include "epd3c/GxEPD2_270c.h"
 #endif
