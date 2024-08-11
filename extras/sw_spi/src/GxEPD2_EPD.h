@@ -127,6 +127,7 @@ class GxEPD2_EPD
     int16_t _cs, _dc, _rst, _busy, _busy_level;
     uint32_t _busy_timeout;
     bool _diag_enabled, _pulldown_rst_mode;
+    SPIClass* _pSPIx;
     SPISettings _spi_settings;
     bool _initial_write, _initial_refresh;
     bool _power_is_on, _using_partial_mode, _hibernating;

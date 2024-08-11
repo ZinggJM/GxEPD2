@@ -156,7 +156,9 @@
 - I can't accept panel donations to add support to GxEPD2 currently, I need a break.
 - I can take note of panels of interest for users, to maybe add support later.
 
-### Version 1.5.8
+### Version 1.5.9
+- added Power Save command (PWS) to GDEY075T7 init (issue with dithered bitmaps)
+#### Version 1.5.8
 - added support for GDEP0565D90 5.65" 7-color 600x448
 - added support for GDEY116F51 11.6"  4-color 960x640, SSD2677
 - added support for GDEY029T71H 2.9" b/w 168x384, SSD1685
