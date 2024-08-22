@@ -71,6 +71,7 @@
 #include "bitmaps/Bitmaps400x300.h" // 4.2"  b/w
 #include "bitmaps/Bitmaps648x480.h" // 5.38"  b/w
 #include "bitmaps/Bitmaps640x384.h" // 7.5"  b/w
+#include "bitmaps/Bitmaps800x276.h" // 5.65" b/w
 #include "bitmaps/Bitmaps800x480.h" // 7.5"  b/w
 #include "bitmaps/Bitmaps960x640.h" // 10.2"  b/w
 #include "bitmaps/Bitmaps960x680.h" // 13.3"  b/w
@@ -83,6 +84,7 @@
 #include "bitmaps/Bitmaps3c176x264.h" // 2.7"  b/w/r
 #include "bitmaps/Bitmaps3c400x300.h" // 4.2"  b/w/r
 #if defined(ESP8266) || defined(ESP32) || defined(ARDUINO_ARCH_RP2040)
+#include "bitmaps/Bitmaps3c800x276.h" // 5.65" b/w
 #include "bitmaps/Bitmaps3c648x480.h" // 5.83" b/w/r
 #include "bitmaps/Bitmaps3c800x480.h" // 7.5"  b/w/r
 #include "bitmaps/Bitmaps3c880x528.h" // 7.5"  b/w/r
@@ -211,10 +213,11 @@ void setup()
   }
   //drawGrid(); return;
   //drawCornerTest(); return;
+  display.writeScreenBuffer();
   drawBitmaps();
   //display.powerOff(); return;
   drawGraphics();
-  //return;
+  //display.powerOff(); return;
 #if !defined(__AVR) // takes too long!
   if ((display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::ACeP730) || (display.epd2.panel == GxEPD2::GDEP0565D90))
   {
@@ -833,6 +836,9 @@ void drawBitmaps()
 #ifdef _GxBitmaps648x480_H_
   drawBitmaps648x480();
 #endif
+#if defined(ESP32) && defined(_GxBitmaps800x276_H_)
+  drawBitmaps800x276();
+#endif
 #ifdef _GxBitmaps800x480_H_
   drawBitmaps800x480();
 #endif
@@ -894,6 +900,9 @@ void drawBitmaps()
     // 3-color
 #ifdef _GxBitmaps3c200x200_H_
     drawBitmaps3c200x200();
+#endif
+#if defined(ESP32) && defined(_GxBitmaps3c800x276_H_)
+    drawBitmaps3c800x276();
 #endif
   }
   // 4-color
@@ -1431,6 +1440,31 @@ void drawBitmaps648x480()
 }
 #endif
 
+#if defined(ESP32) && defined(_GxBitmaps800x276_H_)
+void drawBitmaps800x276()
+{
+  if ((display.epd2.WIDTH == 792) && (display.epd2.HEIGHT == 272) && !display.epd2.hasColor)
+  {
+    display.drawImage(Bitmap800x276_1, 0, 0, 800, 272, true, false, true); delay(2000);
+    display.drawImage(Bitmap800x276_2, 0, 0, 800, 272, true, false, true); delay(2000);
+    display.drawImage(Bitmap800x276_3, 0, 0, 800, 272, true, false, true); delay(2000);
+    display.clearScreen();
+    int16_t wp = display.epd2.WIDTH / 5;
+    int16_t hp = display.epd2.HEIGHT / 5;
+    for (int16_t i = 0; i < 5; i++)
+    {
+      for (int16_t j = 0; j < 5; j++)
+      {
+        display.writeImagePart(Bitmap800x276_1, i * wp, j * hp, 800, 272, i * wp, j * hp, wp, hp, true, false, true);
+        display.refresh(true);
+        display.epd2.writeImagePartAgain(Bitmap800x276_1, i * wp, j * hp, 800, 272, i * wp, j * hp, wp, hp, true, false, true);
+        delay(500);
+      }
+    }
+  }
+}
+#endif
+
 #ifdef _GxBitmaps800x480_H_
 void drawBitmaps800x480()
 {
@@ -1870,6 +1904,36 @@ void drawBitmaps3c648x480()
 }
 #endif
 
+#if defined(ESP32) && defined(_GxBitmaps3c800x276_H_)
+void drawBitmaps3c800x276()
+{
+  if ((display.epd2.WIDTH == 792) && (display.epd2.HEIGHT == 272) && display.epd2.hasColor)
+  {
+    display.drawImage(Bitmap3c800x276_black_1, Bitmap3c800x276_red_1, 0, 0, 800, 272, true, false, true); delay(2000);
+    display.drawImage(Bitmap3c800x276_black_2, Bitmap3c800x276_red_2, 0, 0, 800, 272, true, false, true); delay(2000);
+    int16_t wp = display.epd2.WIDTH / 5;
+    int16_t hp = display.epd2.HEIGHT / 5;
+    int16_t n = 0;
+    for (int16_t k = 0; k < 3; k++)
+    {
+      display.writeScreenBuffer();
+      for (int16_t i = 0; i < 5; i++)
+      {
+        for (int16_t j = 0; j < 5; j++)
+        {
+          if ((n++ % 2) || (k == 2))
+          {
+            display.writeImagePart(Bitmap3c800x276_black_1, Bitmap3c800x276_red_1, i * wp, j * hp, 800, 272, i * wp, j * hp, wp, hp, true, false, true);
+          }
+        }
+      }
+      display.refresh(false);
+      delay(2000);
+    }
+  }
+}
+#endif
+
 #ifdef _GxBitmaps3c800x480_H_
 void drawBitmaps3c800x480()
 {
@@ -2066,7 +2130,7 @@ void drawBitmaps7c192x143()
 #if defined(_GxBitmaps7c800x480_H_)
 void drawBitmaps7c800x480()
 {
-  if ((display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::ACeP730)|| (display.epd2.panel == GxEPD2::GDEP0565D90))
+  if ((display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::ACeP730) || (display.epd2.panel == GxEPD2::GDEP0565D90))
   {
     display.epd2.drawDemoBitmap(Bitmap7c800x480, 0, 0, 0, 800, 480, 0, false, true); // special format
     delay(5000);

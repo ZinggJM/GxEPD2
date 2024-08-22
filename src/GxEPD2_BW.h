@@ -175,6 +175,9 @@
 #if __has_include("gdeq/GxEPD2_426_GDEQ0426T82.h")
 #include "gdeq/GxEPD2_426_GDEQ0426T82.h"
 #endif
+#if __has_include("gdey/GxEPD2_579_GDEY0579T93.h")
+#include "gdey/GxEPD2_579_GDEY0579T93.h"
+#endif
 #if __has_include("epd/GxEPD2_583.h")
 #include "epd/GxEPD2_583.h"
 #endif

@@ -121,6 +121,8 @@
 - Waveshare437inch4color Waveshare 4.37" 4-color e-paper display 512x368 
 - ACeP565        5.65" Waveshare 5.65" 7-color e-paper display 600x448
 - GDEP0565D90    5.65" 7-color 600x448
+- GDEY0579T93    5.79" b/w 792x272, SSD1683
+- GDEY0579Z93    5.79" b/w/r 792x272, SSD1683
 - GDEW0583T7     5.83" b/w 600x448, UC8159c (IL0371)
 - GDEW0583T8     5.83" b/w 648x480, EK79655 (GD7965)
 - GDEW0583Z83    5.83" b/w/r 648x480, EK79655 (GD7965)
@@ -158,6 +160,8 @@
 
 ### Version 1.5.9
 - added Power Save command (PWS) to GDEY075T7 init (issue with dithered bitmaps)
+- added support for GDEY0579T93 5.79" b/w 792x272, SSD1683
+- added support for GDEY0579Z93 5.79" b/w/r 792x272, SSD1683
 #### Version 1.5.8
 - added support for GDEP0565D90 5.65" 7-color 600x448
 - added support for GDEY116F51 11.6"  4-color 960x640, SSD2677
