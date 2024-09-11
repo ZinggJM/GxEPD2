@@ -51,6 +51,9 @@
 // or select the display class and display driver class in the following file (new style):
 #include "GxEPD2_display_selection_new_style.h"
 
+//#define WITHOUT_BITMAPS
+#ifndef WITHOUT_BITMAPS
+
 #if !defined(__AVR) && !defined(STM32F1xx)
 
 // note 16.11.2019: the compiler may exclude code based on constant if statements (display.epd2.panel == constant),
@@ -71,7 +74,7 @@
 #include "bitmaps/Bitmaps400x300.h" // 4.2"  b/w
 #include "bitmaps/Bitmaps648x480.h" // 5.38"  b/w
 #include "bitmaps/Bitmaps640x384.h" // 7.5"  b/w
-#include "bitmaps/Bitmaps800x276.h" // 5.65" b/w
+#include "bitmaps/Bitmaps800x276.h" // 5.79" b/w
 #include "bitmaps/Bitmaps800x480.h" // 7.5"  b/w
 #include "bitmaps/Bitmaps960x640.h" // 10.2"  b/w
 #include "bitmaps/Bitmaps960x680.h" // 13.3"  b/w
@@ -84,7 +87,7 @@
 #include "bitmaps/Bitmaps3c176x264.h" // 2.7"  b/w/r
 #include "bitmaps/Bitmaps3c400x300.h" // 4.2"  b/w/r
 #if defined(ESP8266) || defined(ESP32) || defined(ARDUINO_ARCH_RP2040)
-#include "bitmaps/Bitmaps3c800x276.h" // 5.65" b/w
+#include "bitmaps/Bitmaps3c800x276.h" // 5.79" b/w/r
 #include "bitmaps/Bitmaps3c648x480.h" // 5.83" b/w/r
 #include "bitmaps/Bitmaps3c800x480.h" // 7.5"  b/w/r
 #include "bitmaps/Bitmaps3c880x528.h" // 7.5"  b/w/r
@@ -98,6 +101,7 @@
 #include "bitmaps/WS_Bitmaps4c168x168.h" // 4.37" 4-color
 #include "bitmaps/WS_Bitmaps4c168x400.h" // 3.00" 4-color
 #include "bitmaps/Bitmaps4c400x300.h" // 4.2" 4-color
+#include "bitmaps/Bitmaps4c792x272.h" // 5.79" 4-color
 #include "bitmaps/Bitmaps4c960x640.h" // 11.6" 4-color
 // 7-color
 #include "bitmaps/Bitmaps7c600x448.h" // 5.65" 7-color
@@ -132,6 +136,7 @@
 //#include "bitmaps/Bitmaps3c176x264.h" // 2.7"  b/w/r
 ////#include "bitmaps/Bitmaps3c400x300.h" // 4.2"  b/w/r // not enough code space
 
+#endif
 #endif
 
 #if defined(ARDUINO_ARCH_RP2040) && (defined(ARDUINO_RASPBERRY_PI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO_W))
@@ -923,6 +928,9 @@ void drawBitmaps()
 #endif
 #if defined(_GxBitmaps4c960x640_H_)
   drawBitmaps4c960x640();
+#endif
+#if defined(ESP32) && defined(_GxBitmaps4c792x272_H_)
+  drawBitmaps4c792x272();
 #endif
   // 7-color
 #if defined(_GxBitmaps7c600x448_H_)
@@ -1926,7 +1934,7 @@ void drawBitmaps3c800x276()
             display.writeImagePart(Bitmap3c800x276_black_1, Bitmap3c800x276_red_1, i * wp, j * hp, 800, 272, i * wp, j * hp, wp, hp, true, false, true);
           }
         }
-      }
+     }
       display.refresh(false);
       delay(2000);
     }
@@ -2042,7 +2050,8 @@ void drawBitmaps4c128x250()
 #if defined(_WS_Bitmaps4c168x168_H_)
 void drawBitmaps4c168x168()
 {
-  if ((display.epd2.panel == GxEPD2::Waveshare437inch4color) || (display.epd2.panel == GxEPD2::Waveshare3inch4color) || (display.epd2.panel == GxEPD2::GDEY116F51))
+  if ((display.epd2.panel == GxEPD2::Waveshare437inch4color) || (display.epd2.panel == GxEPD2::Waveshare3inch4color) ||
+      (display.epd2.panel == GxEPD2::GDEY0579F51) || (display.epd2.panel == GxEPD2::GDEY116F51))
   {
     display.drawNative(WS_Bitmap4c168x168, 0, (display.epd2.WIDTH - 168) / 2, (display.epd2.HEIGHT - 168) / 2, 168, 168, false, false, true);
     delay(5000);
@@ -2101,6 +2110,36 @@ void drawBitmaps4c960x640()
   {
     display.drawNative(Bitmap4c960x640, 0, (display.epd2.WIDTH - 960) / 2, (display.epd2.HEIGHT - 640) / 2, 960, 640, true, false, true);
     delay(5000);
+  }
+}
+#endif
+
+#if defined(ESP32) && defined(_GxBitmaps4c792x272_H_)
+void drawBitmaps4c792x272()
+{
+  if (display.epd2.panel == GxEPD2::GDEY0579F51)
+  {
+    display.drawNative(Bitmap4c792x272, 0, (display.epd2.WIDTH - 792) / 2, (display.epd2.HEIGHT - 272) / 2, 792, 272, true, false, true);
+    delay(5000);
+    int16_t wp = display.epd2.WIDTH / 5;
+    int16_t hp = display.epd2.HEIGHT / 5;
+    int16_t n = 0;
+    for (int16_t k = 0; k < 3; k++)
+    {
+      display.writeScreenBuffer();
+      for (int16_t i = 0; i < 5; i++)
+      {
+        for (int16_t j = 0; j < 5; j++)
+        {
+          if ((n++ % 2) || (k == 2))
+          {
+            display.epd2.writeNativePart(Bitmap4c792x272, 0, i * wp, j * hp, 792, 272, i * wp, j * hp, wp, hp, true, false, true);
+          }
+        }
+      }
+      display.refresh(false);
+      delay(2000);
+    }
   }
 }
 #endif

@@ -66,6 +66,9 @@
 #if __has_include("epd4c/GxEPD2_437c.h")
 #include "epd4c/GxEPD2_437c.h"
 #endif
+#if __has_include("epd4c/GxEPD2_0579c_GDEY0579F51.h")
+#include "epd4c/GxEPD2_0579c_GDEY0579F51.h"
+#endif
 #if __has_include("epd4c/GxEPD2_1160c_GDEY116F51.h")
 #include "epd4c/GxEPD2_1160c_GDEY116F51.h"
 #endif
