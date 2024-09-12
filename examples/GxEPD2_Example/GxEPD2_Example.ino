@@ -2124,6 +2124,8 @@ void drawBitmaps4c792x272()
     int16_t wp = display.epd2.WIDTH / 5;
     int16_t hp = display.epd2.HEIGHT / 5;
     int16_t n = 0;
+#if defined(GxEPD2_DRIVER_CLASS) && defined(IS_GxEPD2_DRIVER_4C)
+#if IS_GxEPD2_DRIVER_4C(GxEPD2_DRIVER_CLASS)
     for (int16_t k = 0; k < 3; k++)
     {
       display.writeScreenBuffer();
@@ -2140,6 +2142,8 @@ void drawBitmaps4c792x272()
       display.refresh(false);
       delay(2000);
     }
+#endif
+#endif
   }
 }
 #endif
