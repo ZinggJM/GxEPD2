@@ -115,6 +115,7 @@
 - GDEW042M01     4.2" b/w 400x300, UC8176 (IL0398), DES
 - GDEW042Z15     4.2" b/w/r 400x300, UC8176 (IL0398)
 - GDEQ042Z21     4.2" b/w/r 400x300, UC8276, (Waveshare V2)
+- GDEY042Z98     4.2" b/w/r 400x300, SSD1683
 - GDEY042T81     4.2" b/w 400x300, SSD1683
 - GDEY0420F51    4.2" 4-color 400x300, HX8717
 - GDEQ0426T82    4.26" b/w 800x480, SSD1677
@@ -130,6 +131,7 @@
 - GDEQ0583T31    5.83" b/w 648x480, UC8179
 - GDEQ0583Z31    5.83" b/w/r 648x480, UC8179C
 - GDEY073D46     7.3" 800x480 7-color
+- GDEP073E01     7.3" 800x480 7-color
 - ACeP730        7.3" Waveshare 7-color e-paper display 800x480, PhotoPainter
 - GDEW075T8      7.5" b/w 640x384, UC8159c (IL0371)
 - GDEW075T7      7.5" b/w 800x480, EK79655 (GD7965)
@@ -156,8 +158,9 @@
 - ES103TC1     10.3" grey levels, 1872x1404, on Waveshare e-Paper IT8951 Driver HAT
 
 ### I can and will only support e-paper panels I have!
-- I can't accept panel donations to add support to GxEPD2 currently, I need a break.
-- I can take note of panels of interest for users, to maybe add support later.
+- I can accept panel donations to add support to GxEPD2.
+- But only few panels at any time, and only panels from known sources. 
+- Adding support will take as much time as needed.
 
 ### Version 1.5.9
 - added Power Save command (PWS) to GDEY075T7 init (issue with dithered bitmaps)
@@ -167,6 +170,9 @@
 - the GDEY0579F51 has partial window addressing capability, 
 - but of little use, because the controller buffer is modified during refresh
 - partial window refresh can't be used on GDEY0579F51, refresh is full screen
+- added support for GDEY042Z98 4.2" b/w/r 400x300, SSD1683
+- GDEY042Z98 has "fast" full refresh and supports fast b/w partial refresh
+- added support for GDEP073E01 7.3" 800x480 7-color
 #### Version 1.5.8
 - added support for GDEP0565D90 5.65" 7-color 600x448
 - added support for GDEY116F51 11.6"  4-color 960x640, SSD2677

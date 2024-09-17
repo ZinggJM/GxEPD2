@@ -23,13 +23,15 @@
 
 // e.g. for Wemos D1 mini:
 #if defined (ESP8266)
-GxEPD2_3C<GxEPD2_213_Z19c, GxEPD2_213_Z19c::HEIGHT> display(GxEPD2_213_Z19c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEW0213Z19
+//GxEPD2_3C<GxEPD2_213_Z19c, GxEPD2_213_Z19c::HEIGHT> display(GxEPD2_213_Z19c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEW0213Z19
 //GxEPD2_3C<GxEPD2_290_Z13c, GxEPD2_290_Z13c::HEIGHT> display(GxEPD2_290_Z13c(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEH029Z13
+//GxEPD2_3C<GxEPD2_420c_GDEY042Z98, GxEPD2_420c_GDEY042Z98::HEIGHT> display(GxEPD2_420c_GDEY042Z98(/*CS=D8*/ SS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4)); // GDEY042Z98
 #endif
 
 #if defined(ESP32)
 //GxEPD2_3C<GxEPD2_213_Z19c, GxEPD2_213_Z19c::HEIGHT> display(GxEPD2_213_Z19c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEW0213Z19
 //GxEPD2_3C<GxEPD2_290_Z13c, GxEPD2_290_Z13c::HEIGHT> display(GxEPD2_290_Z13c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEH029Z13
+GxEPD2_3C<GxEPD2_420c_GDEY042Z98, GxEPD2_420c_GDEY042Z98::HEIGHT> display(GxEPD2_420c_GDEY042Z98(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEY042Z98
 #endif
 
 const uint16_t window_x = 8;
@@ -43,6 +45,13 @@ void setup()
   Serial.println();
   display.init(115200);
   helloWorld();
+  if (display.epd2.panel == GxEPD2::GDEY042Z98)
+  {
+    // the controller SSD1683 of this panel requires old and new data to be equal outside of the partial window
+    // else it would refresh also outside of the partial window
+    display.epd2.writeScreenBuffer(0xFF, 0xFF); // both controller buffers set to white
+    // note that the buffer content is lost by this
+  }
   // make sure window is only b/w, before using fast b/w refreshes
   //clearWindow(); // commented out, partial window was cleared by helloWorld()
   for (uint16_t i = 0; i < 100; i++)

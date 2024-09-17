@@ -84,6 +84,9 @@
 #if __has_include("epd3c/GxEPD2_420c_Z21.h")
 #include "epd3c/GxEPD2_420c_Z21.h"
 #endif
+#if __has_include("gdey3c/GxEPD2_420c_GDEY042Z98.h")
+#include "gdey3c/GxEPD2_420c_GDEY042Z98.h"
+#endif
 #if __has_include("gdey3c/GxEPD2_579c_GDEY0579Z93.h")
 #include "gdey3c/GxEPD2_579c_GDEY0579Z93.h"
 #endif

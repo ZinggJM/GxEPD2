@@ -1489,7 +1489,7 @@ void drawBitmaps800x480()
 #else
   const unsigned char* bitmaps[] = {}; // not enough code space
 #endif
-  if ((display.epd2.WIDTH == 800) && (display.epd2.HEIGHT == 480))
+  if ((display.epd2.WIDTH == 800) && (display.epd2.HEIGHT == 480) && !display.epd2.hasColor)
   {
     for (uint16_t i = 0; i < sizeof(bitmaps) / sizeof(char*); i++)
     {
@@ -1859,12 +1859,14 @@ void drawBitmaps3c400x300()
   {
     {Bitmap3c400x300_1_black, Bitmap3c400x300_1_red},
     {Bitmap3c400x300_2_black, Bitmap3c400x300_2_red},
+    {Bitmap3c400x300_3_black, Bitmap3c400x300_3_red},
+    {Bitmap3c400x300_4_black, Bitmap3c400x300_4_red},
     {WS_Bitmap3c400x300_black, WS_Bitmap3c400x300_red}
   };
 #else
   bitmap_pair bitmap_pairs[] = {}; // not enough code space
 #endif
-  if (display.epd2.panel == GxEPD2::GDEW042Z15)
+  if ((display.epd2.WIDTH == 400) && (display.epd2.HEIGHT == 300) && display.epd2.hasColor)
   {
     for (uint16_t i = 0; i < sizeof(bitmap_pairs) / sizeof(bitmap_pair); i++)
     {
@@ -2121,11 +2123,11 @@ void drawBitmaps4c792x272()
   {
     display.drawNative(Bitmap4c792x272, 0, (display.epd2.WIDTH - 792) / 2, (display.epd2.HEIGHT - 272) / 2, 792, 272, true, false, true);
     delay(5000);
+#if defined(GxEPD2_DRIVER_CLASS) && defined(IS_GxEPD2_DRIVER_4C)
+#if IS_GxEPD2_DRIVER_4C(GxEPD2_DRIVER_CLASS)
     int16_t wp = display.epd2.WIDTH / 5;
     int16_t hp = display.epd2.HEIGHT / 5;
     int16_t n = 0;
-#if defined(GxEPD2_DRIVER_CLASS) && defined(IS_GxEPD2_DRIVER_4C)
-#if IS_GxEPD2_DRIVER_4C(GxEPD2_DRIVER_CLASS)
     for (int16_t k = 0; k < 3; k++)
     {
       display.writeScreenBuffer();
@@ -2173,9 +2175,11 @@ void drawBitmaps7c192x143()
 #if defined(_GxBitmaps7c800x480_H_)
 void drawBitmaps7c800x480()
 {
-  if ((display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::ACeP730) || (display.epd2.panel == GxEPD2::GDEP0565D90))
+  if ((display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::ACeP730) || (display.epd2.panel == GxEPD2::GDEP0565D90) || (display.epd2.panel == GxEPD2::GDEP073E01))
   {
     display.epd2.drawDemoBitmap(Bitmap7c800x480, 0, 0, 0, 800, 480, 0, false, true); // special format
+    delay(5000);
+    display.epd2.drawDemoBitmap(Bitmap7c800x480_2, 0, 0, 0, 800, 480, 1, false, true); // special format mode 1
     delay(5000);
   }
 }

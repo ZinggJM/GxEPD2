@@ -87,6 +87,7 @@ class GxEPD2_EPD
     virtual void powerOff() = 0; // turns off generation of panel driving voltages, avoids screen fading over time
     virtual void hibernate() = 0; // turns powerOff() and sets controller to deep sleep for minimum power use, ONLY if wakeable by RST (rst >= 0)
     virtual void setPaged() {}; // for GxEPD2_154c paged workaround
+    virtual void selectFastFullUpdate(bool) {}; // for some panels that support this
     // register a callback function to be called during _waitWhileBusy continuously.
     void setBusyCallback(void (*busyCallback)(const void*), const void* busy_callback_parameter = 0);
     static inline uint16_t gx_uint16_min(uint16_t a, uint16_t b)

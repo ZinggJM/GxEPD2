@@ -86,6 +86,7 @@
 #define GxEPD2_290_C90c_IS_3C true
 #define GxEPD2_420c_IS_3C true
 #define GxEPD2_420c_Z21_IS_3C true
+#define GxEPD2_420c_GDEY042Z98_IS_3C true
 #define GxEPD2_579c_GDEY0579Z93_IS_3C true
 #define GxEPD2_583c_IS_3C true
 #define GxEPD2_583c_Z83_IS_3C true
@@ -110,6 +111,7 @@
 #define GxEPD2_565c_GDEP0565D90_IS_7C true
 #define GxEPD2_730c_GDEY073D46_IS_7C true
 #define GxEPD2_730c_ACeP_730_IS_7C true
+#define GxEPD2_730c_GDEP073E01_IS_7C true
 
 #if defined(GxEPD2_DISPLAY_CLASS) && defined(GxEPD2_DRIVER_CLASS)
 #define IS_GxEPD2_DRIVER(c, x) (c##x)
