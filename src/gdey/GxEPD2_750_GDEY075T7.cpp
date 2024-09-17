@@ -312,31 +312,35 @@ void GxEPD2_750_GDEY075T7::_PowerOff()
 void GxEPD2_750_GDEY075T7::_InitDisplay()
 {
   if (_hibernating) _reset();
+  _writeCommand(0x00); // PANEL SETTING
+  _writeData(0x1f);    // KW: 3f, KWR: 2F, BWROTP: 0f, BWOTP: 1f
+  // same POWER SETTING as from OTP
   _writeCommand(0x01); // POWER SETTING
-  _writeData (0x07);
+  _writeData (0x07); // enable internal
   _writeData (0x07); // VGH=20V,VGL=-20V
   _writeData (0x3f); // VDH=15V
   _writeData (0x3f); // VDL=-15V
+  _writeData (0x09); // VDHR=4.2V
   //Enhanced display drive(Add 0x06 command)
   _writeCommand(0x06); //Booster Soft Start
   _writeData (0x17);
   _writeData (0x17);
   _writeData (0x28);
   _writeData (0x17);
-  _writeCommand(0x00); //PANEL SETTING
-  _writeData(0x1f); //KW: 3f, KWR: 2F, BWROTP: 0f, BWOTP: 1f
   _writeCommand(0x61); //tres
   _writeData (WIDTH / 256); //source 800
   _writeData (WIDTH % 256);
   _writeData (HEIGHT / 256); //gate 480
   _writeData (HEIGHT % 256);
-  _writeCommand(0x15);
-  _writeData(0x00);
-  _writeCommand(0x50); //VCOM AND DATA INTERVAL SETTING
+  _writeCommand(0x15); // DUSPI
+  _writeData(0x00);    // disabled
+  _writeCommand(0x50); // VCOM AND DATA INTERVAL SETTING
   _writeData(0x29);    // LUTKW, N2OCP: copy new to old
-  _writeData(0x07);
-  _writeCommand(0x60); //TCON SETTING
-  _writeData(0x22);
+  _writeData(0x07);    // CDI 10hsynch (default)
+  _writeCommand(0x60); // TCON SETTING
+  _writeData(0x22);    // S2G G2S, 12 (default)
+  _writeCommand(0xE3); // PWS
+  _writeData(0x22);    // VCOM 2 line period, Source 2 * 660ns
 }
 
 // experimental partial screen update LUTs with balanced charge
