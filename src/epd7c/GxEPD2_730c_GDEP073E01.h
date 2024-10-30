@@ -66,11 +66,13 @@ class GxEPD2_730c_GDEP073E01 : public GxEPD2_EPD
     void powerOff(); // turns off generation of panel driving voltages, avoids screen fading over time
     void hibernate(); // turns powerOff() and sets controller to deep sleep for minimum power use, ONLY if wakeable by RST (rst >= 0)
     void setPaged(); // for GxEPD2_154c and GxEPD2_565c and GxEPD2_730c_GDEP073E01 paged workaround
+    void drawNativeColors();
   private:
     uint8_t _colorOfDemoBitmap(uint8_t from, int16_t mode = 0);
     void _PowerOn();
     void _PowerOff();
     void _InitDisplay();
+    uint8_t _convert_to_native(uint8_t data); // uses different native colors
   private:
     bool _paged;
 };

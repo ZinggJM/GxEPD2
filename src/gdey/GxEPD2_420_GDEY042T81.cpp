@@ -16,6 +16,12 @@
 GxEPD2_420_GDEY042T81::GxEPD2_420_GDEY042T81(int16_t cs, int16_t dc, int16_t rst, int16_t busy) :
   GxEPD2_EPD(cs, dc, rst, busy, HIGH, 10000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate)
 {
+  _use_fast_update = useFastFullUpdate;
+}
+
+void GxEPD2_420_GDEY042T81::selectFastFullUpdate(bool ff)
+{
+  _use_fast_update = ff;
 }
 
 void GxEPD2_420_GDEY042T81::clearScreen(uint8_t value)
@@ -362,10 +368,11 @@ void GxEPD2_420_GDEY042T81::_Update_Full()
   _writeCommand(0x21); // Display Update Controll
   _writeData(0x40);    // bypass RED as 0
   _writeData(0x00);    // single chip application
-  if (useFastFullUpdate)
+  if (_use_fast_update)
   {
     _writeCommand(0x1A); // Write to temperature register
-    _writeData(0x64);
+    //_writeData(0x64); // 2023 version
+    _writeData(0x6E); // 2024 version, ok for 2023 version
     _writeCommand(0x22);
     _writeData(0xd7);
   }
