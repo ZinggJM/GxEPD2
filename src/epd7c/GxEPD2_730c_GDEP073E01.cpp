@@ -369,6 +369,7 @@ void GxEPD2_730c_GDEP073E01::writeNative(const uint8_t* data1, const uint8_t* da
       for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(h) / 2; i++)
       {
         uint8_t data = data1[i];
+        if (!invert) data = _convert_to_native(data);
         _transfer(data);
       }
       _endTransfer();
@@ -409,7 +410,7 @@ void GxEPD2_730c_GDEP073E01::writeNative(const uint8_t* data1, const uint8_t* da
               {
                 data = data1[idx];
               }
-              if (invert) data = ~data;
+              if (!invert) data = _convert_to_native(data);
             }
           }
           _transfer(data);
@@ -472,7 +473,7 @@ void GxEPD2_730c_GDEP073E01::writeNativePart(const uint8_t* data1, const uint8_t
         {
           data = data1[idx];
         }
-        if (invert) data = ~data;
+        if (!invert) data = _convert_to_native(data);
       }
       _transfer(data);
     }
@@ -672,11 +673,11 @@ uint8_t GxEPD2_730c_GDEP073E01::_colorOfDemoBitmap(uint8_t from, int16_t mode)
         switch (from)
         {
           case 0xFF: return (0x01); // white;
-          case 0xFC: return (0x05); // yellow;
-          case 0xF1: return (0x06); // orange;
-          case 0xE5: return (0x04); // red;
-          case 0x4B: return (0x03); // blue;
-          case 0x39: return (0x02); // green;
+          case 0xFC: return (0x02); // yellow;
+          case 0xF1: return (0x04); // orange;
+          case 0xE5: return (0x03); // red;
+          case 0x4B: return (0x05); // blue;
+          case 0x39: return (0x06); // green;
           case 0x00: return (0x00); // black;
           default: return (0x01); // white;
         }
@@ -760,4 +761,46 @@ void GxEPD2_730c_GDEP073E01::drawDemoBitmap(const uint8_t* data1, const uint8_t*
 {
   writeDemoBitmap(data1, data2, x, y, w, h, mode, mirror_y, pgm);
   refresh(x, y, w, h);
+}
+
+void GxEPD2_730c_GDEP073E01::drawNativeColors()
+{
+  const uint16_t colors = 7;
+  //const uint16_t colors = 8; // 7 is white
+  //const uint16_t colors = 16; // repeated for 8..15
+  const uint16_t h1 = HEIGHT / colors;
+  _writeCommand(0x10);
+  _startTransfer();
+  for (uint16_t cn = 0; cn < colors; cn++)
+  {
+    for (uint16_t hnb = 0; hnb < h1 * WIDTH / 2; hnb++)
+    {
+      _transfer((cn << 4) | cn);
+    }
+  }
+  _endTransfer();
+  refresh();
+}
+
+uint8_t GxEPD2_730c_GDEP073E01::_convert_to_native(uint8_t data)
+{
+  uint8_t result = 0x00;
+  for (int i = 0; i < 2; i++)
+  {
+    switch (data & 0x07)
+    {
+      case 0x00 : result |= 0x00 << 4; break; // black
+      case 0x01 : result |= 0x01 << 4; break; // white
+      case 0x02 : result |= 0x06 << 4; break; // green
+      case 0x03 : result |= 0x05 << 4; break; // blue
+      case 0x04 : result |= 0x03 << 4; break; // red
+      case 0x05 : result |= 0x02 << 4; break; // yellow
+      case 0x06 : result |= 0x04 << 4; break; // orange
+      case 0x07 : result |= 0x07 << 4; break; // white
+    }
+    if (i == 1) break;
+    data >>= 4;
+    result >>= 4;
+  }
+  return result;
 }

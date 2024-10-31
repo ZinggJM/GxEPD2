@@ -29,9 +29,9 @@ class GxEPD2_290_GDEY029T94 : public GxEPD2_EPD
     static const bool hasFastPartialUpdate = true;
     static const bool useFastFullUpdate = true; // set false for extended (low) temperature range
     static const uint16_t power_on_time = 100; // ms, e.g. 95868us
-    static const uint16_t power_off_time = 150; // ms, e.g. 140350us
-    static const uint16_t full_refresh_time = 1700; // ms, e.g. 1616000us
-    static const uint16_t partial_refresh_time = 500; // ms, e.g. 403000us
+    static const uint16_t power_off_time = 150; // ms, e.g. 140001us
+    static const uint16_t full_refresh_time = 1750; // ms, e.g. 1715001us
+    static const uint16_t partial_refresh_time = 400; // ms, e.g. 362000us
     // constructor
     GxEPD2_290_GDEY029T94(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
     // methods (virtual)

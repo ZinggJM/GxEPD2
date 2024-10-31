@@ -162,7 +162,12 @@
 - But only few panels at any time, and only panels from known sources. 
 - Adding support will take as much time as needed.
 
-### Version 1.5.9
+### Version 1.6.0
+- updated support for GDEY029T94: fixed a partial refresh issue
+- updated support for GDEY042T81: fixed fast full refresh for 2024 panel version
+- updated support for GDEP073E01: fixed color mapping for its native color values
+- updated GxEPD2_display_selection_new_style.h: added Arduino Nano Every, Arduino Nano ESP32, Arduino Nano IoT.
+#### Version 1.5.9
 - added Power Save command (PWS) to GDEY075T7 init (issue with dithered bitmaps)
 - added support for GDEY0579T93 5.79" b/w 792x272, SSD1683
 - added support for GDEY0579Z93 5.79" b/w/r 792x272, SSD1683
