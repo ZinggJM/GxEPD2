@@ -125,6 +125,7 @@ class GxEPD2
       Waveshare437inch4color,
       GDEY0579F51,
       GDEY116F51,
+      GDEM075F52, // 7.5 inch Good Display
       // 7-color
       ACeP565,     Waveshare_5_65_7c = ACeP565,
       GDEP0565D90,
