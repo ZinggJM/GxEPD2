@@ -162,7 +162,9 @@
 - But only few panels at any time, and only panels from known sources. 
 - Adding support will take as much time as needed.
 
-### Version 1.6.0
+### Version 1.6.1
+- fixed and updated GxEPD2_WiFi_Example
+#### Version 1.6.0
 - updated support for GDEY029T94: fixed a partial refresh issue
 - updated support for GDEY042T81: fixed fast full refresh for 2024 panel version
 - updated support for GDEP073E01: fixed color mapping for its native color values
