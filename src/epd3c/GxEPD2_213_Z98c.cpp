@@ -345,7 +345,7 @@ void GxEPD2_213_Z98c::_PowerOff()
     _writeCommand(0x22);
     _writeData(0x83);
     _writeCommand(0x20);
-    _waitWhileBusy("_PowerOff", power_off_time);
+    //_waitWhileBusy("_PowerOff", power_off_time);
   }
   _power_is_on = false;
 }
@@ -389,13 +389,14 @@ void GxEPD2_213_Z98c::_Update_Full()
   _writeCommand(0x22);
   _writeData(0xf7);
   _writeCommand(0x20);
-  _waitWhileBusy("_Update_Full", full_refresh_time);
+//  _waitWhileBusy("_Update_Full", full_refresh_time);
 }
 
 void GxEPD2_213_Z98c::_Update_Part()
 {
   _writeCommand(0x22);
+//  _writeData(0xfc); // does not work for some reason
   _writeData(0xf7);
   _writeCommand(0x20);
-  _waitWhileBusy("_Update_Part", partial_refresh_time);
+//  _waitWhileBusy("_Update_Part", partial_refresh_time);
 }
