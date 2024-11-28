@@ -84,12 +84,6 @@
 #if __has_include("epd3c/GxEPD2_420c_Z21.h")
 #include "epd3c/GxEPD2_420c_Z21.h"
 #endif
-#if __has_include("gdey3c/GxEPD2_420c_GDEY042Z98.h")
-#include "gdey3c/GxEPD2_420c_GDEY042Z98.h"
-#endif
-#if __has_include("gdey3c/GxEPD2_579c_GDEY0579Z93.h")
-#include "gdey3c/GxEPD2_579c_GDEY0579Z93.h"
-#endif
 #if __has_include("epd3c/GxEPD2_583c.h")
 #include "epd3c/GxEPD2_583c.h"
 #endif
@@ -250,8 +244,8 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
     void display(bool partial_update_mode = false)
     {
       epd2.writeImage(_black_buffer, _color_buffer, 0, 0, GxEPD2_Type::WIDTH, _page_height);
-      epd2.refresh(partial_update_mode);
-      if (!partial_update_mode) epd2.powerOff();
+      //epd2.refresh(partial_update_mode);
+      //if (!partial_update_mode) epd2.powerOff();
     }
 
     // display part of buffer content to screen, useful for full screen buffer
@@ -371,14 +365,14 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
           {
             if (!_second_phase)
             {
-              epd2.refresh(false); // full update after first phase
+              //epd2.refresh(false); // full update after first phase
               _second_phase = true;
               fillScreen(GxEPD_WHITE);
               return true;
             }
-            else epd2.refresh(true); // partial update after second phase
-          } else epd2.refresh(false); // full update after only phase
-          epd2.powerOff();
+            else ;//epd2.refresh(true); // partial update after second phase
+          } else ;//epd2.refresh(false); // full update after only phase
+          //epd2.powerOff();
           return false;
         }
         fillScreen(GxEPD_WHITE);
@@ -399,9 +393,9 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
         else // full update
         {
           epd2.writeImage(_black_buffer, 0, 0, GxEPD2_Type::WIDTH, HEIGHT);
-          epd2.refresh(false);
+          //epd2.refresh(false);
           epd2.writeImagePrevious(_black_buffer, 0, 0, GxEPD2_Type::WIDTH, HEIGHT);
-          epd2.powerOff();
+          //epd2.powerOff();
         }
         return false;
       }
@@ -457,7 +451,7 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
             fillScreen(GxEPD_WHITE);
             return true;
           }
-          epd2.powerOff();
+          //epd2.powerOff();
           return false;
         }
         fillScreen(GxEPD_WHITE);
@@ -505,8 +499,8 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
             epd2.writeImage(_black_buffer, _color_buffer, 0, page_ys, GxEPD2_Type::WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
           }
         }
-        epd2.refresh(false); // full update
-        epd2.powerOff();
+        //epd2.refresh(false); // full update
+        //epd2.powerOff();
       }
       _current_page = 0;
     }
@@ -615,7 +609,7 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
     void refresh(bool partial_update_mode = false) // screen refresh from controller memory to full screen
     {
       epd2.refresh(partial_update_mode);
-      if (!partial_update_mode) epd2.powerOff();
+      //if (!partial_update_mode) epd2.powerOff();
     }
     void refresh(int16_t x, int16_t y, int16_t w, int16_t h) // screen refresh from controller memory, partial screen
     {

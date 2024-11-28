@@ -175,9 +175,6 @@
 #if __has_include("gdeq/GxEPD2_426_GDEQ0426T82.h")
 #include "gdeq/GxEPD2_426_GDEQ0426T82.h"
 #endif
-#if __has_include("gdey/GxEPD2_579_GDEY0579T93.h")
-#include "gdey/GxEPD2_579_GDEY0579T93.h"
-#endif
 #if __has_include("epd/GxEPD2_583.h")
 #include "epd/GxEPD2_583.h"
 #endif
@@ -351,12 +348,12 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
     {
       if (partial_update_mode) epd2.writeImage(_buffer, 0, 0, GxEPD2_Type::WIDTH, _page_height);
       else epd2.writeImageForFullRefresh(_buffer, 0, 0, GxEPD2_Type::WIDTH, _page_height);
-      epd2.refresh(partial_update_mode);
+      //epd2.refresh(partial_update_mode);
       if (epd2.hasFastPartialUpdate)
       {
         epd2.writeImageAgain(_buffer, 0, 0, GxEPD2_Type::WIDTH, _page_height);
       }
-      if (!partial_update_mode) epd2.powerOff();
+      //if (!partial_update_mode) epd2.powerOff();
     }
 
     // display part of buffer content to screen, useful for full screen buffer
@@ -434,7 +431,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
         else // full update
         {
           epd2.writeImageForFullRefresh(_buffer, 0, 0, GxEPD2_Type::WIDTH, HEIGHT);
-          epd2.refresh(false);
+          //epd2.refresh(false);
           if (epd2.hasFastPartialUpdate)
           {
             epd2.writeImageAgain(_buffer, 0, 0, GxEPD2_Type::WIDTH, HEIGHT);
@@ -471,7 +468,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
           _current_page = 0;
           if (!_second_phase)
           {
-            epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
+            //epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
             if (epd2.hasFastPartialUpdate)
             {
               _second_phase = true;
@@ -496,14 +493,14 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
           {
             if (!_second_phase)
             {
-              epd2.refresh(false); // full update after first phase
+              //epd2.refresh(false); // full update after first phase
               _second_phase = true;
               fillScreen(GxEPD_WHITE);
               return true;
             }
             //else epd2.refresh(true); // partial update after second phase
           } else epd2.refresh(false); // full update after only phase
-          epd2.powerOff();
+          //epd2.powerOff();
           return false;
         }
         fillScreen(GxEPD_WHITE);
@@ -521,7 +518,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
         if (_using_partial_mode)
         {
           epd2.writeImage(_buffer, _pw_x, _pw_y, _pw_w, _pw_h);
-          epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
+          //epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
           if (epd2.hasFastPartialUpdate)
           {
             epd2.writeImageAgain(_buffer, _pw_x, _pw_y, _pw_w, _pw_h);
@@ -531,7 +528,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
         else // full update
         {
           epd2.writeImageForFullRefresh(_buffer, 0, 0, GxEPD2_Type::WIDTH, HEIGHT);
-          epd2.refresh(false);
+          //epd2.refresh(false);
           if (epd2.hasFastPartialUpdate)
           {
             epd2.writeImageAgain(_buffer, 0, 0, GxEPD2_Type::WIDTH, HEIGHT);
@@ -559,7 +556,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
               else epd2.writeImageAgain(_buffer, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
             }
           }
-          epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
+          //epd2.refresh(_pw_x, _pw_y, _pw_w, _pw_h);
           if (!epd2.hasFastPartialUpdate) break;
           // else make both controller buffers have equal content
         }
@@ -573,7 +570,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
           drawCallback(pv);
           epd2.writeImageForFullRefresh(_buffer, 0, page_ys, GxEPD2_Type::WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
         }
-        epd2.refresh(false); // full update after first phase
+        //epd2.refresh(false); // full update after first phase
         if (epd2.hasFastPartialUpdate)
         {
           // make both controller buffers have equal content
@@ -586,7 +583,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
           }
           //epd2.refresh(true); // partial update after second phase // not needed
         }
-        epd2.powerOff();
+        //epd2.powerOff();
       }
       _current_page = 0;
     }
