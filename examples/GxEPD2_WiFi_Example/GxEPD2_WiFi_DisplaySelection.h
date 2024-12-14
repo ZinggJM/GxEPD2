@@ -1,20 +1,3 @@
-// Display Library example for SPI e-paper panels from Dalian Good Display and boards from Waveshare.
-// Requires HW SPI and Adafruit_GFX. Caution: the e-paper panels require 3.3V supply AND data lines!
-//
-// Display Library based on Demo Example from Good Display: https://www.good-display.com/companyfile/32/
-//
-// Author: Jean-Marc Zingg
-//
-// Version: see library.properties
-//
-// Library: https://github.com/ZinggJM/GxEPD2
-
-// Supporting Arduino Forum Topics (closed, read only):
-// Good Display ePaper for Arduino: https://forum.arduino.cc/t/good-display-epaper-for-arduino/419657
-// Waveshare e-paper displays with SPI: https://forum.arduino.cc/t/waveshare-e-paper-displays-with-spi/467865
-//
-// Add new topics in https://forum.arduino.cc/c/using-arduino/displays/23 for new questions and issues
-
 // NOTE: you may need to adapt or select for your wiring in the processor specific conditional compile sections below
 
 // select the display class (only one), matching the kind of display panel
@@ -128,8 +111,6 @@
 #define EPD_CS SS
 #endif
 
-#if defined(GxEPD2_DISPLAY_CLASS) && defined(GxEPD2_DRIVER_CLASS)
-
 // somehow there should be an easier way to do this
 #define GxEPD2_BW_IS_GxEPD2_BW true
 #define GxEPD2_3C_IS_GxEPD2_3C true
@@ -145,28 +126,8 @@
 #define IS_GxEPD2_1248(x) IS_GxEPD(GxEPD2_1248_IS_, x)
 #define IS_GxEPD2_1248c(x) IS_GxEPD(GxEPD2_1248c_IS_, x)
 
-#include "GxEPD2_selection_check.h"
-
-// for my test use only
-//#if defined(_AVR)
-//#warning "defined(_AVR)"
-//#endif
-//#if defined(ESP32)
-//#warning "defined(ESP32)"
-//#endif
-//#if defined(ARDUINO_ARCH_ESP32)
-//#warning "defined(ARDUINO_ARCH_ESP32)"
-//#endif
-
-#if defined(ARDUINO_ARCH_AVR)
-#if defined (ARDUINO_AVR_MEGA2560) // Note: SS is on 53 on MEGA
-#define MAX_DISPLAY_BUFFER_SIZE 5000 // e.g. full height for 200x200
-#elif defined(ARDUINO_AVR_NANO_EVERY)
-#define EPD_CS 10
-#define MAX_DISPLAY_BUFFER_SIZE 5000 // e.g. full height for 200x200
-#else // Note: SS is on 10 on UNO, NANO
-#define MAX_DISPLAY_BUFFER_SIZE 800 // 
-#endif
+#if defined (ESP8266)
+#define MAX_DISPLAY_BUFFER_SIZE (81920ul-34000ul-36000ul) // ~34000 base use, WiFiClientSecure seems to need about 36k more to work (with certificates)
 #if IS_GxEPD2_BW(GxEPD2_DISPLAY_CLASS)
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8))
 #elif IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS) || IS_GxEPD2_4C(GxEPD2_DISPLAY_CLASS)
@@ -175,27 +136,16 @@
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2))
 #endif
 // adapt the constructor parameters to your wiring
-GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-// for Arduino Micro or Arduino Leonardo with CS on 10 on my proto boards (SS would be 17) uncomment instead:
-//GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ 10, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
+GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=D8*/ EPD_CS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
+// mapping of Waveshare e-Paper ESP8266 Driver Board, new version
+//GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=15*/ EPD_CS, /*DC=4*/ 4, /*RST=2*/ 2, /*BUSY=5*/ 5));
+// mapping of Waveshare e-Paper ESP8266 Driver Board, old version
+//GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=15*/ EPD_CS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
+#undef MAX_DISPLAY_BUFFER_SIZE
+#undef MAX_HEIGHT
 #endif
 
-#if defined(ARDUINO_ARCH_MEGAAVR)
-#if defined(ARDUINO_AVR_NANO_EVERY)
-#define MAX_DISPLAY_BUFFER_SIZE 5000 // e.g. full height for 200x200
-#if IS_GxEPD2_BW(GxEPD2_DISPLAY_CLASS)
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8))
-#elif IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS) || IS_GxEPD2_4C(GxEPD2_DISPLAY_CLASS)
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8))
-#elif IS_GxEPD2_7C(GxEPD2_DISPLAY_CLASS)
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2))
-#endif
-// adapt the constructor parameters to your wiring
-GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ 10, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-#endif
-#endif
-
-#if defined(ARDUINO_ARCH_ESP32)
+#if defined(ESP32)
 #define MAX_DISPLAY_BUFFER_SIZE 65536ul // e.g.
 #if IS_GxEPD2_BW(GxEPD2_DISPLAY_CLASS)
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8))
@@ -206,15 +156,9 @@ GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> displ
 #endif
 // adapt the constructor parameters to your wiring
 #if !IS_GxEPD2_1248(GxEPD2_DRIVER_CLASS) && !IS_GxEPD2_1248c(GxEPD2_DRIVER_CLASS)
-#if defined(ARDUINO_NANO_ESP32) // uses Dx pin names
-GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ D10, /*DC=*/ D8, /*RST=*/ D9, /*BUSY=*/ D7));
-#elif defined(ARDUINO_LOLIN_D32_PRO)
+#if defined(ARDUINO_LOLIN_D32_PRO)
 GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=5*/ EPD_CS, /*DC=*/ 0, /*RST=*/ 2, /*BUSY=*/ 15)); // my LOLIN_D32_PRO proto board
-#elif defined(ARDUINO_LOLIN_S2_MINI)
-GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS*/ 33, /*DC=*/ 35, /*RST=*/ 37, /*BUSY=*/ 39)); // my LOLIN ESP32 S2 mini connection
 #else
-//GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ 27, /*DC=*/ 14, /*RST=*/ 12, /*BUSY=*/ 13)); // Good Display ESP32 Development Kit ESP32-L
-//GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ 27, /*DC=*/ 14, /*RST=*/ 12, /*BUSY=*/ 13, /*CS2=*/ 4)); // for GDEM1085T51 with ESP32-L
 GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=5*/ EPD_CS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // my suggested wiring and proto board
 //GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=5*/ 5, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // LILYGO_T5_V2.4.1
 //GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=5*/ EPD_CS, /*DC=*/ 19, /*RST=*/ 4, /*BUSY=*/ 34)); // LILYGO® TTGO T5 2.66
@@ -233,47 +177,7 @@ GxEPD2_DISPLAY_CLASS < GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS) > di
 #undef MAX_HEIGHT
 #endif
 
-#if defined (ARDUINO_ARCH_ESP8266)
-#define MAX_DISPLAY_BUFFER_SIZE (81920ul-34000ul-5000ul) // ~34000 base use, change 5000 to your application use
-#if IS_GxEPD2_BW(GxEPD2_DISPLAY_CLASS)
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8))
-#elif IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS) || IS_GxEPD2_4C(GxEPD2_DISPLAY_CLASS)
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8))
-#elif IS_GxEPD2_7C(GxEPD2_DISPLAY_CLASS)
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2))
-#endif
-// adapt the constructor parameters to your wiring
-GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=D8*/ EPD_CS, /*DC=D3*/ 0, /*RST=D4*/ 2, /*BUSY=D2*/ 4));
-// mapping of Waveshare e-Paper ESP8266 Driver Board, new version
-//GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=15*/ EPD_CS, /*DC=4*/ 4, /*RST=2*/ 2, /*BUSY=5*/ 5));
-// mapping of Waveshare e-Paper ESP8266 Driver Board, old version
-//GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=15*/ EPD_CS, /*DC=4*/ 4, /*RST=5*/ 5, /*BUSY=16*/ 16));
-#undef MAX_DISPLAY_BUFFER_SIZE
-#undef MAX_HEIGHT
-#endif
-
-// can't use package "STMF1 Boards (STM32Duino.com)" (Roger Clark) anymore with Adafruit_GFX, use "STM32 Boards (selected from submenu)" (STMicroelectronics)
-#if defined(ARDUINO_ARCH_STM32)
-#define MAX_DISPLAY_BUFFER_SIZE 15000ul // ~15k is a good compromise
-#if IS_GxEPD2_BW(GxEPD2_DISPLAY_CLASS)
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8))
-#elif IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS) || IS_GxEPD2_4C(GxEPD2_DISPLAY_CLASS)
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8))
-#elif IS_GxEPD2_7C(GxEPD2_DISPLAY_CLASS)
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2))
-#endif
-// adapt the constructor parameters to your wiring
-// for Good Display STM32 Development Kit DESPI-L. 
-// needs jumpers from PA5 (PIN_SPI_SCK) to SCK for EPD and PA7 (PIN_SPI_MOSI) to SDI for EPD. PD9 and PD10 are not HW SPI capable.
-//GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ PD8, /*DC=*/ PE15, /*RST=*/ PE14, /*BUSY=*/ PE13));
-//GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ PD8, /*DC=*/ PE15, /*RST=*/ PE14, /*BUSY=*/ PE13, /*CS2=*/ PD12)); // for GDEM1085T51
-GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=PA4*/ EPD_CS, /*DC=*/ PA3, /*RST=*/ PA2, /*BUSY=*/ PA1)); // my proto board
-#undef MAX_DISPLAY_BUFFER_SIZE
-#undef MAX_HEIGHT
-#endif
-
-#if defined(ARDUINO_ARCH_RENESAS)
-#if defined(ARDUINO_UNOR4_MINIMA) || defined(ARDUINO_UNOR4_WIFI)
+#if defined(ARDUINO_UNOR4_WIFI)
 #define MAX_DISPLAY_BUFFER_SIZE 16384ul // e.g. half of available RAM
 #if IS_GxEPD2_BW(GxEPD2_DISPLAY_CLASS)
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8))
@@ -284,43 +188,6 @@ GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> displ
 #endif
 // adapt the constructor parameters to your wiring
 GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-#endif
-#endif
-
-#if defined(ARDUINO_ARCH_SAM)
-#define MAX_DISPLAY_BUFFER_SIZE 32768ul // e.g., up to 96k
-#if IS_GxEPD2_BW(GxEPD2_DISPLAY_CLASS)
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8))
-#elif IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS) || IS_GxEPD2_4C(GxEPD2_DISPLAY_CLASS)
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8))
-#elif IS_GxEPD2_7C(GxEPD2_DISPLAY_CLASS)
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2))
-#endif
-// adapt the constructor parameters to your wiring
-GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-#undef MAX_DISPLAY_BUFFER_SIZE
-#undef MAX_HEIGHT
-#endif
-
-#if defined(ARDUINO_ARCH_SAMD)
-#define MAX_DISPLAY_BUFFER_SIZE 15000ul // ~15k is a good compromise
-#if IS_GxEPD2_BW(GxEPD2_DISPLAY_CLASS)
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8))
-#elif IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS) || IS_GxEPD2_4C(GxEPD2_DISPLAY_CLASS)
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8))
-#elif IS_GxEPD2_7C(GxEPD2_DISPLAY_CLASS)
-#define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE) / (EPD::WIDTH / 2))
-#endif
-#if defined(ARDUINO_SAMD_NANO_33_IOT)
-GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=10*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
-#else
-// adapt the constructor parameters to your wiring
-GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=4*/ 4, /*DC=*/ 7, /*RST=*/ 6, /*BUSY=*/ 5));
-//GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=4*/ 4, /*DC=*/ 3, /*RST=*/ 2, /*BUSY=*/ 1)); // my Seed XIOA0
-//GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=4*/ 3, /*DC=*/ 2, /*RST=*/ 1, /*BUSY=*/ 0)); // my other Seed XIOA0
-#endif
-#undef MAX_DISPLAY_BUFFER_SIZE
-#undef MAX_HEIGHT
 #endif
 
 #if defined(ARDUINO_ARCH_RP2040)
@@ -336,23 +203,9 @@ GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> displ
 // adapt the constructor parameters to your wiring
 GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ EPD_CS, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7));
 #endif
-#if defined(ARDUINO_RASPBERRY_PI_PICO)
-// adapt the constructor parameters to your wiring
-//GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ 5, /*DC=*/ 8, /*RST=*/ 9, /*BUSY=*/ 7)); // my proto board
-// mapping of GoodDisplay DESPI-PICO. NOTE: uses alternate HW SPI pins!
-GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ 3, /*DC=*/ 2, /*RST=*/ 1, /*BUSY=*/ 0)); // DESPI-PICO
-//GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ 3, /*DC=*/ 2, /*RST=*/ 11, /*BUSY=*/ 10)); // DESPI-PICO modified
-//GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ 9, /*DC=*/ 8, /*RST=*/ 12, /*BUSY=*/ 13)); // Waveshare Pico-ePaper-2.9
-#endif
 #if defined(ARDUINO_RASPBERRY_PI_PICO_W)
 GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ 9, /*DC=*/ 8, /*RST=*/ 12, /*BUSY=*/ 13)); // Waveshare Pico-ePaper-2.9
 #endif
-#if defined(ARDUINO_ADAFRUIT_FEATHER_RP2040_THINKINK)
-// Adafruit Feather RP2040 ThinkInk used with package https://github.com/earlephilhower/arduino-pico
-GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS)> display(GxEPD2_DRIVER_CLASS(/*CS=*/ PIN_EPD_CS, /*DC=*/ PIN_EPD_DC, /*RST=*/ PIN_EPD_RESET, /*BUSY=*/ PIN_EPD_BUSY));
-#endif
 #undef MAX_DISPLAY_BUFFER_SIZE
 #undef MAX_HEIGHT
-#endif
-
 #endif

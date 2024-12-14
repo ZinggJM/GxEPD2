@@ -81,6 +81,7 @@
 //#define GxEPD2_DRIVER_CLASS GxEPD2_290_BS // DEPG0290BS  128x296, SSD1680, (FPC-7519 rev.b)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_290_M06 // GDEW029M06  128x296, UC8151D, (WFT0290CZ10)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_290_GDEY029T94 // GDEY029T94 128x296, SSD1680, (FPC-A005 20.06.15)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_290_GDEY029T71H // GDEY029T71H 168x384, SSD1685, (FPC-H004 22.03.24)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_310_GDEQ031T10 // GDEQ031T10 240x320, UC8253, (no inking, backside mark KEGMO 3100)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_371     // GDEW0371W7  240x416, UC8171 (IL0324), (missing)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_370_TC1 // ED037TC1  280x480, SSD1677, (ICA-FU-20 ichia 2029), Waveshare 3.7"
@@ -90,6 +91,7 @@
 //#define GxEPD2_DRIVER_CLASS GxEPD2_420_GYE042A87  // GYE042A87, 400x300, SSD1683 (HINK-E042-A07-FPC-A1)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_420_SE0420NQ04 // SE0420NQ04, 400x300, UC8276C (OPM042A2_V1.0)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_426_GDEQ0426T82 // GDEQ0426T82 480x800, SSD1677 (P426010-MF1-A)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_579_GDEY0579T93 // GDEY0579T93 792x272, SSD1683 (FPC-E004 22.04.13)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_583     // GDEW0583T7  600x448, UC8159c (IL0371), (missing)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_583_T8  // GDEW0583T8  648x480, EK79655 (GD7965), (WFT0583CZ61)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_583_GDEQ0583T31 // GDEQ0583T31  648x480, UC8179, (P583010-MF1-B)
@@ -97,6 +99,7 @@
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750_T7  // GDEW075T7   800x480, EK79655 (GD7965), (WFT0583CZ61)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_750_GDEY075T7  // GDEY075T7  800x480, UC8179 (GD7965), (FPC-C001 20.08.20)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_1020_GDEM102T91 // GDEM102T91 960x640, SSD1677, (FPC7705 REV.b)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_1085_GDEM1085T51 // GDEM1085T51 1360x480, JD79686AB, (FPC8617) *** needs CS2 ***
 //#define GxEPD2_DRIVER_CLASS GxEPD2_1160_T91 // GDEH116T91 960x640, SSD1677, (none or hidden)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_1248     // GDEW1248T3 1304x984, UC8179, (WFT1248BZ23,WFT1248BZ24)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_1330_GDEM133T91 // GDEM133T91 960x680, SSD1677, (FPC-7701 REV.B)
@@ -113,6 +116,8 @@
 //#define GxEPD2_DRIVER_CLASS GxEPD2_290_C90c // GDEM029C90  128x296, SSD1680, (FPC-7519 rev.b)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_420c     // GDEW042Z15  400x300, UC8176 (IL0398), (WFT0420CZ15)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_420c_Z21 // GDEQ042Z21  400x300, UC8276, (hidden)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_420c_GDEY042Z98 // GDEY042Z98 400x300, SSD1683 (no inking)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_579c_GDEY0579Z93 // GDEY0579Z93 792x272, SSD1683 (FPC-E004 22.04.13)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_583c     // GDEW0583Z21 600x448, UC8159c (IL0371), (missing)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_583c_Z83 // GDEW0583Z83 648x480, EK79655 (GD7965), (WFT0583CZ61)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_583c_GDEQ0583Z31 // GDEQ0583Z31 648x480, UC8179C, 
@@ -123,15 +128,20 @@
 //#define GxEPD2_DRIVER_CLASS GxEPD2_1248c    // GDEY1248Z51 1304x984, UC8179, (WFT1248BZ23,WFT1248BZ24)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_1330c_GDEM133Z91 // GDEM133Z91 960x680, SSD1677 (FPC-7701 REV.B)
 // 4-color e-paper
+//#define GxEPD2_DRIVER_CLASS GxEPD2_213c_GDEY0213F51 // GDEY0213F51 122x250, JD79661 (FPC-A002 20.04.08)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_266c_GDEY0266F51H // GDEY0266F51H 184x360, JD79667 (FPC-H006 22.04.02)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_290c_GDEY029F51H // GDEY029F51H 168x384, JD79667 (FPC-H004 22.03.24)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_300c     // Waveshare 3.00" 4-color
 //#define GxEPD2_DRIVER_CLASS GxEPD2_420c_GDEY0420F51 // GDEY0420F51 400x300, HX8717 (no inking)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_437c     // Waveshare 4.37" 4-color
+//#define GxEPD2_DRIVER_CLASS GxEPD2_0579c_GDEY0579F51 // GDEY0579F51 792x272, HX8717 (FPC-E009 22.09.25)
+//#define GxEPD2_DRIVER_CLASS GxEPD2_1160c_GDEY116F51 // GDEY116F51 960x640, SSD2677, (FPC-K012 23.09.27)
 // 7-color e-paper
 //#define GxEPD2_DRIVER_CLASS GxEPD2_565c // Waveshare 5.65" 7-color
+//#define GxEPD2_DRIVER_CLASS GxEPD2_565c_GDEP0565D90 // GDEP0565D90 600x448 7-color (E219454, AB1024-EGA AC0750TC1)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_730c_GDEY073D46 // GDEY073D46 800x480 7-color, (N-FPC-001 2021.11.26)
 //#define GxEPD2_DRIVER_CLASS GxEPD2_730c_ACeP_730 // Waveshare 7.3" 7-color
+//#define GxEPD2_DRIVER_CLASS GxEPD2_730c_GDEP073E01 // GDEP073E01 800x480 7-color, (E350911HF 94V-0 F-6 ROHS 24141)
 // grey levels parallel IF e-papers on Waveshare e-Paper IT8951 Driver HAT
 //#define GxEPD2_DRIVER_CLASS GxEPD2_it60           // ED060SCT 800x600
 //#define GxEPD2_DRIVER_CLASS GxEPD2_it60_1448x1072 // ED060KC1 1448x1072
@@ -159,9 +169,7 @@
 #define IS_GxEPD2_1248c(x) IS_GxEPD(GxEPD2_1248c_IS_, x)
 
 #if defined (ESP8266)
-#define MAX_DISPLAY_BUFFER_SIZE (81920ul-34000ul-38000ul) // ~34000 base use, WiFiClientSecure seems to need about 38k more to work (with CertStore)
-// for site people.math.sc.edu an increased RX buffer is required for timely decodes, client.setBufferSizes(8192, 4096); // may help. needs more space:
-//#define MAX_DISPLAY_BUFFER_SIZE (81920ul-34000ul-38000ul) // ~34000 base use, WiFiClientSecure seems to need about 38k more to work (with CertStore)
+#define MAX_DISPLAY_BUFFER_SIZE (81920ul-34000ul-40000ul) // ~34000 base use, WiFiClientSecure seems to need about 40k more to work (with CertStore)
 #if IS_GxEPD2_BW(GxEPD2_DISPLAY_CLASS)
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPLAY_BUFFER_SIZE / (EPD::WIDTH / 8))
 #elif IS_GxEPD2_3C(GxEPD2_DISPLAY_CLASS) || IS_GxEPD2_4C(GxEPD2_DISPLAY_CLASS)
@@ -217,39 +225,43 @@ GxEPD2_DISPLAY_CLASS < GxEPD2_DRIVER_CLASS, MAX_HEIGHT(GxEPD2_DRIVER_CLASS) > di
 #include <time.h>
 #include <FS.h>
 #include <LittleFS.h>
+#else
+#include <WiFi.h>
 #endif
 
 #include <WiFiClient.h>
 #include <WiFiClientSecure.h>
-
-#if defined (ESP8266)
-// A single, global CertStore which can be used by all
-// connections.  Needs to stay live the entire time any of
-// the WiFiClientBearSSLs are present.
-BearSSL::CertStore certStore;
-const char* certificate_rawcontent = 0;
-#else
-#include "GxEPD2_github_raw_certs.h"
-const char* certificate_rawcontent = cert_DigiCert_TLS_RSA_SHA256_2020_CA1;
-#pragma GCC warning "no CertStore for this target"
-//#warning "no CertStore for this target"
-#endif
 
 const char* ssid     = "........";
 const char* password = "........";
 const int httpPort  = 80;
 const int httpsPort = 443;
 
-const char* fp_rawcontent     = "97:D8:C5:70:0F:12:24:6C:88:BC:FA:06:7E:8C:A7:4D:A8:62:67:28"; // SHA-1 as of 12.04.2024
+// note: the certificates have been moved to a separate header file, as R"CERT( destroys IDE Auto Format capability
+#include "GxEPD2_github_raw_certs.h"
+const char* certificate_rawcontent = github_io_pem;  // ok, should work until Fri, 14 Mar 2025 23:59:59 GMT
 
 const char* host_rawcontent   = "raw.githubusercontent.com";
 const char* path_rawcontent   = "/ZinggJM/GxEPD2/master/extras/bitmaps/";
+const char* path_workcontent  = "/ZinggJM/GxEPD2/work_in_progress/extras/bitmaps/";
 const char* path_prenticedavid   = "/prenticedavid/MCUFRIEND_kbv/master/extras/bitmaps/";
 const char* path_waveshare_c  = "/waveshare/e-Paper/master/RaspberryPi_JetsonNano/c/pic/";
 const char* path_waveshare_py = "/waveshare/e-Paper/master/RaspberryPi_JetsonNano/python/pic/";
-const char* path_Burkardt     = "https://people.math.sc.edu/Burkardt/data/bmp/";
+const char* fp_rawcontent     = "97:D8:C5:70:0F:12:24:6C:88:BC:FA:06:7E:8C:A7:4D:A8:62:67:28"; // SHA-1 as of 12.04.2024
+
+//const char* path_Burkardt     = "https://people.math.sc.edu/Burkardt/data/bmp/";
+const char* path_Burkardt     = "/Burkardt/data/bmp/";
 const char* fp_people_cas     = "99:6C:B7:72:CC:ED:96:82:49:2D:B2:78:71:00:14:BA:02:8E:FF:BF";
 const char* host_people_cas_sc_edu = "people.math.sc.edu";
+
+#if defined (ESP8266)
+// A single, global CertStore which can be used by all
+// connections.  Needs to stay live the entire time any of
+// the WiFiClientBearSSLs are present.
+BearSSL::CertStore certStore;
+#else
+#pragma GCC warning "no CertStore for this target"
+#endif
 
 // note that BMP bitmaps are drawn at physical position in physical orientation of the screen
 void showBitmapFrom_HTTP(const char* host, const char* path, const char* filename, int16_t x, int16_t y, bool with_color = true);
@@ -267,7 +279,8 @@ void setup()
   Serial.println();
   Serial.println("GxEPD2_WiFi_Example");
 
-  display.init(115200);
+  //display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
+  display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
 
 #ifdef REMAP_SPI_FOR_WAVESHARE_ESP32_DRIVER_BOARD
   SPI.end(); // release standard SPI pins, e.g. SCK(18), MISO(19), MOSI(23), SS(5)
@@ -283,26 +296,11 @@ void setup()
     delay(1000);
   }
 
-#ifdef RE_INIT_NEEDED
-  WiFi.persistent(true);
+  Serial.println();
   WiFi.mode(WIFI_STA); // switch off AP
-  WiFi.setAutoConnect(true);
-  WiFi.setAutoReconnect(true);
-  WiFi.disconnect();
-#endif
-
-  if (!WiFi.getAutoConnect() || ( WiFi.getMode() != WIFI_STA) || ((WiFi.SSID() != ssid) && String(ssid) != "........"))
-  {
-    Serial.println();
-    Serial.print("WiFi.getAutoConnect()=");
-    Serial.println(WiFi.getAutoConnect());
-    Serial.print("WiFi.SSID()=");
-    Serial.println(WiFi.SSID());
-    WiFi.mode(WIFI_STA); // switch off AP
-    Serial.print("Connecting to ");
-    Serial.println(ssid);
-    WiFi.begin(ssid, password);
-  }
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+  WiFi.begin(ssid, password);
   int ConnectTimeout = 60; // 30 seconds
   while (WiFi.status() != WL_CONNECTED)
   {
@@ -388,8 +386,8 @@ void drawBitmaps_other()
 {
   int16_t w2 = display.width() / 2;
   int16_t h2 = display.height() / 2;
-  showBitmapFrom_HTTP("www.packescape.com", "/img/assets/", "IniciMenusTV2.bmp", w2 - 200, h2 - 150, false);
-  delay(2000);
+  //showBitmapFrom_HTTP("www.packescape.com", "/img/assets/", "IniciMenusTV2.bmp", w2 - 200, h2 - 150, false);
+  //delay(2000);
   showBitmapFrom_HTTP("www.squix.org", "/blog/wunderground/", "chanceflurries.bmp", w2 - 50, h2 - 50, false);
   delay(2000);
   showBitmapFrom_HTTPS(host_rawcontent, path_prenticedavid, "betty_1.bmp", fp_rawcontent, w2 - 100, h2 - 160);
@@ -419,10 +417,11 @@ void drawBitmaps_other()
 void drawBitmaps_test()
 {
 #if defined (ESP8266)
-  showBitmapFrom_HTTPS_Buffered(host_people_cas_sc_edu, path_Burkardt, "lena.bmp", 0, 0, 0, true, 0); // connection ok with CertStore
+  //showBitmapFrom_HTTPS(host_people_cas_sc_edu, path_Burkardt, "lena.bmp", 0, 0, 0, true, 0); // connection not ok with CertStore, needs be updated
 #endif
   int16_t w2 = display.width() / 2;
   int16_t h2 = display.height() / 2;
+  //showBitmapFrom_HTTPS(host_rawcontent, path_workcontent, "z0gs/screenshot.bmp", fp_rawcontent, 0, 0); delay(2000); return;
   showBitmapFrom_HTTPS(host_rawcontent, path_prenticedavid, "betty_4.bmp", fp_rawcontent, w2 - 102, h2 - 126);
   delay(2000);
   showBitmapFrom_HTTPS(host_rawcontent, path_rawcontent, "output5.bmp", fp_rawcontent, 0, 0);
@@ -515,13 +514,18 @@ void drawBitmapsBuffered_7C()
     delay(2000);
     showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_py, "N-Color1.bmp", fp_rawcontent, 0, 0);
     delay(2000);
+
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_rawcontent, "displayed_bmp_small_but_padded.bmp", fp_rawcontent, 0, 0);
+    delay(2000);
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_rawcontent, "displayed_bmp_large.bmp", fp_rawcontent, 0, 0);
+    delay(2000);
   }
 }
 
 void drawBitmapsBuffered_test()
 {
 #if defined (ESP8266)
-  showBitmapFrom_HTTPS_Buffered(host_people_cas_sc_edu, path_Burkardt, "lena.bmp", 0, 0, 0, true, 0); // connection ok with CertStore
+  //showBitmapFrom_HTTPS_Buffered(host_people_cas_sc_edu, path_Burkardt, "lena.bmp", 0, 0, 0, true, 0); // connection not ok with CertStore, needs be updated
 #endif
   int16_t w2 = display.width() / 2;
   int16_t h2 = display.height() / 2;
@@ -530,6 +534,7 @@ void drawBitmapsBuffered_test()
 }
 
 static const uint16_t input_buffer_pixels = 800; // may affect performance
+//static const uint16_t input_buffer_pixels = 960; // may affect performance
 
 static const uint16_t max_row_width = 1872; // for up to 7.8" display 1872x1404
 static const uint16_t max_palette_pixels = 256; // for depth <= 8
@@ -570,10 +575,8 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
     {
       connection_ok = line.startsWith("HTTP/1.1 200 OK");
       if (connection_ok) Serial.println(line);
-      //if (!connection_ok) Serial.println(line);
     }
     if (!connection_ok) Serial.println(line);
-    //Serial.println(line);
     if (line == "\r")
     {
       Serial.println("headers received");
@@ -603,7 +606,7 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
       Serial.print("Image size: ");
       Serial.print(width);
       Serial.print('x');
-      Serial.println(height);
+      Serial.println(abs(height));
       // BMP rows are padded (if needed) to 4-byte boundary
       uint32_t rowSize = (width * depth / 8 + 3) & ~3;
       if (depth < 8) rowSize = ((width * depth + 8 - depth) / 8 + 3) & ~3;
@@ -628,7 +631,6 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
         if (depth <= 8)
         {
           if (depth < 8) bitmask >>= depth;
-          //bytes_read += skip(client, 54 - bytes_read); //palette is always @ 54
           bytes_read += skip(client, imageOffset - (4 << depth) - bytes_read); // 54 for regular, diff for colorsimportant
           for (uint16_t pn = 0; pn < (1 << depth); pn++)
           {
@@ -647,7 +649,6 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
         }
         display.clearScreen();
         uint32_t rowPosition = flip ? imageOffset + (height - h) * rowSize : imageOffset;
-        //Serial.print("skip "); Serial.println(rowPosition - bytes_read);
         bytes_read += skip(client, rowPosition - bytes_read);
         for (uint16_t row = 0; row < h; row++, rowPosition += rowSize) // for each line
         {
@@ -680,6 +681,7 @@ void showBitmapFrom_HTTP(const char* host, const char* path, const char* filenam
               in_bytes = got;
               in_remain -= got;
               bytes_read += got;
+              in_idx = 0;
             }
             if (!connection_ok)
             {
@@ -809,10 +811,8 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
     {
       connection_ok = line.startsWith("HTTP/1.1 200 OK");
       if (connection_ok) Serial.println(line);
-      //if (!connection_ok) Serial.println(line);
     }
     if (!connection_ok) Serial.println(line);
-    //Serial.println(line);
     if (line == "\r")
     {
       Serial.println("headers received");
@@ -842,7 +842,7 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
       Serial.print("Image size: ");
       Serial.print(width);
       Serial.print('x');
-      Serial.println(height);
+      Serial.println(abs(height));
       // BMP rows are padded (if needed) to 4-byte boundary
       uint32_t rowSize = (width * depth / 8 + 3) & ~3;
       if (depth < 8) rowSize = ((width * depth + 8 - depth) / 8 + 3) & ~3;
@@ -867,7 +867,6 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
         if (depth <= 8)
         {
           if (depth < 8) bitmask >>= depth;
-          //bytes_read += skip(client, 54 - bytes_read); //palette is always @ 54
           bytes_read += skip(client, imageOffset - (4 << depth) - bytes_read); // 54 for regular, diff for colorsimportant
           for (uint16_t pn = 0; pn < (1 << depth); pn++)
           {
@@ -888,7 +887,6 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
           }
         }
         uint32_t rowPosition = flip ? imageOffset + (height - h) * rowSize : imageOffset;
-        //Serial.print("skip "); Serial.println(rowPosition - bytes_read);
         bytes_read += skip(client, rowPosition - bytes_read);
         for (uint16_t row = 0; row < h; row++, rowPosition += rowSize) // for each line
         {
@@ -919,6 +917,7 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
               in_bytes = got;
               in_remain -= got;
               bytes_read += got;
+              in_idx = 0;
             }
             if (!connection_ok)
             {
@@ -1032,8 +1031,9 @@ void showBitmapFrom_HTTP_Buffered(const char* host, const char* path, const char
 void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filename, const char* fingerprint, int16_t x, int16_t y, bool with_color, const char* certificate)
 {
   // Use WiFiClientSecure class to create TLS connection
-#if defined (ESP8266)
+#if defined (ESP8266) || defined(ARDUINO_RASPBERRY_PI_PICO_W)
   BearSSL::WiFiClientSecure client;
+  //BearSSL::X509List cert(certificate ? certificate : certificate_rawcontent);
 #else
   WiFiClientSecure client;
 #endif
@@ -1044,9 +1044,7 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
   if ((x >= display.epd2.WIDTH) || (y >= display.epd2.HEIGHT)) return;
   Serial.println(); Serial.print("downloading file \""); Serial.print(filename);  Serial.println("\"");
   Serial.print("connecting to "); Serial.println(host);
-#if defined (ESP8266)
-  //client.setBufferSizes(4096, 4096); // required
-  client.setBufferSizes(8192, 4096); // may help for some sites
+#if defined (ESP8266) || defined(ARDUINO_RASPBERRY_PI_PICO_W)
   client.setCertStore(&certStore);
 #elif defined (ESP32)
   if (certificate) client.setCACert(certificate);
@@ -1070,10 +1068,8 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
     {
       connection_ok = line.startsWith("HTTP/1.1 200 OK");
       if (connection_ok) Serial.println(line);
-      //if (!connection_ok) Serial.println(line);
     }
     if (!connection_ok) Serial.println(line);
-    //Serial.println(line);
     if (line == "\r")
     {
       Serial.println("headers received");
@@ -1082,7 +1078,6 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
   }
   if (!connection_ok) return;
   // Parse BMP header
-  //if (read16(client) == 0x4D42) // BMP signature
   uint16_t signature = 0;
   for (int16_t i = 0; i < 50; i++)
   {
@@ -1102,8 +1097,6 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
     uint16_t depth = read16(client); // bits per pixel
     uint32_t format = read32(client);
     uint32_t bytes_read = 7 * 4 + 3 * 2; // read so far
-    //Serial.print("planes: "); Serial.println(planes);
-    //Serial.print("format: "); Serial.println(format);
     if ((planes == 1) && ((format == 0) || (format == 3))) // uncompressed is handled, 565 also
     {
       Serial.print("File size: "); Serial.println(fileSize);
@@ -1113,7 +1106,7 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
       Serial.print("Image size: ");
       Serial.print(width);
       Serial.print('x');
-      Serial.println(height);
+      Serial.println(abs(height));
       // BMP rows are padded (if needed) to 4-byte boundary
       uint32_t rowSize = (width * depth / 8 + 3) & ~3;
       if (depth < 8) rowSize = ((width * depth + 8 - depth) / 8 + 3) & ~3;
@@ -1191,6 +1184,7 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
               in_bytes = got;
               in_remain -= got;
               bytes_read += got;
+              in_idx = 0;
             }
             if (!connection_ok)
             {
@@ -1293,6 +1287,7 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
   // Use WiFiClientSecure class to create TLS connection
 #if defined (ESP8266)
   BearSSL::WiFiClientSecure client;
+  //BearSSL::X509List cert(certificate ? certificate : certificate_rawcontent);
 #else
   WiFiClientSecure client;
 #endif
@@ -1305,8 +1300,6 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
   display.fillScreen(GxEPD_WHITE);
   Serial.print("connecting to "); Serial.println(host);
 #if defined (ESP8266)
-  //client.setBufferSizes(4096, 4096); // required
-  client.setBufferSizes(8192, 4096); // may help
   client.setCertStore(&certStore);
 #elif defined (ESP32)
   if (certificate) client.setCACert(certificate);
@@ -1330,10 +1323,8 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
     {
       connection_ok = line.startsWith("HTTP/1.1 200 OK");
       if (connection_ok) Serial.println(line);
-      //if (!connection_ok) Serial.println(line);
     }
     if (!connection_ok) Serial.println(line);
-    //Serial.println(line);
     if (line == "\r")
     {
       Serial.println("headers received");
@@ -1342,18 +1333,12 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
   }
   if (!connection_ok) return;
   // Parse BMP header
-  //if (read16(client) == 0x4D42) // BMP signature
   uint16_t signature = 0;
   for (int16_t i = 0; i < 50; i++)
   {
     if (!client.available()) delay(100);
     else signature = read16(client);
-    //Serial.print("signature: 0x"); Serial.println(signature, HEX);
-    if (signature == 0x4D42)
-    {
-      //Serial.print("signature wait loops: "); Serial.println(i);
-      break;
-    }
+    if (signature == 0x4D42) break;
   }
   if (signature == 0x4D42) // BMP signature
   {
@@ -1376,7 +1361,7 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
       Serial.print("Image size: ");
       Serial.print(width);
       Serial.print('x');
-      Serial.println(height);
+      Serial.println(abs(height));
       // BMP rows are padded (if needed) to 4-byte boundary
       uint32_t rowSize = (width * depth / 8 + 3) & ~3;
       if (depth < 8) rowSize = ((width * depth + 8 - depth) / 8 + 3) & ~3;
@@ -1453,6 +1438,7 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
               in_bytes = got;
               in_remain -= got;
               bytes_read += got;
+              in_idx = 0;
             }
             if (!connection_ok)
             {
@@ -1596,7 +1582,7 @@ uint32_t skip(BearSSL::WiFiClientSecure& client, int32_t bytes)
       client.read();
       remain--;
     }
-    else delay(1);
+    else delay(10);
     if (millis() - start > 2000) break; // don't hang forever
   }
   return bytes - remain;
@@ -1614,7 +1600,7 @@ uint32_t read8n(BearSSL::WiFiClientSecure& client, uint8_t* buffer, int32_t byte
       *buffer++ = uint8_t(v);
       remain--;
     }
-    else delay(1);
+    else delay(10);
     if (millis() - start > 2000) break; // don't hang forever
   }
   return bytes - remain;

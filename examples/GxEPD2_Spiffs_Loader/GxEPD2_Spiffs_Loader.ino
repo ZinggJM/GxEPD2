@@ -35,21 +35,20 @@ const char* ssid     = "........";
 const char* password = "........";
 const int httpPort  = 80;
 const int httpsPort = 443;
-const char* fp_api_github_com = "df b2 29 c6 a6 38 1a 59 9d c9 ad 92 2d 26 f5 3c 83 8f a5 87"; // as of 25.11.2020
-const char* fp_github_com     = "5f 3f 7a c2 56 9f 50 a4 66 76 47 c6 a1 8c a0 07 aa ed bb 8e"; // as of 25.11.2020
-const char* fp_rawcontent     = "70 94 de dd e6 c4 69 48 3a 92 70 a1 48 56 78 2d 18 64 e0 b7"; // as of 25.11.2020
 
 // note: the certificates have been moved to a separate header file, as R"CERT( destroys IDE Auto Format capability
 
 #include "GxEPD2_github_raw_certs.h"
 
-const char* certificate_rawcontent = cert_DigiCert_TLS_RSA_SHA256_2020_CA1; // ok, should work until 2031-04-13 23:59:59
+const char* certificate_rawcontent = github_io_pem;  // ok, should work until Fri, 14 Mar 2025 23:59:59 GMT
 
 const char* host_rawcontent   = "raw.githubusercontent.com";
 const char* path_rawcontent   = "/ZinggJM/GxEPD2/master/extras/bitmaps/";
+const char* path_workcontent  = "/ZinggJM/GxEPD2/work_in_progress/extras/bitmaps/";
 const char* path_prenticedavid   = "/prenticedavid/MCUFRIEND_kbv/master/extras/bitmaps/";
 const char* path_waveshare_c  = "/waveshare/e-Paper/master/RaspberryPi_JetsonNano/c/pic/";
 const char* path_waveshare_py = "/waveshare/e-Paper/master/RaspberryPi_JetsonNano/python/pic/";
+const char* fp_rawcontent     = "97:D8:C5:70:0F:12:24:6C:88:BC:FA:06:7E:8C:A7:4D:A8:62:67:28"; // SHA-1 as of 12.04.2024
 
 void setup()
 {
@@ -150,6 +149,7 @@ void downloadBitmaps_other()
 
 void downloadBitmaps_test()
 {
+  //downloadFile_HTTPS(host_rawcontent, path_workcontent, "z0gs/screenshot.bmp", fp_rawcontent, "screenshot.bmp"); return;
   downloadFile_HTTPS(host_rawcontent, path_rawcontent, "output5.bmp", fp_rawcontent, "output5.bmp");
   downloadFile_HTTPS(host_rawcontent, path_rawcontent, "output6.bmp", fp_rawcontent, "output6.bmp");
   downloadFile_HTTPS(host_rawcontent, path_rawcontent, "tractor_1.bmp", fp_rawcontent, "tractor_1.bmp");
@@ -289,6 +289,8 @@ void downloadFile_HTTPS(const char* host, const char* path, const char* filename
   Serial.println(); Serial.print("downloading file \""); Serial.print(filename);  Serial.println("\"");
   Serial.print("connecting to "); Serial.println(host);
 #if defined (ESP8266)
+  client.setBufferSizes(4096, 4096); // required
+  //client.setBufferSizes(8192, 4096); // may help for some sites
   if (certificate) client.setTrustAnchors(&cert);
   else if (fingerprint) client.setFingerprint(fingerprint);
   else client.setInsecure();
