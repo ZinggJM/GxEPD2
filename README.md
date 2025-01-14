@@ -46,7 +46,8 @@
 - Waveshare e-paper displays with SPI: http://forum.arduino.cc/index.php?topic=487007.0
 - Good Display ePaper for Arduino : https://forum.arduino.cc/index.php?topic=436411.0
 - Note that these topics are closed. Use only for reference.
-- create a new topic for each question or issue in https://forum.arduino.cc/c/using-arduino/displays/23
+- The Arduino Forum is no longer watched and answered by the Author.
+- New questions or issues should be posted on https://github.com/ZinggJM/GxEPD2/discussions
 
 ### Note on documentation
 - GxEPD2 uses Adafruit_GFX for Graphics and Text support, which is well documented there
@@ -162,7 +163,11 @@
 - But only few panels at any time, and only panels from known sources. 
 - Adding support will take as much time as needed.
 
-### Version 1.6.1
+### Version 1.6.2
+- fixed support for GDEY029T71H 2.9" b/w 168x384, SSD1685
+- GxEPD2_WiFi_Example: added direct (non-buffered) BMP download to 7-color displays
+- some minor fixes
+#### Version 1.6.1
 - fixed and updated GxEPD2_WiFi_Example
 #### Version 1.6.0
 - updated support for GDEY029T94: fixed a partial refresh issue

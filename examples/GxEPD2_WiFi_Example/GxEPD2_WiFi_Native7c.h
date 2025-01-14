@@ -1,13 +1,32 @@
-void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char* filename, int16_t x, int16_t y, bool with_color)
+uint8_t color7(uint16_t red, uint16_t green, uint16_t blue)
+{
+  uint8_t cv7 = 0x00;
+  if ((red < 0x80) && (green < 0x80) && (blue < 0x80)) cv7 = 0x00; // black
+  else if ((red >= 0x80) && (green >= 0x80) && (blue >= 0x80)) cv7 = 0x01; // white
+  else if ((red >= 0x80) && (blue >= 0x80)) cv7 = red > blue ? 0x04 : 0x03; // red, blue
+  else if ((green >= 0x80) && (blue >= 0x80)) cv7 = green > blue ? 0x02 : 0x03; // green, blue
+  else if ((red >= 0x80) && (green >= 0xC0)) cv7 = 0x05; // yellow
+  else if ((red >= 0x80) && (green >= 0x40)) cv7 = 0x06; // orange
+  else if (red >= 0x80) cv7 = 0x04; // red
+  else if (green >= 0x80) cv7 = 0x02; // green
+  else cv7 = 0x03; // blue
+  return cv7;
+}
+
+void whiteLine()
+{
+  for (size_t i = 0; i < sizeof(output_row_native4c_buffer); i++) output_row_native4c_buffer[i] = 0x11;
+}
+
+void showNative7cFrom_HTTP(const char* host, const char* path, const char* filename, int16_t x, int16_t y)
 {
   WiFiClient client;
   bool connection_ok = false;
   bool valid = false; // valid format to be handled
   bool flip = true; // bitmap is stored bottom-to-top
-  bool has_multicolors = (display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46)|| (display.epd2.panel == GxEPD2::GDEP073E01);
   uint32_t startTime = millis();
-  if ((x >= display.width()) || (y >= display.height())) return;
-  display.fillScreen(GxEPD_WHITE);
+  if ((x >= display.epd2.WIDTH) || (y >= display.epd2.HEIGHT)) return;
+  Serial.println(); Serial.print("downloading file \""); Serial.print(filename);  Serial.println("\"");
   Serial.print("connecting to "); Serial.println(host);
   if (!client.connect(host, httpPort))
   {
@@ -70,17 +89,15 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
       }
       uint16_t w = width;
       uint16_t h = height;
-      if ((x + w - 1) >= display.width())  w = display.width()  - x;
-      if ((y + h - 1) >= display.height()) h = display.height() - y;
-      //if (w <= max_row_width) // handle with direct drawing
+      if ((x + w - 1) >= display.epd2.WIDTH)  w = display.epd2.WIDTH  - x;
+      if ((y + h - 1) >= display.epd2.HEIGHT) h = display.epd2.HEIGHT - y;
+      if (w <= max_row_width) // handle with direct drawing
       {
         valid = true;
         uint8_t bitmask = 0xFF;
         uint8_t bitshift = 8 - depth;
         uint16_t red, green, blue;
-        bool whitish = false;
-        bool colored = false;
-        if (depth == 1) with_color = false;
+        uint8_t cv7 = 0x00;
         if (depth <= 8)
         {
           if (depth < 8) bitmask >>= depth;
@@ -92,18 +109,16 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
             red   = client.read();
             client.read();
             bytes_read += 4;
-            whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
-            colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
-            if (0 == pn % 8) mono_palette_buffer[pn / 8] = 0;
-            mono_palette_buffer[pn / 8] |= whitish << pn % 8;
-            if (0 == pn % 8) color_palette_buffer[pn / 8] = 0;
-            color_palette_buffer[pn / 8] |= colored << pn % 8;
-            //Serial.print("0x00"); Serial.print(red, HEX); Serial.print(green, HEX); Serial.print(blue, HEX);
-            //Serial.print(" : "); Serial.print(whitish); Serial.print(", "); Serial.println(colored);
-            rgb_palette_buffer[pn] = ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | ((blue & 0xF8) >> 3);
+            rgb_palette_buffer[pn] = color7(red, green, blue);
           }
         }
-        uint32_t rowPosition = flip ? imageOffset + (height - h) * rowSize : imageOffset;
+        display.epd2.setPaged();
+        whiteLine();
+        for (uint16_t l = 0; l < y; l++)
+        {
+          display.writeNative(output_row_native4c_buffer, 0, 0, l, display.epd2.WIDTH, 1, false, false, false);
+        }
+        uint32_t rowPosition = imageOffset;
         bytes_read += skip(client, rowPosition - bytes_read);
         for (uint16_t row = 0; row < h; row++, rowPosition += rowSize) // for each line
         {
@@ -114,7 +129,8 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
           uint32_t in_bytes = 0;
           uint8_t in_byte = 0; // for depth <= 8
           uint8_t in_bits = 0; // for depth <= 8
-          uint16_t color = GxEPD_WHITE;
+          uint8_t out_cv7_byte = 0x00;
+          uint32_t out_idx = 0;
           for (uint16_t col = 0; col < w; col++) // for each pixel
           {
             yield();
@@ -148,17 +164,13 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
                 green = input_buffer[in_idx++];
                 red = input_buffer[in_idx++];
                 in_idx++; // skip alpha
-                whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
-                colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
-                color = ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | ((blue & 0xF8) >> 3);
+                cv7 = color7(red, green, blue);
                 break;
               case 24:
                 blue = input_buffer[in_idx++];
                 green = input_buffer[in_idx++];
                 red = input_buffer[in_idx++];
-                whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
-                colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
-                color = ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | ((blue & 0xF8) >> 3);
+                cv7 = color7(red, green, blue);
                 break;
               case 16:
                 {
@@ -169,18 +181,15 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
                     blue  = (lsb & 0x1F) << 3;
                     green = ((msb & 0x03) << 6) | ((lsb & 0xE0) >> 2);
                     red   = (msb & 0x7C) << 1;
-                    color = ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | ((blue & 0xF8) >> 3);
                   }
                   else // 565
                   {
                     blue  = (lsb & 0x1F) << 3;
                     green = ((msb & 0x07) << 5) | ((lsb & 0xE0) >> 3);
                     red   = (msb & 0xF8);
-                    color = (msb << 8) | lsb;
                   }
-                  whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
-                  colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
                 }
+                cv7 = color7(red, green, blue);
                 break;
               case 1:
               case 2:
@@ -193,39 +202,35 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
                     in_bits = 8;
                   }
                   uint16_t pn = (in_byte >> bitshift) & bitmask;
-                  whitish = mono_palette_buffer[pn / 8] & (0x1 << pn % 8);
-                  colored = color_palette_buffer[pn / 8] & (0x1 << pn % 8);
+                  cv7 = rgb_palette_buffer[pn];
                   in_byte <<= depth;
                   in_bits -= depth;
-                  color = rgb_palette_buffer[pn];
                 }
                 break;
             }
-            if (with_color && has_multicolors)
+            out_cv7_byte |= cv7 << (4 * (1 - col % 2));
+            if ((1 == col % 2) || (col == w - 1)) // write that last byte! (for w%2!=0 border)
             {
-              // keep color
+              uint32_t bx = flip ? (display.epd2.WIDTH - x) / 2 - out_idx++ : x / 2 + out_idx++;
+              output_row_native4c_buffer[bx] = out_cv7_byte;
+              out_cv7_byte = 0x00;
             }
-            else if (whitish)
-            {
-              color = GxEPD_WHITE;
-            }
-            else if (colored && with_color)
-            {
-              color = GxEPD_COLORED;
-            }
-            else
-            {
-              color = GxEPD_BLACK;
-            }
-            uint16_t yrow = y + (flip ? h - row - 1 : row);
-            display.drawPixel(x + col, yrow, color);
           } // end pixel
+          display.writeNative(output_row_native4c_buffer, 0, 0, y + row, display.epd2.WIDTH, 1, false, false, false);
         } // end line
+        Serial.print("downloaded in ");
+        Serial.print(millis() - startTime);
+        Serial.println(" ms");
+        whiteLine();
+        for (uint16_t l = y + h; l < display.epd2.HEIGHT; l++)
+        {
+          display.writeNative(output_row_native4c_buffer, 0, 0, l, display.epd2.WIDTH, 1, false, false, false);
+        }
+        display.refresh();
       }
       Serial.print("bytes read "); Serial.println(bytes_read);
     }
   }
-  Serial.print("loaded in "); Serial.print(millis() - startTime); Serial.println(" ms");
   client.stop();
   if (!valid)
   {
@@ -233,22 +238,10 @@ void drawBitmapFrom_HTTP_ToBuffer(const char* host, const char* path, const char
   }
 }
 
-void showBitmapFrom_HTTP_Buffered(const char* host, const char* path, const char* filename, int16_t x, int16_t y, bool with_color)
-{
-  Serial.println(); Serial.print("downloading file \""); Serial.print(filename);  Serial.println("\"");
-  display.setFullWindow();
-  display.firstPage();
-  do
-  {
-    drawBitmapFrom_HTTP_ToBuffer(host, path, filename, x, y, with_color);
-  }
-  while (display.nextPage());
-}
-
-void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const char* filename, const char* fingerprint, int16_t x, int16_t y, bool with_color, const char* certificate)
+void showNative7cFrom_HTTPS(const char* host, const char* path, const char* filename, const char* fingerprint, int16_t x, int16_t y, bool with_color, const char* certificate)
 {
   // Use WiFiClientSecure class to create TLS connection
-#if defined (ESP8266)
+#if defined (ESP8266) || defined(ARDUINO_RASPBERRY_PI_PICO_W)
   BearSSL::WiFiClientSecure client;
   BearSSL::X509List cert(certificate ? certificate : certificate_rawcontent);
 #else
@@ -257,12 +250,11 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
   bool connection_ok = false;
   bool valid = false; // valid format to be handled
   bool flip = true; // bitmap is stored bottom-to-top
-  bool has_multicolors = (display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46)|| (display.epd2.panel == GxEPD2::GDEP073E01);
   uint32_t startTime = millis();
-  if ((x >= display.width()) || (y >= display.height())) return;
-  display.fillScreen(GxEPD_WHITE);
+  if ((x >= display.epd2.WIDTH) || (y >= display.epd2.HEIGHT)) return;
+  Serial.println(); Serial.print("downloading file \""); Serial.print(filename);  Serial.println("\"");
   Serial.print("connecting to "); Serial.println(host);
-#if defined (ESP8266)
+#if defined (ESP8266) || defined(ARDUINO_RASPBERRY_PI_PICO_W)
   if (certificate) client.setTrustAnchors(&cert);
   else if (fingerprint) client.setFingerprint(fingerprint);
   else client.setInsecure();
@@ -337,21 +329,18 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
       }
       uint16_t w = width;
       uint16_t h = height;
-      if ((x + w - 1) >= display.width())  w = display.width()  - x;
-      if ((y + h - 1) >= display.height()) h = display.height() - y;
-      //if (w <= max_row_width) // handle with direct drawing
+      if ((x + w - 1) >= display.epd2.WIDTH)  w = display.epd2.WIDTH  - x;
+      if ((y + h - 1) >= display.epd2.HEIGHT) h = display.epd2.HEIGHT - y;
+      if (w <= max_row_width) // handle with direct drawing
       {
         valid = true;
         uint8_t bitmask = 0xFF;
         uint8_t bitshift = 8 - depth;
         uint16_t red, green, blue;
-        bool whitish = false;
-        bool colored = false;
-        if (depth == 1) with_color = false;
+        uint8_t cv7 = 0x00;
         if (depth <= 8)
         {
           if (depth < 8) bitmask >>= depth;
-          //bytes_read += skip(client, 54 - bytes_read); //palette is always @ 54
           bytes_read += skip(client, imageOffset - (4 << depth) - bytes_read); // 54 for regular, diff for colorsimportant
           for (uint16_t pn = 0; pn < (1 << depth); pn++)
           {
@@ -360,19 +349,16 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
             red   = client.read();
             client.read();
             bytes_read += 4;
-            whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
-            colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
-            if (0 == pn % 8) mono_palette_buffer[pn / 8] = 0;
-            mono_palette_buffer[pn / 8] |= whitish << pn % 8;
-            if (0 == pn % 8) color_palette_buffer[pn / 8] = 0;
-            color_palette_buffer[pn / 8] |= colored << pn % 8;
-            //Serial.print("0x00"); Serial.print(red, HEX); Serial.print(green, HEX); Serial.print(blue, HEX);
-            //Serial.print(" : "); Serial.print(whitish); Serial.print(", "); Serial.println(colored);
-            rgb_palette_buffer[pn] = ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | ((blue & 0xF8) >> 3);
+            rgb_palette_buffer[pn] = color7(red, green, blue);
           }
         }
-        uint32_t rowPosition = flip ? imageOffset + (height - h) * rowSize : imageOffset;
-        //Serial.print("skip "); Serial.println(rowPosition - bytes_read);
+        display.epd2.setPaged();
+        whiteLine();
+        for (uint16_t l = 0; l < y; l++)
+        {
+          display.writeNative(output_row_native4c_buffer, 0, 0, l, display.epd2.WIDTH, 1, false, false, false);
+        }
+        uint32_t rowPosition = imageOffset;
         bytes_read += skip(client, rowPosition - bytes_read);
         for (uint16_t row = 0; row < h; row++, rowPosition += rowSize) // for each line
         {
@@ -383,7 +369,8 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
           uint32_t in_bytes = 0;
           uint8_t in_byte = 0; // for depth <= 8
           uint8_t in_bits = 0; // for depth <= 8
-          uint16_t color = GxEPD_WHITE;
+          uint8_t out_cv7_byte = 0x00;
+          uint32_t out_idx = 0;
           for (uint16_t col = 0; col < w; col++) // for each pixel
           {
             yield();
@@ -417,17 +404,13 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
                 green = input_buffer[in_idx++];
                 red = input_buffer[in_idx++];
                 in_idx++; // skip alpha
-                whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
-                colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
-                color = ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | ((blue & 0xF8) >> 3);
+                cv7 = color7(red, green, blue);
                 break;
               case 24:
                 blue = input_buffer[in_idx++];
                 green = input_buffer[in_idx++];
                 red = input_buffer[in_idx++];
-                whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
-                colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
-                color = ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | ((blue & 0xF8) >> 3);
+                cv7 = color7(red, green, blue);
                 break;
               case 16:
                 {
@@ -438,18 +421,15 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
                     blue  = (lsb & 0x1F) << 3;
                     green = ((msb & 0x03) << 6) | ((lsb & 0xE0) >> 2);
                     red   = (msb & 0x7C) << 1;
-                    color = ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | ((blue & 0xF8) >> 3);
                   }
                   else // 565
                   {
                     blue  = (lsb & 0x1F) << 3;
                     green = ((msb & 0x07) << 5) | ((lsb & 0xE0) >> 3);
                     red   = (msb & 0xF8);
-                    color = (msb << 8) | lsb;
                   }
-                  whitish = with_color ? ((red > 0x80) && (green > 0x80) && (blue > 0x80)) : ((red + green + blue) > 3 * 0x80); // whitish
-                  colored = (red > 0xF0) || ((green > 0xF0) && (blue > 0xF0)); // reddish or yellowish?
                 }
+                cv7 = color7(red, green, blue);
                 break;
               case 1:
               case 2:
@@ -462,54 +442,38 @@ void drawBitmapFrom_HTTPS_ToBuffer(const char* host, const char* path, const cha
                     in_bits = 8;
                   }
                   uint16_t pn = (in_byte >> bitshift) & bitmask;
-                  whitish = mono_palette_buffer[pn / 8] & (0x1 << pn % 8);
-                  colored = color_palette_buffer[pn / 8] & (0x1 << pn % 8);
+                  cv7 = rgb_palette_buffer[pn];
                   in_byte <<= depth;
                   in_bits -= depth;
-                  color = rgb_palette_buffer[pn];
                 }
                 break;
             }
-            if (with_color && has_multicolors)
+            out_cv7_byte |= cv7 << (4 * (1 - col % 2));
+            if ((1 == col % 2) || (col == w - 1)) // write that last byte! (for w%2!=0 border)
             {
-              // keep color
+              uint32_t bx = flip ? (display.epd2.WIDTH - x) / 2 - out_idx++ : x / 2 + out_idx++;
+              output_row_native4c_buffer[bx] = out_cv7_byte;
+              out_cv7_byte = 0x00;
             }
-            else if (whitish)
-            {
-              color = GxEPD_WHITE;
-            }
-            else if (colored && with_color)
-            {
-              color = GxEPD_COLORED;
-            }
-            else
-            {
-              color = GxEPD_BLACK;
-            }
-            uint16_t yrow = y + (flip ? h - row - 1 : row);
-            display.drawPixel(x + col, yrow, color);
           } // end pixel
+          display.writeNative(output_row_native4c_buffer, 0, 0, y + row, display.epd2.WIDTH, 1, false, false, false);
         } // end line
+        Serial.print("downloaded in ");
+        Serial.print(millis() - startTime);
+        Serial.println(" ms");
+        whiteLine();
+        for (uint16_t l = y + h; l < display.epd2.HEIGHT; l++)
+        {
+          display.writeNative(output_row_native4c_buffer, 0, 0, l, display.epd2.WIDTH, 1, false, false, false);
+        }
+        display.refresh();
       }
       Serial.print("bytes read "); Serial.println(bytes_read);
     }
   }
-  Serial.print("loaded in "); Serial.print(millis() - startTime); Serial.println(" ms");
   client.stop();
   if (!valid)
   {
     Serial.println("bitmap format not handled.");
   }
-}
-
-void showBitmapFrom_HTTPS_Buffered(const char* host, const char* path, const char* filename, const char* fingerprint, int16_t x, int16_t y, bool with_color, const char* certificate)
-{
-  Serial.println(); Serial.print("downloading file \""); Serial.print(filename);  Serial.println("\"");
-  display.setFullWindow();
-  display.firstPage();
-  do
-  {
-    drawBitmapFrom_HTTPS_ToBuffer(host, path, filename, fingerprint, x, y, with_color, certificate);
-  }
-  while (display.nextPage());
 }

@@ -372,6 +372,11 @@ void GxEPD2_290_GDEY029T71H::_InitDisplay()
   _writeData(0x05);
   _writeCommand(0x18); //Read built-in temperature sensor
   _writeData(0x80);
+  // NEEDED before first _setPartialRamArea
+  // reason: OTP set for 168x384, but TFT shifted: S8..S175 connected to TFT sources
+  _writeCommand(0x21); // Display Update Controll
+  _writeData(0x00);    // RED normal
+  _writeData(0x00);    // 200x384
   _setPartialRamArea(0, 0, WIDTH, HEIGHT);
   _init_display_done = true;
 }
@@ -380,7 +385,7 @@ void GxEPD2_290_GDEY029T71H::_Update_Full()
 {
   _writeCommand(0x21); // Display Update Controll
   _writeData(0x40);    // bypass RED as 0
-  _writeData(0x00);    // single chip application
+  _writeData(0x00);    // 200x384
   if (useFastFullUpdate)
   {
     _writeCommand(0x1A); // Write to temperature register
@@ -408,7 +413,7 @@ void GxEPD2_290_GDEY029T71H::_Update_Part()
 {
   _writeCommand(0x21); // Display Update Controll
   _writeData(0x00);    // RED normal
-  _writeData(0x00);    // single chip application
+  _writeData(0x00);    // 200x384
   _writeCommand(0x22);
   _writeData(0xdc);
   _writeCommand(0x20);
