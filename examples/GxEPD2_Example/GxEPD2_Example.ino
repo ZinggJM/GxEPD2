@@ -108,7 +108,7 @@
 #include "bitmaps/WS_Bitmaps7c192x143.h" // 5.65" 7-color
 #include "bitmaps/WS_Bitmaps7c300x180.h" // 7.3" 7-color
 #endif
-#if defined(ESP32) || defined(ARDUINO_ARCH_RP2040)
+#if defined(ESP32) || defined(ESP_PLATFORM) || defined(ARDUINO_ARCH_RP2040)
 #include "bitmaps/Bitmaps1304x984.h" // 12.48" b/w
 #include "bitmaps/Bitmaps1360x480.h" // 10.85" b/w
 #include "bitmaps/Bitmaps3c1304x984.h" // 12.48" b/w/r

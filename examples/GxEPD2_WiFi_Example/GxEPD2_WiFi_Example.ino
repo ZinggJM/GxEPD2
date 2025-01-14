@@ -77,7 +77,11 @@ void showBitmapFrom_HTTPS_Buffered(const char* host, const char* path, const cha
 
 void showNative4cFrom_HTTP(const char* host, const char* path, const char* filename, int16_t x, int16_t y, bool with_color = true);
 void showNative4cFrom_HTTPS(const char* host, const char* path, const char* filename, const char* fingerprint, int16_t x, int16_t y, bool with_color = true,
-                          const char* certificate = certificate_rawcontent);
+                            const char* certificate = certificate_rawcontent);
+
+void showNative7cFrom_HTTP(const char* host, const char* path, const char* filename, int16_t x, int16_t y, bool with_color = true);
+void showNative7cFrom_HTTPS(const char* host, const char* path, const char* filename, const char* fingerprint, int16_t x, int16_t y, bool with_color = true,
+                            const char* certificate = certificate_rawcontent);
 
 #if defined(ESP32)
 // uncomment next line to use HSPI for EPD (and VSPI for SD), e.g. with Waveshare ESP32 Driver Board
@@ -146,11 +150,13 @@ void setup()
 
   setClock();
 
-  if ((display.epd2.panel == GxEPD2::GDEW0154Z04) || (display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46) || false)
+  if ((display.epd2.panel == GxEPD2::GDEW0154Z04) || (display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::GDEP073E01) || false)
   {
     //drawBitmapsBuffered_200x200();
     //drawBitmapsBuffered_other();
-    drawBitmapsBuffered_7C();
+    //drawBitmapsBuffered_7C();
+    drawBitmaps_7C();
+    //drawBitmaps_7C_mixed();
   }
   else
   {
@@ -308,24 +314,95 @@ void drawBitmapsBuffered_other()
 
 void drawBitmapsBuffered_7C()
 {
-  if ((display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46))
+  if ((display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::GDEP073E01))
   {
-    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_c, "5in65f.bmp", fp_rawcontent, 0, 0);
+    int16_t w2 = display.width() / 2;
+    int16_t h2 = display.height() / 2;
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_c, "5in65f.bmp", fp_rawcontent, w2 - 300, h2 - 224);
     delay(2000);
-    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_c, "5in65f2.bmp", fp_rawcontent, 0, 0);
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_c, "5in65f2.bmp", fp_rawcontent, w2 - 300, h2 - 224);
     delay(2000);
-    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_c, "5in65f3.bmp", fp_rawcontent, 0, 0);
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_c, "5in65f3.bmp", fp_rawcontent, w2 - 300, h2 - 224);
     delay(2000);
-    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_c, "5in65f4.bmp", fp_rawcontent, 0, 0);
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_c, "5in65f4.bmp", fp_rawcontent, w2 - 300, h2 - 224);
     delay(2000);
-    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_py, "5in65f4.bmp", fp_rawcontent, 0, 0);
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_py, "5in65f4.bmp", fp_rawcontent, w2 - 300, h2 - 224);
     delay(2000);
-    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_py, "N-Color1.bmp", fp_rawcontent, 0, 0);
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_py, "N-Color1.bmp", fp_rawcontent, w2 - 300, h2 - 224);
     delay(2000);
 
-    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_rawcontent, "displayed_bmp_small_but_padded.bmp", fp_rawcontent, 0, 0);
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_rawcontent, "displayed_bmp_small_but_padded.bmp", fp_rawcontent, w2 - 300, h2 - 224);
     delay(2000);
-    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_rawcontent, "displayed_bmp_large.bmp", fp_rawcontent, 0, 0);
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_rawcontent, "displayed_bmp_large.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+  }
+}
+
+void drawBitmaps_7C()
+{
+  if ((display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::GDEP073E01))
+  {
+    int16_t w2 = display.epd2.WIDTH / 2;
+    int16_t h2 = display.epd2.HEIGHT / 2;
+    showNative7cFrom_HTTPS(host_rawcontent, path_waveshare_c, "5in65f.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+    showNative7cFrom_HTTPS(host_rawcontent, path_waveshare_c, "5in65f2.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+    showNative7cFrom_HTTPS(host_rawcontent, path_waveshare_c, "5in65f3.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+    showNative7cFrom_HTTPS(host_rawcontent, path_waveshare_c, "5in65f4.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+    showNative7cFrom_HTTPS(host_rawcontent, path_waveshare_py, "5in65f4.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+    showNative7cFrom_HTTPS(host_rawcontent, path_waveshare_py, "N-Color1.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+
+    showNative7cFrom_HTTPS(host_rawcontent, path_rawcontent, "displayed_bmp_small_but_padded.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+    showNative7cFrom_HTTPS(host_rawcontent, path_rawcontent, "displayed_bmp_large.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+  }
+}
+
+void drawBitmaps_7C_mixed()
+{
+  if ((display.epd2.panel == GxEPD2::ACeP565) || (display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::GDEP073E01))
+  {
+    int16_t w2 = display.epd2.WIDTH / 2;
+    int16_t h2 = display.epd2.HEIGHT / 2;
+    display.setRotation(2);
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_c, "5in65f.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+    showNative7cFrom_HTTPS(host_rawcontent, path_waveshare_c, "5in65f.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_c, "5in65f2.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+    showNative7cFrom_HTTPS(host_rawcontent, path_waveshare_c, "5in65f2.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_c, "5in65f3.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+    showNative7cFrom_HTTPS(host_rawcontent, path_waveshare_c, "5in65f3.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_c, "5in65f4.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+    showNative7cFrom_HTTPS(host_rawcontent, path_waveshare_c, "5in65f4.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_py, "5in65f4.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+    showNative7cFrom_HTTPS(host_rawcontent, path_waveshare_py, "5in65f4.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_waveshare_py, "N-Color1.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+    showNative7cFrom_HTTPS(host_rawcontent, path_waveshare_py, "N-Color1.bmp", fp_rawcontent, w2 - 300, h2 - 224);
+    delay(2000);
+
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_rawcontent, "displayed_bmp_small_but_padded.bmp", fp_rawcontent, w2 - 400, h2 - 240);
+    delay(2000);
+    showNative7cFrom_HTTPS(host_rawcontent, path_rawcontent, "displayed_bmp_small_but_padded.bmp", fp_rawcontent, w2 - 400, h2 - 240);
+    delay(2000);
+    showBitmapFrom_HTTPS_Buffered(host_rawcontent, path_rawcontent, "displayed_bmp_large.bmp", fp_rawcontent, w2 - 400, h2 - 240);
+    delay(2000);
+    showNative7cFrom_HTTPS(host_rawcontent, path_rawcontent, "displayed_bmp_large.bmp", fp_rawcontent, w2 - 400, h2 - 240);
     delay(2000);
   }
 }
@@ -845,6 +922,7 @@ void showBitmapFrom_HTTPS(const char* host, const char* path, const char* filena
 #include "GxEPD2_WiFi_Buffered.h"
 
 #include "GxEPD2_WiFi_Native4c.h"
+#include "GxEPD2_WiFi_Native7c.h"
 
 uint16_t read16(WiFiClient& client)
 {

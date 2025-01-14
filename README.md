@@ -165,6 +165,8 @@
 
 ### Version 1.6.2
 - fixed support for GDEY029T71H 2.9" b/w 168x384, SSD1685
+- GxEPD2_WiFi_Example: added direct (non-buffered) BMP download to 7-color displays
+- some minor fixes
 #### Version 1.6.1
 - fixed and updated GxEPD2_WiFi_Example
 #### Version 1.6.0
