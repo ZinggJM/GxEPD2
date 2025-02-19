@@ -282,7 +282,7 @@ void GxEPD2_154_Z90c::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
   int16_t y1 = y < 0 ? 0 : y; // limit
   w1 = x1 + w1 < int16_t(WIDTH) ? w1 : int16_t(WIDTH) - x1; // limit
   h1 = y1 + h1 < int16_t(HEIGHT) ? h1 : int16_t(HEIGHT) - y1; // limit
-  if ((w1 <= 0) || (h1 <= 0)) return; 
+  if ((w1 <= 0) || (h1 <= 0)) return;
   // make x1, w1 multiple of 8
   w1 += x1 % 8;
   if (w1 % 8 > 0) w1 += 8 - w1 % 8;
@@ -341,11 +341,14 @@ void GxEPD2_154_Z90c::_PowerOn()
 
 void GxEPD2_154_Z90c::_PowerOff()
 {
-  _writeCommand(0x22);
-  _writeData(0xc3);
-  _writeCommand(0x20);
-  _waitWhileBusy("_PowerOff", power_off_time);
-  _power_is_on = false;
+  if (_power_is_on)
+  {
+    _writeCommand(0x22);
+    _writeData(0xc3);
+    _writeCommand(0x20);
+    _waitWhileBusy("_PowerOff", power_off_time);
+    _power_is_on = false;
+  }
 }
 
 void GxEPD2_154_Z90c::_InitDisplay()
@@ -369,13 +372,11 @@ void GxEPD2_154_Z90c::_InitDisplay()
 void GxEPD2_154_Z90c::_Init_Full()
 {
   _InitDisplay();
-  _PowerOn();
 }
 
 void GxEPD2_154_Z90c::_Init_Part()
 {
   _InitDisplay();
-  _PowerOn();
 }
 
 void GxEPD2_154_Z90c::_Update_Full()
@@ -384,6 +385,7 @@ void GxEPD2_154_Z90c::_Update_Full()
   _writeData(0xF7);
   _writeCommand(0x20);  //Activate Display Update Sequence
   _waitWhileBusy("_Update_Full", full_refresh_time);
+  _power_is_on = false;
 }
 
 void GxEPD2_154_Z90c::_Update_Part()
@@ -392,4 +394,5 @@ void GxEPD2_154_Z90c::_Update_Part()
   _writeData(0xF7);
   _writeCommand(0x20);  //Activate Display Update Sequence
   _waitWhileBusy("_Update_Part", partial_refresh_time);
+  _power_is_on = false;
 }

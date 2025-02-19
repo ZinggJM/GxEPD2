@@ -163,7 +163,10 @@
 - But only few panels at any time, and only panels from known sources. 
 - Adding support will take as much time as needed.
 
-### Version 1.6.2
+### Version 1.6.3
+- updated GxEPD2_4C.h with WIDTH_VISIBLE (for GDEY0213F51)
+- updated GxEPD2_154_Z90c.cpp powerOff() handling
+#### Version 1.6.2
 - fixed support for GDEY029T71H 2.9" b/w 168x384, SSD1685
 - GxEPD2_WiFi_Example: added direct (non-buffered) BMP download to 7-color displays
 - some minor fixes
