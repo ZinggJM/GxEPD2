@@ -57,11 +57,11 @@
 - https://github.com/olikraus/u8glib/wiki/tpictureloop
 
 ### Note on issues and pull requests
-- issues should be reported in the Arduino Forum Displays.
+- issues should be reported in https://github.com/ZinggJM/GxEPD2/discussions.
 - issues on GitHub are disabled; there were too many false issues.
 - pull requests are not welcome, will not be merged.
 - pull requests can't be disabled, but will be closed.
-- please place information about interesting fork additions in the Arduino Forum Displays.
+- please place information about interesting fork additions in https://github.com/ZinggJM/GxEPD2/discussions.
 
 ### Supported SPI e-paper panels from Good Display:
 - GDEW0102T4     1.02" b/w 80x128, UC8175
@@ -159,11 +159,16 @@
 - ES103TC1     10.3" grey levels, 1872x1404, on Waveshare e-Paper IT8951 Driver HAT
 
 ### I can and will only support e-paper panels I have!
-- I can accept panel donations to add support to GxEPD2.
-- But only few panels at any time, and only panels from known sources. 
-- Adding support will take as much time as needed.
+- I accept panel donations to add support to GxEPD2 only on exception.
+- I support only panels from known sources that are well documented.
+- Let me know about interesting panels that fall into this category.
+- I occasionally buy new panels, but adding support will take as much time as needed.
 
-### Version 1.6.2
+### Version 1.6.3
+- updated GxEPD2_4C.h with WIDTH_VISIBLE (for GDEY0213F51)
+- updated GxEPD2_154_Z90c.cpp powerOff() handling
+- updated powerOff() handling for other 3-color displays
+#### Version 1.6.2
 - fixed support for GDEY029T71H 2.9" b/w 168x384, SSD1685
 - GxEPD2_WiFi_Example: added direct (non-buffered) BMP download to 7-color displays
 - some minor fixes

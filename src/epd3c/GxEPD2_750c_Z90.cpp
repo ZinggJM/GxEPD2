@@ -400,13 +400,11 @@ void GxEPD2_750c_Z90::_InitDisplay()
 void GxEPD2_750c_Z90::_Init_Full()
 {
   _InitDisplay();
-  _PowerOn();
 }
 
 void GxEPD2_750c_Z90::_Init_Part()
 {
   _InitDisplay();
-  _PowerOn();
 }
 
 void GxEPD2_750c_Z90::_Update_Full()
@@ -415,6 +413,7 @@ void GxEPD2_750c_Z90::_Update_Full()
   _writeData(0xC7);    //
   _writeCommand(0x20); // Master Activation
   _waitWhileBusy("_Update_Full", full_refresh_time);
+  _power_is_on = false;
 }
 
 void GxEPD2_750c_Z90::_Update_Part()
@@ -423,4 +422,5 @@ void GxEPD2_750c_Z90::_Update_Part()
   _writeData(0xC7);    //
   _writeCommand(0x20); // Master Activation
   _waitWhileBusy("_Update_Part", partial_refresh_time);
+  _power_is_on = false;
 }

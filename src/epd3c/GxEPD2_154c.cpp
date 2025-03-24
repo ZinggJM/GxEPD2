@@ -376,19 +376,22 @@ void GxEPD2_154c::_PowerOn()
 
 void GxEPD2_154c::_PowerOff()
 {
-  _writeCommand(0x50);
-  _writeData(0x17);    //BD floating
-  _writeCommand(0x82);     //to solve Vcom drop
-  _writeData(0x00);
-  _writeCommand(0x01);     //power setting
-  _writeData(0x02);    //gate switch to external
-  _writeData(0x00);
-  _writeData(0x00);
-  _writeData(0x00);
-  delay(1500);     //delay 1.5S
-  _writeCommand(0x02); // power off
-  //_waitWhileBusy("_PowerOff", power_off_time);
-  _power_is_on = false;
+  if (_power_is_on)
+  {
+    _writeCommand(0x50);
+    _writeData(0x17);    //BD floating
+    _writeCommand(0x82);     //to solve Vcom drop
+    _writeData(0x00);
+    _writeCommand(0x01);     //power setting
+    _writeData(0x02);    //gate switch to external
+    _writeData(0x00);
+    _writeData(0x00);
+    _writeData(0x00);
+    delay(1500);     //delay 1.5S
+    _writeCommand(0x02); // power off
+    //_waitWhileBusy("_PowerOff", power_off_time); // causes busy timeout
+    _power_is_on = false;
+  }
 }
 
 void GxEPD2_154c::setPaged()

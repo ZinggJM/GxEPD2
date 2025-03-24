@@ -375,13 +375,11 @@ void GxEPD2_266c::_InitDisplay()
 void GxEPD2_266c::_Init_Full()
 {
   _InitDisplay();
-  _PowerOn();
 }
 
 void GxEPD2_266c::_Init_Part()
 {
   _InitDisplay();
-  _PowerOn();
 }
 
 void GxEPD2_266c::_Update_Full()
@@ -390,6 +388,7 @@ void GxEPD2_266c::_Update_Full()
   _writeData(0xf7);
   _writeCommand(0x20);
   _waitWhileBusy("_Update_Full", full_refresh_time);
+  _power_is_on = false;
 }
 
 void GxEPD2_266c::_Update_Part()
@@ -398,4 +397,5 @@ void GxEPD2_266c::_Update_Part()
   _writeData(0xf7);
   _writeCommand(0x20);
   _waitWhileBusy("_Update_Part", partial_refresh_time);
+  _power_is_on = false;
 }

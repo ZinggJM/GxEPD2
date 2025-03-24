@@ -205,7 +205,7 @@ void GxEPD2_213_Z19c::_writeImagePart(uint8_t command, const uint8_t* bitmap, in
 }
 
 void GxEPD2_213_Z19c::writeImagePartPrevious(const uint8_t* black, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                                             int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+    int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   _writeImagePart(0x10, black, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
 }
@@ -271,7 +271,7 @@ void GxEPD2_213_Z19c::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
   int16_t y1 = y < 0 ? 0 : y; // limit
   w1 = x1 + w1 < int16_t(WIDTH) ? w1 : int16_t(WIDTH) - x1; // limit
   h1 = y1 + h1 < int16_t(HEIGHT) ? h1 : int16_t(HEIGHT) - y1; // limit
-  if ((w1 <= 0) || (h1 <= 0)) return; 
+  if ((w1 <= 0) || (h1 <= 0)) return;
   // make x1, w1 multiple of 8
   w1 += x1 % 8;
   if (w1 % 8 > 0) w1 += 8 - w1 % 8;
@@ -329,9 +329,12 @@ void GxEPD2_213_Z19c::_PowerOn()
 
 void GxEPD2_213_Z19c::_PowerOff()
 {
-  _writeCommand(0x02); // power off
-  _waitWhileBusy("_PowerOff", power_off_time);
-  _power_is_on = false;
+  if (_power_is_on)
+  {
+    _writeCommand(0x02); // power off
+    _waitWhileBusy("_PowerOff", power_off_time);
+    _power_is_on = false;
+  }
 }
 
 void GxEPD2_213_Z19c::_InitDisplay()
