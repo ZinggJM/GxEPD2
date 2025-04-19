@@ -43,6 +43,7 @@
 #include <GxEPD2_4C.h>
 #include <GxEPD2_7C.h>
 #include <Fonts/FreeMonoBold9pt7b.h>
+#include <Fonts/FreeMonoBold12pt7b.h>
 
 // select the display constructor line in one of the following files (old style):
 #include "GxEPD2_display_selection.h"
@@ -185,6 +186,10 @@ void setup()
   // SPI.begin(sck, miso, mosi, ss); // preset for remapped pins
   SPI.begin(18, -1, 16, 33); // my LOLIN ESP32 S2 mini connection
 #endif
+#if defined(ESP32) && defined(ARDUINO_ESP32S3_DEV) && true // CrowPanel
+  pinMode(7, OUTPUT);
+  digitalWrite(7, HIGH); // enable power to the panel
+#endif
   //display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
   display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
   //display.init(115200, true, 10, false, SPIn, SPISettings(4000000, MSBFIRST, SPI_MODE0)); // extended init method with SPI channel and/or settings selection
@@ -210,6 +215,7 @@ void setup()
   //helloValue(123.9, 1);
   //delay(1000);
   showFont("FreeMonoBold9pt7b", &FreeMonoBold9pt7b);
+  //showFont("FreeMonoBold12pt7b", &FreeMonoBold12pt7b);
   delay(1000);
   if (display.epd2.WIDTH < 104)
   {
