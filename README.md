@@ -110,6 +110,7 @@
 - GDEY029F51H    2.9" 4-color 168x384, JD79667
 - Waveshare3inch4color 3.0" 4-color 168x400
 - GDEQ031T10     3.1" b/w 240x320, UC8253
+- GDEY037T03     3.7" b/w 240x416, UC8253
 - ED037TC1       3.7" b/w 280x480, SSD1677, Waveshare 3.7"
 - GDEW0371W7     3.7" b/w 240x416, UC8171 (IL0324)
 - GDEW042T2      4.2" b/w 400x300, UC8176 (IL0398)
@@ -164,7 +165,9 @@
 - Let me know about interesting panels that fall into this category.
 - I occasionally buy new panels, but adding support will take as much time as needed.
 
-### Version 1.6.3
+### Version 1.6.4
+- added support for GDEY037T03 3.7" b/w 240x416, UC8253
+#### Version 1.6.3
 - updated GxEPD2_4C.h with WIDTH_VISIBLE (for GDEY0213F51)
 - updated GxEPD2_154_Z90c.cpp powerOff() handling
 - updated powerOff() handling for other 3-color displays
