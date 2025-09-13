@@ -71,6 +71,7 @@ class GxEPD2
       ED037TC1,
       GDEY037T03,
       GDEW0371W7, Waveshare_3_7_bw = GDEW0371W7,
+      GDEM0397T81,
       GDEW042T2,  Waveshare_4_2_bw = GDEW042T2,
       GDEW042M01,
       GDEY042T81,
