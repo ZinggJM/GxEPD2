@@ -770,7 +770,7 @@ void showPartialUpdate()
 
 void drawGrid()
 {
-  uint16_t x, y;
+  int16_t x, y;
   display.firstPage();
   do
   {
@@ -1506,6 +1506,16 @@ void drawBitmaps800x480()
       while (display.nextPage());
       delay(2000);
     }
+#if defined(ESP32)
+    if (display.epd2.panel == GxEPD2::GDEM0397T81)
+    {
+      display.drawImage(Bitmap800x480_5, 0, 0, 800, 480, false, true, true); delay(2000);
+      display.drawImage(Bitmap800x480_6, 0, 0, 800, 480, false, true, true); delay(2000);
+      display.drawImage(Bitmap800x480_7, 0, 0, 800, 480, false, true, true); delay(2000);
+      display.drawImage(Bitmap800x480_8, 0, 0, 800, 480, false, true, true); delay(2000);
+      display.drawImage(Bitmap800x480_9, 0, 0, 800, 480, false, true, true); delay(2000);
+    }
+#endif
     if ((display.epd2.panel == GxEPD2::GDEW075T7) || (display.epd2.panel == GxEPD2::GDEY075T7))
     {
       // avoid ghosting caused by OTP waveform

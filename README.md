@@ -20,6 +20,7 @@
 - note that Waveshare boards with "clever" reset circuit need 1k pull-up on RST on ESP8266, or different pin
 - note that the new Waveshare Universal e-Paper Raw Panel Driver HAT Rev 2.3 needs PWR connected to VCC or driven HIGH
 - see https://www.waveshare.com/wiki/E-Paper_Driver_HAT
+- some new Waveshare boards also have a PWR control pin, needs be pulled hight
 
 ### Paged Drawing, Picture Loop
  - This library uses paged drawing to limit RAM use and cope with missing single pixel update support
@@ -33,8 +34,9 @@
 
 ### Full Screen Buffer Support
  - full screen buffer is selected by setting template parameter page_height to display height
- - drawing to full screen buffer is done using Adafruit_GFX methods without picture loop or drawCallback
+ - drawing to full screen buffer can either be done using Adafruit_GFX methods without picture loop or drawCallback
  - and then calling method display()
+ - or by still using the page loop or drawCallback
 
 ### Low Level Bitmap Drawing Support
  - bitmap drawing support to the controller memory and screen is available:
@@ -113,6 +115,7 @@
 - GDEY037T03     3.7" b/w 240x416, UC8253
 - ED037TC1       3.7" b/w 280x480, SSD1677, Waveshare 3.7"
 - GDEW0371W7     3.7" b/w 240x416, UC8171 (IL0324)
+- GDEM0397T81    3.97" b/w 480x800, SSD2677
 - GDEW042T2      4.2" b/w 400x300, UC8176 (IL0398)
 - GDEW042M01     4.2" b/w 400x300, UC8176 (IL0398), DES
 - GDEW042Z15     4.2" b/w/r 400x300, UC8176 (IL0398)
@@ -165,7 +168,10 @@
 - Let me know about interesting panels that fall into this category.
 - I occasionally buy new panels, but adding support will take as much time as needed.
 
-### Version 1.6.4
+### Version 1.6.5
+- added support for GDEM0397T81, 3.97" b/w 480x800, SSD2677
+- fixed GxEPD2_290_T94 partial refresh
+#### Version 1.6.4
 - added support for GDEY037T03 3.7" b/w 240x416, UC8253
 #### Version 1.6.3
 - updated GxEPD2_4C.h with WIDTH_VISIBLE (for GDEY0213F51)
