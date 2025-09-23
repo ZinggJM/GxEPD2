@@ -52,6 +52,9 @@
 #if __has_include("epd/GxEPD2_102.h")
 #include "epd/GxEPD2_102.h"
 #endif
+#if __has_include("epd/GxEPD2_122_T61.h")
+#include "epd/GxEPD2_122_T61.h"
+#endif
 #if __has_include("epd/GxEPD2_150_BN.h")
 #include "epd/GxEPD2_150_BN.h"
 #endif
