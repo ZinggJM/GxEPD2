@@ -1,4 +1,4 @@
-# Kconfig for GxEPD2 E-Paper Display Library
+# Kconfig for GxEPD2 E-Paper Display Library - Simplified Configuration
 
 menuconfig GXEPD2
     bool "GxEPD2 E-Paper Display Library"
@@ -8,8 +8,8 @@ menuconfig GXEPD2
       Enable support for Good Display / Waveshare e-paper displays
       using the GxEPD2 library ported to Zephyr RTOS.
 
-      This library provides drivers for various e-paper display panels
-      from Good Display and Waveshare that use SPI communication.
+      This provides a simple configuration system - just select your
+      board and display type and everything is configured automatically!
 
 if GXEPD2
 
@@ -17,13 +17,135 @@ module = GXEPD2
 module-str = gxepd2
 source "subsys/logging/Kconfig.template.log_config"
 
+choice GXEPD2_DISPLAY_MODEL
+    prompt "Select Display Model"
+    default GXEPD2_DISPLAY_154
+    help
+      Select your e-paper display model. The library will automatically
+      configure width, height, and panel-specific settings.
+
+config GXEPD2_DISPLAY_154
+    bool "1.54 inch (200x200) - GDEP015OC1"
+    help
+      1.54" black/white display, 200x200 pixels
+      Controller: IL3829
+      Partial update: Yes
+      Fast partial update: Yes
+
+config GXEPD2_DISPLAY_213
+    bool "2.13 inch (250x122) - GDEW0213T5D"
+    help
+      2.13" black/white display, 250x122 pixels
+      Popular display for wearables and IoT
+      Partial update: Yes
+
+config GXEPD2_DISPLAY_290
+    bool "2.9 inch (296x128) - GDEW029T5"
+    help
+      2.9" black/white display, 296x128 pixels
+      Good balance between size and readability
+      Partial update: Yes
+
+config GXEPD2_DISPLAY_420
+    bool "4.2 inch (400x300) - GDEW042T2"
+    help
+      4.2" black/white display, 400x300 pixels
+      Larger display for more content
+      Partial update: Yes
+
+config GXEPD2_DISPLAY_CUSTOM
+    bool "Custom Display (Manual Configuration)"
+    help
+      Use manual configuration via device tree.
+      For displays not listed above.
+
+endchoice
+
+if !GXEPD2_DISPLAY_CUSTOM
+
+choice GXEPD2_BOARD
+    prompt "Select Development Board"
+    default GXEPD2_BOARD_AUTO
+    help
+      Select your development board for automatic pin configuration.
+
+config GXEPD2_BOARD_AUTO
+    bool "Auto-detect from build target"
+    help
+      Automatically configure pins based on the build target board.
+      Works for nRF52840DK, nRF5340DK, and nRF54L15DK.
+
+config GXEPD2_BOARD_NRF52840DK
+    bool "nRF52840 Development Kit"
+    help
+      Nordic nRF52840 DK
+      Default pins: SPI1 with P1.01-P1.06
+
+config GXEPD2_BOARD_NRF5340DK
+    bool "nRF5340 Development Kit (App Core)"
+    help
+      Nordic nRF5340 DK Application Core
+      Default pins: SPI1 with P1.01-P1.06
+
+config GXEPD2_BOARD_NRF54L15DK
+    bool "nRF54L15 Development Kit"
+    help
+      Nordic nRF54L15 DK
+      Default pins: SPI20 with P1.04-P1.09
+
+config GXEPD2_BOARD_CUSTOM
+    bool "Custom Board (Use Device Tree)"
+    help
+      Use custom pin configuration via device tree overlay.
+
+endchoice
+
+menu "Pin Configuration (Automatic)"
+    visible if !GXEPD2_BOARD_CUSTOM
+
+config GXEPD2_PIN_CONFIG_INFO
+    bool
+    default y
+    help
+      Pins are configured automatically based on your board selection:
+
+      nRF52840DK / nRF5340DK:
+        - SPI: spi1 (SCK=P1.01, MOSI=P1.02)
+        - CS:  P1.03
+        - DC:  P1.04
+        - RST: P1.05
+        - BUSY: P1.06
+
+      nRF54L15DK:
+        - SPI: spi20 (SCK=P1.04, MOSI=P1.05)
+        - CS:  P1.06
+        - DC:  P1.07
+        - RST: P1.08
+        - BUSY: P1.09
+
+      To customize pins, select "Custom Board" and provide a device tree overlay.
+
+endmenu
+
+config GXEPD2_AUTO_INIT
+    bool "Automatic Initialization"
+    default y
+    help
+      Automatically initialize the display at boot time.
+      You can then use gxepd2_get_display() to get the configured display instance.
+
+      If disabled, you must call gxepd2_init() manually in your application.
+
+endif # !GXEPD2_DISPLAY_CUSTOM
+
 config GXEPD2_SPI_FREQUENCY
-    int "Default SPI frequency in Hz"
+    int "SPI frequency in Hz"
     default 4000000
     range 1000000 8000000
     help
-      Default SPI bus frequency for e-paper display communication.
+      SPI bus frequency for e-paper display communication.
       Most displays work well at 4 MHz. Some may support up to 8 MHz.
+      If you experience communication issues, try reducing to 2 MHz.
 
 config GXEPD2_INIT_PRIORITY
     int "Initialization priority"
@@ -31,5 +153,12 @@ config GXEPD2_INIT_PRIORITY
     help
       Initialization priority for the GxEPD2 library.
       Must be higher than SPI and GPIO drivers (typically 50-60).
+
+config GXEPD2_THREAD_SAFE
+    bool "Thread-safe operations"
+    default n
+    help
+      Enable mutex protection for display operations.
+      Useful if multiple threads will access the display.
 
 endif # GXEPD2

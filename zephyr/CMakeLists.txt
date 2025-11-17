@@ -22,7 +22,11 @@ zephyr_library_sources(
 zephyr_library_sources(
     lib/GxEPD2_EPD.cpp
     lib/gxepd2_zephyr.cpp
+    lib/gxepd2_config.cpp
 )
+
+# Display drivers (conditionally compiled based on Kconfig)
+zephyr_library_sources_ifdef(CONFIG_GXEPD2_DISPLAY_154 lib/epd/GxEPD2_154.cpp)
 
 # Compiler options for C++
 zephyr_library_compile_options(
