@@ -1,0 +1,11 @@
+# Zephyr module configuration for GxEPD2
+#
+# This file enables the GxEPD2 library to be used as a Zephyr module
+
+build:
+  cmake: zephyr
+  kconfig: zephyr/Kconfig
+  settings:
+    dts_root: zephyr
+
+name: gxepd2

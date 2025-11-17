@@ -1,0 +1,54 @@
+/*
+ * Device Tree Overlay for nRF54L15 DK (Application Core)
+ * E-Paper Display Example Configuration
+ *
+ * This overlay configures SPI and GPIO pins for connecting an e-paper display
+ * to the nRF54L15 Development Kit (Application Core).
+ *
+ * Default pin assignments (can be customized):
+ * - SPI: spi20 (P1.04 = SCK, P1.05 = MOSI)
+ * - CS:  P1.06
+ * - DC:  P1.07
+ * - RST: P1.08
+ * - BUSY: P1.09
+ */
+
+&pinctrl {
+    spi20_default: spi20_default {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK, 1, 4)>,
+                    <NRF_PSEL(SPIM_MOSI, 1, 5)>;
+        };
+    };
+
+    spi20_sleep: spi20_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK, 1, 4)>,
+                    <NRF_PSEL(SPIM_MOSI, 1, 5)>;
+            low-power-enable;
+        };
+    };
+};
+
+&spi20 {
+    compatible = "nordic,nrf-spim";
+    status = "okay";
+    pinctrl-0 = <&spi20_default>;
+    pinctrl-1 = <&spi20_sleep>;
+    pinctrl-names = "default", "sleep";
+    cs-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
+
+    epaper: epaper@0 {
+        compatible = "gooddisplay,gxepd2";
+        reg = <0>;
+        spi-max-frequency = <4000000>;
+        dc-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
+        reset-gpios = <&gpio1 8 GPIO_ACTIVE_HIGH>;
+        busy-gpios = <&gpio1 9 GPIO_ACTIVE_HIGH>;
+        busy-level = <1>;
+        busy-timeout-ms = <30000>;
+        width = <200>;
+        height = <200>;
+        panel-type = "GDEP015OC1"; /* 1.54" 200x200 display - change as needed */
+    };
+};

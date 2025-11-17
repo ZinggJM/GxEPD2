@@ -1,0 +1,63 @@
+# Device tree binding for Good Display GxEPD2 E-Paper Displays
+description: Good Display / Waveshare E-Paper Display (SPI interface)
+
+compatible: "gooddisplay,gxepd2"
+
+include: spi-device.yaml
+
+properties:
+  dc-gpios:
+    type: phandle-array
+    required: true
+    description: |
+      Data/Command GPIO pin. This pin is used to differentiate between
+      command and data bytes sent to the display controller.
+
+  reset-gpios:
+    type: phandle-array
+    required: true
+    description: |
+      Reset GPIO pin. This pin is used to reset the display controller.
+
+  busy-gpios:
+    type: phandle-array
+    required: true
+    description: |
+      Busy GPIO pin. This pin indicates when the display controller is busy
+      processing commands or refreshing the display.
+
+  busy-level:
+    type: int
+    default: 1
+    description: |
+      Logic level of the busy signal when display is busy (0 or 1).
+      Default is 1 (active high).
+
+  busy-timeout-ms:
+    type: int
+    default: 30000
+    description: |
+      Maximum time to wait for the busy signal to clear, in milliseconds.
+      Default is 30000ms (30 seconds).
+
+  width:
+    type: int
+    required: true
+    description: Display width in pixels
+
+  height:
+    type: int
+    required: true
+    description: Display height in pixels
+
+  panel-type:
+    type: string
+    required: true
+    description: |
+      Panel type identifier. Examples:
+      "GDEP015OC1" - 1.54" b/w (200x200)
+      "GDEW0213T5D" - 2.13" b/w (250x122)
+      "GDEW029T5" - 2.9" b/w (296x128)
+      "GDEW042T2" - 4.2" b/w (400x300)
+      "GDEW075T8" - 7.5" b/w (800x480)
+      See GxEPD2.h for complete list of supported panels.

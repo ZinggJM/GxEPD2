@@ -1,0 +1,35 @@
+# Kconfig for GxEPD2 E-Paper Display Library
+
+menuconfig GXEPD2
+    bool "GxEPD2 E-Paper Display Library"
+    depends on SPI && GPIO
+    select CPP
+    help
+      Enable support for Good Display / Waveshare e-paper displays
+      using the GxEPD2 library ported to Zephyr RTOS.
+
+      This library provides drivers for various e-paper display panels
+      from Good Display and Waveshare that use SPI communication.
+
+if GXEPD2
+
+module = GXEPD2
+module-str = gxepd2
+source "subsys/logging/Kconfig.template.log_config"
+
+config GXEPD2_SPI_FREQUENCY
+    int "Default SPI frequency in Hz"
+    default 4000000
+    range 1000000 8000000
+    help
+      Default SPI bus frequency for e-paper display communication.
+      Most displays work well at 4 MHz. Some may support up to 8 MHz.
+
+config GXEPD2_INIT_PRIORITY
+    int "Initialization priority"
+    default 90
+    help
+      Initialization priority for the GxEPD2 library.
+      Must be higher than SPI and GPIO drivers (typically 50-60).
+
+endif # GXEPD2
