@@ -1,15 +1,13 @@
-# Kconfig for GxEPD2 E-Paper Display Library - Simplified Configuration
+# GxEPD2 Kconfig - Just Select Your Display!
+# All 37 display drivers available - uncomment ONE line
 
 menuconfig GXEPD2
     bool "GxEPD2 E-Paper Display Library"
     depends on SPI && GPIO
     select CPP
     help
-      Enable support for Good Display / Waveshare e-paper displays
-      using the GxEPD2 library ported to Zephyr RTOS.
-
-      This provides a simple configuration system - just select your
-      board and display type and everything is configured automatically!
+      GxEPD2 library for e-paper displays on Zephyr RTOS.
+      Simply select your display model below and build!
 
 if GXEPD2
 
@@ -17,148 +15,155 @@ module = GXEPD2
 module-str = gxepd2
 source "subsys/logging/Kconfig.template.log_config"
 
-choice GXEPD2_DISPLAY_MODEL
-    prompt "Select Display Model"
-    default GXEPD2_DISPLAY_154
-    help
-      Select your e-paper display model. The library will automatically
-      configure width, height, and panel-specific settings.
+#
+# STEP 1: SELECT YOUR DISPLAY (Uncomment ONE)
+# All original drivers from src/epd/ are available!
+#
 
-config GXEPD2_DISPLAY_154
-    bool "1.54 inch (200x200) - GDEP015OC1"
+choice GXEPD2_DISPLAY
+    prompt "Select Your Display Model"
     help
-      1.54" black/white display, 200x200 pixels
-      Controller: IL3829
-      Partial update: Yes
-      Fast partial update: Yes
+      Choose your e-paper display model. The driver will be automatically
+      compiled and initialized. Just select and build!
 
-config GXEPD2_DISPLAY_213
-    bool "2.13 inch (250x122) - GDEW0213T5D"
-    help
-      2.13" black/white display, 250x122 pixels
-      Popular display for wearables and IoT
-      Partial update: Yes
+# 1.02" - 1.54" Displays
+config GXEPD2_102
+    bool "1.02\" 128x80 - GxEPD2_102"
+config GXEPD2_150_BN
+    bool "1.50\" 200x200 - GxEPD2_150_BN"
+config GXEPD2_154
+    bool "1.54\" 200x200 - GxEPD2_154 (GDEP015OC1)"
+config GXEPD2_154_D67
+    bool "1.54\" 200x200 - GxEPD2_154_D67 (GDEH0154D67)"
+config GXEPD2_154_M09
+    bool "1.54\" 200x200 - GxEPD2_154_M09"
+config GXEPD2_154_M10
+    bool "1.54\" 200x200 - GxEPD2_154_M10"
+config GXEPD2_154_T8
+    bool "1.54\" 200x200 - GxEPD2_154_T8 (GDEW0154T8)"
 
-config GXEPD2_DISPLAY_290
-    bool "2.9 inch (296x128) - GDEW029T5"
-    help
-      2.9" black/white display, 296x128 pixels
-      Good balance between size and readability
-      Partial update: Yes
+# 2.13" Displays
+config GXEPD2_213
+    bool "2.13\" 250x122 - GxEPD2_213 (GDE0213B1)"
+config GXEPD2_213_B72
+    bool "2.13\" 250x122 - GxEPD2_213_B72 (GDEH0213B72)"
+config GXEPD2_213_B73
+    bool "2.13\" 250x122 - GxEPD2_213_B73 (GDEH0213B73)"
+config GXEPD2_213_B74
+    bool "2.13\" 250x122 - GxEPD2_213_B74 (GDEH0213B74)"
+config GXEPD2_213_BN
+    bool "2.13\" 250x122 - GxEPD2_213_BN"
+config GXEPD2_213_M21
+    bool "2.13\" 250x122 - GxEPD2_213_M21 (GDEW0213M21)"
+config GXEPD2_213_T5D
+    bool "2.13\" 250x122 - GxEPD2_213_T5D (GDEW0213T5D)"
+config GXEPD2_213_flex
+    bool "2.13\" 250x122 Flexible - GxEPD2_213_flex"
 
-config GXEPD2_DISPLAY_420
-    bool "4.2 inch (400x300) - GDEW042T2"
-    help
-      4.2" black/white display, 400x300 pixels
-      Larger display for more content
-      Partial update: Yes
+# 2.6" - 2.9" Displays
+config GXEPD2_260
+    bool "2.6\" 296x152 - GxEPD2_260 (GDEW026T0)"
+config GXEPD2_260_M01
+    bool "2.6\" 296x152 - GxEPD2_260_M01 (GDEW026M01)"
+config GXEPD2_266_BN
+    bool "2.66\" 296x152 - GxEPD2_266_BN"
+config GXEPD2_270
+    bool "2.7\" 264x176 - GxEPD2_270 (GDEW027W3)"
+config GXEPD2_290
+    bool "2.9\" 296x128 - GxEPD2_290 (GDEH029A1)"
+config GXEPD2_290_T5
+    bool "2.9\" 296x128 - GxEPD2_290_T5 (GDEW029T5)"
+config GXEPD2_290_T5D
+    bool "2.9\" 296x128 - GxEPD2_290_T5D (GDEW029T5D)"
+config GXEPD2_290_T94
+    bool "2.9\" 296x128 - GxEPD2_290_T94"
+config GXEPD2_290_T94_V2
+    bool "2.9\" 296x128 - GxEPD2_290_T94_V2"
+config GXEPD2_290_M06
+    bool "2.9\" 296x128 - GxEPD2_290_M06 (GDEW029M06)"
+config GXEPD2_290_BS
+    bool "2.9\" 296x128 - GxEPD2_290_BS"
 
-config GXEPD2_DISPLAY_CUSTOM
-    bool "Custom Display (Manual Configuration)"
-    help
-      Use manual configuration via device tree.
-      For displays not listed above.
+# 3.7" - 4.2" Displays
+config GXEPD2_371
+    bool "3.7\" 416x240 - GxEPD2_371 (GDEW0371W7)"
+config GXEPD2_420
+    bool "4.2\" 400x300 - GxEPD2_420 (GDEW042T2)"
+config GXEPD2_420_M01
+    bool "4.2\" 400x300 - GxEPD2_420_M01"
+config GXEPD2_420_M02
+    bool "4.2\" 400x300 - GxEPD2_420_M02"
+config GXEPD2_437
+    bool "4.37\" 512x368 - GxEPD2_437"
+
+# 5.65" - 5.83" Displays
+config GXEPD2_565
+    bool "5.65\" 600x448 - GxEPD2_565 (GDEW0565T15)"
+config GXEPD2_583
+    bool "5.83\" 648x480 - GxEPD2_583 (GDEW0583T7)"
+config GXEPD2_583_T8
+    bool "5.83\" 648x480 - GxEPD2_583_T8 (GDEW0583T8)"
+
+# 7.5" Displays
+config GXEPD2_750
+    bool "7.5\" 800x480 - GxEPD2_750 (GDEW075T8)"
+config GXEPD2_750_T7
+    bool "7.5\" 800x480 - GxEPD2_750_T7 (GDEW075T7)"
+
+# 11.6" Display
+config GXEPD2_1160_T91
+    bool "11.6\" 1304x984 - GxEPD2_1160_T91"
+
+# 12.48" Display
+config GXEPD2_1248
+    bool "12.48\" 1304x984 - GxEPD2_1248"
 
 endchoice
 
-if !GXEPD2_DISPLAY_CUSTOM
+#
+# STEP 2: BOARD CONFIGURATION (Optional - Auto-Detected)
+#
 
 choice GXEPD2_BOARD
-    prompt "Select Development Board"
+    prompt "Development Board"
     default GXEPD2_BOARD_AUTO
     help
-      Select your development board for automatic pin configuration.
+      Select your board or use auto-detection.
 
 config GXEPD2_BOARD_AUTO
-    bool "Auto-detect from build target"
-    help
-      Automatically configure pins based on the build target board.
-      Works for nRF52840DK, nRF5340DK, and nRF54L15DK.
-
-config GXEPD2_BOARD_NRF52840DK
-    bool "nRF52840 Development Kit"
-    help
-      Nordic nRF52840 DK
-      Default pins: SPI1 with P1.01-P1.06
-
-config GXEPD2_BOARD_NRF5340DK
-    bool "nRF5340 Development Kit (App Core)"
-    help
-      Nordic nRF5340 DK Application Core
-      Default pins: SPI1 with P1.01-P1.06
-
-config GXEPD2_BOARD_NRF54L15DK
-    bool "nRF54L15 Development Kit"
-    help
-      Nordic nRF54L15 DK
-      Default pins: SPI20 with P1.04-P1.09
-
+    bool "Auto-detect (nRF52840/5340/54L15)"
+config GXEPD2_BOARD_NRF52840
+    bool "nRF52840 DK"
+config GXEPD2_BOARD_NRF5340
+    bool "nRF5340 DK"
+config GXEPD2_BOARD_NRF54L15
+    bool "nRF54L15 DK"
 config GXEPD2_BOARD_CUSTOM
-    bool "Custom Board (Use Device Tree)"
-    help
-      Use custom pin configuration via device tree overlay.
-
+    bool "Custom (use device tree overlay)"
 endchoice
 
-menu "Pin Configuration (Automatic)"
-    visible if !GXEPD2_BOARD_CUSTOM
-
-config GXEPD2_PIN_CONFIG_INFO
-    bool
-    default y
-    help
-      Pins are configured automatically based on your board selection:
-
-      nRF52840DK / nRF5340DK:
-        - SPI: spi1 (SCK=P1.01, MOSI=P1.02)
-        - CS:  P1.03
-        - DC:  P1.04
-        - RST: P1.05
-        - BUSY: P1.06
-
-      nRF54L15DK:
-        - SPI: spi20 (SCK=P1.04, MOSI=P1.05)
-        - CS:  P1.06
-        - DC:  P1.07
-        - RST: P1.08
-        - BUSY: P1.09
-
-      To customize pins, select "Custom Board" and provide a device tree overlay.
-
-endmenu
+#
+# STEP 3: OPTIONS
+#
 
 config GXEPD2_AUTO_INIT
-    bool "Automatic Initialization"
+    bool "Auto-initialize at boot"
     default y
     help
-      Automatically initialize the display at boot time.
-      You can then use gxepd2_get_display() to get the configured display instance.
-
-      If disabled, you must call gxepd2_init() manually in your application.
-
-endif # !GXEPD2_DISPLAY_CUSTOM
+      Display is automatically initialized and ready to use in main().
+      Call gxepd2_get_display() to get the instance.
 
 config GXEPD2_SPI_FREQUENCY
-    int "SPI frequency in Hz"
+    int "SPI frequency (Hz)"
     default 4000000
     range 1000000 8000000
     help
-      SPI bus frequency for e-paper display communication.
-      Most displays work well at 4 MHz. Some may support up to 8 MHz.
-      If you experience communication issues, try reducing to 2 MHz.
+      SPI clock frequency. Most displays work at 4MHz.
 
 config GXEPD2_INIT_PRIORITY
-    int "Initialization priority"
+    int "Init priority"
     default 90
     help
-      Initialization priority for the GxEPD2 library.
-      Must be higher than SPI and GPIO drivers (typically 50-60).
-
-config GXEPD2_THREAD_SAFE
-    bool "Thread-safe operations"
-    default n
-    help
-      Enable mutex protection for display operations.
-      Useful if multiple threads will access the display.
+      Must be higher than SPI/GPIO drivers (50-60).
 
 endif # GXEPD2
