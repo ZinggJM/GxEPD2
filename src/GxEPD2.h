@@ -108,6 +108,7 @@ class GxEPD2
       GDEW042Z15,  Waveshare_4_2_bwr = GDEW042Z15,
       GDEQ042Z21,  Waveshare_4_2_V2_bwr = GDEQ042Z21,
       GDEY042Z98,
+      SE2417FS051, // 4.2" b/w/r 400x300
       GDEY0579Z93,
       GDEQ0583Z31,
       GDEW0583Z21, Waveshare_5_83_bwr = GDEW0583Z21,
