@@ -89,7 +89,8 @@ void GxEPD2_420c_SE2417::writeImage(const uint8_t* black, const uint8_t* color, 
   w1 -= dx;
   h1 -= dy;
   if ((w1 <= 0) || (h1 <= 0)) return;
-  _Init_Part();
+  if (!_using_partial_mode) _Init_Part(); // Only init if not already in partial mode
+  _using_partial_mode = true; // Set flag to avoid reinitialization
   _setPartialRamArea(x1, y1, w1, h1);
   _writeCommand(0x10);
   _startTransfer();
@@ -181,7 +182,8 @@ void GxEPD2_420c_SE2417::writeImagePart(const uint8_t* black, const uint8_t* col
   w1 -= dx;
   h1 -= dy;
   if ((w1 <= 0) || (h1 <= 0)) return;
-  if (!_using_partial_mode) _Init_Part();
+  if (!_using_partial_mode) _Init_Part(); // Only init if not already in partial mode
+  _using_partial_mode = true; // Set flag to avoid reinitialization
   _setPartialRamArea(x1, y1, w1, h1);
   _writeCommand(0x10);
   _startTransfer();
@@ -349,19 +351,17 @@ void GxEPD2_420c_SE2417::_PowerOff()
 void GxEPD2_420c_SE2417::_InitDisplay()
 {
   if (_hibernating) _reset();
-  // SE2417FS051-specific initialization sequence
+  // SE2417FS051-specific initialization sequence (from arduino_esp32_epd_lib)
   _writeCommand(0x06); // booster soft start
   _writeData(0x17);
   _writeData(0x17);
   _writeData(0x17);
+  _writeCommand(0x04); // power on - MUST come right after booster!
+  _waitWhileBusy("_PowerOn", power_on_time);
+  _power_is_on = true;
   _writeCommand(0x00); // panel setting
   _writeData(0x0f);    // LUT from OTP, BWR mode
   _writeData(0x0d);    // SE2417FS051 specific second byte
-  _writeCommand(0x61); // resolution setting
-  _writeData(WIDTH / 256);
-  _writeData(WIDTH % 256);
-  _writeData(HEIGHT / 256);
-  _writeData(HEIGHT % 256);
   _writeCommand(0x50); // VCOM AND DATA INTERVAL SETTING
   _writeData(0x77);    // SE2417FS051 specific value (vs 0xf7 for IL0398)
 }
@@ -369,23 +369,25 @@ void GxEPD2_420c_SE2417::_InitDisplay()
 void GxEPD2_420c_SE2417::_Init_Full()
 {
   _InitDisplay();
-  _PowerOn();
+  // Power already turned on in _InitDisplay()
 }
 
 void GxEPD2_420c_SE2417::_Init_Part()
 {
   _InitDisplay();
-  _PowerOn();
+  // Power already turned on in _InitDisplay()
 }
 
 void GxEPD2_420c_SE2417::_Update_Full()
 {
   _writeCommand(0x12); // display refresh
   _waitWhileBusy("_Update_Full", full_refresh_time);
+  _using_partial_mode = false; // Reset flag after refresh
 }
 
 void GxEPD2_420c_SE2417::_Update_Part()
 {
   _writeCommand(0x12); // display refresh
   _waitWhileBusy("_Update_Part", partial_refresh_time);
+  _using_partial_mode = false; // Reset flag after refresh
 }
