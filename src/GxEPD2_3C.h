@@ -182,7 +182,7 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
       y -= _current_page * _page_height;
       // check if in current page
       if ((y < 0) || (y >= int16_t(_page_height))) return;
-      uint16_t i = x / 8 + y * (_pw_w / 8);
+      uint32_t i = x / 8 + uint32_t(y) * uint32_t(_pw_w / 8);
       _black_buffer[i] = (_black_buffer[i] | (1 << (7 - x % 8))); // white
       _color_buffer[i] = (_color_buffer[i] | (1 << (7 - x % 8)));
       if (color == GxEPD_WHITE) return;
@@ -236,7 +236,7 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
       if (color == GxEPD_WHITE);
       else if (color == GxEPD_BLACK) black = 0x00;
       else if ((color == GxEPD_RED) || (color == GxEPD_YELLOW)) red = 0x00;
-      for (uint16_t x = 0; x < sizeof(_black_buffer); x++)
+      for (uint32_t x = 0; x < sizeof(_black_buffer); x++)
       {
         _black_buffer[x] = black;
         _color_buffer[x] = red;
@@ -382,6 +382,8 @@ class GxEPD2_3C : public GxEPD2_GFX_BASE_CLASS
         return true;
       }
     }
+
+    bool nextPageToPrevious() {return false;}; // no-op in this class
 
     bool nextPageBW()
     {

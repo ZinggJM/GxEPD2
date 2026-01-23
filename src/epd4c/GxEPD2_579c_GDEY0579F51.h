@@ -12,12 +12,12 @@
 //
 // Library: https://github.com/ZinggJM/GxEPD2
 
-#ifndef _GxEPD2_0579c_GDEY0579F51_H_
-#define _GxEPD2_0579c_GDEY0579F51_H_
+#ifndef _GxEPD2_579c_GDEY0579F51_H_
+#define _GxEPD2_579c_GDEY0579F51_H_
 
 #include "../GxEPD2_EPD.h"
 
-class GxEPD2_0579c_GDEY0579F51 : public GxEPD2_EPD
+class GxEPD2_579c_GDEY0579F51 : public GxEPD2_EPD
 {
   public:
     // attributes
@@ -33,7 +33,7 @@ class GxEPD2_0579c_GDEY0579F51 : public GxEPD2_EPD
     static const uint16_t full_refresh_time = 21000; // ms, e.g. 20070999us
     static const uint16_t partial_refresh_time = 21000; // ms, e.g. 20070999us
     // constructor
-    GxEPD2_0579c_GDEY0579F51(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
+    GxEPD2_579c_GDEY0579F51(int16_t cs, int16_t dc, int16_t rst, int16_t busy);
     // methods (virtual)
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     void clearScreen(uint8_t value = 0xFF); // init controller memory and screen (default white)

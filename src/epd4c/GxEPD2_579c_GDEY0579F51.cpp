@@ -12,22 +12,22 @@
 //
 // Library: https://github.com/ZinggJM/GxEPD2
 
-#include "GxEPD2_0579c_GDEY0579F51.h"
+#include "GxEPD2_579c_GDEY0579F51.h"
 
-GxEPD2_0579c_GDEY0579F51::GxEPD2_0579c_GDEY0579F51(int16_t cs, int16_t dc, int16_t rst, int16_t busy) :
+GxEPD2_579c_GDEY0579F51::GxEPD2_579c_GDEY0579F51(int16_t cs, int16_t dc, int16_t rst, int16_t busy) :
   GxEPD2_EPD(cs, dc, rst, busy, LOW, 50000000, WIDTH, HEIGHT, panel, hasColor, hasPartialUpdate, hasFastPartialUpdate)
 {
   _paged = false;
   _needs_re_init = false;
 }
 
-void GxEPD2_0579c_GDEY0579F51::clearScreen(uint8_t value)
+void GxEPD2_579c_GDEY0579F51::clearScreen(uint8_t value)
 {
   //Serial.println("clearScreen");
   clearScreen(value, 0xFF);
 }
 
-void GxEPD2_0579c_GDEY0579F51::clearScreen(uint8_t black_value, uint8_t color_value)
+void GxEPD2_579c_GDEY0579F51::clearScreen(uint8_t black_value, uint8_t color_value)
 {
   //Serial.println("clearScreen");
   if (_needs_re_init) _InitDisplay();
@@ -35,12 +35,12 @@ void GxEPD2_0579c_GDEY0579F51::clearScreen(uint8_t black_value, uint8_t color_va
   refresh();
 }
 
-void GxEPD2_0579c_GDEY0579F51::writeScreenBuffer(uint8_t value)
+void GxEPD2_579c_GDEY0579F51::writeScreenBuffer(uint8_t value)
 {
   writeScreenBuffer(value, 0xFF);
 }
 
-void GxEPD2_0579c_GDEY0579F51::writeScreenBuffer(uint8_t black_value, uint8_t color_value)
+void GxEPD2_579c_GDEY0579F51::writeScreenBuffer(uint8_t black_value, uint8_t color_value)
 {
   //Serial.println("writeScreenBuffer");
   if (!_init_display_done) _InitDisplay();
@@ -63,7 +63,7 @@ void GxEPD2_0579c_GDEY0579F51::writeScreenBuffer(uint8_t black_value, uint8_t co
   _initial_write = false; // initial full screen buffer clean done
 }
 
-void GxEPD2_0579c_GDEY0579F51::_writeLineFromImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t wbb, bool invert, bool pgm, bool lowside, bool trf)
+void GxEPD2_579c_GDEY0579F51::_writeLineFromImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t wbb, bool invert, bool pgm, bool lowside, bool trf)
 {
   bool skip_first = (w % 8 != 0) && !lowside;
   bool skip_last = (w % 8 != 0) && lowside;
@@ -110,7 +110,7 @@ void GxEPD2_0579c_GDEY0579F51::_writeLineFromImage(const uint8_t* black, const u
   if (trf) _endTransfer();
 }
 
-void GxEPD2_0579c_GDEY0579F51::_writeDataFromImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, int16_t wbb, int16_t hb, bool invert, bool mirror_y, bool pgm, bool lowside)
+void GxEPD2_579c_GDEY0579F51::_writeDataFromImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, int16_t wbb, int16_t hb, bool invert, bool mirror_y, bool pgm, bool lowside)
 {
   _startTransfer();
   for (int16_t i = 0; i < h; i++)
@@ -127,12 +127,12 @@ void GxEPD2_0579c_GDEY0579F51::_writeDataFromImage(const uint8_t* black, const u
   _endTransfer();
 }
 
-void GxEPD2_0579c_GDEY0579F51::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_579c_GDEY0579F51::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   writeImage(bitmap, 0, x, y, w, h, invert, mirror_y, pgm);
 }
 
-void GxEPD2_0579c_GDEY0579F51::writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_579c_GDEY0579F51::writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   if (!black && !color) return;
   //Serial.print("writeImage("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", ");
@@ -252,13 +252,13 @@ void GxEPD2_0579c_GDEY0579F51::writeImage(const uint8_t* black, const uint8_t* c
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
 
-void GxEPD2_0579c_GDEY0579F51::writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+void GxEPD2_579c_GDEY0579F51::writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
     int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   writeImagePart(bitmap, 0, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
 }
 
-void GxEPD2_0579c_GDEY0579F51::writeImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+void GxEPD2_579c_GDEY0579F51::writeImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
     int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   //Serial.print("writeImagePart("); Serial.print(x_part); Serial.print(", "); Serial.print(y_part); Serial.print(", ");
@@ -392,7 +392,7 @@ void GxEPD2_0579c_GDEY0579F51::writeImagePart(const uint8_t* black, const uint8_
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
 
-void GxEPD2_0579c_GDEY0579F51::_writeLineFromNative(const uint8_t* native, int16_t x, int16_t y, int16_t w, int16_t wbb, bool invert, bool pgm, bool trf)
+void GxEPD2_579c_GDEY0579F51::_writeLineFromNative(const uint8_t* native, int16_t x, int16_t y, int16_t w, int16_t wbb, bool invert, bool pgm, bool trf)
 {
   if (trf) _startTransfer();
   for (int16_t j = 0; j < w; j += 4)
@@ -418,7 +418,7 @@ void GxEPD2_0579c_GDEY0579F51::_writeLineFromNative(const uint8_t* native, int16
   if (trf) _endTransfer();
 }
 
-void GxEPD2_0579c_GDEY0579F51::_writeDataFromNative(const uint8_t* native, int16_t x, int16_t y, int16_t w, int16_t h, int16_t wbb, int16_t hb, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_579c_GDEY0579F51::_writeDataFromNative(const uint8_t* native, int16_t x, int16_t y, int16_t w, int16_t h, int16_t wbb, int16_t hb, bool invert, bool mirror_y, bool pgm)
 {
   //Serial.print("_writeDataFromNative("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(w); Serial.print(", "); Serial.print(h); Serial.print(", ");
   //Serial.print(wbb); Serial.print(", "); Serial.print(hb); Serial.print(", "); Serial.println(")");
@@ -436,7 +436,7 @@ void GxEPD2_0579c_GDEY0579F51::_writeDataFromNative(const uint8_t* native, int16
   _endTransfer();
 }
 
-void GxEPD2_0579c_GDEY0579F51::writeNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_579c_GDEY0579F51::writeNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   if (!data1) return;
   //Serial.print("writeNative("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", ");
@@ -556,7 +556,7 @@ void GxEPD2_0579c_GDEY0579F51::writeNative(const uint8_t* data1, const uint8_t* 
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
 
-void GxEPD2_0579c_GDEY0579F51::writeNativePart(const uint8_t* data1, const uint8_t* data2, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+void GxEPD2_579c_GDEY0579F51::writeNativePart(const uint8_t* data1, const uint8_t* data2, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
     int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   //Serial.print("writeNativePart("); Serial.print(x_part); Serial.print(", "); Serial.print(y_part); Serial.print(", ");
@@ -689,45 +689,45 @@ void GxEPD2_0579c_GDEY0579F51::writeNativePart(const uint8_t* data1, const uint8
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
 
-void GxEPD2_0579c_GDEY0579F51::drawImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_579c_GDEY0579F51::drawImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   writeImage(bitmap, x, y, w, h, invert, mirror_y, pgm);
   refresh(x, y, w, h);
 }
 
-void GxEPD2_0579c_GDEY0579F51::drawImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+void GxEPD2_579c_GDEY0579F51::drawImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
     int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   writeImagePart(bitmap, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
   refresh(x, y, w, h);
 }
 
-void GxEPD2_0579c_GDEY0579F51::drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_579c_GDEY0579F51::drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   writeImage(black, color, x, y, w, h, invert, mirror_y, pgm);
   refresh(x, y, w, h);
 }
 
-void GxEPD2_0579c_GDEY0579F51::drawImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+void GxEPD2_579c_GDEY0579F51::drawImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
     int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   writeImagePart(black, color, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
   refresh(x, y, w, h);
 }
 
-void GxEPD2_0579c_GDEY0579F51::drawNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_579c_GDEY0579F51::drawNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   writeNative(data1, data2, x, y, w, h, invert, mirror_y, pgm);
   refresh(x, y, w, h);
 }
 
-void GxEPD2_0579c_GDEY0579F51::refresh(bool partial_update_mode)
+void GxEPD2_579c_GDEY0579F51::refresh(bool partial_update_mode)
 {
   _setPartialRamAreaBoth(0, 0, WIDTH / 2, HEIGHT);
   _refresh(partial_update_mode);
 }
 
-void GxEPD2_0579c_GDEY0579F51::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
+void GxEPD2_579c_GDEY0579F51::refresh(int16_t x, int16_t y, int16_t w, int16_t h)
 {
   // intersection with screen
   int16_t w1 = x < 0 ? w + x : w; // reduce
@@ -747,12 +747,12 @@ void GxEPD2_0579c_GDEY0579F51::refresh(int16_t x, int16_t y, int16_t w, int16_t 
   _refresh(!fullscreen);
 }
 
-void GxEPD2_0579c_GDEY0579F51::powerOff()
+void GxEPD2_579c_GDEY0579F51::powerOff()
 {
   _PowerOff();
 }
 
-void GxEPD2_0579c_GDEY0579F51::hibernate()
+void GxEPD2_579c_GDEY0579F51::hibernate()
 {
   _PowerOff();
   if (_rst >= 0)
@@ -764,7 +764,7 @@ void GxEPD2_0579c_GDEY0579F51::hibernate()
   }
 }
 
-void GxEPD2_0579c_GDEY0579F51::setPaged()
+void GxEPD2_579c_GDEY0579F51::setPaged()
 {
   if (!hasPartialUpdate)
   {
@@ -774,7 +774,7 @@ void GxEPD2_0579c_GDEY0579F51::setPaged()
   }
 }
 
-void GxEPD2_0579c_GDEY0579F51::_refresh(bool partial_update_mode)
+void GxEPD2_579c_GDEY0579F51::_refresh(bool partial_update_mode)
 {
   _writeCommand(0x50); // VCOM and Data Interval Setting
   _writeData(partial_update_mode ? 0x97 : 0x37); // floating or white
@@ -787,26 +787,26 @@ void GxEPD2_0579c_GDEY0579F51::_refresh(bool partial_update_mode)
   _needs_re_init = true;
 }
 
-void GxEPD2_0579c_GDEY0579F51::_setPartialRamAreaMaster(uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool partial_mode)
+void GxEPD2_579c_GDEY0579F51::_setPartialRamAreaMaster(uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool partial_mode)
 {
   //Serial.print("_setPartialRamAreaMaster("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", ");
   //Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
   _setPartialRamArea(x, y, w, h, 0x01, partial_mode);
 }
-void GxEPD2_0579c_GDEY0579F51::_setPartialRamAreaSlave(uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool partial_mode)
+void GxEPD2_579c_GDEY0579F51::_setPartialRamAreaSlave(uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool partial_mode)
 {
   //Serial.print("_setPartialRamAreaSlave("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", ");
   //Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
   _setPartialRamArea(x, y, w, h, 0x02, partial_mode);
 }
-void GxEPD2_0579c_GDEY0579F51::_setPartialRamAreaBoth(uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool partial_mode)
+void GxEPD2_579c_GDEY0579F51::_setPartialRamAreaBoth(uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool partial_mode)
 {
   //Serial.print("_setPartialRamAreaBoth("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", ");
   //Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
   _setPartialRamArea(x, y, w, h, 0x00, partial_mode);
 }
 
-void GxEPD2_0579c_GDEY0579F51::_setPartialRamArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint8_t select, bool partial_mode)
+void GxEPD2_579c_GDEY0579F51::_setPartialRamArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint8_t select, bool partial_mode)
 {
   //Serial.print("_setPartialRamArea("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", ");
   //Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
@@ -824,7 +824,7 @@ void GxEPD2_0579c_GDEY0579F51::_setPartialRamArea(uint16_t x, uint16_t y, uint16
   _writeData(partial_mode ? 0x01 : 0x00);
 }
 
-void GxEPD2_0579c_GDEY0579F51::_PowerOn()
+void GxEPD2_579c_GDEY0579F51::_PowerOn()
 {
   if (!_power_is_on)
   {
@@ -834,7 +834,7 @@ void GxEPD2_0579c_GDEY0579F51::_PowerOn()
   _power_is_on = true;
 }
 
-void GxEPD2_0579c_GDEY0579F51::_PowerOff()
+void GxEPD2_579c_GDEY0579F51::_PowerOff()
 {
   if (_power_is_on)
   {
@@ -845,7 +845,7 @@ void GxEPD2_0579c_GDEY0579F51::_PowerOff()
   _power_is_on = false;
 }
 
-void GxEPD2_0579c_GDEY0579F51::_InitDisplay()
+void GxEPD2_579c_GDEY0579F51::_InitDisplay()
 {
   //Serial.println("_InitDisplay");
   // initcode from Good Dispay demo for GDEY0579F51
@@ -896,7 +896,7 @@ void GxEPD2_0579c_GDEY0579F51::_InitDisplay()
   _setPartialRamAreaBoth(0, 0, WIDTH / 2, HEIGHT);
 }
 
-void GxEPD2_0579c_GDEY0579F51::_ReInitDisplay()
+void GxEPD2_579c_GDEY0579F51::_ReInitDisplay()
 {
   //Serial.println("_ReInitDisplay");
   _writeCommand(0x50); // CDI
