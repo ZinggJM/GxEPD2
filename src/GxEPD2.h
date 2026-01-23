@@ -119,13 +119,17 @@ class GxEPD2
       GDEY1248Z51,
       GDEM133Z91,
       // 4-color
+      GDEM0154F51H,
       GDEY0213F51,
       GDEY0266F51H,
       GDEY029F51H,
       Waveshare3inch4color,
+      GDEM035F51,
+      GDEM0397F81,
       GDEY0420F51,
       Waveshare437inch4color,
       GDEY0579F51,
+      GDEM075F52,
       GDEY116F51,
       // 7-color
       ACeP565,     Waveshare_5_65_7c = ACeP565,

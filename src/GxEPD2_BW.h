@@ -296,7 +296,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
       y -= _current_page * _page_height;
       // check if in current page
       if ((y < 0) || (y >= int16_t(_page_height))) return;
-      uint16_t i = x / 8 + y * (_pw_w / 8);
+      uint32_t i = x / 8 + uint32_t(y) * uint32_t(_pw_w / 8);
       if (color)
         _buffer[i] = (_buffer[i] | (1 << (7 - x % 8)));
       else
@@ -346,7 +346,7 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
     void fillScreen(uint16_t color) // 0x0 black, >0x0 white, to buffer
     {
       uint8_t data = (color == GxEPD_BLACK) ? 0x00 : 0xFF;
-      for (uint16_t x = 0; x < sizeof(_buffer); x++)
+      for (uint32_t x = 0; x < sizeof(_buffer); x++)
       {
         _buffer[x] = data;
       }
@@ -510,6 +510,61 @@ class GxEPD2_BW : public GxEPD2_GFX_BASE_CLASS
             //else epd2.refresh(true); // partial update after second phase
           } else epd2.refresh(false); // full update after only phase
           epd2.powerOff();
+          return false;
+        }
+        fillScreen(GxEPD_WHITE);
+        return true;
+      }
+    }
+
+    bool nextPageToPrevious()
+    {
+      if (1 == _pages)
+      {
+        if (_using_partial_mode)
+        {
+          epd2.writeImageToPrevious(_buffer, _pw_x, _pw_y, _pw_w, _pw_h);
+        }
+        else // full update
+        {
+          epd2.writeImageToPrevious(_buffer, 0, 0, GxEPD2_Type::WIDTH, HEIGHT);
+        }
+        return false;
+      }
+      uint16_t page_ys = _current_page * _page_height;
+      if (_using_partial_mode)
+      {
+        //Serial.print("  nextPage("); Serial.print(_pw_x); Serial.print(", "); Serial.print(_pw_y); Serial.print(", ");
+        //Serial.print(_pw_w); Serial.print(", "); Serial.print(_pw_h); Serial.print(") P"); Serial.println(_current_page);
+        uint16_t page_ye = _current_page < int16_t(_pages - 1) ? page_ys + _page_height : HEIGHT;
+        uint16_t dest_ys = _pw_y + page_ys; // transposed
+        uint16_t dest_ye = gx_uint16_min(_pw_y + _pw_h, _pw_y + page_ye);
+        if (dest_ye > dest_ys)
+        {
+          //Serial.print("writeImage("); Serial.print(_pw_x); Serial.print(", "); Serial.print(dest_ys); Serial.print(", ");
+          //Serial.print(_pw_w); Serial.print(", "); Serial.print(dest_ye - dest_ys); Serial.println(")");
+          epd2.writeImageToPrevious(_buffer, _pw_x, dest_ys, _pw_w, dest_ye - dest_ys);
+        }
+        else
+        {
+          //Serial.print("writeImage("); Serial.print(_pw_x); Serial.print(", "); Serial.print(dest_ys); Serial.print(", ");
+          //Serial.print(_pw_w); Serial.print(", "); Serial.print(dest_ye - dest_ys); Serial.print(") skipped ");
+          //Serial.print(dest_ys); Serial.print(".."); Serial.println(dest_ye);
+        }
+        _current_page++;
+        if (_current_page == int16_t(_pages))
+        {
+          return false;
+        }
+        fillScreen(GxEPD_WHITE);
+        return true;
+      }
+      else // full update
+      {
+        epd2.writeImageToPrevious(_buffer, 0, page_ys, GxEPD2_Type::WIDTH, gx_uint16_min(_page_height, HEIGHT - page_ys));
+        _current_page++;
+        if (_current_page == int16_t(_pages))
+        {
           return false;
         }
         fillScreen(GxEPD_WHITE);

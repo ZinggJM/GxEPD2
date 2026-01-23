@@ -76,6 +76,7 @@
 - GDEY0154D67    1.54" b/w 200x200, SSD1681
 - GDEW0154Z04    1.54" b/w/r 200x200, IL0376F, no longer available
 - GDEH0154Z90    1.54" b/w/r 200x200, SSD1681, replacement for GDEW0154Z04
+- GDEM0154F51H   1.54" 4-color 200x200, JD79660
 - GDE0213B1      2.13" b/w 122x250, IL3895, phased out
 - GDEH0213B72    2.13" b/w 122x250, SSD1675A (IL3897), replacement for GDE0213B1
 - GDEH0213B73    2.13" b/w 122x250, SSD1675B, new replacement for GDE0213B1, GDEH0213B72
@@ -112,10 +113,12 @@
 - GDEY029F51H    2.9" 4-color 168x384, JD79667
 - Waveshare3inch4color 3.0" 4-color 168x400
 - GDEQ031T10     3.1" b/w 240x320, UC8253
+- GDEM035F51     3.5" 4-color 184x384, JD79667
 - GDEY037T03     3.7" b/w 240x416, UC8253
 - ED037TC1       3.7" b/w 280x480, SSD1677, Waveshare 3.7"
 - GDEW0371W7     3.7" b/w 240x416, UC8171 (IL0324)
 - GDEM0397T81    3.97" b/w 480x800, SSD2677
+- GDEM0397F81    3.97" 4-color, 800x480, SSD2677
 - GDEW042T2      4.2" b/w 400x300, UC8176 (IL0398)
 - GDEW042M01     4.2" b/w 400x300, UC8176 (IL0398), DES
 - GDEW042Z15     4.2" b/w/r 400x300, UC8176 (IL0398)
@@ -144,6 +147,7 @@
 - GDEW075Z09     7.5" b/w/r 640x384, UC8159c (IL0371)
 - GDEW075Z08     7.5" b/w/r 800x480, EK79655 (GD7965)
 - GDEH075Z90     7.5" b/w/r 880x528, SSD1677
+- GDEM075F52     7.5" 4-color, 800x480, JD79665AA
 - GDEM102T91    10.2" b/w 960x640, SSD1677
 - GDEM1085T51   10.85 b/w 1360x480, JD79686AB
 - GDEH116T91    11.6" b/w 960x640, SSD1677
@@ -168,7 +172,14 @@
 - Let me know about interesting panels that fall into this category.
 - I occasionally buy new panels, but adding support will take as much time as needed.
 
-### Version 1.6.5
+### Version 1.6.6
+- added support for GDEM0154F51H, 1.54" 4-color 200x200, JD79660
+- added support for GDEM035F51, 3.5" 4-color 184x384, JD79667
+- added support for GDEM0397F81, 3.97" 4-color, 800x480, SSD2677
+- added support for GDEM075F52, 7.5" 4-color, 800x480, JD79665AA
+- added method writeImageToPrevious to class GxEPD2_750_GDEY075T7 and nextPageToPrevious to GxEPD2_BW
+- renamed class GxEPD2_0579c_GDEY0579F51 to GxEPD2_579c_GDEY0579F51
+#### Version 1.6.5
 - added support for GDEM0397T81, 3.97" b/w 480x800, SSD2677
 - fixed GxEPD2_290_T94 partial refresh
 #### Version 1.6.4

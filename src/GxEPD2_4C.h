@@ -48,6 +48,9 @@
 #  define __has_include(x) true
 #endif
 
+#if __has_include("epd4c/GxEPD2_154c_GDEM0154F51H.h")
+#include "epd4c/GxEPD2_154c_GDEM0154F51H.h"
+#endif
 #if __has_include("epd4c/GxEPD2_213c_GDEY0213F51.h")
 #include "epd4c/GxEPD2_213c_GDEY0213F51.h"
 #endif
@@ -60,14 +63,23 @@
 #if __has_include("epd4c/GxEPD2_300c.h")
 #include "epd4c/GxEPD2_300c.h"
 #endif
+#if __has_include("epd4c/GxEPD2_350c_GDEM035F51.h")
+#include "epd4c/GxEPD2_350c_GDEM035F51.h"
+#endif
+#if __has_include("epd4c/GxEPD2_397c_GDEM0397F81.h")
+#include "epd4c/GxEPD2_397c_GDEM0397F81.h"
+#endif
 #if __has_include("epd4c/GxEPD2_420c_GDEY0420F51.h")
 #include "epd4c/GxEPD2_420c_GDEY0420F51.h"
 #endif
 #if __has_include("epd4c/GxEPD2_437c.h")
 #include "epd4c/GxEPD2_437c.h"
 #endif
-#if __has_include("epd4c/GxEPD2_0579c_GDEY0579F51.h")
-#include "epd4c/GxEPD2_0579c_GDEY0579F51.h"
+#if __has_include("epd4c/GxEPD2_579c_GDEY0579F51.h")
+#include "epd4c/GxEPD2_579c_GDEY0579F51.h"
+#endif
+#if __has_include("epd4c/GxEPD2_750c_GDEM075F52.h")
+#include "epd4c/GxEPD2_750c_GDEM075F52.h"
 #endif
 #if __has_include("epd4c/GxEPD2_1160c_GDEY116F51.h")
 #include "epd4c/GxEPD2_1160c_GDEY116F51.h"
@@ -323,6 +335,8 @@ class GxEPD2_4C : public GxEPD2_GFX_BASE_CLASS
         return true;
       }
     }
+
+    bool nextPageToPrevious() {return false;}; // no-op in this class
 
     // GxEPD style paged drawing; drawCallback() is called as many times as needed
     void drawPaged(void (*drawCallback)(const void*), const void* pv)

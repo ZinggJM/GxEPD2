@@ -311,6 +311,8 @@ class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
       }
     }
 
+    bool nextPageToPrevious() {return false;}; // no-op in this class
+
     // GxEPD style paged drawing; drawCallback() is called as many times as needed
     void drawPaged(void (*drawCallback)(const void*), const void* pv)
     {
