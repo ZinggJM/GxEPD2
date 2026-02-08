@@ -15,7 +15,7 @@
 //#define USE_HSPI_FOR_EPD
 
 // uncomment next line to use class GFX of library GFX_Root instead of Adafruit_GFX
-#include <GFX.h>
+//#include <GFX.h>
 // Note: if you use this with ENABLE_GxEPD2_GFX 1:
 //       uncomment it in GxEPD2_GFX.h too, or add #include <GFX.h> before any #include <GxEPD2_GFX.h>
 

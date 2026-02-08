@@ -58,7 +58,7 @@ void GxEPD2_750c_GDEW075Z08::_writeScreenBuffer(uint8_t command, uint8_t value)
 
 void GxEPD2_750c_GDEW075Z08::writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  _writeScreenBuffer(0x13, 0x00); // set red/white
+  _writeScreenBuffer(0x13, 0xFF); // set red/white
   _writeImage(0x10, bitmap, x, y, w, h, invert, mirror_y, pgm);
 }
 
@@ -196,16 +196,16 @@ void GxEPD2_750c_GDEW075Z08::writeImagePart(const uint8_t* black, const uint8_t*
   if (color) _writeImagePart(0x13, color, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
 }
 
-void GxEPD2_750c_GDEW075Z08::writeImagePartToPrevious(const uint8_t* black, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+void GxEPD2_750c_GDEW075Z08::writeImagePartToPrevious(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
     int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  _writeImagePart(0x26, black, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
+  _writeImagePart(0x13, bitmap, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
 }
 
-void GxEPD2_750c_GDEW075Z08::writeImagePartToCurrent(const uint8_t* black, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+void GxEPD2_750c_GDEW075Z08::writeImagePartToCurrent(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
     int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  _writeImagePart(0x24, black, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
+  _writeImagePart(0x10, bitmap, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
 }
 
 void GxEPD2_750c_GDEW075Z08::writeNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
