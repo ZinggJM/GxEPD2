@@ -20,6 +20,7 @@
 #include <GxEPD2_BW.h>
 #include <GxEPD2_3C.h>
 #include <Fonts/FreeMonoBold9pt7b.h>
+#include <Fonts/FreeMonoBold12pt7b.h>
 
 // e.g. for Wemos D1 mini:
 #if defined (ESP8266)
@@ -31,7 +32,9 @@
 #if defined(ESP32)
 //GxEPD2_3C<GxEPD2_213_Z19c, GxEPD2_213_Z19c::HEIGHT> display(GxEPD2_213_Z19c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEW0213Z19
 //GxEPD2_3C<GxEPD2_290_Z13c, GxEPD2_290_Z13c::HEIGHT> display(GxEPD2_290_Z13c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEH029Z13
-GxEPD2_3C<GxEPD2_420c_GDEY042Z98, GxEPD2_420c_GDEY042Z98::HEIGHT> display(GxEPD2_420c_GDEY042Z98(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEY042Z98
+//GxEPD2_3C<GxEPD2_420c_GDEY042Z98, GxEPD2_420c_GDEY042Z98::HEIGHT> display(GxEPD2_420c_GDEY042Z98(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEY042Z98
+//GxEPD2_3C<GxEPD2_750c_GDEW075Z08, GxEPD2_750c_GDEW075Z08::HEIGHT / 2> display(GxEPD2_750c_GDEW075Z08(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEW075Z08
+GxEPD2_3C<GxEPD2_750c_GDEY075Z08, GxEPD2_750c_GDEY075Z08::HEIGHT / 2> display(GxEPD2_750c_GDEY075Z08(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEY075Z08
 #endif
 
 const uint16_t window_x = 8;
@@ -76,7 +79,8 @@ void clearWindow()
 void showValue(uint16_t value)
 {
   display.setRotation(0);
-  display.setFont(&FreeMonoBold9pt7b);
+  //display.setFont(&FreeMonoBold9pt7b);
+  display.setFont(&FreeMonoBold12pt7b);
   display.setTextColor(GxEPD_BLACK);
   if ((1 == display.pages()) && true) // test non-paged
   {
@@ -107,7 +111,8 @@ const char HelloWorld[] = "Hello World!";
 void helloWorld()
 {
   display.setRotation(1);
-  display.setFont(&FreeMonoBold9pt7b);
+  //display.setFont(&FreeMonoBold9pt7b);
+  display.setFont(&FreeMonoBold12pt7b);
   display.setTextColor(GxEPD_RED);
   int16_t tbx, tby; uint16_t tbw, tbh;
   display.getTextBounds(HelloWorld, 0, 0, &tbx, &tby, &tbw, &tbh);

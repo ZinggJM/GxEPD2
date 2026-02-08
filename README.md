@@ -4,7 +4,7 @@
 - With full Graphics and Text support using Adafruit_GFX
 
 - For SPI e-paper displays from Dalian Good Display 
-- and SPI e-paper boards from Waveshare
+- and SPI e-paper boards from Waveshare having the same panels
 
 ### important note:
 - the display panels are for 3.3V supply and 3.3V data lines
@@ -146,6 +146,7 @@
 - GDEY075T7      7.5" b/w 800x480, UC8179 (GD7965)
 - GDEW075Z09     7.5" b/w/r 640x384, UC8159c (IL0371)
 - GDEW075Z08     7.5" b/w/r 800x480, EK79655 (GD7965)
+- GDEY075Z08     7.5" b/w/r 800x480, UC8179
 - GDEH075Z90     7.5" b/w/r 880x528, SSD1677
 - GDEM075F52     7.5" 4-color, 800x480, JD79665AA
 - GDEM102T91    10.2" b/w 960x640, SSD1677
@@ -172,7 +173,16 @@
 - Let me know about interesting panels that fall into this category.
 - I occasionally buy new panels, but adding support will take as much time as needed.
 
-### Version 1.6.6
+### Version 1.6.7
+- added support for GDEW075Z08 fast b/w refresh in new class GxEPD2_750c_GDEW075Z08
+- GxEPD2_750c_GDEW075Z08 uses a b/w waveform written to registers, none available in OTP
+- added support for GDEY075Z08 fast b/w refresh in new class GxEPD2_750c_GDEY075Z08
+- GxEPD2_750c_GDEY075Z08 uses a b/w waveform written to registers, OTP version is faulty
+- GDEW075Z08 and GDEY075Z08 both have distortion on borders between black and white
+- therefore narrow or small fonts are barely readable with fast b/w refresh
+- renamed method writeImagePrevious to writeImageToPrevious
+- renamed method writeImageNew to writeImageToCurrent
+#### Version 1.6.6
 - added support for GDEM0154F51H, 1.54" 4-color 200x200, JD79660
 - added support for GDEM035F51, 3.5" 4-color 184x384, JD79667
 - added support for GDEM0397F81, 3.97" 4-color, 800x480, SSD2677

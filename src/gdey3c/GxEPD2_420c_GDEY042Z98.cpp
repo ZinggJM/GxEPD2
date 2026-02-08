@@ -113,14 +113,14 @@ void GxEPD2_420c_GDEY042Z98::_writeImage(uint8_t command, const uint8_t bitmap[]
   delay(1); // yield() to avoid WDT on ESP8266 and ESP32
 }
 
-void GxEPD2_420c_GDEY042Z98::writeImagePrevious(const uint8_t* black, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_420c_GDEY042Z98::writeImageToPrevious(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  _writeImage(0x26, black, x, y, w, h, invert, mirror_y, pgm);
+  _writeImage(0x26, bitmap, x, y, w, h, invert, mirror_y, pgm);
 }
 
-void GxEPD2_420c_GDEY042Z98::writeImageNew(const uint8_t* black, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+void GxEPD2_420c_GDEY042Z98::writeImageToCurrent(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
-  _writeImage(0x24, black, x, y, w, h, invert, mirror_y, pgm);
+  _writeImage(0x24, bitmap, x, y, w, h, invert, mirror_y, pgm);
 }
 
 void GxEPD2_420c_GDEY042Z98::writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
@@ -196,13 +196,13 @@ void GxEPD2_420c_GDEY042Z98::writeImagePart(const uint8_t* black, const uint8_t*
   if (color) _writeImagePart(0x26, color, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, !invert, mirror_y, pgm);
 }
 
-void GxEPD2_420c_GDEY042Z98::writeImagePartPrevious(const uint8_t* black, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+void GxEPD2_420c_GDEY042Z98::writeImagePartToPrevious(const uint8_t* black, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
     int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   _writeImagePart(0x26, black, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
 }
 
-void GxEPD2_420c_GDEY042Z98::writeImagePartNew(const uint8_t* black, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+void GxEPD2_420c_GDEY042Z98::writeImagePartToCurrent(const uint8_t* black, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
     int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   _writeImagePart(0x24, black, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);

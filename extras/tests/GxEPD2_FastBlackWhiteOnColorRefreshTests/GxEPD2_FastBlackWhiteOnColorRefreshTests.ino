@@ -30,6 +30,15 @@
 // or select the display class and display driver class in the following file (new style):
 #include "GxEPD2_display_selection_new_style.h"
 
+// or select one of the panels supporting fast black white refresh on color
+#if defined(ESP32)
+//GxEPD2_3C<GxEPD2_213_Z19c, GxEPD2_213_Z19c::HEIGHT> display(GxEPD2_213_Z19c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEW0213Z19
+//GxEPD2_3C<GxEPD2_290_Z13c, GxEPD2_290_Z13c::HEIGHT> display(GxEPD2_290_Z13c(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEH029Z13
+//GxEPD2_3C<GxEPD2_420c_GDEY042Z98, GxEPD2_420c_GDEY042Z98::HEIGHT> display(GxEPD2_420c_GDEY042Z98(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEY042Z98
+//GxEPD2_3C<GxEPD2_750c_GDEW075Z08, GxEPD2_750c_GDEW075Z08::HEIGHT / 2> display(GxEPD2_750c_GDEW075Z08(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEW075Z08
+GxEPD2_3C<GxEPD2_750c_GDEY075Z08, GxEPD2_750c_GDEY075Z08::HEIGHT / 2> display(GxEPD2_750c_GDEY075Z08(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4)); // GDEY075Z08
+#endif
+
 #include "Open_Sans_ExtraBold_120.h"
 
 
@@ -67,10 +76,25 @@ void setup()
   {
     full_black();
     delay(500);
-    full_white();
+    full_white(); // don't comment out!
     delay(500);
   }
-  // stripes test
+  //full_white(); // IS NEEDED BEFORE ANY FAST BW (make both controller buffer equal in the partial window)
+  // stripes tests
+  for (int i = 0; i < 0; i++)
+  {
+    horizontal_stripes(8);
+    delay(1000);
+    horizontal_stripes_inverted(8);
+    delay(1000);
+  }
+  for (int i = 0; i < 0; i++)
+  {
+    vertical_stripes(8);
+    delay(3000);
+    vertical_stripes_inverted(8);
+    delay(3000);
+  }
   for (int i = 0; i < 1; i++)
   {
     horizontal_stripes(8);
@@ -78,8 +102,10 @@ void setup()
     vertical_stripes(8);
     delay(3000);
   }
+  //display.powerOff(); return;
   full_white();
   delay(1000);
+  //display.powerOff(); return;
   // clock simulation test, for limited length
   start_time = next_time = previous_time = previous_full_update = millis();
   for (int i = 0; i < 50; i++)
@@ -131,7 +157,7 @@ void partial_white()
   {
     display.fillScreen(GxEPD_WHITE);
   }
-  while (display.nextPage());
+  while (display.nextPageBW());
 }
 
 void partial_black()
@@ -142,7 +168,7 @@ void partial_black()
   {
     display.fillScreen(GxEPD_BLACK);
   }
-  while (display.nextPage());
+  while (display.nextPageBW());
 }
 
 void horizontal_stripes(uint16_t nr)
@@ -162,7 +188,7 @@ void horizontal_stripes(uint16_t nr)
       y += h;
     } while (y < display.height());
   }
-  while (display.nextPage());
+  while (display.nextPageBW());
 }
 
 void vertical_stripes(uint16_t nr)
@@ -182,7 +208,47 @@ void vertical_stripes(uint16_t nr)
       x += w;
     } while (x < display.width());
   }
-  while (display.nextPage());
+  while (display.nextPageBW());
+}
+
+void horizontal_stripes_inverted(uint16_t nr)
+{
+  uint16_t h = display.height() / nr;
+  display.setPartialWindow(0, 0, display.width(), display.height());
+  display.firstPage();
+  do
+  {
+    uint16_t y = 0;
+    do
+    {
+      display.fillRect(0, y, display.width(), h, GxEPD_WHITE);
+      y += h;
+      if (y >= display.height()) break;
+      display.fillRect(0, y, display.width(), h, GxEPD_BLACK);
+      y += h;
+    } while (y < display.height());
+  }
+  while (display.nextPageBW());
+}
+
+void vertical_stripes_inverted(uint16_t nr)
+{
+  uint16_t w = display.width() / nr;
+  display.setPartialWindow(0, 0, display.width(), display.height());
+  display.firstPage();
+  do
+  {
+    uint16_t x = 0;
+    do
+    {
+      display.fillRect(x, 0, w, display.height(), GxEPD_WHITE);
+      x += w;
+      if (x >= display.width()) break;
+      display.fillRect(x, 0, w, display.height(), GxEPD_BLACK);
+      x += w;
+    } while (x < display.width());
+  }
+  while (display.nextPageBW());
 }
 
 void clock_test()
@@ -257,7 +323,7 @@ void showMinutes()
     display.setCursor(x, y);
     display.print(str);
   }
-  while (display.nextPage());
+  while (display.nextPageBW());
   delay(1000);
   //Serial.println("showMinutes done");
 }
@@ -294,7 +360,7 @@ void showDays()
     display.setCursor(x, y);
     display.print(str);
   }
-  while (display.nextPage());
+  while (display.nextPageBW());
   delay(1000);
   //Serial.println("showDays done");
 }
@@ -332,6 +398,6 @@ void showTime()
     display.setCursor(x, y);
     display.print(str);
   }
-  while (display.nextPage());
+  while (display.nextPageBW());
   //Serial.println("showTime done");
 }

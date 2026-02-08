@@ -96,6 +96,8 @@
 #define GxEPD2_750c_IS_3C true
 #define GxEPD2_750c_Z08_IS_3C true
 #define GxEPD2_750c_Z90_IS_3C true
+#define GxEPD2_750c_GDEW075Z08_IS_3C true
+#define GxEPD2_750c_GDEY075Z08_IS_3C true
 #define GxEPD2_1160c_GDEY116Z91_IS_3C true
 #define GxEPD2_1248c_IS_3C true
 #define GxEPD2_1330c_GDEM133Z91_IS_3C true

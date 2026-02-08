@@ -2065,7 +2065,7 @@ void drawBitmaps3c800x480()
 #else
   bitmap_pair bitmap_pairs[] = {}; // not enough code space
 #endif
-  if (display.epd2.panel == GxEPD2::GDEW075Z08)
+  if ((display.epd2.panel == GxEPD2::GDEW075Z08) || (display.epd2.panel == GxEPD2::GDEY075Z08))
   {
     for (uint16_t i = 0; i < sizeof(bitmap_pairs) / sizeof(bitmap_pair); i++)
     {

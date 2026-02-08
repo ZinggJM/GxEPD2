@@ -35,6 +35,7 @@ class GxEPD2_EPD
                uint16_t w, uint16_t h, GxEPD2::Panel p, bool c, bool pu, bool fpu);
     virtual void init(uint32_t serial_diag_bitrate = 0); // serial_diag_bitrate = 0 : disabled
     virtual void init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration = 10, bool pulldown_rst_mode = false);
+    virtual void init(int16_t sck, int16_t mosi, uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration = 20, bool pulldown_rst_mode = false);
     virtual void end(); // release SPI and control pins
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     virtual void clearScreen(uint8_t value) = 0; // init controller memory and screen (default white)
@@ -116,8 +117,12 @@ class GxEPD2_EPD
     void _startTransfer();
     void _transfer(uint8_t value);
     void _endTransfer();
+    // additions for read from OTP
+    uint8_t _readData();
+    void _readData(uint8_t* data, uint16_t n);
   protected:
     int16_t _cs, _dc, _rst, _busy, _busy_level;
+    int16_t _sck, _mosi;
     uint32_t _busy_timeout;
     bool _diag_enabled, _pulldown_rst_mode;
     SPIClass* _pSPIx;
@@ -128,6 +133,7 @@ class GxEPD2_EPD
     uint16_t _reset_duration;
     void (*_busy_callback)(const void*);
     const void* _busy_callback_parameter;
+#include <GxEPD2_EPD_friends.h>
 };
 
 #endif

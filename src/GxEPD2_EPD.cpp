@@ -32,6 +32,8 @@ GxEPD2_EPD::GxEPD2_EPD(int16_t cs, int16_t dc, int16_t rst, int16_t busy, int16_
   _reset_duration = 10;
   _busy_callback = 0;
   _busy_callback_parameter = 0;
+  _sck = -1;
+  _mosi = -1;
 }
 
 void GxEPD2_EPD::init(uint32_t serial_diag_bitrate)
@@ -285,4 +287,62 @@ void GxEPD2_EPD::_endTransfer()
 {
   if (_cs >= 0) digitalWrite(_cs, HIGH);
   _pSPIx->endTransaction();
+}
+
+void GxEPD2_EPD::init(int16_t sck, int16_t mosi, uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration, bool pulldown_rst_mode)
+{
+  _sck = sck;
+  _mosi = mosi;
+  init(serial_diag_bitrate, initial, reset_duration, pulldown_rst_mode);
+}
+
+uint8_t GxEPD2_EPD::_readData()
+{
+  uint8_t data = 0;
+  if ((_sck >= 0) && (_mosi >= 0))
+  {
+    _pSPIx->end();
+    digitalWrite(_sck, LOW);
+    pinMode(_sck, OUTPUT);
+    digitalWrite(_sck, LOW);
+    pinMode(_mosi, INPUT);
+    if (_cs >= 0) digitalWrite(_cs, LOW);
+    for (int i = 0; i < 8; i++)
+    {
+      data <<= 1;
+      digitalWrite(_sck, HIGH);
+      data |= digitalRead(_mosi);
+      digitalWrite(_sck, LOW);
+    }
+    if (_cs >= 0) digitalWrite(_cs, HIGH);
+    _pSPIx->begin();
+  }
+  return data;
+}
+
+void GxEPD2_EPD::_readData(uint8_t* data, uint16_t n)
+{
+  if ((_sck >= 0) && (_mosi >= 0))
+  {
+    _pSPIx->end();
+    digitalWrite(_sck, LOW);
+    pinMode(_sck, OUTPUT);
+    digitalWrite(_sck, LOW);
+    pinMode(_mosi, INPUT);
+    if (_cs >= 0) digitalWrite(_cs, LOW);
+    for (uint8_t i = 0; i < n; i++)
+    {
+      *data = 0;
+      for (int i = 0; i < 8; i++)
+      {
+        *data <<= 1;
+        digitalWrite(_sck, HIGH);
+        *data |= digitalRead(_mosi);
+        digitalWrite(_sck, LOW);
+      }
+      data++;
+    }
+    if (_cs >= 0) digitalWrite(_cs, HIGH);
+    _pSPIx->begin();
+  }
 }
