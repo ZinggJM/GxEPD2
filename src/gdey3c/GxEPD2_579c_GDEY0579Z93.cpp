@@ -126,7 +126,6 @@ void GxEPD2_579c_GDEY0579Z93::_writeFromImage(uint8_t command, const uint8_t bit
     int16_t wm = x1 >= WIDTH / 2 ? w1 : (x1 + w1) - WIDTH / 2;
     int16_t hm = y1 + h1 <= HEIGHT / 2 ? h1 : HEIGHT / 2 - y1;
     int16_t xm = x1 < WIDTH / 2 ? WIDTH / 2 - wm : WIDTH - x1 - wm;
-    int16_t ym = y1 < HEIGHT / 2 ? HEIGHT / 2 - hm : HEIGHT - y1 - hm;
     //Serial.print("upper right wm="); Serial.print(wm); Serial.print(" hm="); Serial.print(hm); Serial.print(" dx="); Serial.print(dx); Serial.print(" dy="); Serial.println(dy);
     _setPartialRamAreaMaster(xm, y1, wm, hm, 0x02);
     _writeCommand(command);
