@@ -175,6 +175,7 @@
 
 ### Version 1.6.8
 - added methods writeImageToPrevious and writeImagePartToPrevious to b/w driver classes
+- added partial update support to GDEP073E01
 #### Version 1.6.7
 - added support for GDEW075Z08 fast b/w refresh in new class GxEPD2_750c_GDEW075Z08
 - GxEPD2_750c_GDEW075Z08 uses a b/w waveform written to registers, none available in OTP
