@@ -94,6 +94,11 @@ void GxEPD2_579_GDEY0579T93::writeImageAgain(const uint8_t bitmap[], int16_t x, 
   _writeImage(0x24, bitmap, x, y, w, h, invert, mirror_y, pgm); // set current
 }
 
+void GxEPD2_579_GDEY0579T93::writeImageToPrevious(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+{
+  _writeImage(0x26, bitmap, x, y, w, h, invert, mirror_y, pgm);
+}
+
 void GxEPD2_579_GDEY0579T93::_writeImage(uint8_t command, const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   //Serial.print("writeImage("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", ");
@@ -135,7 +140,6 @@ void GxEPD2_579_GDEY0579T93::_writeFromImage(uint8_t command, const uint8_t bitm
     int16_t wm = x1 >= WIDTH / 2 ? w1 : (x1 + w1) - WIDTH / 2;
     int16_t hm = y1 + h1 <= HEIGHT / 2 ? h1 : HEIGHT / 2 - y1;
     int16_t xm = x1 < WIDTH / 2 ? WIDTH / 2 - wm : WIDTH - x1 - wm;
-    int16_t ym = y1 < HEIGHT / 2 ? HEIGHT / 2 - hm : HEIGHT - y1 - hm;
     //Serial.print("upper right wm="); Serial.print(wm); Serial.print(" hm="); Serial.print(hm); Serial.print(" dx="); Serial.print(dx); Serial.print(" dy="); Serial.println(dy);
     _setPartialRamAreaMaster(xm, y1, wm, hm, 0x02);
     _writeCommand(command);
@@ -206,6 +210,12 @@ void GxEPD2_579_GDEY0579T93::writeImagePartAgain(const uint8_t bitmap[], int16_t
     int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   _writeImagePart(0x24, bitmap, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
+  _writeImagePart(0x26, bitmap, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
+}
+
+void GxEPD2_579_GDEY0579T93::writeImagePartToPrevious(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+    int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+{
   _writeImagePart(0x26, bitmap, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
 }
 

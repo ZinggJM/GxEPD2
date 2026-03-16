@@ -248,7 +248,7 @@ void setup()
     draw7colors();
     delay(4000);
     display.epd2.drawNativeColors(); delay(2000);
-    //return;
+    //display.powerOff(); return;
   }
 #endif
   if (display.epd2.hasPartialUpdate)
@@ -1619,6 +1619,30 @@ void drawBitmaps800x480()
       display.refresh(false); // full update
     }
   }
+#if defined(ESP32) && false
+  if (display.epd2.panel == GxEPD2::GDEP073E01)
+  {
+    int16_t wp = display.epd2.WIDTH / 5;
+    int16_t hp = display.epd2.HEIGHT / 5;
+    int16_t n = 0;
+    for (int16_t k = 0; k < 3; k++)
+    {
+      display.writeScreenBuffer();
+      for (int16_t i = 0; i < 5; i++)
+      {
+        for (int16_t j = 0; j < 5; j++)
+        {
+          if ((n++ % 2) || (k == 2))
+          {
+            display.epd2.writeImagePart(Bitmap800x480_1, 0, i * wp, j * hp, 800, 480, i * wp, j * hp, wp, hp, false, false, true);
+          }
+        }
+      }
+      display.refresh(false);
+      delay(2000);
+    }
+  }
+#endif
 }
 #endif
 
@@ -2077,6 +2101,28 @@ void drawBitmaps3c800x480()
         display.drawBitmap(0, 0, bitmap_pairs[i].red, display.epd2.WIDTH, display.epd2.HEIGHT, GxEPD_RED);
       }
       while (display.nextPage());
+      delay(2000);
+    }
+  }
+  if ((display.epd2.panel == GxEPD2::GDEP073E01) && false)
+  {
+    int16_t wp = display.epd2.WIDTH / 5;
+    int16_t hp = display.epd2.HEIGHT / 5;
+    int16_t n = 0;
+    for (int16_t k = 0; k < 3; k++)
+    {
+      display.writeScreenBuffer();
+      for (int16_t i = 0; i < 5; i++)
+      {
+        for (int16_t j = 0; j < 5; j++)
+        {
+          if ((n++ % 2) || (k == 2))
+          {
+            display.epd2.writeImagePart(Bitmap3c800x480_1_black, Bitmap3c800x480_1_red, i * wp, j * hp, 800, 480, i * wp, j * hp, wp, hp, true, false, true);
+          }
+        }
+      }
+      display.refresh(false);
       delay(2000);
     }
   }

@@ -218,8 +218,8 @@ class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
     }
 
     // setPartialWindow, use parameters according to actual rotation.
-    // x and w should be multiple of 8, for rotation 0 or 2,
-    // y and h should be multiple of 8, for rotation 1 or 3,
+    // x and w should be multiple of 4, for rotation 0 or 2,
+    // y and h should be multiple of 4, for rotation 1 or 3,
     // else window is increased as needed,
     // this is an addressing limitation of the e-paper controllers
     void setPartialWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
@@ -231,10 +231,10 @@ class GxEPD2_7C : public GxEPD2_GFX_BASE_CLASS
       _pw_h = gx_uint16_min(h, height() - _pw_y);
       _rotate(_pw_x, _pw_y, _pw_w, _pw_h);
       _using_partial_mode = true;
-      // make _pw_x, _pw_w multiple of 2
-      _pw_w += _pw_x % 2;
-      if (_pw_w % 2 > 0) _pw_w += 2 - _pw_w % 2;
-      _pw_x -= _pw_x % 2;
+      // make _pw_x, _pw_w multiple of 4, required by Spectra6 controller
+      _pw_w += _pw_x % 4;
+      if (_pw_w % 4 > 0) _pw_w += 4 - _pw_w % 4;
+      _pw_x -= _pw_x % 4;
     }
 
     void firstPage()

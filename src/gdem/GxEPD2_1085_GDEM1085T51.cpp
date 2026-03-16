@@ -101,6 +101,11 @@ void GxEPD2_1085_GDEM1085T51::writeImageAgain(const uint8_t bitmap[], int16_t x,
   _writeImage(0x13, bitmap, x, y, w, h, invert, mirror_y, pgm); // set current
 }
 
+void GxEPD2_1085_GDEM1085T51::writeImageToPrevious(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+{
+  _writeImage(0x10, bitmap, x, y, w, h, invert, mirror_y, pgm);
+}
+
 void GxEPD2_1085_GDEM1085T51::_writeImage(uint8_t command, const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   //Serial.print("_writeImage("); Serial.print(x); Serial.print(", "); Serial.print(y); Serial.print(", "); Serial.print(w); Serial.print(", "); Serial.print(h); Serial.println(")");
@@ -196,6 +201,12 @@ void GxEPD2_1085_GDEM1085T51::writeImagePart(const uint8_t bitmap[], int16_t x_p
 }
 
 void GxEPD2_1085_GDEM1085T51::writeImagePartAgain(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+    int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
+{
+  _writeImagePart(0x10, bitmap, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
+}
+
+void GxEPD2_1085_GDEM1085T51::writeImagePartToPrevious(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
     int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm)
 {
   _writeImagePart(0x10, bitmap, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
