@@ -25,7 +25,8 @@ class GxEPD2_730c_GDEY073D46 : public GxEPD2_EPD
     static const uint16_t HEIGHT = 480;
     static const GxEPD2::Panel panel = GxEPD2::GDEY073D46;
     static const bool hasColor = true;
-    static const bool hasPartialUpdate = false;
+    static const bool hasPartialUpdate = true;
+    static const bool usePartialUpdate = false; // force full screen update, else looks horrible
     static const bool hasFastPartialUpdate = false;
     static const uint16_t power_on_time = 200; // ms, e.g. 172000us
     static const uint16_t power_off_time = 150; // ms, e.g. 145000us
@@ -65,14 +66,12 @@ class GxEPD2_730c_GDEY073D46 : public GxEPD2_EPD
     void refresh(int16_t x, int16_t y, int16_t w, int16_t h); // screen refresh from controller memory, partial screen
     void powerOff(); // turns off generation of panel driving voltages, avoids screen fading over time
     void hibernate(); // turns powerOff() and sets controller to deep sleep for minimum power use, ONLY if wakeable by RST (rst >= 0)
-    void setPaged(); // for GxEPD2_154c and GxEPD2_565c and GxEPD2_730c_GDEY073D46 paged workaround
   private:
-    uint8_t _colorOfDemoBitmap(uint8_t from);
+    void _setPartialRamArea(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
+    uint8_t _colorOfDemoBitmap(uint8_t from, int16_t mode = 0);
     void _PowerOn();
     void _PowerOff();
     void _InitDisplay();
-  private:
-    bool _paged;
 };
 
 #endif
