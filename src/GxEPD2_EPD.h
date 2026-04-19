@@ -35,7 +35,6 @@ class GxEPD2_EPD
                uint16_t w, uint16_t h, GxEPD2::Panel p, bool c, bool pu, bool fpu);
     virtual void init(uint32_t serial_diag_bitrate = 0); // serial_diag_bitrate = 0 : disabled
     virtual void init(uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration = 10, bool pulldown_rst_mode = false);
-    virtual void init(int16_t sck, int16_t mosi, uint32_t serial_diag_bitrate, bool initial, uint16_t reset_duration = 20, bool pulldown_rst_mode = false);
     virtual void end(); // release SPI and control pins
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     virtual void clearScreen(uint8_t value) = 0; // init controller memory and screen (default white)
@@ -95,6 +94,8 @@ class GxEPD2_EPD
     virtual void drawNativeColors() {}; // for test (7-color native mapping)
     // register a callback function to be called during _waitWhileBusy continuously.
     void setBusyCallback(void (*busyCallback)(const void*), const void* busy_callback_parameter = 0);
+    // addition for read from OTP and reading panel temperature
+    void enableRead(int16_t sck, int16_t mosi); // for _readData using SW SPI
     static inline uint16_t gx_uint16_min(uint16_t a, uint16_t b)
     {
       return (a < b ? a : b);
@@ -117,7 +118,7 @@ class GxEPD2_EPD
     void _startTransfer();
     void _transfer(uint8_t value);
     void _endTransfer();
-    // additions for read from OTP
+    // additions for read from OTP and reading panel temperature
     uint8_t _readData();
     void _readData(uint8_t* data, uint16_t n);
   protected:
