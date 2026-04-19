@@ -42,6 +42,7 @@
 #include <GxEPD2_3C.h>
 #include <GxEPD2_4C.h>
 #include <GxEPD2_7C.h>
+#include <GxEPD2_BW_SHM.h>
 #include <Fonts/FreeMonoBold9pt7b.h>
 #include <Fonts/FreeMonoBold12pt7b.h>
 #include <Fonts/FreeSansBold24pt7b.h>
@@ -78,6 +79,7 @@
 #include "bitmaps/Bitmaps640x384.h" // 7.5"  b/w
 #include "bitmaps/Bitmaps800x276.h" // 5.79" b/w
 #include "bitmaps/Bitmaps800x480.h" // 7.5"  b/w
+#include "bitmaps/Bitmaps920x680.h" // 5.65" b/w
 #include "bitmaps/Bitmaps960x640.h" // 10.2"  b/w
 #include "bitmaps/Bitmaps960x680.h" // 13.3"  b/w
 // 3-color
@@ -117,7 +119,7 @@
 #include "bitmaps/Bitmaps1304x984.h" // 12.48" b/w
 #include "bitmaps/Bitmaps1360x480.h" // 10.85" b/w
 #include "bitmaps/Bitmaps3c1304x984.h" // 12.48" b/w/r
-#include "bitmaps/Bitmaps7c800x480.h" // 7.3" 7-color
+//#include "bitmaps/Bitmaps7c800x480.h" // 7.3" 7-color
 #endif
 
 #else
@@ -195,6 +197,7 @@ void setup()
   pinMode(7, OUTPUT);
   digitalWrite(7, HIGH); // enable power to the panel
 #endif
+  if (display.epd2.panel == GxEPD2::GDEH0576T81) display.epd2.enableRead(SCK, MOSI); // enable read temperature, uses SW SPI
   //display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
   display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
   //display.init(115200, true, 10, false, SPIn, SPISettings(4000000, MSBFIRST, SPI_MODE0)); // extended init method with SPI channel and/or settings selection
@@ -204,7 +207,7 @@ void setup()
     Serial.print("pages = "); Serial.print(display.pages()); Serial.print(" page height = "); Serial.println(display.pageHeight());
     delay(1000);
   }
-  //display.clearScreen(); return;
+  //display.clearScreen(); display.powerOff(); return;
   // first update should be full refresh
   helloWorld();
   delay(1000);
@@ -948,6 +951,9 @@ void drawBitmaps()
 #ifdef _WS_Bitmaps800x600_H_
   drawBitmaps800x600();
 #endif
+#if defined(ESP32) && defined(_GxBitmaps920x680_H_)
+  drawBitmaps920x680();
+#endif
 #if defined(ESP32) && defined(_GxBitmaps960x640_H_)
   drawBitmaps960x640();
 #endif
@@ -1646,6 +1652,24 @@ void drawBitmaps800x480()
 }
 #endif
 
+#if defined(ESP32) && defined(_GxBitmaps920x680_H_)
+void drawBitmaps920x680()
+{
+  if (display.epd2.panel == GxEPD2::GDEH0576T81)
+  {
+    display.drawImage(Bitmap920x680_1, 0, 0, 920, 680, false, true, true); delay(3000);
+    display.drawImage(Bitmap920x680_2, 0, 0, 920, 680, false, true, true); delay(3000);
+    display.drawImage(Bitmap920x680_3, 0, 0, 920, 680, false, true, true); delay(3000);
+    //display.drawImage(Bitmap920x680_p1, 0, 0, 920, 680, false, true, true); delay(3000);
+    display.drawNative(Bitmap920x680_3, Bitmap920x680_p1, 0, 0, 920, 680, false, true, true); delay(2000); // old to new
+    display.drawNative(Bitmap920x680_p1, Bitmap920x680_p2, 0, 0, 920, 680, false, true, true); delay(2000); // old to new
+    display.drawNative(Bitmap920x680_p2, Bitmap920x680_p3, 0, 0, 920, 680, false, true, true); delay(2000); // old to new
+    display.drawNative(Bitmap920x680_p3, Bitmap920x680_3, 0, 0, 920, 680, false, true, true); delay(2000); // old to new
+    display.drawNative(Bitmap920x680_3, Bitmap920x680_1, 0, 0, 920, 680, false, true, true); delay(2000); // old to new
+  }
+}
+#endif
+
 #if defined(ESP32) && defined(_GxBitmaps960x640_H_)
 void drawBitmaps960x640()
 {
@@ -2104,7 +2128,7 @@ void drawBitmaps3c800x480()
       delay(2000);
     }
   }
-  if ((display.epd2.panel == GxEPD2::GDEP073E01) && false)
+  if (((display.epd2.panel == GxEPD2::GDEP073E01) || (display.epd2.panel == GxEPD2::GDEY073D46)) && true)
   {
     int16_t wp = display.epd2.WIDTH / 5;
     int16_t hp = display.epd2.HEIGHT / 5;
@@ -2379,7 +2403,8 @@ void drawBitmaps7c800x480()
 #if defined(_WS_Bitmaps7c300x180_H_)
 void drawBitmaps7c300x180()
 {
-  if ((display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::ACeP730) || (display.epd2.panel == GxEPD2::GDEP0565D90))
+  //if ((display.epd2.panel == GxEPD2::GDEY073D46) || (display.epd2.panel == GxEPD2::ACeP730) || (display.epd2.panel == GxEPD2::GDEP0565D90))
+  if ((display.epd2.panel == GxEPD2::ACeP730) || (display.epd2.panel == GxEPD2::GDEP0565D90))
   {
     display.drawNative(WS_Bitmap7c300x180, 0, (display.epd2.WIDTH - 300) / 2, (display.epd2.HEIGHT - 180) / 2, 300, 180, false, false, true);
     delay(5000);

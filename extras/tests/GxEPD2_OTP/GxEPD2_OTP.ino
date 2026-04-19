@@ -154,7 +154,7 @@ void setup()
   Serial.println();
   Serial.println("setup");
   delay(100);
-  display.epd2.init(SCK, MOSI, 115200, true, 20, false); // sw_spi
+  display.epd2.enableRead(SCK, MOSI); // sw_spi
   display.init(115200);
   helloWorld();
   // these have never been finished, and are not checked-in yet

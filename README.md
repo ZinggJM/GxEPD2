@@ -117,7 +117,7 @@
 - GDEY037T03     3.7" b/w 240x416, UC8253
 - ED037TC1       3.7" b/w 280x480, SSD1677, Waveshare 3.7"
 - GDEW0371W7     3.7" b/w 240x416, UC8171 (IL0324)
-- GDEM0397T81    3.97" b/w 480x800, SSD2677
+- GDEM0397T81    3.97" b/w 480x800, SSD1677
 - GDEM0397F81    3.97" 4-color, 800x480, SSD2677
 - GDEW042T2      4.2" b/w 400x300, UC8176 (IL0398)
 - GDEW042M01     4.2" b/w 400x300, UC8176 (IL0398), DES
@@ -130,6 +130,7 @@
 - Waveshare437inch4color Waveshare 4.37" 4-color e-paper display 512x368 
 - ACeP565        5.65" Waveshare 5.65" 7-color e-paper display 600x448
 - GDEP0565D90    5.65" 7-color 600x448
+- GDEH0576T81    5.76" b/w 920x680, SSD2677
 - GDEY0579T93    5.79" b/w 792x272, SSD1683
 - GDEY0579Z93    5.79" b/w/r 792x272, SSD1683
 - GDEY0579F51    5.79" 4-color 792x272, HX8717
@@ -173,7 +174,16 @@
 - Let me know about interesting panels that fall into this category.
 - I occasionally buy new panels, but adding support will take as much time as needed.
 
-### Version 1.6.8
+### Version 1.6.9
+- added support for GDEH0576T81, 5.76" b/w 920x680, SSD2677
+- the GDEH0576T81 has partial window addressing and partial window refresh
+- the controller SSD2677 of GDEH0576T81 supports differential refresh with bit interleaved old/new per pixel
+- the driver GxEPD2_576_GDEH0576T81 supports differential refresh through writeNative with previous/current bitmaps
+- the new display class GxEPD2_BW_SHM supports GxEPD2 style fast partial update with a shadow buffer for previous
+- the display class GxEPD2_BW_SHM uses a "malloc" allocated shadow buffer on processors with enough heap space
+- class GxEPD2_BW_SHM falls back to GxEPD2_BW behavior if "malloc" fails, which results in full refresh on GDEH0576T81
+- fixed controller name of GDEM0397T81 to SSD1677
+#### Version 1.6.8
 - added methods writeImageToPrevious and writeImagePartToPrevious to b/w driver classes
 - added partial update support to GDEP073E01
 - added partial window addressing to GDEY073D46, partial refresh not usable
@@ -194,7 +204,7 @@
 - added method writeImageToPrevious to class GxEPD2_750_GDEY075T7 and nextPageToPrevious to GxEPD2_BW
 - renamed class GxEPD2_0579c_GDEY0579F51 to GxEPD2_579c_GDEY0579F51
 #### Version 1.6.5
-- added support for GDEM0397T81, 3.97" b/w 480x800, SSD2677
+- added support for GDEM0397T81, 3.97" b/w 480x800, SSD1677
 - fixed GxEPD2_290_T94 partial refresh
 #### Version 1.6.4
 - added support for GDEY037T03 3.7" b/w 240x416, UC8253
