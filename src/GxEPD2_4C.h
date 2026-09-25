@@ -54,6 +54,9 @@
 #if __has_include("epd4c/GxEPD2_213c_GDEY0213F51.h")
 #include "epd4c/GxEPD2_213c_GDEY0213F51.h"
 #endif
+#if __has_include("epd4c/GxEPD2_213c_GDEY0213F52.h")
+#include "epd4c/GxEPD2_213c_GDEY0213F52.h"
+#endif
 #if __has_include("epd4c/GxEPD2_266c_GDEY0266F51H.h")
 #include "epd4c/GxEPD2_266c_GDEY0266F51H.h"
 #endif

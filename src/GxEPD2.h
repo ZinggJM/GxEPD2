@@ -123,6 +123,7 @@ class GxEPD2
       // 4-color
       GDEM0154F51H,
       GDEY0213F51,
+      GDEY0213F52,
       GDEY0266F51H,
       GDEY029F51H,
       Waveshare3inch4color,

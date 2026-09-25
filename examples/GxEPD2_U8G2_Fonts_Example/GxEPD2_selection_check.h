@@ -105,6 +105,7 @@
 // 4-color e-paper
 #define GxEPD2_154c_GDEM0154F51H_IS_4C true
 #define GxEPD2_213c_GDEY0213F51_IS_4C true
+#define GxEPD2_213c_GDEY0213F52_IS_4C true
 #define GxEPD2_266c_GDEY0266F51H_IS_4C true
 #define GxEPD2_290c_GDEY029F51H_IS_4C true
 #define GxEPD2_300c_IS_4C true
